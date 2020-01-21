@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classlist{% endblock %}
+
+{% block body %}
+    <h1>Classlist</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ classlist.id }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ classlist.role }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('classlist_index') }}">back to list</a>
+
+    <a href="{{ path('classlist_edit', {'id': classlist.id}) }}">edit</a>
+
+    {{ include('classlist/_delete_form.html.twig') }}
+{% endblock %}

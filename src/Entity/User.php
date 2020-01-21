@@ -44,9 +44,15 @@ class User implements UserInterface
      */
     private $docs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Classlist", mappedBy="user")
+     */
+    private $classlists;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
+        $this->classlists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,6 +171,34 @@ class User implements UserInterface
             if ($doc->getUser() === $this) {
                 $doc->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classlist[]
+     */
+    public function getClasslists(): Collection
+    {
+        return $this->classlists;
+    }
+
+    public function addClasslist(Classlist $classlist): self
+    {
+        if (!$this->classlists->contains($classlist)) {
+            $this->classlists[] = $classlist;
+            $classlist->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClasslist(Classlist $classlist): self
+    {
+        if ($this->classlists->contains($classlist)) {
+            $this->classlists->removeElement($classlist);
+            $classlist->removeUser($this);
         }
 
         return $this;
