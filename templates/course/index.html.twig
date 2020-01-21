@@ -8,20 +8,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for course in courses %}
             <tr>
-                <td>{{ course.id }}</td>
-                <td>{{ course.name }}</td>
-                <td>
-                    <a href="{{ path('course_show', {'id': course.id}) }}">show</a>
-                    <a href="{{ path('course_edit', {'id': course.id}) }}">edit</a>
-                </td>
+                <td><a href="{{ path('course_show', {'id': course.id}) }}">{{ course.name }}</a></td>
             </tr>
         {% else %}
             <tr>
