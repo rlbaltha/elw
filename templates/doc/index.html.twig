@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doc index{% endblock %}
+
+{% block body %}
+    <h1>Doc index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doc in docs %}
+            <tr>
+                <td><a href="{{ path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
+                <td>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('doc_new') }}">Create new</a>
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -36,6 +38,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Doc", mappedBy="user", orphanRemoval=true)
+     */
+    private $docs;
+
+    public function __construct()
+    {
+        $this->docs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,6 +135,37 @@ class User implements UserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Doc[]
+     */
+    public function getDocs(): Collection
+    {
+        return $this->docs;
+    }
+
+    public function addDoc(Doc $doc): self
+    {
+        if (!$this->docs->contains($doc)) {
+            $this->docs[] = $doc;
+            $doc->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoc(Doc $doc): self
+    {
+        if ($this->docs->contains($doc)) {
+            $this->docs->removeElement($doc);
+            // set the owning side to null (unless already changed)
+            if ($doc->getUser() === $this) {
+                $doc->setUser(null);
+            }
+        }
 
         return $this;
     }

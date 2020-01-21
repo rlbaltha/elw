@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doc{% endblock %}
+
+{% block body %}
+    <h1>Title</h1>
+
+    {{ doc.body|raw }}
+
+    <a class="btn btn-primary" href="{{ path('doc_index') }}">Close</a>
+
+    <a class="btn btn-primary" href="{{ path('doc_edit', {'id': doc.id}) }}">Edit</a>
+
+    {{ include('doc/_delete_form.html.twig') }}
+{% endblock %}
