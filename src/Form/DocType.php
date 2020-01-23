@@ -16,7 +16,9 @@ class DocType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('body', CKEditorType::class)
+            ->add('body', CKEditorType::class, array(
+                'config_name' => 'doc_config',
+            ))
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'username'

@@ -2,6 +2,11 @@
 
 {% block title %}New Doc{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+{% endblock %}
+
 {% block body %}
     <h1>Create new Doc</h1>
 
@@ -9,3 +14,5 @@
 
     <a href="{{ path('doc_index') }}">back to list</a>
 {% endblock %}
+
+

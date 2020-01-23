@@ -3,3 +3,13 @@
 twig:
     form_themes:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+
+fos_ck_editor:
+    configs:
+        doc_config:
+            toolbar: [ ['Styles','Bold','Italic','Underline','Strike','JustifyLeft','JustifyCenter','JustifyRight','TextColor','BGColor','FontSize'],['Link','Unlink','NumberedList','BulletedList','Outdent','Indent','Image'],[ 'Undo', 'Redo','RemoveFormat'] ]
+            contentsCss: 'css/ckeditor_document.css'
+            bodyClass: 'document-editor'
+            format_tags: 'p;h1;h2;h3;pre'
+            height: 800
+            width: 1200
