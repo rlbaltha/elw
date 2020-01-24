@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Doc;
 use App\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,10 +16,14 @@ class DocType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('body', CKEditorType::class, array(
+            ->add('title', TextType::class, [
+                'label'  => 'Title',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
-            ))
+                'label' => '',
+            ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'username'
