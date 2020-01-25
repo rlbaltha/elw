@@ -2,6 +2,12 @@
 
 {% block title %}Doc index{% endblock %}
 
+{% block subnav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('doc_index') }}">Documents</a>
+    </li>
+{% endblock %}
+
 {% block body %}
     <h1>Doc index</h1>
 

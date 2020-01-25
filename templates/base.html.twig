@@ -13,30 +13,28 @@
 </head>
 <body>
 
-{% block nav %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="https://uga.view.usg.edu/d2l/lp/navbars/6637/theme/viewimage/24058796/view?v=20.20.1.19921-113" alt="eLC Logo" style="width:200px;">
+    </a>
     <a class="navbar-brand" href="#">ELW</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_login') }}">Login</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('doc_index') }}">Documents</a>
-            </li>
+            {% block subnav %}{% endblock %}
         </ul>
     </div>
 </nav>
-{% endblock %}
+
 
 <div class="container-fluid">
     {% block body %}{% endblock %}
