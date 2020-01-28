@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,400,400i,600,600i,700,700i');
 
-.document-frame {
-    width: 1200px;
+html  {
+    background-color: rgb(232, 232, 232);
 }
 
-.document-frame > .document-editor {
-    min-width: 800px;
+div.document-editor {
+    min-width: 900px;
 }
 .document-editor {
     width: 15.8cm;
+    min-width: 750px;
     min-height: 21cm;
     padding: 1cm 2cm 2cm;
     margin: 0.5cm auto;

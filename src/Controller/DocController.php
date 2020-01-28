@@ -39,7 +39,7 @@ class DocController extends AbstractController
             $entityManager->persist($doc);
             $entityManager->flush();
 
-            return $this->redirectToRoute('doc_index');
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId()]);
         }
 
         return $this->render('doc/new.html.twig', [
@@ -69,7 +69,7 @@ class DocController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('doc_index');
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId()]);
         }
 
         return $this->render('doc/edit.html.twig', [

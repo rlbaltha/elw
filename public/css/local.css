@@ -1,0 +1,8 @@
+body {
+    background-color: #efefef;
+}
+.navbar {
+    border-top-style: solid;
+    border-top-width: 5px;
+    border-top-color: #ba0c2f;
+}

@@ -7,12 +7,20 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
 {% endblock %}
 
+{% block subnav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('doc_index') }}">Documents</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">{{ doc.title }}</a>
+    </li>
+{% endblock %}
+
 {% block body %}
-    <h1>Create new Doc</h1>
-
-    {{ include('doc/_form.html.twig') }}
-
-    <a href="{{ path('doc_index') }}">back to list</a>
+    <div class="row">
+        <div class="col">{{ include('doc/_form.html.twig') }}</div>
+        <div class="col"></div>
+    </div>
 {% endblock %}
 
 

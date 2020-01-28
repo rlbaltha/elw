@@ -2,6 +2,18 @@
 
 {% block title %}Doc index{% endblock %}
 
+{% block subnav %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Documents
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ path('doc_index') }}">List Docs</a>
+            <a class="dropdown-item" href="{{ path('doc_new') }}">Create Doc</a>
+        </div>
+    </li>
+{% endblock %}
+
 {% block body %}
     <h1>Doc index</h1>
 
