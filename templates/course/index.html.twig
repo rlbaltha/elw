@@ -13,7 +13,7 @@
         <tbody>
         {% for course in courses %}
             <tr>
-                <td><a href="{{ path('course_show', {'id': course.id}) }}">{{ course.name }}</a></td>
+                <td><a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a></td>
             </tr>
         {% else %}
             <tr>

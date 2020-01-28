@@ -49,10 +49,11 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="course_show", methods={"GET"})
+     * @Route("/{courseid}/show", name="course_show", methods={"GET"})
      */
-    public function show(Course $course): Response
+    public function show(String $courseid): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
         return $this->render('course/show.html.twig', [
             'course' => $course,
         ]);

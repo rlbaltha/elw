@@ -32,6 +32,12 @@ class Doc
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="docs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $course;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +75,18 @@ class Doc
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): self
+    {
+        $this->course = $course;
 
         return $this;
     }

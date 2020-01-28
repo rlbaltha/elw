@@ -24,10 +24,6 @@ class DocType extends AbstractType
                 'config_name' => 'doc_config',
                 'label' => '',
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username'
-            ])
         ;
     }
 
