@@ -21,14 +21,18 @@
         <thead>
             <tr>
                 <th>Title</th>
+                <th>Course</th>
+                <th>Owner</th>
+                <th>Updated</th>
             </tr>
         </thead>
         <tbody>
         {% for doc in docs %}
             <tr>
                 <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
-                <td>
-                </td>
+                <td>{{ doc.course.name }}</td>
+                <td>{{ doc.user.firstname }} {{ doc.user.lastname }}</td>
+                <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
         {% else %}
             <tr>
