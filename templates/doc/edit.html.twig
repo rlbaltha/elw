@@ -3,24 +3,15 @@
 {% block title %}Edit Doc{% endblock %}
 
 {% block subnav %}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-            Documents
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ course_path('doc_index') }}">List Docs</a>
-            <a class="dropdown-item" href="{{ course_path('doc_new') }}">Create Doc</a>
-        </div>
-    </li>
+    <a class="navbar-brand" href="#">{{ doc.title }}</a>
     <li class="nav-item">
-        <a class="nav-link" href="#">{{ doc.title }}</a>
-    </li>
-    <li class="nav-item">
-        {{ include('doc/_delete_form.html.twig') }}
+        <a href="#" id="submit-doc-form" class="nav-link">Submit</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_show', {'id': doc.id}) }}">Close</a>
+    </li>
+    <li class="nav-item">
+        {{ include('doc/_delete_form.html.twig') }}
     </li>
 {% endblock %}
 
@@ -30,6 +21,15 @@
         <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
         <div class="col"></div>
     </div>
+{% endblock %}
 
-
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $("#submit-doc-form").click(function () {
+                $("#doc-form").submit(); // Submit the form
+            });
+        });
+    </script>
 {% endblock %}

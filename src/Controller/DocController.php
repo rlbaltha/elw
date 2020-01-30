@@ -40,7 +40,7 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc->setUser($user);
         $doc->setCourse($course);
-        $form = $this->createForm(DocType::class, $doc);
+        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,7 +72,7 @@ class DocController extends AbstractController
      */
     public function edit(Request $request, Doc $doc, string $courseid): Response
     {
-        $form = $this->createForm(DocType::class, $doc);
+        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

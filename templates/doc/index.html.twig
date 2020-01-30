@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Doc index{% endblock %}
+{% block title %}Documents{% endblock %}
 
 {% block subnav %}
+    {{ parent() }}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Documents
@@ -15,7 +16,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Doc index</h1>
+    <h1>Documents</h1>
 
     <table class="table">
         <thead>

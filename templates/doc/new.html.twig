@@ -8,11 +8,9 @@
 {% endblock %}
 
 {% block subnav %}
+    <a class="navbar-brand" href="#">{{ doc.title }}</a>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#">{{ doc.title }}</a>
+        <a href="#" id="submit-doc-form" class="nav-link">Submit</a>
     </li>
 {% endblock %}
 
@@ -21,6 +19,17 @@
         <div class="col">{{ include('doc/_form.html.twig') }}</div>
         <div class="col"></div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $("#submit-doc-form").click(function () {
+                $("#doc-form").submit(); // Submit the form
+            });
+        });
+    </script>
 {% endblock %}
 
 
