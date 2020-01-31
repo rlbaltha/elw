@@ -12,4 +12,12 @@ fos_ck_editor:
             format_tags: 'p;h1;h2;h3;pre'
             height: 800
             width: 1200
+            extraPlugins: 'wordcount,notification'
             toolbar: [ [ 'Print' ], [ 'Undo', 'Redo' ], [ 'Format', 'Font', 'FontSize' ], [ 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat', 'CopyFormatting' ], [ 'TextColor', 'BGColor' ], [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'Link', 'Unlink' ], [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ], [ 'Image', 'Table' ], [ 'Maximize' ] ]
+    plugins:
+        wordcount:
+            path:     "/bundles/plugins/wordcount/" # with trailing slash
+            filename: "plugin.js"
+        notification:
+            path:     "/bundles/plugins/notification/" # with trailing slash
+            filename: "plugin.js"
