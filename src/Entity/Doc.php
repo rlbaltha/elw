@@ -20,7 +20,7 @@ class Doc
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private $title="New Document";
 
     /**
      * @ORM\Column(type="text", nullable=true)
