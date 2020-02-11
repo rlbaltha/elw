@@ -33,10 +33,16 @@ class Course
      */
     private $docs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset", mappedBy="courses")
+     */
+    private $labelsets;
+
     public function __construct()
     {
         $this->classlists = new ArrayCollection();
         $this->docs = new ArrayCollection();
+        $this->labelsets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +119,34 @@ class Course
             if ($doc->getCourse() === $this) {
                 $doc->setCourse(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Labelset[]
+     */
+    public function getLabelsets(): Collection
+    {
+        return $this->labelsets;
+    }
+
+    public function addLabelset(Labelset $labelset): self
+    {
+        if (!$this->labelsets->contains($labelset)) {
+            $this->labelsets[] = $labelset;
+            $labelset->addCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLabelset(Labelset $labelset): self
+    {
+        if ($this->labelsets->contains($labelset)) {
+            $this->labelsets->removeElement($labelset);
+            $labelset->removeCourse($this);
         }
 
         return $this;
