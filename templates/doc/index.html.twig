@@ -3,7 +3,10 @@
 {% block title %}Documents{% endblock %}
 
 {% block subnav %}
-    {{ parent() }}
+    <a class="navbar-brand" href="#">{{ course.name }}</a>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>
+    </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Documents

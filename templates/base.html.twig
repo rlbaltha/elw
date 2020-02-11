@@ -22,11 +22,11 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
+        <a href="{{ path('course_index') }}" class="navbar-brand">
+            <img src="https://design.online.uga.edu/images/logo.svg" height="28" alt="ELW">
+        </a>
         <ul class="navbar-nav">
             {% block subnav %}
-{#            <li class="nav-item">#}
-{#                <a class="nav-link" href="{{ path('app_login') }}">Login</a>#}
-{#            </li>#}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
