@@ -20,7 +20,7 @@
 
     <a href="{{ path('classlist_index') }}">back to list</a>
 
-    <a href="{{ path('classlist_edit', {'id': classlist.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
 
     {{ include('classlist/_delete_form.html.twig') }}
 {% endblock %}

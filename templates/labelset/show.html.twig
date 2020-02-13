@@ -24,7 +24,7 @@
 
     <a href="{{ path('labelset_index') }}">back to list</a>
 
-    <a href="{{ path('labelset_edit', {'id': labelset.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
 
     {{ include('labelset/_delete_form.html.twig') }}
 {% endblock %}

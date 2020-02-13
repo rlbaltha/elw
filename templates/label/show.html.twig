@@ -28,7 +28,7 @@
 
     <a href="{{ path('label_index') }}">back to list</a>
 
-    <a href="{{ path('label_edit', {'id': label.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('label_edit', {'id': label.id}) }}">Edit</a>
 
     {{ include('label/_delete_form.html.twig') }}
 {% endblock %}

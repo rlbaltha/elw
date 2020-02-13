@@ -24,11 +24,6 @@ class Labelset
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Course", inversedBy="labelsets")
-     */
-    private $courses;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="user")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -101,37 +96,6 @@ class Labelset
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Label[]
-     */
-    public function getLabels(): Collection
-    {
-        return $this->labels;
-    }
-
-    public function addLabel(Label $label): self
-    {
-        if (!$this->labels->contains($label)) {
-            $this->labels[] = $label;
-            $label->setLabelset($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLabel(Label $label): self
-    {
-        if ($this->labels->contains($label)) {
-            $this->labels->removeElement($label);
-            // set the owning side to null (unless already changed)
-            if ($label->getLabelset() === $this) {
-                $label->setLabelset(null);
-            }
-        }
 
         return $this;
     }

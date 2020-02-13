@@ -8,22 +8,15 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Level</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for labelset in labelsets %}
             <tr>
-                <td>{{ labelset.id }}</td>
-                <td>{{ labelset.name }}</td>
+                <td><a href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
                 <td>{{ labelset.level }}</td>
-                <td>
-                    <a href="{{ path('labelset_show', {'id': labelset.id}) }}">show</a>
-                    <a href="{{ path('labelset_edit', {'id': labelset.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>

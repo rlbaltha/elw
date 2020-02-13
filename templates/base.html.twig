@@ -27,19 +27,31 @@
         </a>
         <ul class="navbar-nav">
             {% block subnav %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Courses
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ path('course_index') }}">List Courses</a>
-                    <a class="dropdown-item" href="{{ path('course_new') }}">Create Course</a>
-                </div>
-            </li>
-            <li class="nav-item">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('labelset_index') }}">List Label Sets</a>
+                        <a class="dropdown-item" href="{{ path('labelset_new') }}">New Label Set</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Courses
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('course_index') }}">List Courses</a>
+                        <a class="dropdown-item" href="{{ path('course_new') }}">Create Course</a>
+                    </div>
+                </li>
+                <li class="nav-item">
 
-            </li>
+                </li>
             {% endblock %}
         </ul>
     </div>

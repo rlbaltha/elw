@@ -34,9 +34,10 @@ class Course
     private $docs;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset", mappedBy="courses")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset")
      */
     private $labelsets;
+
 
     public function __construct()
     {
@@ -136,7 +137,6 @@ class Course
     {
         if (!$this->labelsets->contains($labelset)) {
             $this->labelsets[] = $labelset;
-            $labelset->addCourse($this);
         }
 
         return $this;
@@ -146,9 +146,9 @@ class Course
     {
         if ($this->labelsets->contains($labelset)) {
             $this->labelsets->removeElement($labelset);
-            $labelset->removeCourse($this);
         }
 
         return $this;
     }
+
 }
