@@ -60,7 +60,7 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="course_edit", methods={"GET","POST"})
+     * @Route("/{courseid}/{id}/edit", name="course_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Course $course): Response
     {

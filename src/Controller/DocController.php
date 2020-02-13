@@ -21,11 +21,12 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/index", name="doc_index", methods={"GET"})
      */
-    public function index(DocRepository $docRepository): Response
+    public function index(DocRepository $docRepository, $courseid): Response
     {
-
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         return $this->render('doc/index.html.twig', [
             'docs' => $docRepository->findAll(),
+            'course' => $course
         ]);
     }
 
