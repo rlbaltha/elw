@@ -3,7 +3,7 @@
 {% block title %}Edit Doc{% endblock %}
 
 {% block subnav %}
-    <a class="navbar-brand" href="#">{{ doc.title }}</a>
+    <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }}</a>
     <li class="nav-item">
         <a href="#" id="submit-doc-form" class="nav-link">Submit</a>
     </li>
@@ -27,6 +27,15 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $("label").toggle();
+            $("#doc_title").toggle();
+            $("#doc_labels").toggle();
+            $("#doc-title-toggle").click(function () {
+                $("label").toggle();
+                $("#doc_title").toggle();
+                $("#doc_labels").toggle();
+            });
+
             $("#submit-doc-form").click(function () {
                 $("#doc-form").submit(); // Submit the form
             });
