@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Doc;
-use App\Entity\User;
+use App\Entity\Label;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -23,6 +23,12 @@ class DocType extends AbstractType
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
                 'label' => '',
+            ])
+            ->add('labels', EntityType::class, [
+                'class' => Label::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true
             ])
         ;
     }

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Labelset index{% endblock %}
+
+{% block body %}
+    <h1>Labelset index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for labelset in labelsets %}
+            <tr>
+                <td><a href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
+                <td>{{ labelset.level }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('labelset_new') }}">Create new</a>
+{% endblock %}

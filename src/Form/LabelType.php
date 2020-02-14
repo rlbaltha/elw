@@ -2,29 +2,42 @@
 
 namespace App\Form;
 
+use App\Entity\Doc;
+use App\Entity\Label;
+use App\Entity\Labelset;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+class LabelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
+            ->add('name', TextType::class, [
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('firstname', TextType::class, [
+            ->add('color', TextType::class, [
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('lastname', TextType::class, [
+            ->add('level', TextType::class, [
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+                'multiple' => false,
+            ])
+            ->add('labelset', EntityType::class, [
+                'class' => Labelset::class,
+                'choice_label' => 'name',
+                'multiple' => false,
             ])
         ;
     }
@@ -32,7 +45,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Label::class,
         ]);
     }
 }

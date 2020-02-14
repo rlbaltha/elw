@@ -5,7 +5,7 @@
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
     <li class="nav-item">
-        <a class="nav-link" href="{{ path('course_edit', {'id': course.id}) }}">Edit Course</a>
+        <a class="nav-link" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>

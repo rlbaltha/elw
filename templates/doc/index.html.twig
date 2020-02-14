@@ -26,6 +26,7 @@
             <tr>
                 <th>Title</th>
                 <th>Course</th>
+                <th>Labels</th>
                 <th>Owner</th>
                 <th>Updated</th>
             </tr>
@@ -35,6 +36,7 @@
             <tr>
                 <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
                 <td>{{ doc.course.name }}</td>
+                <td>{% for label in doc.labels %}<span class="badge badge-primary" style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}</td>
                 <td>{{ doc.user.firstname }} {{ doc.user.lastname }}</td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>

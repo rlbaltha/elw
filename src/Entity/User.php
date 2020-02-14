@@ -49,10 +49,22 @@ class User implements UserInterface
      */
     private $classlists;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="user", orphanRemoval=true)
+     */
+    private $labels;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Labelset", mappedBy="user", orphanRemoval=true)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
         $this->classlists = new ArrayCollection();
+        $this->labels = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,6 +211,68 @@ class User implements UserInterface
         if ($this->classlists->contains($classlist)) {
             $this->classlists->removeElement($classlist);
             $classlist->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Label[]
+     */
+    public function getLabels(): Collection
+    {
+        return $this->labels;
+    }
+
+    public function addLabel(Label $label): self
+    {
+        if (!$this->labels->contains($label)) {
+            $this->labels[] = $label;
+            $label->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLabel(Label $label): self
+    {
+        if ($this->labels->contains($label)) {
+            $this->labels->removeElement($label);
+            // set the owning side to null (unless already changed)
+            if ($label->getUser() === $this) {
+                $label->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Labelset[]
+     */
+    public function getUser(): Collection
+    {
+        return $this->user;
+    }
+
+    public function addUser(Labelset $user): self
+    {
+        if (!$this->user->contains($user)) {
+            $this->user[] = $user;
+            $user->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(Labelset $user): self
+    {
+        if ($this->user->contains($user)) {
+            $this->user->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getUser() === $this) {
+                $user->setUser(null);
+            }
         }
 
         return $this;

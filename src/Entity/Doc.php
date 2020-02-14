@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -54,6 +56,17 @@ class Doc
      * @ORM\JoinColumn(nullable=false)
      */
     private $course;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Label")
+     */
+    private $labels;
+
+    public function __construct()
+    {
+        $this->labels = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -117,4 +130,31 @@ class Doc
 
         return $this;
     }
+
+    /**
+     * @return Collection|Label[]
+     */
+    public function getLabels(): Collection
+    {
+        return $this->labels;
+    }
+
+    public function addLabel(Label $label): self
+    {
+        if (!$this->labels->contains($label)) {
+            $this->labels[] = $label;
+        }
+
+        return $this;
+    }
+
+    public function removeLabel(Label $label): self
+    {
+        if ($this->labels->contains($label)) {
+            $this->labels->removeElement($label);
+        }
+
+        return $this;
+    }
+
 }
