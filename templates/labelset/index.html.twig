@@ -3,8 +3,8 @@
 {% block title %}Labelset index{% endblock %}
 
 {% block body %}
-    <h1>Labelset index</h1>
-
+    <h1>Label Sets</h1>
+    <a class="btn btn-primary float-right" href="{{ path('labelset_new') }}">New Label Set</a>
     <table class="table">
         <thead>
             <tr>
@@ -16,7 +16,9 @@
         {% for labelset in labelsets %}
             <tr>
                 <td><a href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
-                <td>{{ labelset.level }}</td>
+                <td>
+                    {% if labelset.level == 0 %}Default{% else %}Instructor Created{% endif %}
+                </td>
             </tr>
         {% else %}
             <tr>
@@ -26,5 +28,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('labelset_new') }}">Create new</a>
 {% endblock %}

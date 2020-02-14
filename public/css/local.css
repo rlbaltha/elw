@@ -6,3 +6,15 @@ body {
     border-top-width: 5px;
     border-top-color: #ba0c2f;
 }
+
+div.checkbox > label {
+    margin-right:2em;
+}
+
+h1 {
+    font-size: 2em;
+    display: inline;
+}
+h2 {
+    font-size: 1.5em;
+}

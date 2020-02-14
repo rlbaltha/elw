@@ -46,6 +46,7 @@ class Label
      */
     private $labelset;
 
+
     public function __construct()
     {
         $this->doc = new ArrayCollection();
@@ -115,4 +116,5 @@ class Label
 
         return $this;
     }
+
 }

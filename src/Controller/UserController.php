@@ -79,6 +79,17 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/promote", name="user_promote", methods={"GET"})
+     */
+    public function promote(User $user): Response
+    {
+
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response

@@ -8,6 +8,7 @@ use App\Entity\Labelset;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,27 +19,19 @@ class LabelType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Title',
+                'label'  => 'Name',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('color', TextType::class, [
-                'label'  => 'Title',
+                'label'  => 'Color',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('level', TextType::class, [
-                'label'  => 'Title',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
+            ->add('level', ChoiceType::class, [
+                'choices' => ['Folder' => '0', 'Stage' => '1', 'Access' => '2'],
                 'multiple' => false,
-            ])
-            ->add('labelset', EntityType::class, [
-                'class' => Labelset::class,
-                'choice_label' => 'name',
-                'multiple' => false,
-            ])
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox'],
+            ]);
         ;
     }
 

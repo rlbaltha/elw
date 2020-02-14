@@ -20,15 +20,16 @@ class DocType extends AbstractType
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'doc_config',
-                'label' => '',
-            ])
             ->add('labels', EntityType::class, [
                 'class' => Label::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox']
+            ])
+            ->add('body', CKEditorType::class, [
+                'config_name' => 'doc_config',
+                'label' => '',
             ])
         ;
     }

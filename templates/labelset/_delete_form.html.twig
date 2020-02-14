@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('labelset_delete', {'id': labelset.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form class="float-right" method="post" action="{{ path('labelset_delete', {'id': labelset.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ labelset.id) }}">
     <button class="btn btn-warning">Delete</button>

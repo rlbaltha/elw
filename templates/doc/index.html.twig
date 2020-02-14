@@ -7,19 +7,15 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>
     </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Documents
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ course_path('doc_index') }}">List Docs</a>
-            <a class="dropdown-item" href="{{ course_path('doc_new') }}">Create Doc</a>
-        </div>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
     </li>
 {% endblock %}
 
 {% block body %}
     <h1>Documents</h1>
+
+    <a class="btn btn-primary float-right" href="{{ course_path('doc_new') }}">Create Doc</a>
 
     <table class="table">
         <thead>

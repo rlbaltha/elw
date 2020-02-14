@@ -29,15 +29,16 @@ class Labelset
      */
     private $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="labelset", orphanRemoval=true)
-     */
-    private $labels;
 
     /**
      * @ORM\Column(type="integer")
      */
     private $level;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="labelset", orphanRemoval=true)
+     */
+    private $labels;
 
     public function __construct()
     {
@@ -108,6 +109,37 @@ class Labelset
     public function setLevel(int $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Label[]
+     */
+    public function getLabels(): Collection
+    {
+        return $this->labels;
+    }
+
+    public function addLabel(Label $label): self
+    {
+        if (!$this->labels->contains($label)) {
+            $this->labels[] = $label;
+            $label->setLabelset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLabel(Label $label): self
+    {
+        if ($this->labels->contains($label)) {
+            $this->labels->removeElement($label);
+            // set the owning side to null (unless already changed)
+            if ($label->getLabelset() === $this) {
+                $label->setLabelset(null);
+            }
+        }
 
         return $this;
     }

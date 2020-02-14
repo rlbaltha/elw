@@ -5,29 +5,22 @@
 {% block body %}
     <h1>User index</h1>
 
+    <a class="btn btn-primary float-right" href="{{ path('user_new') }}">New User</a>
+
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Username</th>
+                <th>Name</th>
                 <th>Roles</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{% for role in user.roles %}{{ role }}{% endfor %}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                </td>
+                <td><a href="{{ path('user_edit', {'id': user.id}) }}">{{ user.firstname }} {{ user.lastname }}</a></td>
+                <td>{% for role in user.roles %}{{ role }} {% endfor %}</td>
             </tr>
         {% else %}
             <tr>
@@ -37,5 +30,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('user_new') }}">Create new</a>
 {% endblock %}

@@ -26,20 +26,26 @@ class LabelController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="label_new", methods={"GET","POST"})
+     * @Route("/{labelsetid}/new", name="label_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, $labelsetid): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $label = new Label();
         $form = $this->createForm(LabelType::class, $label);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $labelset = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findOneById($labelsetid);
+        $label->setLabelset( $labelset);
+        $label->setUser($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager->persist($label);
             $entityManager->flush();
 
-            return $this->redirectToRoute('label_index');
+            return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
         return $this->render('label/new.html.twig', [
@@ -63,13 +69,14 @@ class LabelController extends AbstractController
      */
     public function edit(Request $request, Label $label): Response
     {
+        $labelset = $label->getLabelset();
         $form = $this->createForm(LabelType::class, $label);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('label_index');
+            return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
         return $this->render('label/edit.html.twig', [

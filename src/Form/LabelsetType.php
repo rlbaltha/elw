@@ -17,11 +17,11 @@ class LabelsetType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Title',
+                'label'  => 'Name',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('level', TextType::class, [
-                'label'  => 'Title',
+                'label'  => 'Level',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('user', EntityType::class, [

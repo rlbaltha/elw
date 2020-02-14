@@ -3,28 +3,41 @@
 {% block title %}Labelset{% endblock %}
 
 {% block body %}
-    <h1>Labelset</h1>
+    <h1>{{ labelset.name }}</h1>
+    (Level: {% if labelset.level == 0 %}Default{% else %}Instructor Created{% endif %})
+
+    {{ include('labelset/_delete_form.html.twig') }}
+    <a class="btn btn-primary float-right" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
+    <a class="btn btn-primary float-right" href="{{ path('label_new', {'labelsetid': labelset.id}) }}">Add Label</a>
 
     <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Level</th>
+        </tr>
+        </thead>
         <tbody>
+        {% for label in labelset.labels %}
             <tr>
-                <th>Id</th>
-                <td>{{ labelset.id }}</td>
+                <td><a class="badge badge-primary p-2" style="background:{{ label.color }}" href="{{ path('label_edit', {'id': label.id}) }}">{{ label.name }}</a></td>
+                <td>
+                    {% if label.level == 0 %}
+                        Folder
+                    {% elseif label.level == 1 %}
+                        Stage
+                    {% else %}
+                        Access
+                    {% endif %}
+                </td>
             </tr>
+        {% else %}
             <tr>
-                <th>Name</th>
-                <td>{{ labelset.name }}</td>
+                <td colspan="5">no records found</td>
             </tr>
-            <tr>
-                <th>Level</th>
-                <td>{{ labelset.level }}</td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('labelset_index') }}">back to list</a>
 
-    <a class="btn btn-primary" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
-
-    {{ include('labelset/_delete_form.html.twig') }}
 {% endblock %}
