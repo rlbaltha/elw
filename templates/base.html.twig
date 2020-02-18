@@ -17,38 +17,40 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <a href="{{ path('course_index') }}" class="navbar-brand">
-            <img src="https://design.online.uga.edu/images/logo.svg" height="28" alt="ELW">
-        </a>
-        <ul class="navbar-nav">
-            {% block subnav %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Admin
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
-                        <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
-                        <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
-                </li>
-            {% endblock %}
-        </ul>
+    <div class="container d-flex justify-content-between">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <a href="{{ path('course_index') }}" class="navbar-brand">
+                <img src="https://design.online.uga.edu/images/logo.svg" height="28" alt="ELW">
+            </a>
+            <ul class="navbar-nav">
+                {% block subnav %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
+                            <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
+                            <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
+                    </li>
+                {% endblock %}
+            </ul>
+        </div>
     </div>
 </nav>
 
 
-<div class="container-fluid">
+<div class="container mt-5">
     {% block body %}{% endblock %}
 </div>
 
