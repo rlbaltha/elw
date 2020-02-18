@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Markup{% endblock %}
+
+{% block body %}
+    <h1>Edit Markup</h1>
+
+    {{ include('markup/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('markup_index') }}">back to list</a>
+
+    {{ include('markup/_delete_form.html.twig') }}
+{% endblock %}

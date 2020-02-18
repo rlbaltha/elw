@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Markupset{% endblock %}
+
+{% block body %}
+    <h1>Markupset</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ markupset.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ markupset.name }}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>{{ markupset.level }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('markupset_index') }}">back to list</a>
+
+    <a href="{{ path('markupset_edit', {'id': markupset.id}) }}">edit</a>
+
+    {{ include('markupset/_delete_form.html.twig') }}
+{% endblock %}

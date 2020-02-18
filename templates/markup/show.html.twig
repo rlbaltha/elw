@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Markup{% endblock %}
+
+{% block body %}
+    <h1>Markup</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ markup.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ markup.name }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ markup.color }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ markup.description }}</td>
+            </tr>
+            <tr>
+                <th>Sort</th>
+                <td>{{ markup.sort }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('markup_index') }}">back to list</a>
+
+    <a href="{{ path('markup_edit', {'id': markup.id}) }}">edit</a>
+
+    {{ include('markup/_delete_form.html.twig') }}
+{% endblock %}

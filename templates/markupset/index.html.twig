@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Markupset index{% endblock %}
+
+{% block body %}
+    <h1>Markupset index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Level</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for markupset in markupsets %}
+            <tr>
+                <td>{{ markupset.id }}</td>
+                <td>{{ markupset.name }}</td>
+                <td>{{ markupset.level }}</td>
+                <td>
+                    <a href="{{ path('markupset_show', {'id': markupset.id}) }}">show</a>
+                    <a href="{{ path('markupset_edit', {'id': markupset.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('markupset_new') }}">Create new</a>
+{% endblock %}

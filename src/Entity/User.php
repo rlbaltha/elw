@@ -59,12 +59,24 @@ class User implements UserInterface
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Markup", mappedBy="user", orphanRemoval=true)
+     */
+    private $markups;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Markupset", mappedBy="user", orphanRemoval=true)
+     */
+    private $markupsets;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
         $this->classlists = new ArrayCollection();
         $this->labels = new ArrayCollection();
         $this->user = new ArrayCollection();
+        $this->markups = new ArrayCollection();
+        $this->markupsets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -274,6 +286,68 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($user->getUser() === $this) {
                 $user->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Markup[]
+     */
+    public function getMarkups(): Collection
+    {
+        return $this->markups;
+    }
+
+    public function addMarkup(Markup $markup): self
+    {
+        if (!$this->markups->contains($markup)) {
+            $this->markups[] = $markup;
+            $markup->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarkup(Markup $markup): self
+    {
+        if ($this->markups->contains($markup)) {
+            $this->markups->removeElement($markup);
+            // set the owning side to null (unless already changed)
+            if ($markup->getUser() === $this) {
+                $markup->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Markupset[]
+     */
+    public function getMarkupsets(): Collection
+    {
+        return $this->markupsets;
+    }
+
+    public function addMarkupset(Markupset $markupset): self
+    {
+        if (!$this->markupsets->contains($markupset)) {
+            $this->markupsets[] = $markupset;
+            $markupset->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarkupset(Markupset $markupset): self
+    {
+        if ($this->markupsets->contains($markupset)) {
+            $this->markupsets->removeElement($markupset);
+            // set the owning side to null (unless already changed)
+            if ($markupset->getUser() === $this) {
+                $markupset->setUser(null);
             }
         }
 

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Markupset{% endblock %}
+
+{% block body %}
+    <h1>Edit Markupset</h1>
+
+    {{ include('markupset/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('markupset_index') }}">back to list</a>
+
+    {{ include('markupset/_delete_form.html.twig') }}
+{% endblock %}

@@ -38,12 +38,18 @@ class Course
      */
     private $labelsets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Markupset", inversedBy="courses")
+     */
+    private $markupsets;
+
 
     public function __construct()
     {
         $this->classlists = new ArrayCollection();
         $this->docs = new ArrayCollection();
         $this->labelsets = new ArrayCollection();
+        $this->markupsets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,6 +152,32 @@ class Course
     {
         if ($this->labelsets->contains($labelset)) {
             $this->labelsets->removeElement($labelset);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Markupset[]
+     */
+    public function getMarkupsets(): Collection
+    {
+        return $this->markupsets;
+    }
+
+    public function addMarkupset(Markupset $markupset): self
+    {
+        if (!$this->markupsets->contains($markupset)) {
+            $this->markupsets[] = $markupset;
+        }
+
+        return $this;
+    }
+
+    public function removeMarkupset(Markupset $markupset): self
+    {
+        if ($this->markupsets->contains($markupset)) {
+            $this->markupsets->removeElement($markupset);
         }
 
         return $this;
