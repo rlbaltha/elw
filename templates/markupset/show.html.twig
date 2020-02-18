@@ -3,28 +3,36 @@
 {% block title %}Markupset{% endblock %}
 
 {% block body %}
-    <h1>Markupset</h1>
+    <h1>{{ markupset.name }}</h1>
+    (Level: {% if markupset.level == 0 %}Default{% else %}Instructor Created{% endif %})
+
+    {{ include('markupset/_delete_form.html.twig') }}
+    <a class="btn btn-primary float-right" href="{{ path('markupset_edit', {'id': markupset.id}) }}">Edit</a>
+    {#<a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>#}
+
 
     <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Sort</th>
+        </tr>
+        </thead>
         <tbody>
+        {% for markup in markupset.markups %}
             <tr>
-                <th>Id</th>
-                <td>{{ markupset.id }}</td>
+                <td><a class="badge badge-primary" style="background:{{ markup.color }}" href="{{ path('markup_show', {'id': markup.id}) }}">{{ markup.name }}</a></td>
+                <td>{{ markup.description }}</td>
+                <td>{{ markup.sort }}</td>
             </tr>
+        {% else %}
             <tr>
-                <th>Name</th>
-                <td>{{ markupset.name }}</td>
+                <td colspan="6">no records found</td>
             </tr>
-            <tr>
-                <th>Level</th>
-                <td>{{ markupset.level }}</td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('markupset_index') }}">back to list</a>
 
-    <a href="{{ path('markupset_edit', {'id': markupset.id}) }}">edit</a>
-
-    {{ include('markupset/_delete_form.html.twig') }}
 {% endblock %}
