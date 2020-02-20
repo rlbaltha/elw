@@ -58,3 +58,19 @@ div.document-editor {
 .document-editor table thead th:first-of-type {
     border-left: 1px solid #d0d0d0;
 }
+
+span.highlight {
+    background-color: rgba(255, 255, 0, 0.25);
+    padding:2px 2px 2px 6px;
+    border:#e3e3e3 1px solid;
+    border-radius: 4px 0 0 4px;
+}
+span.note {
+    color:blue;
+    background-color:white;
+    border:#e3e3e3 1px solid;
+    border-radius: 0 4px 4px 0;
+    margin-left:-1px;
+    margin-right: 4px;
+    padding:2px 2px 2px 6px;
+}

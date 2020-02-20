@@ -13,4 +13,4 @@ fos_ck_editor:
             height: 800
             width: 1200
             toolbar: [ [ 'Print' ], [ 'Undo', 'Redo' ], [ 'Format', 'Font', 'FontSize' ], [ 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat', 'CopyFormatting' ], [ 'TextColor', 'BGColor' ], [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'Link', 'Unlink' ], [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ], [ 'Image', 'Table' ], [ 'Maximize' ] ]
-
+            allowedContent: 'span[id,class](highlight, note)'

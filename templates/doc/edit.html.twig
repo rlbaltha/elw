@@ -24,17 +24,22 @@
 {% block body %}
     <div class="row">
         <div class="col border">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+
+
         <div class="col">
+            {# Note Insert#}
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Insert Note</h4>
                     <form id='note_insert_form' name='note_insert_form'>
                         <label for="insert_value">Insert Note</label>
                         <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
-                        <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary" title="Insert Note">Submit</a>
+                        <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary"
+                           title="Insert Note">Submit</a>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 {% endblock %}
@@ -61,15 +66,15 @@
                 var nEditor = CKEDITOR.instances.doc_body;
                 nEditor.focus();
                 if (nEditor.mode == 'wysiwyg') {
-                    var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id +'" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
+                    var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id + '" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
                     nEditor.insertElement(hightlight);
-                    var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id +'" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
+                    var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
                     nEditor.insertElement(note);
                     $('#insert_value').val('');
-                }
-                else
+                } else
                     alert('You must be on WYSIWYG mode!');
             }
+
             $(function () {
                 $('#note_insert_submit').click(function () {
                     note();

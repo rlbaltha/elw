@@ -28,8 +28,55 @@
                 {{ doc.body|raw }}
             </div>
         </div>
-        <div class="col"></div>
+        <div class="col">
+            {# Notes Panel #}
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-body">
+                        <h4 class="card-title">Notes</h4>
+                        <div id="notes">
+                            <div id='notes_container'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
     </div>
 
     {#    {{ include('doc/_delete_form.html.twig') }}#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {# Notes #}
+            $("#notes").click(function () {
+                $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
+                $('.note, .super').toggle();
+            });
+            $('#notes_container').empty();
+            var numNotes = $('.note').length;
+            if (numNotes > 0) {
+                $('.note').each(function (index) {
+                    var note_index = index + 1;
+                    var note_number = '<span class="blue">' + note_index + '</span>';
+                    var note = '<div>' + note_number + $(this).html() + '</div>';
+                    $('#notes_container').append(note);
+                });
+            }
+            else {
+                var note = '<div class="cell divider clear">There are no notes in this document.</div>';
+                $('#notes_container').append(note);
+            }
+            $('.highlight').each(function (index) {
+                var span_number = index + 1;
+                var span_append = '<span class="super">' + span_number + '</span>';
+                $(this).append(span_append);
+            });
+            $('.super').toggle();
+            $('#inline-toggle').text('Inline');
+        });
+    </script>
 {% endblock %}
