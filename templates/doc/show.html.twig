@@ -9,7 +9,8 @@
 
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ doc.title }} {% for label in doc.labels %}<span class="badge badge-primary"
-                                                                                        style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}</a>
+                                                                                        style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
+    </a>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
     </li>
@@ -30,16 +31,11 @@
         </div>
         <div class="col">
             {# Notes Panel #}
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-body">
-                        <h4 class="card-title">Notes</h4>
-                        <div id="notes">
-                            <div id='notes_container'>
-                            </div>
-                        </div>
-                    </div>
+            <h4 class="card-title">Notes</h4>
+            <div id="notes">
+                <div id='notes_container'>
                 </div>
+            </div>
         </div>
     </div>
     </div>
@@ -60,13 +56,14 @@
             var numNotes = $('.note').length;
             if (numNotes > 0) {
                 $('.note').each(function (index) {
+                    var p = $(this).position();
+                    var top =  p.top - 100;
                     var note_index = index + 1;
                     var note_number = '<span class="blue">' + note_index + '</span>';
-                    var note = '<div>' + note_number + $(this).html() + '</div>';
+                    var note = '<div class="card card-note" style="top:'+ top +'px"><div class="card-body">' + note_number + $(this).html() + '</div></div>';
                     $('#notes_container').append(note);
                 });
-            }
-            else {
+            } else {
                 var note = '<div class="cell divider clear">There are no notes in this document.</div>';
                 $('#notes_container').append(note);
             }
@@ -75,8 +72,7 @@
                 var span_append = '<span class="super">' + span_number + '</span>';
                 $(this).append(span_append);
             });
-            $('.super').toggle();
-            $('#inline-toggle').text('Inline');
+            $('.note').toggle();
         });
     </script>
 {% endblock %}

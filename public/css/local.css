@@ -42,3 +42,11 @@ span.note {
     font-size:smaller;
     line-height: normal;
 }
+
+.card-note {
+    margin-bottom:1em;
+    width:80%;
+    position:absolute;
+    font-size: smaller;
+    overflow: auto;
+}
