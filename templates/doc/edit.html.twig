@@ -59,7 +59,7 @@
                             <div class="card-body">
                                 {% for markup in markupset.markups %}
                                     <a class="badge badge-primary" style="background-color:{{ markup.color }}"
-                                       href="javascript:insert_markup('{{ markup.id }}', '{{ markup.description }}','{{ markup.color }}'); "
+                                       href="javascript:insert_markup('{{ markup.id }}', '{{ markup.description }}','{{ markup.color }}');"
                                        title="Submit entry">{{ markup.name }}</a>
                                 {% endfor %}
                             </div>
@@ -75,12 +75,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script language="javascript">
+    <script>
         {# Markup insert and tracking #}
         function insert_markup(id, description, color) {
-            var id = id;
-            var description = description;
-            var color = color;
             var nEditor = CKEDITOR.instances.doc_body;
             nEditor.focus();
             var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + description + '" class="badge badge-primary" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
