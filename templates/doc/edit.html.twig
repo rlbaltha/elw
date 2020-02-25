@@ -40,13 +40,66 @@
                 </div>
             </div>
 
+            {# Markup Insert#}
+            <div class="accordion" id="accordionMarkup">
+                {% for markupset in markupsets %}
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapse{{ loop.index }}" aria-expanded="true"
+                                        aria-controls="collapse{{ loop.index }}">
+                                    {{ markupset.name }}
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="collapse{{ loop.index }}" class="collapse show"
+                             aria-labelledby="heading{{ loop.index }}" data-parent="#accordionMarkup">
+                            <div class="card-body">
+                                {% for markup in markupset.markups %}
+                                    <a class="badge badge-primary" style="background-color:{{ markup.color }}"
+                                       href="javascript:insert_markup('{{ markup.id }}', '{{ markup.description }}','{{ markup.color }}'); "
+                                       title="Submit entry">{{ markup.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
+    <script language="javascript">
+        {# Markup insert and tracking #}
+        function insert_markup(id, description, color) {
+            var id = id;
+            var description = description;
+            var color = color;
+            var nEditor = CKEDITOR.instances.doc_body;
+            nEditor.focus();
+            var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + description + '" class="badge badge-primary" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
+            nEditor.insertElement(markup_html);
+        }
+        {# Note insert #}
+        function note() {
+            var note_id = new Date().getTime();
+            var nEditor = CKEDITOR.instances.doc_body;
+            nEditor.focus();
+            if (nEditor.mode == 'wysiwyg') {
+                var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id + '" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
+                nEditor.insertElement(hightlight);
+                var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
+                nEditor.insertElement(note);
+                $('#insert_value').val('');
+            } else
+                alert('You must be on WYSIWYG mode!');
+        }
         $(document).ready(function () {
             $("label").toggle();
             $("#doc_title").toggle();
@@ -56,25 +109,9 @@
                 $("#doc_title").toggle();
                 $("#doc_labels").toggle();
             });
-
             $("#submit-doc-form").click(function () {
                 $("#doc-form").submit(); // Submit the form
             });
-            {# Note insert #}
-            function note() {
-                var note_id = new Date().getTime();
-                var nEditor = CKEDITOR.instances.doc_body;
-                nEditor.focus();
-                if (nEditor.mode == 'wysiwyg') {
-                    var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id + '" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
-                    nEditor.insertElement(hightlight);
-                    var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
-                    nEditor.insertElement(note);
-                    $('#insert_value').val('');
-                } else
-                    alert('You must be on WYSIWYG mode!');
-            }
-
             $(function () {
                 $('#note_insert_submit').click(function () {
                     note();

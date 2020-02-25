@@ -39,6 +39,7 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
@@ -54,6 +55,7 @@ class DocController extends AbstractController
 
         return $this->render('doc/new.html.twig', [
             'doc' => $doc,
+            'markupsets' => $markupsets,
             'form' => $form->createView(),
         ]);
     }
@@ -73,8 +75,10 @@ class DocController extends AbstractController
      */
     public function edit(Request $request, Doc $doc, string $courseid): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
+        $markupsets = $course->getMarkupsets();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -84,6 +88,7 @@ class DocController extends AbstractController
 
         return $this->render('doc/edit.html.twig', [
             'doc' => $doc,
+            'markupsets' => $markupsets,
             'form' => $form->createView(),
         ]);
     }
