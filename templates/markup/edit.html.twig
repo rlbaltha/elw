@@ -7,7 +7,9 @@
 
     {{ include('markup/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('markup_index') }}">back to list</a>
 
     {{ include('markup/_delete_form.html.twig') }}
+
+    <a href="{{ path('markup_index') }}">back to list</a>
+
 {% endblock %}

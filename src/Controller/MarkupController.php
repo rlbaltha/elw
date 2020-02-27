@@ -69,13 +69,14 @@ class MarkupController extends AbstractController
      */
     public function edit(Request $request, Markup $markup): Response
     {
+        $markupset = $markup->getMarkupset();
         $form = $this->createForm(MarkupType::class, $markup);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('markup_index');
+            return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
         }
 
         return $this->render('markup/edit.html.twig', [
@@ -84,17 +85,20 @@ class MarkupController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/{id}", name="markup_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Markup $markup): Response
     {
+        $markupset = $markup->getMarkupset();
+
         if ($this->isCsrfTokenValid('delete'.$markup->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($markup);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('markup_index');
+        return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
     }
 }
