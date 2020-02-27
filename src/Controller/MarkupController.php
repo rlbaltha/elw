@@ -26,20 +26,26 @@ class MarkupController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="markup_new", methods={"GET","POST"})
+     * @Route("/{markupsetid}/new", name="markup_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, $markupsetid): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $markup = new Markup();
         $form = $this->createForm(MarkupType::class, $markup);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $markupset = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findOneById($markupsetid);
+        $markup->setMarkupset( $markupset);
+        $markup->setUser($user);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($markup);
             $entityManager->flush();
 
-            return $this->redirectToRoute('markup_index');
+            return $this->redirectToRoute('markupset_show', ['id'=> $markupsetid]);
         }
 
         return $this->render('markup/new.html.twig', [

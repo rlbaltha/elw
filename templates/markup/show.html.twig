@@ -32,7 +32,7 @@
 
     <a href="{{ path('markup_index') }}">back to list</a>
 
-    <a href="{{ path('markup_edit', {'id': markup.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('markup_edit', {'id': markup.id}) }}">Edit</a>
 
     {{ include('markup/_delete_form.html.twig') }}
 {% endblock %}
