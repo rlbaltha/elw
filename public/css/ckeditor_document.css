@@ -74,3 +74,8 @@ span.note {
     margin-right: 4px;
     padding:2px 2px 2px 6px;
 }
+span.markup {
+    color:white;
+    border-radius: 4px 4px 4px 4px;
+    padding:2px 2px 2px 2px;
+}

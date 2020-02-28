@@ -41,7 +41,6 @@
     </div>
 
     {# Markup pops for this document #}
-    <h2>Markup</h2>
     {% for markupset in markupsets %}
         {% for markup in markupset.markups %}
             <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover'>
