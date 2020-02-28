@@ -1,5 +1,6 @@
 <form method="post" action="{{ path('markup_delete', {'id': markup.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ markup.id) }}">
-    <button class="btn">Delete</button>
+    <button class="btn btn-warning">Delete</button>
 </form>
+

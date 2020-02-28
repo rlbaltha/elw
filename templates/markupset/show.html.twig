@@ -8,7 +8,7 @@
 
     {{ include('markupset/_delete_form.html.twig') }}
     <a class="btn btn-primary float-right" href="{{ path('markupset_edit', {'id': markupset.id}) }}">Edit</a>
-    {#<a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>#}
+    #<a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>#
 
 
     <table class="table">
@@ -22,7 +22,7 @@
         <tbody>
         {% for markup in markupset.markups %}
             <tr>
-                <td><a class="badge badge-primary p-2" style="background:{{ markup.color }}" href="{{ path('markup_show', {'id': markup.id}) }}">{{ markup.name }}</a></td>
+                <td><a class="badge badge-primary p-2" style="background:{{ markup.color }}" href="{{ path('markup_edit', {'id': markup.id}) }}">{{ markup.name }}</a></td>
                 <td>{{ markup.description }}</td>
                 <td>{{ markup.sort }}</td>
             </tr>
