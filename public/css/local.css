@@ -50,3 +50,11 @@ span.note {
     font-size: smaller;
     overflow: auto;
 }
+
+.popover-title {
+    padding: 2em;
+}
+
+.popover-content {
+    padding: 2em;
+}
