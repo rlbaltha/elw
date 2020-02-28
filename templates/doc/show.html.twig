@@ -22,6 +22,7 @@
     </li>
 {% endblock %}
 
+
 {% block body %}
     <div class="row">
         <div class="col">
@@ -38,9 +39,21 @@
             </div>
         </div>
     </div>
+
+    {# Markup pops for this document #}
+    <h2>Markup</h2>
+    {% for markupset in markupsets %}
+        {% for markup in markupset.markups %}
+            <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover'>
+                <div class="popover-title" style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                <div class="popover-content"style="padding:.5em;">{{ markup.description|raw }}</div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
     </div>
 
-    {#    {{ include('doc/_delete_form.html.twig') }}#}
 {% endblock %}
 
 {% block javascripts %}
@@ -73,6 +86,16 @@
                 $(this).append(span_append);
             });
             $('.note').toggle();
+            {# Markup #}
+            $('.popover').hide();
+            $('.markup').mouseover(function () {
+                var id = "div[data-id='" + $(this).attr('data-id') + "']";
+                var offset = $(this).offset();
+                $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
+            });
+            $('.popover').click(function () {
+                $(this).hide();
+            });
         });
     </script>
 {% endblock %}

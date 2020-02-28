@@ -65,8 +65,11 @@ class DocController extends AbstractController
      */
     public function show(Doc $doc, string $courseid): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
+            'markupsets' => $markupsets,
         ]);
     }
 
