@@ -1,10 +1,17 @@
 {
     "type": "project",
     "license": "proprietary",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/IMSGlobal/lti-1-3-php-library"
+        }
+    ],
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "antishov/doctrine-extensions-bundle": "^1.4",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "sensio/framework-extra-bundle": "^5.1",
@@ -27,7 +34,8 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "4.4.*",
         "symfony/web-link": "4.4.*",
-        "symfony/yaml": "4.4.*"
+        "symfony/yaml": "4.4.*",
+        "imsglobal/lti-1p3-tool": "dev-master"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
@@ -62,7 +70,6 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "ckeditor:install": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "doctrine:schema:update --force": "symfony-cmd"
         },
