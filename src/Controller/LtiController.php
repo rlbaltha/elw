@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use IMSGlobal\LTI;
-use LTI\Util\Database;
-use LTI\Util\LaunchType;
-use LTI\Util\Cache;
-use LTI\Util\Cookie;
-use LTI\Util\User;
+use App\LTI\Util\Database;
+use App\LTI\Util\LaunchType;
+use App\LTI\Util\Cache;
+use App\LTI\Util\Cookie;
+use App\LTI\Util\User;
 
 
 class LtiController extends AbstractController
@@ -32,7 +32,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/launch", name="lti_launch", methods={"GET", "POST"})
      */
-    public function launch($activity_id = null, Request $request, SessionInterface $session)
+    public function launch($activity_id, Request $request, SessionInterface $session)
     {
         if ($request->get('error') != '') {
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
@@ -56,7 +56,7 @@ class LtiController extends AbstractController
         $data['launch_id'] = $launch->get_launch_id();
 
         $user = User::create_from_launcher($data);
-        $connect_class = $this->getImplementedSymfonyLTIClass();
+        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
         if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
@@ -94,11 +94,11 @@ class LtiController extends AbstractController
     }
 
     private function getDatabase($issuer) {
-        $implemented_symfony_lti_class = $this->getImplementedSymfonyLTIClass();
-        return new Database($issuer, $implemented_symfony_lti_class);
+        $implemented_lti_class = $this->getImplementedLTIClass();
+        return new Database($issuer, $implemented_lti_class);
     }
 
-    private function getImplementedSymfonyLTIClass() {
+    private function getImplementedLTIClass() {
         $connect_class = $this->getParameter('symfony_lti_class');
 
         if (empty($connect_class)) {

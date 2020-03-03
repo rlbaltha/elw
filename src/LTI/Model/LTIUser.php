@@ -1,6 +1,6 @@
 <?php
 
-namespace LTI\Model;
+namespace App\LTI\Model;
 
 /**
  * Class LTIUser

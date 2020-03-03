@@ -1,6 +1,6 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use IMSGlobal\LTI\Cookie as LTICookie;
@@ -34,7 +34,7 @@ class Cookie extends LTICookie{
      * @param int $exp
      * @return $this|LTICookie
      */
-    public function set_cookie($name, $value, $exp = 3600) {
+    public function set_cookie($name, $value, $exp = 3600, $options = []) {
         $this->session->set($name, $value);
         return $this;
     }

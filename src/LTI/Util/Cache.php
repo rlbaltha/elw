@@ -1,6 +1,6 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use IMSGlobal\LTI\Cache as LTICache;

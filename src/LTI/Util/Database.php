@@ -1,23 +1,23 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 use IMSGlobal\LTI;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use LTI\Util\LTIConnectAbstract;
+use App\LTI\Util\LTIConnectAbstract;
 
 /**
  * Class Database
  */
 class Database implements LTI\Database {
-    private $auth_login_url = '';
-    private $auth_token_url = '';
-    private $key_set_url = '';
-    private $client_id = '';
-    private $kid = '';
-    private $issuer = '';
-    private $private_key = '';
+    private $auth_login_url = 'https://elwriting.us-east-2.elasticbeanstalk.com/login';
+    private $auth_token_url = 'https://elwriting.us-east-2.elasticbeanstalk.com/launch';
+    private $key_set_url = 'https://elwriting.us-east-2.elasticbeanstalk.com/jwks';
+    private $client_id = 'from d2l';
+    private $kid = '9d31ac3ead925f3f247a4360c1e617ea';
+    private $issuer = 'https://ugatest2.view.usg.edu';
+    private $private_key = 'https://elwriting.us-east-2.elasticbeanstalk.com/private.key';
 
     /**
      * Database constructor.

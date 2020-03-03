@@ -1,24 +1,24 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 use Doctrine\ORM\EntityManager;
-use LTI\Model\LTIUser;
+use App\LTI\Model\LTIUser;
 
 /**
  * Class LTIConnectAbstract
  */
 abstract class LTIConnectAbstract {
-    protected $em;
-
-    /**
-     * SymfonyLTIConnectAbstract constructor.
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->em = $entityManager;
-    }
+//    protected $em;
+//
+//    /**
+//     * LTIConnectAbstract constructor.
+//     * @param EntityManager $entityManager
+//     */
+//    public function __construct(EntityManager $entityManager)
+//    {
+//        $this->em = $entityManager;
+//    }
 
     /**
      * Get data issuer from issuer (iss LTI1.3 parameter)

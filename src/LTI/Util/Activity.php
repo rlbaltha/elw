@@ -1,11 +1,10 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use LTI\Model\LTIUser;
 use \IMSGlobal\LTI;
 
 /**

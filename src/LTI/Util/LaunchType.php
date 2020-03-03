@@ -1,6 +1,6 @@
 <?php
 
-namespace LTI\Util;
+namespace App\LTI\Util;
 
 /**
  * Class LaunchType
