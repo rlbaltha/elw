@@ -1,32 +1,12 @@
 {
-  "http://imsglobal.org": {
-    "client_id": "testing12345",
-    "auth_login_url": "https://lti-ri.imsglobal.org/platforms/531/authorizations/new",
-    "auth_token_url": "https://lti-ri.imsglobal.org/platforms/531/access_tokens",
-    "key_set_url": "https://lti-ri.imsglobal.org/platforms/531/platform_keys/529.json",
-    "private_key_file": "/private.key",
-    "deployment": [
-      "1234"
-    ]
-  },
-  "ltiadvantagevalidator.imsglobal.org": {
-    "client_id": "imstestuser",
-    "auth_login_url": "https://ltiadvantagevalidator.imsglobal.org/ltitool/oidcauthurl.html",
-    "auth_token_url": "https://oauth2server.imsglobal.org/oauth2server/authcodejwt",
-    "key_set_url": "https://oauth2server.imsglobal.org/jwks",
-    "private_key_file": "/cert_suite_private.key",
-    "deployment": [
-      "testdeploy"
-    ]
-  },
   "https://elwriting.us-east-2.elasticbeanstalk.com": {
-    "client_id": "fromd2l",
-    "auth_login_url": "https://elwriting.us-east-2.elasticbeanstalk.com/login",
+    "client_id": "from_d2l",
+    "auth_login_url": "https://elwriting.us-east-2.elasticbeanstalk.com/lti_login",
     "auth_server": "https://elwriting.us-east-2.elasticbeanstalk.com",
     "auth_token_url": "https://elwriting.us-east-2.elasticbeanstalk.com/token",
     "key_set_url": "https://elwriting.us-east-2.elasticbeanstalk.com/jwks",
     "private_key_file": "/../SSL/private.key",
-    "kid": "xxx",
+    "kid": "a6a9101066ac9cd65dd1f4975abff764cbcb7ca3",
     "deployment": [
       "9d31ac3ead925f3f247a4360c1e617ea"
     ]

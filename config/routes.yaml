@@ -2,6 +2,3 @@ index:
     path: /
     controller: App\Controller\CourseController::index
 
-ltilaunch:
-    path: /ltilaunch
-    controller: App\Controller\CourseController::index

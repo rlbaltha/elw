@@ -30,10 +30,20 @@ class LtiController extends AbstractController
     }
 
     /**
+     * @Route("/token", name="lti_token", methods={"GET"})
+     */
+    public function token()
+    {
+        die('LTI token');
+    }
+
+
+    /**
      * @Route("/launch", name="lti_launch", methods={"GET", "POST"}, defaults={"activity_id": ""})
      */
     public function launch($activity_id, Request $request, Session $session)
     {
+        $issuer = 'https://elwriting.us-east-2.elasticbeanstalk.com';
         if ($request->get('error') != '') {
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
@@ -71,7 +81,7 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="lti_login", methods={"POST", "GET"})
+     * @Route("/lti_login", name="lti_login", methods={"POST", "GET"})
      */
     public function login(Request $request, Session $session)
     {
@@ -90,7 +100,7 @@ class LtiController extends AbstractController
 
 //        simplified database instantiation
         $issuer = 'https://elwriting.us-east-2.elasticbeanstalk.com';
-        $data = LTI\JWKS_Endpoint::from_issuer($this->getDatabase(), $issuer)->output_jwks();
+        $data = LTI\JWKS_Endpoint::from_issuer($this->getDatabase(), $issuer)->get_public_jwks();
 
         $response = new JsonResponse();
         $response->setContent(json_encode($data));
