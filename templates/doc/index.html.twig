@@ -8,12 +8,15 @@
         <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
+        <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared Docs</a>
     </li>
 {% endblock %}
 
 {% block body %}
-    <h1>Documents</h1>
+    <h2>{{header}}</h2>
 
     <a class="btn btn-primary float-right" href="{{ course_path('doc_new') }}">Create Doc</a>
 
@@ -21,7 +24,6 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Course</th>
                 <th>Labels</th>
                 <th>Owner</th>
                 <th>Updated</th>
@@ -31,7 +33,6 @@
         {% for doc in docs %}
             <tr>
                 <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
-                <td>{{ doc.course.name }}</td>
                 <td>{% for label in doc.labels %}<span class="badge badge-primary" style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}</td>
                 <td>{{ doc.user.firstname }} {{ doc.user.lastname }}</td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>

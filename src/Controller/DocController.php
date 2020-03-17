@@ -19,21 +19,24 @@ class DocController extends AbstractController
 {
 
     /**
-     * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyFiles"})
+     * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyDocs"})
      */
     public function index(DocRepository $docRepository, $courseid, $findtype): Response
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        if ($findtype=='MyFiles') {
-            $docs = $docRepository->findMyFiles($course, $user);
-        }
-        elseif ($findtype=='SharedFiles') {
+        if ($findtype=='SharedDocs') {
             $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findShared();
-            $docs = $docRepository->findSharedFiles($course, $label);
+            $docs = $docRepository->findSharedDocs($course, $label);
+            $header = 'Shared Docs';
+        }
+        else {
+            $docs = $docRepository->findMyDocs($course, $user);
+            $header = 'My Docs';
         }
         return $this->render('doc/index.html.twig', [
+            'header' => $header,
             'docs' => $docs,
             'course' => $course
         ]);

@@ -22,7 +22,7 @@ class DocRepository extends ServiceEntityRepository
     /**
     * @return Doc[] Returns an array of Doc objects
     */
-        public function findMyFiles($course, $user)
+        public function findMyDocs($course, $user)
         {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.course = :val1')
@@ -38,7 +38,7 @@ class DocRepository extends ServiceEntityRepository
     /**
      * @return Doc[] Returns an array of Doc objects
      */
-    public function findSharedFiles($course, $label)
+    public function findSharedDocs($course, $label)
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.course = :val1')
