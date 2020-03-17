@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Markup;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,9 +25,9 @@ class MarkupType extends AbstractType
                 'label'  => 'Color',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('description', TextType::class, [
-                'label'  => 'Description',
-                'attr' => ['class' => 'form-control']
+            ->add('description', CKEditorType::class, [
+                'config_name' => 'simple_config',
+                'label' => '',
             ])
             ->add('sort', TextType::class, [
                 'label'  => 'Sort',

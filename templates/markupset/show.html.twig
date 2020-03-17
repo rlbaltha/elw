@@ -23,7 +23,7 @@
         {% for markup in markupset.markups %}
             <tr>
                 <td><a class="badge badge-primary p-2" style="background:{{ markup.color }}" href="{{ path('markup_edit', {'id': markup.id}) }}">{{ markup.name }}</a></td>
-                <td>{{ markup.description }}</td>
+                <td>{{ markup.description|raw }}</td>
                 <td>{{ markup.sort }}</td>
             </tr>
         {% else %}
