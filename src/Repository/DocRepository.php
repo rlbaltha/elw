@@ -19,32 +19,47 @@ class DocRepository extends ServiceEntityRepository
         parent::__construct($registry, Doc::class);
     }
 
-    // /**
-    //  * @return Doc[] Returns an array of Doc objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Doc[] Returns an array of Doc objects
+    */
+        public function findMyFiles($course, $user)
+        {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.user = :val2')
+                ->setParameter('val1', $course)
+                ->setParameter('val2', $user)
+                ->orderBy('d.updated', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+    /**
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findSharedFiles($course, $label)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('d.course = :val1')
+            ->andWhere(':val2 MEMBER OF d.labels')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $label)
+            ->orderBy('d.updated', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Doc
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+        /*
+        public function findOneBySomeField($value): ?Doc
+        {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.exampleField = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
+        */
 }

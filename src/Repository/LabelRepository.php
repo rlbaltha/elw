@@ -36,15 +36,15 @@ class LabelRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Label
+
+    public function findShared(): ?Label
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('l.name = :val')
+            ->setParameter('val', 'Shared')
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
