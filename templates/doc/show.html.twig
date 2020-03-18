@@ -32,7 +32,7 @@
         </div>
         <div class="col">
             {# Notes Panel #}
-            <h4 class="card-title">Notes</h4>
+            <h4 class="card-title d-inline">Notes</h4> <a id="toggle-inline" class="btn btn-primary ml-1" href="#">Inline</a>
             <div id="notes">
                 <div id='notes_container'>
                 </div>
@@ -44,8 +44,9 @@
     {% for markupset in markupsets %}
         {% for markup in markupset.markups %}
             <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover'>
-                <div class="popover-title" style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                <div class="popover-content"style="padding:.5em;">{{ markup.description|raw }}</div>
+                <div class="popover-title"
+                     style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
             </div>
         {% endfor %}
     {% endfor %}
@@ -60,29 +61,43 @@
     <script>
         $(document).ready(function () {
             {# Notes #}
-            $("#notes").click(function () {
+            $("#toggle-inline").click(function () {
                 $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
                 $('.note, .super').toggle();
+                $('#notes_container').toggle();
             });
             $('#notes_container').empty();
             var numNotes = $('.note').length;
             if (numNotes > 0) {
                 $('.note').each(function (index) {
                     var p = $(this).position();
-                    var top =  p.top - 100;
+                    var top = p.top - 150;
                     var note_index = index + 1;
                     var note_number = '<span class="blue">' + note_index + '</span>';
-                    var note = '<div class="card card-note" style="top:'+ top +'px"><div class="card-body">' + note_number + $(this).html() + '</div></div>';
+                    var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="card card-note" style="top:' + top + 'px"><div class="card-body">' + note_number + $(this).html() + '</div></div>';
                     $('#notes_container').append(note);
                 });
             } else {
                 var note = '<div class="cell divider clear">There are no notes in this document.</div>';
                 $('#notes_container').append(note);
             }
+            $('.card-note').each(function (index) {
+                $(this).click(function () {
+                    $('.highlight').removeClass('hfocus');
+                    var hid = $(this).attr("data-id")
+                    $('#' + hid).addClass('hfocus');
+                });
+            });
+
             $('.highlight').each(function (index) {
                 var span_number = index + 1;
+                $(this).attr('id', 'h' + span_number);
                 var span_append = '<span class="super">' + span_number + '</span>';
                 $(this).append(span_append);
+                $(this).click(function () {
+                    $('.card').removeClass('notefocus')
+                    $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));
+                });
             });
             $('.note').toggle();
             {# Markup #}
@@ -95,6 +110,7 @@
             $('.popover').click(function () {
                 $(this).hide();
             });
+
         });
     </script>
 {% endblock %}
