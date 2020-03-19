@@ -19,48 +19,4 @@ h2 {
     font-size: 1.5em;
 }
 
-/* Doc display */
-span.highlight {
-    background-color: rgba(255, 255, 0, 0.11);
-    padding:2px 2px 2px 6px;
-    border:#e3e3e3 1px solid;
-    border-radius: 4px 0 0 4px;
-}
 
-span.note {
-    color:blue;
-    background-color:white;
-    border:#e3e3e3 1px solid;
-    border-radius: 0 4px 4px 0;
-    margin-left:-1px;
-    margin-right: 4px;
-    padding:2px 2px 2px 6px;
-}
-
-.super {
-    color:blue;
-    vertical-align:super;
-    font-size:smaller;
-    line-height: normal;
-}
-
-.card-note {
-    margin-bottom:1em;
-    width:80%;
-    position:absolute;
-    font-size: smaller;
-    overflow: auto;
-}
-
-.popover-title {
-    padding: 2em;
-}
-
-.popover-content {
-    padding: 2em;
-}
-
-.notefocus {
-    border-color: #0f74a8;
-    left: -5em;
-}

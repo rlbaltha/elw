@@ -99,6 +99,8 @@
                 $(this).click(function () {
                     $('.card').removeClass('notefocus')
                     $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));
+                    $('.hfocus').addClass('highlight').removeClass('hfocus');
+                    $('#h' + span_number).removeClass('highlight').addClass('hfocus');
                 });
             });
             $('.note').toggle();
