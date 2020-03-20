@@ -157,4 +157,17 @@ class Doc
         return $this;
     }
 
+    /**
+     * @return Boolean
+     */
+    public function isOwner($user)
+    {
+        if($user == $this->user){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

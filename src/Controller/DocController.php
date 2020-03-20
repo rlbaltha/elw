@@ -6,6 +6,7 @@ use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -90,6 +91,11 @@ class DocController extends AbstractController
      */
     public function edit(Request $request, Doc $doc, string $courseid): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        if (!$doc->isOwner($user)) {
+            throw new AccessDeniedException();
+        }
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
@@ -113,6 +119,11 @@ class DocController extends AbstractController
      */
     public function delete(Request $request, Doc $doc, string $courseid): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        if (!$doc->isOwner($user)) {
+            throw new AccessDeniedException();
+        }
         if ($this->isCsrfTokenValid('delete'.$doc->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($doc);

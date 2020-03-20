@@ -16,24 +16,27 @@
 {% endblock %}
 
 {% block body %}
-    <h2>{{header}}</h2>
+    <h2>{{ header }}</h2>
 
     <a class="btn btn-primary float-right" href="{{ course_path('doc_new') }}">Create Doc</a>
 
+    <input class="form-control" style="width:25%" id="filter" type="text" placeholder="Search..">
     <table class="table">
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Labels</th>
-                <th>Owner</th>
-                <th>Updated</th>
-            </tr>
+        <tr>
+            <th>Title</th>
+            <th>Labels</th>
+            <th>Owner</th>
+            <th>Updated</th>
+        </tr>
         </thead>
         <tbody>
         {% for doc in docs %}
             <tr>
                 <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
-                <td>{% for label in doc.labels %}<span class="badge badge-primary" style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}</td>
+                <td>{% for label in doc.labels %}<span class="badge badge-primary"
+                                                       style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
+                </td>
                 <td>{{ doc.user.firstname }} {{ doc.user.lastname }}</td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
@@ -46,3 +49,21 @@
     </table>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $(document).ready(function(){
+                $("#filter").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("table tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+
