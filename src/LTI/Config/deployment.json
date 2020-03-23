@@ -5,7 +5,7 @@
     "auth_server": "https://englvm01.english.uga.edu",
     "auth_token_url": "https://englvm01.english.uga.edu/token",
     "key_set_url": "https://englvm01.english.uga.edu//jwks",
-    "private_key_file": "/../englvm01_english_uga_edu.key",
+    "private_key_file": "englvm01_english_uga_edu.key",
     "kid": "a6a9101066ac9cd65dd1f4975abff764cbcb7ca3",
     "deployment": [
       "9d31ac3ead925f3f247a4360c1e617ea"
