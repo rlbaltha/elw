@@ -99,7 +99,7 @@ class LtiController extends AbstractController
     public function jwks(Request $request) {
 
 //        simplified database instantiation
-        $issuer = 'https://elwriting.us-east-2.elasticbeanstalk.com';
+        $issuer = 'https://englvm01.english.uga.edu';
         $data = LTI\JWKS_Endpoint::from_issuer($this->getDatabase(), $issuer)->get_public_jwks();
 
         $response = new JsonResponse();
