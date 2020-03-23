@@ -49,6 +49,7 @@ class LtiController extends AbstractController
         }
 
         $launch = LTI\LTI_Message_Launch::new($this->getDatabase(), new Cache($session), new Cookie($session));
+        $data = $launch->get_launch_data();
 
 //        try {
 //            $launch = LTI\LTI_Message_Launch::new($this->getDatabase(), new Cache($session), new Cookie($session))
@@ -58,25 +59,31 @@ class LtiController extends AbstractController
 //        }
 
         // assign launch type 'RESOURCE' by default
-        $type_launch = LaunchType::RESOURCE;
-
-        if ($launch->is_deep_link_launch()) {
-            $type_launch = LaunchType::DEEP;
-        }
-
-        $data = $launch->get_launch_data();
-        $data['launch_id'] = $launch->get_launch_id();
-
-        $user = User::create_from_launcher($data);
-
-        // get custom field: activity_id
-        if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
-            isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
-            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
-        }
+//        $type_launch = LaunchType::RESOURCE;
+//
+//        if ($launch->is_deep_link_launch()) {
+//            $type_launch = LaunchType::DEEP;
+//        }
+//
+//        $data = $launch->get_launch_data();
+//        $data['launch_id'] = $launch->get_launch_id();
+//
+//        $user = User::create_from_launcher($data);
+//
+//        // get custom field: activity_id
+//        if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
+//            isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
+//            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
+//        }
 
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
         // need to develop actual login here
+        $message = 'LTI Success  '. $data;
+        $this->addFlash(
+            'lti',
+            $message
+            );
+
         return $this->redirectToRoute('course_index');
     }
 
