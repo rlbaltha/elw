@@ -51,6 +51,11 @@
 
 
 <div class="container-fluid mt-3">
+    {% for message in app.flashes('lti') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
     {% block body %}{% endblock %}
 </div>
 

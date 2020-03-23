@@ -22,4 +22,19 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/testing", name="default")
+     */
+    public function testing()
+    {
+        $message = 'LTI Success';
+        $this->addFlash(
+            'lti',
+            $message
+        );
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController',
+        ]);
+    }
+
 }
