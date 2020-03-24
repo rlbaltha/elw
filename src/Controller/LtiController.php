@@ -43,7 +43,7 @@ class LtiController extends AbstractController
      */
     public function launch($activity_id, Request $request, Session $session)
     {
-        $issuer = 'https://elwriting.us-east-2.elasticbeanstalk.com';
+
         if ($request->get('error') != '') {
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
@@ -92,7 +92,6 @@ class LtiController extends AbstractController
      */
     public function login(Request $request, Session $session)
     {
-        $issuer = 'https://elwriting.us-east-2.elasticbeanstalk.com';
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
         LTI\LTI_OIDC_Login::new($this->getDatabase(), new Cache($session), new Cookie($session))
