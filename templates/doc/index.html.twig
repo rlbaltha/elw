@@ -13,6 +13,9 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared Docs</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'ReviewDocs'}) }}">Reviews By Me</a>
+    </li>
 {% endblock %}
 
 {% block body %}
@@ -26,7 +29,7 @@
         <tr>
             <th>Title</th>
             <th>Labels</th>
-            <th>Owner</th>
+            <th>Owner(s))</th>
             <th>Updated</th>
         </tr>
         </thead>
@@ -37,7 +40,10 @@
                 <td>{% for label in doc.labels %}<span class="badge badge-primary"
                                                        style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
                 </td>
-                <td>{{ doc.user.firstname }} {{ doc.user.lastname }}</td>
+                <td>
+                    {{ doc.user.firstname }} {{ doc.user.lastname }}
+                    {% if doc.origin %}/ {{doc.origin.user.firstname}} {{doc.origin.user.lastname}}{% endif %}
+                </td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
         {% else %}

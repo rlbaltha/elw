@@ -20,25 +20,24 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
-    * @return Doc[] Returns an array of Doc objects
-    */
-        public function findMyDocs($course, $user)
-        {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.course = :val1')
-                ->andWhere('d.user = :val2')
-                ->setParameter('val1', $course)
-                ->setParameter('val2', $user)
-                ->orderBy('d.updated', 'ASC')
-                ->getQuery()
-                ->getResult()
-            ;
-        }
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findMyDocs($course, $user)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.user = :val2')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $user)
+            ->orderBy('d.updated', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     /**
      * @return Doc[] Returns an array of Doc objects
      */
-    public function findSharedDocs($course, $label)
+    public function findDocsByLabel($course, $label)
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.course = :val1')
@@ -47,19 +46,21 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val2', $label)
             ->orderBy('d.updated', 'ASC')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
-        /*
-        public function findOneBySomeField($value): ?Doc
-        {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.exampleField = :val')
-                ->setParameter('val', $value)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-        }
-        */
+
+
+    /**
+     * @return Doc Returns a Doc objects
+     */
+    public function findOneById($docid): ?Doc
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.id = :val')
+            ->setParameter('val', $docid)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

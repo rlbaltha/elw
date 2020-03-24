@@ -62,9 +62,20 @@ class Doc
      */
     private $labels;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Doc", inversedBy="reviews")
+     */
+    private $origin;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Doc", mappedBy="origin")
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->labels = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
 
@@ -168,6 +179,49 @@ class Doc
         else{
             return false;
         }
+    }
+
+    public function getOrigin(): ?self
+    {
+        return $this->origin;
+    }
+
+    public function setOrigin(?self $origin): self
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(self $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setOrigin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(self $review): self
+    {
+        if ($this->reviews->contains($review)) {
+            $this->reviews->removeElement($review);
+            // set the owning side to null (unless already changed)
+            if ($review->getOrigin() === $this) {
+                $review->setOrigin(null);
+            }
+        }
+
+        return $this;
     }
 
 }

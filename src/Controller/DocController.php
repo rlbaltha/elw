@@ -28,9 +28,14 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($findtype=='SharedDocs') {
-            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findShared();
-            $docs = $docRepository->findSharedDocs($course, $label);
+            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
+            $docs = $docRepository->findDocsByLabel($course, $label);
             $header = 'Shared Docs';
+        }
+        elseif ($findtype=='ReviewDocs') {
+            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
+            $docs = $docRepository->findDocsByLabel($course, $label);
+            $header = 'Review Docs By Me';
         }
         else {
             $docs = $docRepository->findMyDocs($course, $user);
@@ -55,6 +60,49 @@ class DocController extends AbstractController
         $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
+        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($doc);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
+        }
+
+        return $this->render('doc/new.html.twig', [
+            'doc' => $doc,
+            'markupsets' => $markupsets,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/{docid}/review", name="doc_review", methods={"GET","POST"})
+     */
+    public function review(Request $request, $courseid, $docid): Response
+    {
+        $doc = new Doc();
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $reviewlabel = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
+        $markupsets = $course->getMarkupsets();
+        $doc_title = 'Review of '.$doc->getTitle();
+        $labels = $origin->getLabels();
+        foreach ($labels as &$label) {
+            if ($label->getName() != 'Shared') {
+                $doc->addLabel($label);
+            }
+        }
+        $doc->setUser($user);
+        $doc->setCourse($course);
+        $doc->setOrigin($origin);
+        $doc->setTitle($doc_title);
+        $doc->setBody($origin->getBody());
+        $doc->addLabel($reviewlabel);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 

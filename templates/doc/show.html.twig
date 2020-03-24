@@ -20,6 +20,9 @@
     </li>
     {% endif %}
     <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Review</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Close</a>
     </li>
 {% endblock %}

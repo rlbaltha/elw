@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Doc;
 use App\Entity\Label;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -37,14 +38,16 @@ class LabelRepository extends ServiceEntityRepository
     */
 
 
-    public function findShared(): ?Label
+    /**
+     * @return Label Returns a Label objects
+     */
+    public function findOneByName($value): ?Label
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.name = :val')
-            ->setParameter('val', 'Shared')
+            ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
 }
