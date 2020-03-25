@@ -11,17 +11,31 @@
     <a class="navbar-brand" href="#">{{ doc.title }} {% for label in doc.labels %}<span class="badge badge-primary"
                                                                                         style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
     </a>
+    {# if owner #}
     {%  if app.user == doc.user %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            Reviews
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for review in doc.reviews %}
+                <a class="dropdown-item" href="{{ course_path('doc_show', {'id': review.id}) }}">{{ review.user.firstname }} {{ review.user.lastname }}</a>
+            {% endfor %}
+        </div>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
     </li>
     <li class="nav-item">
         {{ include('doc/_delete_form.html.twig') }}
     </li>
-    {% endif %}
+    {% else %}
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Review</a>
+        <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
     </li>
+    {% endif %}
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Close</a>
     </li>

@@ -29,7 +29,7 @@ class DocRepository extends ServiceEntityRepository
             ->andWhere('d.user = :val2')
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
-            ->orderBy('d.updated', 'ASC')
+            ->orderBy('d.updated', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -44,7 +44,7 @@ class DocRepository extends ServiceEntityRepository
             ->andWhere(':val2 MEMBER OF d.labels')
             ->setParameter('val1', $course)
             ->setParameter('val2', $label)
-            ->orderBy('d.updated', 'ASC')
+            ->orderBy('d.updated', 'DESC')
             ->getQuery()
             ->getResult();
     }

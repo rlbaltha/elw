@@ -22,27 +22,54 @@
     <h2>{{ header }}</h2>
 
     <a class="btn btn-primary float-right" href="{{ course_path('doc_new') }}">Create Doc</a>
+    <div class="p-1">
+        <input class="form-control" style="width:25%" id="filter" type="text" placeholder="Search..">
+    </div>
+    <div class="p-2">
+        Filter:
+        {% for labelset in course.labelsets %}
+            {% for label in labelset.labels %}
+                <span class="badge badge-primary p-2"
+                      style="cursor: pointer; background:{{ label.color }}">{{ label.name }}</span>
+            {% endfor %}
+        {% endfor %}
+        <span class="badge badge-primary p-2"
+              style="cursor: pointer; background: grey">Clear</span>
+    </div>
 
-    <input class="form-control" style="width:25%" id="filter" type="text" placeholder="Search..">
     <table class="table">
         <thead>
         <tr>
             <th>Title</th>
             <th>Labels</th>
-            <th>Owner(s))</th>
+            <th>Owner</th>
+            <th>Reviews</th>
             <th>Updated</th>
         </tr>
         </thead>
         <tbody>
         {% for doc in docs %}
-            <tr>
+            <tr class="body">
                 <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
                 <td>{% for label in doc.labels %}<span class="badge badge-primary"
                                                        style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
                 </td>
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
-                    {% if doc.origin %}/ {{doc.origin.user.firstname}} {{doc.origin.user.lastname}}{% endif %}
+                </td>
+                <td>{% if app.user == doc.user and doc.reviews|length > 0 %}
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                 Reviews <span class="badge badge-primary">{{ doc.reviews|length }}</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                {% for review in doc.reviews %}
+                                    <a class="dropdown-item"
+                                       href="{{ course_path('doc_show', {'id': review.id}) }}">{{ review.user.firstname }} {{ review.user.lastname }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
@@ -60,13 +87,23 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            $(document).ready(function(){
-                $("#filter").on("keyup", function() {
-                    var value = $(this).val().toLowerCase();
-                    $("table tr").filter(function() {
+            $("#filter").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("table tr.body").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+            $("span.badge").click(function () {
+                if ($(this).text() == 'Clear') {
+                    $("table tr.body").show();
+                }
+                else {
+                    var value = $(this).text().toLowerCase();
+                    $("table tr.body").filter(function () {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
-                });
+                }
+
             });
         });
     </script>
