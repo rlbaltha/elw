@@ -57,7 +57,7 @@
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
                 </td>
-                <td>{% if app.user == doc.user and doc.reviews|length > 0 %}
+                <td>{% if doc.reviews|length > 0 %}
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                  Reviews <span class="badge badge-primary">{{ doc.reviews|length }}</span>
