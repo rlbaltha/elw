@@ -10,13 +10,7 @@
 {% block subnav %}
     <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }} <i class="material-icons">expand_more</i></a>
     <li class="nav-item">
-        <a href="#" id="submit-doc-form" class="nav-link">Submit</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_show', {'id': doc.id}) }}">Close</a>
-    </li>
-    <li class="nav-item">
-        {{ include('doc/_delete_form.html.twig') }}
+        <a href="#" id="submit-doc-form" class="btn btn-primary">Submit</a>
     </li>
 {% endblock %}
 
@@ -35,7 +29,7 @@
                         <label for="insert_value">Insert Note</label>
                         <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
                         <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary"
-                           title="Insert Note">Submit</a>
+                           title="Insert Note">Insert</a>
                     </form>
                 </div>
             </div>
