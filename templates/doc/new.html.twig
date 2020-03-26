@@ -4,11 +4,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {% endblock %}
 
 {% block subnav %}
-    <a class="navbar-brand" href="#">{{ doc.title }}</a>
+    <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }} <i class="material-icons">expand_less</i></a>
     <li class="nav-item">
         <a href="#" id="submit-doc-form" class="nav-link">Submit</a>
     </li>
@@ -17,16 +17,90 @@
 {% block body %}
     <div class="row">
         <div class="col">{{ include('doc/_form.html.twig') }}</div>
-        <div class="col"></div>
+        <div class="col">
+            {# Note Insert#}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Insert Note</h4>
+                    <form id='note_insert_form' name='note_insert_form'>
+                        <label for="insert_value">Insert Note</label>
+                        <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
+                        <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary"
+                           title="Insert Note">Submit</a>
+                    </form>
+                </div>
+            </div>
+
+            {# Markup Insert#}
+            <div class="accordion" id="accordionMarkup">
+                {% for markupset in markupsets %}
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapse{{ loop.index }}" aria-expanded="true"
+                                        aria-controls="collapse{{ loop.index }}">
+                                    {{ markupset.name }}
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="collapse{{ loop.index }}" class="collapse show"
+                             aria-labelledby="heading{{ loop.index }}" data-parent="#accordionMarkup">
+                            <div class="card-body">
+                                {% for markup in markupset.markups %}
+                                    <a class="badge badge-primary" style="background-color:{{ markup.color }}"
+                                       href="javascript:insert_markup('{{ markup.id }}', '{{ markup.name }}','{{ markup.color }}');"
+                                       title="Submit entry">{{ markup.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
+        {# Markup insert and tracking #}
+        function insert_markup(id, name, color) {
+            var nEditor = CKEDITOR.instances.doc_body;
+            nEditor.focus();
+            var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + name + '" class="badge badge-primary markup" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
+            nEditor.insertElement(markup_html);
+        }
+        {# Note insert #}
+        function note() {
+            var note_id = new Date().getTime();
+            var nEditor = CKEDITOR.instances.doc_body;
+            nEditor.focus();
+            if (nEditor.mode == 'wysiwyg') {
+                var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id + '" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
+                nEditor.insertElement(hightlight);
+                var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
+                nEditor.insertElement(note);
+                $('#insert_value').val('');
+            } else
+                alert('You must be on WYSIWYG mode!');
+        }
         $(document).ready(function () {
+            $("#doc-title-toggle").click(function () {
+                $("label").toggle();
+                $("#doc_title").toggle();
+                $("#doc_labels").toggle();
+                var text = $('.material-icons').text();
+                $('.material-icons').text(text == "expand_more" ? "expand_less" : "expand_more");
+            });
             $("#submit-doc-form").click(function () {
                 $("#doc-form").submit(); // Submit the form
+            });
+            $(function () {
+                $('#note_insert_submit').click(function () {
+                    note();
+                });
             });
         });
     </script>

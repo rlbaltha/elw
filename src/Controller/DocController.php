@@ -90,7 +90,7 @@ class DocController extends AbstractController
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $reviewlabel = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
         $markupsets = $course->getMarkupsets();
-        $doc_title = 'Review of '.$doc->getTitle();
+        $doc_title = 'Review for '.$origin->getUser()->getFirstname().' '.$origin->getUser()->getLastname();
         $labels = $origin->getLabels();
         foreach ($labels as &$label) {
             if ($label->getName() != 'Shared') {
