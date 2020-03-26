@@ -1,10 +1,10 @@
 {
-  "https://englvm01.english.uga.edu": {
+  "https://ugatest2.view.usg.edu/": {
     "client_id": "90fd07d4-0a1d-449d-82e6-2fb566eabf33",
-    "auth_login_url": "https://englvm01.english.uga.edu/lti_login",
-    "auth_server": "https://englvm01.english.uga.edu",
-    "auth_token_url": "https://englvm01.english.uga.edu/token",
-    "key_set_url": "https://englvm01.english.uga.edu/jwks",
+    "auth_login_url": "https://ugatest2.view.usg.edu/login",
+    "auth_server": "https://ugatest2.view.usg.edu/",
+    "auth_token_url": "https://ugatest2.view.usg.edu/token",
+    "key_set_url": "https://ugatest2.view.usg.edu//jwks",
     "private_key_file": "/../SSL/private.key",
     "kid": "a6a9101066ac9cd65dd1f4975abff764cbcb7ca3",
     "deployment": [
