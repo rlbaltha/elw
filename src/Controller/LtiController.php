@@ -65,10 +65,10 @@ class LtiController extends AbstractController
 //            $type_launch = LaunchType::DEEP;
 //        }
 //
-//        $data = $launch->get_launch_data();
-//        $data['launch_id'] = $launch->get_launch_id();
-//
-//        $user = User::create_from_launcher($data);
+        $data = $launch->get_launch_data();
+        $data['launch_id'] = $launch->get_launch_id();
+
+        $user = User::create_from_launcher($data);
 //
 //        // get custom field: activity_id
 //        if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
@@ -78,7 +78,7 @@ class LtiController extends AbstractController
 
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
         // need to develop actual login here
-        $message = 'LTI Success  '. $data;
+        $message = 'LTI Success  '. $user->getName();
         $this->addFlash(
             'lti',
             $message
