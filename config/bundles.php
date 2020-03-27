@@ -1,5 +1,6 @@
 <?php
 
+
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
@@ -14,4 +15,6 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
+    Elw\LTIBundle\LTIBundle::class => ['all' => true],
+
 ];

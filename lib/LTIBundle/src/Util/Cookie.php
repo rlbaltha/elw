@@ -1,6 +1,6 @@
 <?php
 
-namespace App\LTI\Util;
+namespace Elw\LTIBundle\Util;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use IMSGlobal\LTI\Cookie as LTICookie;

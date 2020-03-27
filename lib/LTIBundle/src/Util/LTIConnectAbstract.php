@@ -1,9 +1,9 @@
 <?php
 
-namespace App\LTI\Util;
+namespace Elw\LTIBundle\Util;
 
 use Doctrine\ORM\EntityManager;
-use App\LTI\Model\LTIUser;
+use Elw\LTIBundle\Model\LTIUser;
 
 /**
  * Class LTIConnectAbstract

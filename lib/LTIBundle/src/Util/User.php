@@ -1,10 +1,10 @@
 <?php
 
-namespace App\LTI\Util;
+namespace Elw\LTIBundle\Util;
 
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use App\LTI\Model\LTIUser;
+use Elw\LTIBundle\Model\LTIUser;
 use IMSGlobal\LTI;
 use IMSGlobal\LTI\LTI_Exception;
 

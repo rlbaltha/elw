@@ -1,6 +1,6 @@
 <?php
 
-namespace App\LTI\Model;
+namespace Elw\LTIBundle\Model;
 
 /**
  * Class LTIUser

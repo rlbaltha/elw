@@ -1,6 +1,6 @@
 <?php
 
-namespace App\LTI\Util;
+namespace Elw\LTIBundle\Util;
 
 /**
  * Class LaunchType
