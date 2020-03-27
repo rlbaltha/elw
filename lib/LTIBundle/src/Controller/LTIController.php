@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use IMSGlobal\LTI;
 use Elw\LTIBundle\Util\Database;
@@ -42,7 +42,7 @@ class LTIController extends AbstractController
     /**
      * @Route("/launch", name="lti_launch", methods={"GET", "POST"}, defaults={"activity_id": ""})
      */
-    public function launch($activity_id, Request $request, Session $session)
+    public function launch($activity_id, Request $request, SessionInterface $session)
     {
 
         if ($request->get('error') != '') {
@@ -82,7 +82,7 @@ class LTIController extends AbstractController
     /**
      * @Route("/lti_login", name="lti_login", methods={"POST", "GET"})
      */
-    public function login(Request $request, Session $session)
+    public function login(Request $request, SessionInterface $session)
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 

@@ -4,7 +4,7 @@ namespace Elw\LTIBundle\Util;
 
 
 use Elw\LTIBundle\Exceptions\LTIException;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Elw\LTIBundle\Model\LTIUser;
 use IMSGlobal\LTI;
 use IMSGlobal\LTI\LTI_Exception;
@@ -85,7 +85,7 @@ class User {
         $lti_user->setRoles(array_unique($roles));
     }
 
-    public static function send_score($score, $launch_data, Session $session, $em, $parameter_symfony_lti_class) {
+    public static function send_score($score, $launch_data, SessionInterface $session, $em, $parameter_symfony_lti_class) {
         $cache = new Cache($session);
         $cookie = new Cookie($session);
 

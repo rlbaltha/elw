@@ -2,7 +2,7 @@
 
 namespace Elw\LTIBundle\Util;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use IMSGlobal\LTI\Cache as LTICache;
 
 /**
@@ -13,9 +13,9 @@ class Cache extends LTICache {
 
     /**
      * Cache constructor.
-     * @param Session $session
+     * @param SessionInterface $session
      */
-    public function __construct(Session $session)
+    public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
