@@ -14,7 +14,7 @@ use Elw\LTIBundle\Util\LaunchType;
 use Elw\LTIBundle\Util\Cache;
 use Elw\LTIBundle\Util\Cookie;
 use Elw\LTIBundle\Util\User;
-use Elw\LTIBundle\Exception\LTIException;
+use Elw\LTIBundle\Exceptions\LTIException;
 
 
 
@@ -67,7 +67,7 @@ class LTIController extends AbstractController
         $data['launch_id'] = $launch->get_launch_id();
 
         $user = User::create_from_launcher($data);
-        $connect_class = $this->getImplementedSymfonyLTIClass();
+        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
         if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
@@ -108,19 +108,19 @@ class LTIController extends AbstractController
     }
 
     private function getDatabase($issuer) {
-        $implemented_symfony_lti_class = $this->getImplementedLTIClass();
-        return new Database($issuer, $implemented_symfony_lti_class);
+        $implemented_lti_class = $this->getImplementedLTIClass();
+        return new Database($issuer, $implemented_lti_class);
     }
 
 
     private function getImplementedLTIClass() {
-        $connect_class = $this->getParameter('symfony_lti_class');
+        $connect_class = $this->getParameter('lti_class');
 
         if (empty($connect_class)) {
             throw new LTIException("Connect class is not defined in config packages");
         }
 
-        return new LTIException($connect_class($this->getDoctrine()->getManager()));
+        return new $connect_class($this->getDoctrine()->getManager());
     }
 
 }

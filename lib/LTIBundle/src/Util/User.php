@@ -3,6 +3,7 @@
 namespace Elw\LTIBundle\Util;
 
 
+use Elw\LTIBundle\Exceptions\LTIException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Elw\LTIBundle\Model\LTIUser;
 use IMSGlobal\LTI;
@@ -84,37 +85,37 @@ class User {
         $lti_user->setRoles(array_unique($roles));
     }
 
-//    public static function send_score($score, $launch_data, Session $session, $em, $parameter_symfony_lti_class) {
-//        $cache = new Cache($session);
-//        $cookie = new Cookie($session);
-//
-//        $cache->cache_launch_data($launch_data['launch_id'], $launch_data);
-//
-//        $connect_class = new $parameter_symfony_lti_class($em);
-//        $database = new Database($launch_data['iss'], $connect_class);
-//
-//        $launch = LTI\LTI_Message_Launch::from_cache($launch_data['launch_id'], $database, $cache, $cookie);
-//        if (!$launch->has_ags()) {
-//            throw new Exception("Don't have grades!");
-//        }
-//        $grades = $launch->get_ags();
-//
-//        $score = LTI\LTI_Grade::new()
-//            ->set_score_given($score)
-//            ->set_score_maximum(100)
-//            ->set_timestamp(date(\DateTime::ISO8601))
-//            ->set_activity_progress('Completed')
-//            ->set_grading_progress('FullyGraded')
-//            ->set_user_id($launch->get_launch_data()['sub']);
-//
-//        $result = $grades->put_grade($score);
-//        foreach($result['headers'] as $h) {
-//            if ($h == 'HTTP/1.1 200 OK') {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
+    public static function send_score($score, $launch_data, Session $session, $em, $parameter_symfony_lti_class) {
+        $cache = new Cache($session);
+        $cookie = new Cookie($session);
+
+        $cache->cache_launch_data($launch_data['launch_id'], $launch_data);
+
+        $connect_class = new $parameter_symfony_lti_class($em);
+        $database = new Database($launch_data['iss'], $connect_class);
+
+        $launch = LTI\LTI_Message_Launch::from_cache($launch_data['launch_id'], $database, $cache, $cookie);
+        if (!$launch->has_ags()) {
+            throw new LTIException("Don't have grades!");
+        }
+        $grades = $launch->get_ags();
+
+        $score = LTI\LTI_Grade::new()
+            ->set_score_given($score)
+            ->set_score_maximum(100)
+            ->set_timestamp(date(\DateTime::ISO8601))
+            ->set_activity_progress('Completed')
+            ->set_grading_progress('FullyGraded')
+            ->set_user_id($launch->get_launch_data()['sub']);
+
+        $result = $grades->put_grade($score);
+        foreach($result['headers'] as $h) {
+            if ($h == 'HTTP/1.1 200 OK') {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 

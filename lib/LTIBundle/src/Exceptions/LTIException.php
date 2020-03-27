@@ -4,6 +4,6 @@ namespace Elw\LTIBundle\Exceptions;
 
 /**
  * Generic class LTIException
- * @package Elw\LTI\DependencyInjection
+ * @package Elw\LTIBundle\DependencyInjection
  */
 class LTIException extends \Exception {}

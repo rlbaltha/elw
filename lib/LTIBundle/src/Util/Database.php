@@ -5,12 +5,12 @@ namespace Elw\LTIBundle\Util;
 use \IMSGlobal\LTI;
 use Elw\LTIBundle\Util\LTIConnectAbstract;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Elw\LTIBundle\Exception\LTIException;
+use Elw\LTIBundle\Exceptions\LTIException;
 use Symfony\Component\HttpFoundation\Exception;
 
 /**
  * Class Database
- * @package App\LTI\Util
+ * @package Elw\LTIBundle\Util
  */
 class Database implements LTI\Database {
     private $auth_login_url = '';
@@ -29,7 +29,18 @@ class Database implements LTI\Database {
      */
     public function __construct($iss, LTIConnectAbstract $connect)
     {
-        $connect_data = $connect->getDataIssuer($iss);
+//        $connect_data = $connect->getDataIssuer($iss);
+
+        $connect_data = [
+            "issuer" => "https://ugatest2.view.usg.edu",
+            "auth_login_url"=> "https://ugatest2.view.usg.edu/d2l/lti/authenticate",
+            "auth_token_url" => "https://auth.brightspace.com/core/connect/token",
+            "key_set_url"=> "https://ugatest2.view.usg.edu/d2l/.well-known/jwks",
+            "client_id"=> "90fd07d4-0a1d-449d-82e6-2fb566eabf33",
+            "kid"=> "a6a9101066ac9cd65dd1f4975abff764cbcb7ca3",
+            "auth_server"=> "https://ugatest2.view.usg.edu",
+            "private_key"=> "/../SSL/private.key"
+        ];
 
         $must_keys_in_connect_data = array(
             'auth_login_url',
