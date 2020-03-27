@@ -2,8 +2,8 @@
 
 namespace Elw\LTIBundle\Util;
 
-use \IMSGlobal\LTI;
 use Elw\LTIBundle\Util\LTIConnectAbstract;
+use \IMSGlobal\LTI;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Elw\LTIBundle\Exceptions\LTIException;
 use Symfony\Component\HttpFoundation\Exception;
@@ -27,7 +27,8 @@ class Database implements LTI\Database {
      * @param LTIConnectAbstract $connect
      * @throws LTIException
      */
-    public function __construct($iss, LTIConnectAbstract $connect)
+//    public function __construct($iss, LTIConnectAbstract $connect)
+    public function __construct($iss)
     {
 //        $connect_data = $connect->getDataIssuer($iss);
 

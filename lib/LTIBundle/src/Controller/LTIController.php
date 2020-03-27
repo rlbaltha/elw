@@ -108,8 +108,9 @@ class LTIController extends AbstractController
     }
 
     private function getDatabase($issuer) {
-        $implemented_lti_class = $this->getImplementedLTIClass();
-        return new Database($issuer, $implemented_lti_class);
+//        $implemented_lti_class = $this->getImplementedLTIClass();
+//        return new Database($issuer, $implemented_lti_class);
+        return new Database($issuer);
     }
 
 
