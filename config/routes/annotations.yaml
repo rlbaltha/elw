@@ -4,4 +4,3 @@ controllers:
 lti:
     resource: ../../lib/LTIBundle/src/Controller/
     type: annotation
-    prefix: /lti
