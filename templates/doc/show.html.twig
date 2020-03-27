@@ -11,6 +11,20 @@
     <a class="navbar-brand" href="#">{{ doc.title }} {% for label in doc.labels %}<span class="badge badge-primary"
                                                                                         style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
     </a>
+    <td>{% if doc.reviews|length > 0 %}
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Reviews <span class="badge badge-primary">{{ doc.reviews|length }}</span>
+                </a>
+                <div class="dropdown-menu">
+                    {% for review in doc.reviews %}
+                        <a class="dropdown-item"
+                           href="{{ course_path('doc_show', {'id': review.id}) }}">{{ review.user.firstname }} {{ review.user.lastname }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </td>
     {# if owner #}
     {%  if app.user == doc.user %}
     <li class="nav-item">
