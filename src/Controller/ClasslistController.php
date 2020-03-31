@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Classlist;
 use App\Form\ClasslistType;
 use App\Repository\ClasslistRepository;
+use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,6 +58,7 @@ class ClasslistController extends AbstractController
             'classlist' => $classlist,
         ]);
     }
+
 
     /**
      * @Route("/{id}/edit", name="classlist_edit", methods={"GET","POST"})

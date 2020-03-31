@@ -15,6 +15,7 @@
 {% block body %}
 
     {{ include('course/_delete_form.html.twig') }}
+    <a class="btn btn-primary float-right" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All Pending</a>
     <a class="btn btn-primary float-right" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
     <a class="btn btn-primary float-right" href="{{ path('classlist_new') }}">Add Students</a>
     <table class="table">
@@ -26,8 +27,8 @@
         </tr>
         {% for classlist in course.classlists %}
                 <tr>
-                    <td>{% for user in classlist.user %}{{ user.firstname }} {{ user.lastname }}{% endfor %}</td>
-                    <td>{{ classlist.status }}</td>
+                    <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
+                    <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
                     <td>{{ classlist.role }}</td>
                 </tr>
         {% endfor %}

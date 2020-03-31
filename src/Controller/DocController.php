@@ -6,6 +6,7 @@ use App\Entity\Classlist;
 use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
+use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,18 +24,17 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyDocs"})
      */
-    public function index(DocRepository $docRepository, $courseid, $findtype): Response
+    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
     {
-
+        //discover need info on request
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $classuser =  $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findOneByUser($course, $user);
+        $classuser =  $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
         if (!$classuser) {
             $classlist = new Classlist();
-            $classlist->addUser($user);
+            $classlist->setUser($user);
             $classlist->setCourse($course);
             $classlist->setRole('Student');
             $classlist->setStatus('Pending');
@@ -43,7 +43,16 @@ class DocController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
+        // check classlist status
+        elseif ($classuser->getStatus() == 'Pending') {
+            $this->addFlash('notice', 'Your addmission to the course has not yet been approved.');
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        }
+        // test role access
         else {
+            $allowed = ['Student','Instructor'];
+            $permissions->restrictAccessTo($courseid, $allowed);
+
             if ($findtype == 'SharedDocs') {
                 $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
                 $docs = $docRepository->findDocsByLabel($course, $label);
@@ -67,8 +76,11 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/new", name="doc_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $courseid): Response
+    public function new(Request $request, Permissions $permissions, $courseid): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -97,8 +109,11 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/{docid}/review", name="doc_review", methods={"GET","POST"})
      */
-    public function review(Request $request, $courseid, $docid): Response
+    public function review(Request $request, Permissions $permissions, $courseid, $docid): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -140,8 +155,11 @@ class DocController extends AbstractController
     /**
      * @Route("/{id}/{courseid}/show", name="doc_show", methods={"GET"})
      */
-    public function show(Doc $doc, string $courseid): Response
+    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
@@ -153,8 +171,11 @@ class DocController extends AbstractController
     /**
      * @Route("/{id}/{courseid}/edit", name="doc_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Doc $doc, string $courseid): Response
+    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if (!$doc->isOwner($user)) {
@@ -181,8 +202,11 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Doc $doc, string $courseid): Response
+    public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if (!$doc->isOwner($user)) {

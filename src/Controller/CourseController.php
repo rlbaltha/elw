@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
+use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,8 +52,11 @@ class CourseController extends AbstractController
     /**
      * @Route("/{courseid}/show", name="course_show", methods={"GET"})
      */
-    public function show(String $courseid): Response
+    public function show(Permissions $permissions, String $courseid): Response
     {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
         return $this->render('course/show.html.twig', [
             'course' => $course,
@@ -62,8 +66,13 @@ class CourseController extends AbstractController
     /**
      * @Route("/{courseid}/{id}/edit", name="course_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Course $course): Response
+    public function edit(Request $request, Permissions $permissions, Course $course): Response
     {
+        $courseid = $course->getId();
+
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
 
@@ -80,10 +89,38 @@ class CourseController extends AbstractController
     }
 
     /**
+     *  Approves all pending student
+     * @Route("/approve_all_pending/{courseid}" , name="approve_all_pending")
+     *
+     */
+    public function approveAllAction(Permissions $permissions, $courseid)
+    {
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        foreach($classlists as $classlist){
+            if ($classlist->getStatus() == 'Pending'){
+                $classlist->setStatus('Approved');
+                $entityManager->persist($classlist);
+            }
+        }
+        $entityManager->flush();
+        return $this->redirect($this->generateUrl('course_show', ['courseid' => $courseid]));
+
+    }
+
+    /**
      * @Route("/{id}", name="course_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Course $course): Response
+    public function delete(Request $request, Permissions $permissions, Course $course): Response
     {
+        $courseid = $course->getId();
+
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
         if ($this->isCsrfTokenValid('delete'.$course->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($course);

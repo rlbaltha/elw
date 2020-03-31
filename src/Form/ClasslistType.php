@@ -25,8 +25,7 @@ class ClasslistType extends AbstractType
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'username',
-                'multiple' => true,
+                'choice_label' => 'username'
             ])
             ->add('course', EntityType::class, [
                 'class' => Course::class,

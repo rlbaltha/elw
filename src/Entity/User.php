@@ -45,7 +45,7 @@ class User implements UserInterface
     private $docs;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Classlist", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Classlist", mappedBy="user", orphanRemoval=true)
      */
     private $classlists;
 
@@ -202,6 +202,7 @@ class User implements UserInterface
         return $this;
     }
 
+
     /**
      * @return Collection|Classlist[]
      */
@@ -214,7 +215,7 @@ class User implements UserInterface
     {
         if (!$this->classlists->contains($classlist)) {
             $this->classlists[] = $classlist;
-            $classlist->addUser($this);
+            $classlist->setUser($this);
         }
 
         return $this;
@@ -224,11 +225,15 @@ class User implements UserInterface
     {
         if ($this->classlists->contains($classlist)) {
             $this->classlists->removeElement($classlist);
-            $classlist->removeUser($this);
+            // set the owning side to null (unless already changed)
+            if ($classlist->getUser() === $this) {
+                $classlist->setUser(null);
+            }
         }
 
         return $this;
     }
+
 
     /**
      * @return Collection|Label[]

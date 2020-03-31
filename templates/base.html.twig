@@ -28,6 +28,7 @@
             </a>
             <ul class="navbar-nav">
                 {% block subnav %}
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown"
@@ -40,6 +41,7 @@
                             <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
                         </div>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                     </li>
@@ -51,8 +53,8 @@
 
 
 <div class="container-fluid mt-3">
-    {% for message in app.flashes('lti') %}
-        <div class="flash-notice">
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-info">
             {{ message }}
         </div>
     {% endfor %}

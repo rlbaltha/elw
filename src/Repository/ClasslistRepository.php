@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Classlist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Classlist|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,16 +34,18 @@ class ClasslistRepository extends ServiceEntityRepository
     }
 
 
-    public function findOneByUser($course, $user): ?Classlist
+    public function findCourseUser($course, $user): ?Classlist
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.course = :course')
-            ->andWhere(':user MEMBER OF c.user')
-            ->setParameter('course', $course)
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.course = :course')
+                ->andWhere('c.user = :user')
+                ->setParameter('course', $course)
+                ->setParameter('user', $user)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+        }
     }
 
 }
