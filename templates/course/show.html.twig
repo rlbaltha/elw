@@ -21,13 +21,15 @@
         <tbody>
         <tr>
             <td>Students</td>
+            <td>Status</td>
+            <td>Role</td>
         </tr>
         {% for classlist in course.classlists %}
-            {% for user in classlist.user %}
                 <tr>
-                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                    <td>{% for user in classlist.user %}{{ user.firstname }} {{ user.lastname }}{% endfor %}</td>
+                    <td>{{ classlist.status }}</td>
+                    <td>{{ classlist.role }}</td>
                 </tr>
-            {% endfor %}
         {% endfor %}
         </tbody>
     </table>

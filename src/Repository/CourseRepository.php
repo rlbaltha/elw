@@ -36,7 +36,9 @@ class CourseRepository extends ServiceEntityRepository
     }
     */
 
-
+    /**
+    * @return Course Returns a Course objects
+    */
     public function findOneByCourseid($value): ?Course
     {
         return $this->createQueryBuilder('c')

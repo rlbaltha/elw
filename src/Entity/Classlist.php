@@ -26,13 +26,18 @@ class Classlist
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $role;
+    private $role = 'Student';
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="classlists")
      * @ORM\JoinColumn(nullable=false)
      */
     private $course;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status = 'Pending';
 
     public function __construct()
     {
@@ -90,6 +95,18 @@ class Classlist
     public function setCourse(?Course $course): self
     {
         $this->course = $course;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

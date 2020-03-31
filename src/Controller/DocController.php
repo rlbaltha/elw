@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Classlist;
 use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
@@ -24,28 +25,43 @@ class DocController extends AbstractController
      */
     public function index(DocRepository $docRepository, $courseid, $findtype): Response
     {
+
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        if ($findtype=='SharedDocs') {
-            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
-            $docs = $docRepository->findDocsByLabel($course, $label);
-            $header = 'Shared Docs';
-        }
-        elseif ($findtype=='ReviewDocs') {
-            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
-            $docs = $docRepository->findDocsByLabel($course, $label);
-            $header = 'Review Docs By Me';
+        $classuser =  $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findOneByUser($course, $user);
+
+        if (!$classuser) {
+            $classlist = new Classlist();
+            $classlist->addUser($user);
+            $classlist->setCourse($course);
+            $classlist->setRole('Student');
+            $classlist->setStatus('Pending');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($classlist);
+            $entityManager->flush();
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
         else {
-            $docs = $docRepository->findMyDocs($course, $user);
-            $header = 'My Docs';
+            if ($findtype == 'SharedDocs') {
+                $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
+                $docs = $docRepository->findDocsByLabel($course, $label);
+                $header = 'Shared Docs';
+            } elseif ($findtype == 'ReviewDocs') {
+                $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
+                $docs = $docRepository->findDocsByLabel($course, $label);
+                $header = 'Review Docs By Me';
+            } else {
+                $docs = $docRepository->findMyDocs($course, $user);
+                $header = 'My Docs';
+            }
+            return $this->render('doc/index.html.twig', [
+                'header' => $header,
+                'docs' => $docs,
+                'course' => $course
+            ]);
         }
-        return $this->render('doc/index.html.twig', [
-            'header' => $header,
-            'docs' => $docs,
-            'course' => $course
-        ]);
     }
 
     /**

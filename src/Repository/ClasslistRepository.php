@@ -19,32 +19,30 @@ class ClasslistRepository extends ServiceEntityRepository
         parent::__construct($registry, Classlist::class);
     }
 
-    // /**
-    //  * @return Classlist[] Returns an array of Classlist objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Classlist[] Returns an array of Classlist objects
+    */
+    public function findByCourseid($courseid)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('c.course = :val')
+            ->setParameter('val', $courseid)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Classlist
+
+    public function findOneByUser($course, $user): ?Classlist
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('c.course = :course')
+            ->andWhere(':user MEMBER OF c.user')
+            ->setParameter('course', $course)
+            ->setParameter('user', $user)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

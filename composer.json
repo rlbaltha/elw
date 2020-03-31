@@ -14,6 +14,8 @@
         "ext-json": "*",
         "antishov/doctrine-extensions-bundle": "^1.4",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
+        "imsglobal/lti-1p3-tool": "dev-master",
+        "prayno/casauth-bundle": "^1.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
@@ -34,8 +36,7 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "4.4.*",
         "symfony/web-link": "4.4.*",
-        "symfony/yaml": "4.4.*",
-        "imsglobal/lti-1p3-tool": "dev-master"
+        "symfony/yaml": "4.4.*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
@@ -71,9 +72,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "ckeditor:install": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "doctrine:schema:update --force": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

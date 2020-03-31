@@ -37,4 +37,14 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/logout")
+     */
+    public function logout()
+    {
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController',
+        ]);
+    }
+
 }
