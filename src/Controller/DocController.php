@@ -26,52 +26,30 @@ class DocController extends AbstractController
      */
     public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
     {
-        //discover need info on request
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $classuser =  $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
-
-        if (!$classuser) {
-            $classlist = new Classlist();
-            $classlist->setUser($user);
-            $classlist->setCourse($course);
-            $classlist->setRole('Student');
-            $classlist->setStatus('Pending');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($classlist);
-            $entityManager->flush();
-            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        if ($findtype == 'SharedDocs') {
+            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
+            $docs = $docRepository->findDocsByLabel($course, $label);
+            $header = 'Shared Docs';
+        } elseif ($findtype == 'ReviewDocs') {
+            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
+            $docs = $docRepository->findDocsByLabel($course, $label);
+            $header = 'Review Docs By Me';
+        } else {
+            $docs = $docRepository->findMyDocs($course, $user);
+            $header = 'My Docs';
         }
-        // check classlist status
-        elseif ($classuser->getStatus() == 'Pending') {
-            $this->addFlash('notice', 'Your addmission to the course has not yet been approved.');
-            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-        }
-        // test role access
-        else {
-            $allowed = ['Student','Instructor'];
-            $permissions->restrictAccessTo($courseid, $allowed);
-
-            if ($findtype == 'SharedDocs') {
-                $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
-                $docs = $docRepository->findDocsByLabel($course, $label);
-                $header = 'Shared Docs';
-            } elseif ($findtype == 'ReviewDocs') {
-                $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
-                $docs = $docRepository->findDocsByLabel($course, $label);
-                $header = 'Review Docs By Me';
-            } else {
-                $docs = $docRepository->findMyDocs($course, $user);
-                $header = 'My Docs';
-            }
-            return $this->render('doc/index.html.twig', [
-                'header' => $header,
-                'docs' => $docs,
-                'course' => $course
-            ]);
-        }
+        return $this->render('doc/index.html.twig', [
+            'header' => $header,
+            'docs' => $docs,
+            'course' => $course
+        ]);
     }
+
 
     /**
      * @Route("/{courseid}/new", name="doc_new", methods={"GET","POST"})
@@ -121,7 +99,7 @@ class DocController extends AbstractController
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $reviewlabel = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
         $markupsets = $course->getMarkupsets();
-        $doc_title = 'Review for '.$origin->getUser()->getFirstname().' '.$origin->getUser()->getLastname();
+        $doc_title = 'Review for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $labels = $origin->getLabels();
         foreach ($labels as &$label) {
             if ($label->getName() != 'Shared') {
@@ -212,7 +190,7 @@ class DocController extends AbstractController
         if (!$doc->isOwner($user)) {
             throw new AccessDeniedException();
         }
-        if ($this->isCsrfTokenValid('delete'.$doc->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $doc->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($doc);
             $entityManager->flush();

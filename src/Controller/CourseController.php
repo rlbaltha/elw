@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
@@ -31,6 +32,8 @@ class CourseController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         $course = new Course();
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
@@ -54,13 +57,36 @@ class CourseController extends AbstractController
      */
     public function show(Permissions $permissions, String $courseid): Response
     {
-        $allowed = ['Instructor', 'Student'];
-        $permissions->restrictAccessTo($courseid, $allowed);
+        //discover need info on request
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
-        return $this->render('course/show.html.twig', [
-            'course' => $course,
-        ]);
+        if (!$classuser) {
+            $classlist = new Classlist();
+            $classlist->setUser($user);
+            $classlist->setCourse($course);
+            $classlist->setRole('Student');
+            $classlist->setStatus('Pending');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($classlist);
+            $entityManager->flush();
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        } // check classlist status
+        elseif ($classuser->getStatus() == 'Pending') {
+            $this->addFlash('notice', 'Your addmission to the course has not yet been approved.');
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        } // test role access
+        else {
+            $allowed = ['Instructor', 'Student'];
+            $permissions->restrictAccessTo($courseid, $allowed);
+
+            $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
+            return $this->render('course/show.html.twig', [
+                'course' => $course,
+            ]);
+        }
     }
 
     /**
@@ -69,7 +95,6 @@ class CourseController extends AbstractController
     public function edit(Request $request, Permissions $permissions, Course $course): Response
     {
         $courseid = $course->getId();
-
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
@@ -117,7 +142,6 @@ class CourseController extends AbstractController
     public function delete(Request $request, Permissions $permissions, Course $course): Response
     {
         $courseid = $course->getId();
-
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
