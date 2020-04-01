@@ -49,13 +49,12 @@ class LTIController extends AbstractController
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
 
-        $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session));
-//        try {
-//            $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
-//                ->validate();
-//        } catch (LTI\LTI_Exception $err) {
-//            die('LTI_Exception: '.$err->getMessage().'. Is your browser blocking third-party cookies?');
-//        }
+        try {
+            $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
+                ->validate();
+        } catch (LTI\LTI_Exception $err) {
+            die('LTI_Exception: '.$err->getMessage().'. Is your browser blocking third-party cookies?');
+        }
 
         // assign launch type 'RESOURCE' by default
         $type_launch = LaunchType::RESOURCE;
@@ -67,19 +66,19 @@ class LTIController extends AbstractController
         $data = $launch->get_launch_data();
         $data['launch_id'] = $launch->get_launch_id();
 
-//        $user = User::create_from_launcher($data);
+        $user = User::create_from_launcher($data);
 //        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
-//        if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
-//            isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
-//            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
-//        }
+        if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
+            isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
+            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
+        }
 
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
-        $iss = $request->query->get('iss');
+
         return $this->render('default/index.html.twig', [
-            'iss' => $iss,
+            'user' => $user,
         ]);
 
     }
@@ -91,14 +90,9 @@ class LTIController extends AbstractController
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $iss = $request->request->get('iss');
-        return $this->render('default/index.html.twig', [
-            'iss' => $iss,
-        ]);
-
-//        LTI\LTI_OIDC_Login::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
-//            ->do_oidc_login_redirect($url)
-//            ->do_redirect();
+        LTI\LTI_OIDC_Login::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
+            ->do_oidc_login_redirect($url)
+            ->do_redirect();
 
     }
 
