@@ -90,7 +90,7 @@ class LTIController extends AbstractController
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-        LTI\LTI_OIDC_Login::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
+        LTI\LTI_OIDC_Login::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
             ->do_oidc_login_redirect($url)
             ->do_redirect();
 
