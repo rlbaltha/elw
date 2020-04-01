@@ -79,7 +79,6 @@ class LTIController extends AbstractController
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
         $iss = $request->query->get('iss');
         return $this->render('default/index.html.twig', [
-            'data' => $data,
             'iss' => $iss,
         ]);
 
@@ -92,9 +91,14 @@ class LTIController extends AbstractController
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-        LTI\LTI_OIDC_Login::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
-            ->do_oidc_login_redirect($url)
-            ->do_redirect();
+        $iss = $request->query->get('iss');
+        return $this->render('default/index.html.twig', [
+            'iss' => $iss,
+        ]);
+
+//        LTI\LTI_OIDC_Login::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
+//            ->do_oidc_login_redirect($url)
+//            ->do_redirect();
 
     }
 
