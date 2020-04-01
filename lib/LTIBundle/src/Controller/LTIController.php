@@ -67,7 +67,7 @@ class LTIController extends AbstractController
         $data = $launch->get_launch_data();
         $data['launch_id'] = $launch->get_launch_id();
 
-//        $user = User::create_from_launcher($data);
+        $user = User::create_from_launcher($data);
 //        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
@@ -80,6 +80,7 @@ class LTIController extends AbstractController
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
         return $this->render('default/index.html.twig', [
             'data' => $data,
+            'user' => $user,
         ]);
 
     }
