@@ -55,7 +55,7 @@ class LTIController extends AbstractController
 //        } catch (LTI\LTI_Exception $err) {
 //            die('LTI_Exception: '.$err->getMessage().'. Is your browser blocking third-party cookies?');
 //        }
-
+        $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session));
         // assign launch type 'RESOURCE' by default
         $type_launch = LaunchType::RESOURCE;
 
