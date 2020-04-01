@@ -75,7 +75,8 @@ class LTIController extends AbstractController
 //            isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
 //            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
 //        }
-        $this->addFlash('notice', $data);
+        $datastring = implode(" ",$data);
+        $this->addFlash('notice', $datastring);
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
         return $this->redirectToRoute('default');
 
