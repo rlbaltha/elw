@@ -24,28 +24,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <a href="{{ path('course_index') }}" class="navbar-brand">
-                <img src="https://design.online.uga.edu/images/logo.svg" height="28" alt="ELW">
+                <img src="https://design.online.uga.edu/images/logo.svg" height="40" alt="ELW logo">
             </a>
             <ul class="navbar-nav">
                 {% block subnav %}
                     {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            Admin
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
-                            <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
-                            <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
-                        </div>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
+                                <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
+                                <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
+                            </div>
+                        </li>
                     {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                     </li>
                 {% endblock %}
+                <li class="nav-item float-right">
+                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                </li>
             </ul>
         </div>
     </div>

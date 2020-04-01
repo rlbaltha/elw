@@ -5,6 +5,10 @@ body {
     border-top-style: solid;
     border-top-width: 5px;
     border-top-color: #ba0c2f;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #dcdcdc;
+    z-index: 1000;
 }
 
 div.checkbox > label {
