@@ -10,6 +10,12 @@
 
 <div class="example-wrapper">
     <h1>eLC for Writing</h1>
+    {% if data %}
+    {% for obj in data %}
+    {{ obj }}
+    {% endfor %}
+    {{ endif }}
+    
 
 
 </div>

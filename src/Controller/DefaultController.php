@@ -27,11 +27,6 @@ class DefaultController extends AbstractController
      */
     public function testing()
     {
-        $message = 'LTI Success';
-        $this->addFlash(
-            'lti',
-            $message
-        );
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
         ]);

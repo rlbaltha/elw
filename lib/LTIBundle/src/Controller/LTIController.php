@@ -78,7 +78,9 @@ class LTIController extends AbstractController
         $datastring = implode(" ",$data);
         $this->addFlash('notice', $datastring);
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
-        return $this->redirectToRoute('default');
+        return $this->render('default/index.html.twig', [
+            'data' => $data,
+        ]);
 
     }
 
