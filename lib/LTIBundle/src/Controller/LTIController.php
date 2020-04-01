@@ -91,7 +91,7 @@ class LTIController extends AbstractController
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $iss = $request->query->get('iss');
+        $iss = $request->request->get('iss');
         return $this->render('default/index.html.twig', [
             'iss' => $iss,
         ]);
