@@ -55,7 +55,7 @@ class LTIController extends AbstractController
 //        } catch (LTI\LTI_Exception $err) {
 //            die('LTI_Exception: '.$err->getMessage().'. Is your browser blocking third-party cookies?');
 //        }
-        $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session));
+        $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session));
         // assign launch type 'RESOURCE' by default
         $type_launch = LaunchType::RESOURCE;
 
@@ -63,17 +63,16 @@ class LTIController extends AbstractController
             $type_launch = LaunchType::DEEP;
         }
 
-        $data = $launch->get_launch_data();
-        $data['launch_id'] = $launch->get_launch_id();
-        $data['iss'] = $request->request->get('iss');
+        $data_launcher = $launch->get_launch_data();
+        $data_launcher['launch_id'] = $launch->get_launch_id();
 
-        $user = User::create_from_launcher($data);
+        $user = User::create_from_launcher($data_launcher);
 //        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
         if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
             isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'])) {
-            $activity_id = $data['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
+            $activity_id = $data_launcher['https://purl.imsglobal.org/spec/lti/claim/custom']['activity_id'];
         }
 
 //        return $connect_class->loginUser($user, $type_launch, $data, $activity_id);
@@ -91,7 +90,7 @@ class LTIController extends AbstractController
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-        LTI\LTI_OIDC_Login::new($this->getDatabase($request->get('iss')), new Cache($session), new Cookie($session))
+        LTI\LTI_OIDC_Login::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
             ->do_oidc_login_redirect($url)
             ->do_redirect();
 
