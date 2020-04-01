@@ -15,7 +15,11 @@
     {{ obj }}
     {% endfor %}
     {% endif %}
-
+    {% if user %}
+        {% for obj in user %}
+            {{ obj }}
+        {% endfor %}
+    {% endif %}
 
 
 </div>
