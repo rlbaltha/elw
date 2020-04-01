@@ -65,6 +65,7 @@ class LTIController extends AbstractController
 
         $data = $launch->get_launch_data();
         $data['launch_id'] = $launch->get_launch_id();
+        $data['iss'] = $request->request->get('iss');
 
         $user = User::create_from_launcher($data);
 //        $connect_class = $this->getImplementedLTIClass();
