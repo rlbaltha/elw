@@ -43,6 +43,11 @@ class Course
      */
     private $markupsets;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $announcement;
+
 
     public function __construct()
     {
@@ -179,6 +184,18 @@ class Course
         if ($this->markupsets->contains($markupset)) {
             $this->markupsets->removeElement($markupset);
         }
+
+        return $this;
+    }
+
+    public function getAnnouncement(): ?string
+    {
+        return $this->announcement;
+    }
+
+    public function setAnnouncement(?string $announcement): self
+    {
+        $this->announcement = $announcement;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classlist;
 use App\Entity\Course;
+use App\Form\AnnouncementType;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
 use App\Service\Permissions;
@@ -90,21 +91,45 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{id}/edit", name="course_edit", methods={"GET","POST"})
+     * @Route("/{courseid}/edit", name="course_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Permissions $permissions, Course $course): Response
+    public function edit(Request $request, Permissions $permissions, $courseid): Response
     {
-        $courseid = $course->getId();
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('course_index');
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        }
+
+        return $this->render('course/edit.html.twig', [
+            'course' => $course,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/announcement", name="course_announcement", methods={"GET","POST"})
+     */
+    public function announcement(Request $request, Permissions $permissions, $courseid): Response
+    {
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $form = $this->createForm(AnnouncementType::class, $course);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
 
         return $this->render('course/edit.html.twig', [

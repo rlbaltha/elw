@@ -5,19 +5,22 @@
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
     </li>
 {% endblock %}
 
 {% block body %}
 
+    {% if course.announcement != '' %}
+    <div class="alert alert-primary">{{ course.announcement|raw }}</div>
+    {% endif %}
+    {% if is_granted('ROLE_INSTRUCTOR') %}
     {{ include('course/_delete_form.html.twig') }}
     <a class="btn btn-primary float-right" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All Pending</a>
+    <a class="btn btn-primary float-right" href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit Announcement</a>
     <a class="btn btn-primary float-right" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
     <a class="btn btn-primary float-right" href="{{ path('classlist_new') }}">Add Students</a>
+    {% endif %}
     <table class="table">
         <tbody>
         <tr>

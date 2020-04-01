@@ -5,7 +5,7 @@
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Classlist</a>
+        <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Course Home</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
@@ -38,8 +38,8 @@
         <thead>
         <tr>
             <th>Title</th>
-            <th>Labels</th>
             <th>Owner</th>
+            <th>Labels</th>
             <th>Reviews</th>
             <th>Updated</th>
         </tr>
@@ -47,13 +47,17 @@
         <tbody>
         {% for doc in docs %}
             <tr class="body">
-                <td><a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a></td>
-                <td>{% for label in doc.labels %}<span class="badge badge-primary"
-                                                       style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
+                <td>
+                    <a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
                 </td>
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
                 </td>
+                <td>{% for label in doc.labels %}
+                        <span class="badge badge-primary" style="background:{{ label.color }}">{{ label.name }}</span>
+                    {% endfor %}
+                </td>
+
                 <td>{% if doc.reviews|length > 0 %}
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -72,7 +76,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
