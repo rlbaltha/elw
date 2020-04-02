@@ -50,7 +50,7 @@ class LTIController extends AbstractController
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
 
-        $val = $request->get('iss');
+        $val = $request->request->get('iss');
 
         return $this->render('default/index.html.twig', [
             'iss' => $val,
