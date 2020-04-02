@@ -46,7 +46,7 @@ class Course
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $announcement;
+    private $announcement = "Welcome to our class.";
 
 
     public function __construct()

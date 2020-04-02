@@ -34,14 +34,22 @@ class CourseController extends AbstractController
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
 
         $course = new Course();
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
+        $classlist = new Classlist();
+        $classlist->setUser($user);
+        $classlist->setCourse($course);
+        $classlist->setRole('Instructor');
+        $classlist->setStatus('Admitted');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($course);
+            $entityManager->persist($classlist);
             $entityManager->flush();
 
             return $this->redirectToRoute('course_index');
@@ -64,6 +72,7 @@ class CourseController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
+        // check if on classlist
         if (!$classuser) {
             $classlist = new Classlist();
             $classlist->setUser($user);
@@ -73,12 +82,9 @@ class CourseController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($classlist);
             $entityManager->flush();
+            $this->addFlash('notice', 'Your admission to the course has not yet been approved.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-        } // check classlist status
-        elseif ($classuser->getStatus() == 'Pending') {
-            $this->addFlash('notice', 'Your addmission to the course has not yet been approved.');
-            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-        } // test role access
+        }  // test role access
         else {
             $allowed = ['Instructor', 'Student'];
             $permissions->restrictAccessTo($courseid, $allowed);
@@ -166,9 +172,7 @@ class CourseController extends AbstractController
      */
     public function delete(Request $request, Permissions $permissions, Course $course): Response
     {
-        $courseid = $course->getId();
-        $allowed = ['Instructor'];
-        $permissions->restrictAccessTo($courseid, $allowed);
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         if ($this->isCsrfTokenValid('delete'.$course->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
