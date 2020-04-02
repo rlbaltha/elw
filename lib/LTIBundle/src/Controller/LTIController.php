@@ -49,6 +49,15 @@ class LTIController extends AbstractController
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
 
+        $iss = $request->request->get('iss');
+
+        return $this->render('default/index.html.twig', [
+            'iss' => $iss,
+        ]);
+
+
+
+
 //        try {
 //            $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
 //                ->validate();
@@ -89,15 +98,10 @@ class LTIController extends AbstractController
     public function login(Request $request, SessionInterface $session)
     {
         $url =  $this->generateUrl('lti_launch', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $iss = $request->request->get('iss');
 
-        return $this->render('default/index.html.twig', [
-            'iss' => $iss,
-        ]);
-
-//        LTI\LTI_OIDC_Login::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
-//            ->do_oidc_login_redirect($url)
-//            ->do_redirect();
+        LTI\LTI_OIDC_Login::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
+            ->do_oidc_login_redirect($url)
+            ->do_redirect();
 
     }
 
