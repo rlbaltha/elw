@@ -2,6 +2,8 @@
 
 namespace Elw\LTIBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Elw\LTIBundle\Util\Connect;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,21 +46,17 @@ class LTIController extends AbstractController
      */
     public function launch($activity_id, Request $request, SessionInterface $session)
     {
-
         if ($request->get('error') != '') {
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
 
-        $iss = $request->get('iss');
+        $val = $request->get('iss');
 
         return $this->render('default/index.html.twig', [
-            'iss' => $iss,
+            'iss' => $val,
         ]);
 
-
-
-
-//        try {
+        //        try {
 //            $launch = LTI\LTI_Message_Launch::new($this->getDatabase($request->request->get('iss')), new Cache($session), new Cookie($session))
 //                ->validate();
 //        } catch (LTI\LTI_Exception $err) {
@@ -76,7 +74,7 @@ class LTIController extends AbstractController
         $data_launcher['launch_id'] = $launch->get_launch_id();
 
         $user = User::create_from_launcher($data_launcher);
-//        $connect_class = $this->getImplementedLTIClass();
+        $connect_class = $this->getImplementedLTIClass();
 
         // get custom field: activity_id
         if (isset($data['https://purl.imsglobal.org/spec/lti/claim/custom']) &&
@@ -121,20 +119,19 @@ class LTIController extends AbstractController
     }
 
     private function getDatabase($issuer) {
-//        $implemented_lti_class = $this->getImplementedLTIClass();
-//        return new Database($issuer, $implemented_lti_class);
-        return new Database($issuer);
+        $implemented_lti_class = $this->getImplementedLTIClass();
+        return new Database($issuer, $implemented_lti_class);
     }
 
 
     private function getImplementedLTIClass() {
-        $connect_class = $this->getParameter('lti_class');
+        $connect_class = new Connect();
 
         if (empty($connect_class)) {
             throw new LTIException("Connect class is not defined in config packages");
         }
 
-        return new $connect_class($this->getDoctrine()->getManager());
+        return new $connect_class();
     }
 
 }

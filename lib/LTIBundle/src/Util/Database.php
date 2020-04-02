@@ -27,21 +27,9 @@ class Database implements LTI\Database {
      * @param LTIConnectAbstract $connect
      * @throws LTIException
      */
-//    public function __construct($iss, LTIConnectAbstract $connect)
-    public function __construct($iss)
+    public function __construct($iss, LTIConnectAbstract $connect)
     {
-//        $connect_data = $connect->getDataIssuer($iss);
-
-        $connect_data = [
-            "issuer" => "https://ugatest2.view.usg.edu",
-            "auth_login_url"=> "https://ugatest2.view.usg.edu/d2l/lti/authenticate",
-            "auth_token_url" => "https://auth.brightspace.com/core/connect/token",
-            "key_set_url"=> "https://ugatest2.view.usg.edu/d2l/.well-known/jwks",
-            "client_id"=> "90fd07d4-0a1d-449d-82e6-2fb566eabf33",
-            "kid"=> "a6a9101066ac9cd65dd1f4975abff764cbcb7ca3",
-            "auth_server"=> "https://ugatest2.view.usg.edu",
-            "private_key"=> "/../SSL/private.key"
-        ];
+        $connect_data = $connect->getDataIssuer($iss);
 
         $must_keys_in_connect_data = array(
             'auth_login_url',
