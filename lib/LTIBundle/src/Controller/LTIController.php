@@ -49,7 +49,7 @@ class LTIController extends AbstractController
             die("Problem detected: [".$request->get('error')."] ".$request->get('error_description'));
         }
 
-        $iss = $request->request->get('iss');
+        $iss = $request->get('iss');
 
         return $this->render('default/index.html.twig', [
             'iss' => $iss,
