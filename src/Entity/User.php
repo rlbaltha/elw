@@ -69,6 +69,11 @@ class User implements UserInterface
      */
     private $markupsets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="user", orphanRemoval=true)
+     */
+    private $projects;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -77,6 +82,7 @@ class User implements UserInterface
         $this->user = new ArrayCollection();
         $this->markups = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -353,6 +359,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($markupset->getUser() === $this) {
                 $markupset->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getUser() === $this) {
+                $project->setUser(null);
             }
         }
 

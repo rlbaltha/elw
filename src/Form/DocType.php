@@ -25,7 +25,16 @@ class DocType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
-                'attr' => ['class' => 'checkbox']
+                'attr' => ['class' => 'checkbox'],
+                'label' => 'Project'
+            ])
+            ->add('labels', EntityType::class, [
+                'class' => Label::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox'],
+                'label' => 'Stage'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',

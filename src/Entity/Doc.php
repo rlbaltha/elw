@@ -57,10 +57,6 @@ class Doc
      */
     private $course;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Label")
-     */
-    private $labels;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Doc", inversedBy="reviews")
@@ -72,10 +68,19 @@ class Doc
      */
     private $reviews;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Label")
+     */
+    private $labels;
+
+
     public function __construct()
     {
-        $this->labels = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->stages = new ArrayCollection();
+        $this->access = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->labels = new ArrayCollection();
     }
 
 
@@ -142,31 +147,6 @@ class Doc
         return $this;
     }
 
-    /**
-     * @return Collection|Label[]
-     */
-    public function getLabels(): Collection
-    {
-        return $this->labels;
-    }
-
-    public function addLabel(Label $label): self
-    {
-        if (!$this->labels->contains($label)) {
-            $this->labels[] = $label;
-        }
-
-        return $this;
-    }
-
-    public function removeLabel(Label $label): self
-    {
-        if ($this->labels->contains($label)) {
-            $this->labels->removeElement($label);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Boolean
@@ -223,5 +203,32 @@ class Doc
 
         return $this;
     }
+
+    /**
+     * @return Collection|Label[]
+     */
+    public function getLabels(): Collection
+    {
+        return $this->labels;
+    }
+
+    public function addLabel(Label $label): self
+    {
+        if (!$this->labels->contains($label)) {
+            $this->labels[] = $label;
+        }
+
+        return $this;
+    }
+
+    public function removeLabel(Label $label): self
+    {
+        if ($this->labels->contains($label)) {
+            $this->labels->removeElement($label);
+        }
+
+        return $this;
+    }
+    
 
 }

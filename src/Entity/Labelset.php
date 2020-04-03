@@ -40,10 +40,28 @@ class Labelset
      */
     private $labels;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="labelset", orphanRemoval=true)
+     */
+    private $projects;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Stage", mappedBy="labelset", orphanRemoval=true)
+     */
+    private $stages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Access", mappedBy="labelset", orphanRemoval=true)
+     */
+    private $accesses;
+
     public function __construct()
     {
         $this->courses = new ArrayCollection();
         $this->labels = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->stages = new ArrayCollection();
+        $this->accesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,6 +156,99 @@ class Labelset
             // set the owning side to null (unless already changed)
             if ($label->getLabelset() === $this) {
                 $label->setLabelset(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setLabelset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getLabelset() === $this) {
+                $project->setLabelset(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Stage[]
+     */
+    public function getStages(): Collection
+    {
+        return $this->stages;
+    }
+
+    public function addStage(Stage $stage): self
+    {
+        if (!$this->stages->contains($stage)) {
+            $this->stages[] = $stage;
+            $stage->setLabelset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStage(Stage $stage): self
+    {
+        if ($this->stages->contains($stage)) {
+            $this->stages->removeElement($stage);
+            // set the owning side to null (unless already changed)
+            if ($stage->getLabelset() === $this) {
+                $stage->setLabelset(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Access[]
+     */
+    public function getAccesses(): Collection
+    {
+        return $this->accesses;
+    }
+
+    public function addAccess(Access $access): self
+    {
+        if (!$this->accesses->contains($access)) {
+            $this->accesses[] = $access;
+            $access->setLabelset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccess(Access $access): self
+    {
+        if ($this->accesses->contains($access)) {
+            $this->accesses->removeElement($access);
+            // set the owning side to null (unless already changed)
+            if ($access->getLabelset() === $this) {
+                $access->setLabelset(null);
             }
         }
 

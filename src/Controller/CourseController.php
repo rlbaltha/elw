@@ -34,6 +34,7 @@ class CourseController extends AbstractController
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
 
