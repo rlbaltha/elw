@@ -29,7 +29,7 @@ services:
 
     PRayno\CasAuthBundle\Event\LogoutSuccessHandler:
         arguments:
-            $logoutUrl: "logout"
+            $logoutUrl: "https://sso.dev.uga.edu/cas/logout"
 
 
 
