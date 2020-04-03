@@ -2,12 +2,12 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: username
-#        cas:
-#            id: prayno.cas_user_provider
+#        app_user_provider:
+#            entity:
+#                class: App\Entity\User
+#                property: username
+        cas:
+            id: prayno.cas_user_provider
     encoders:
         # use your user class name here
         App\Entity\User:
@@ -20,21 +20,21 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
-            logout:
-                path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
-#            anonymous: ~
-#            logout:
-#                path: /logout
-#                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+#            anonymous: lazy
 #            guard:
 #                authenticators:
-#                    - prayno.cas_authenticator
+#                    - App\Security\LoginFormAuthenticator
+#            logout:
+#                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
+            anonymous: ~
+            logout:
+                path: /logout
+                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+            guard:
+                authenticators:
+                    - prayno.cas_authenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -52,7 +52,7 @@ security:
         - { path: ^/doc, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_ADMIN }
-        - { path: ^/labelset, roles: ROLE_ADMIN }
-        - { path: ^/label, roles: ROLE_ADMIN }
+        - { path: ^/labelset, roles: ROLE_INSTRUCTOR }
+        - { path: ^/label, roles: ROLE_INSTRUCTOR }
         - { path: ^/markupset, roles: ROLE_INSTRUCTOR }
         - { path: ^/markup, roles: ROLE_INSTRUCTOR }
