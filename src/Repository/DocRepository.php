@@ -37,6 +37,21 @@ class DocRepository extends ServiceEntityRepository
     /**
      * @return Doc[] Returns an array of Doc objects
      */
+    public function findSharedDocs($course, $access)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.access = :val2')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $access)
+            ->orderBy('d.updated', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Doc[] Returns an array of Doc objects
+     */
     public function findDocsByLabel($course, $label)
     {
         return $this->createQueryBuilder('d')

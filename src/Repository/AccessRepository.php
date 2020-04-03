@@ -36,15 +36,15 @@ class AccessRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Access
+    /**
+     * @return Access Returns a Access objects
+     */
+    public function findOneByName($value): ?Access
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.name = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
 }

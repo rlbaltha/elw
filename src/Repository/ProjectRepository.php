@@ -36,15 +36,15 @@ class ProjectRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Project
+    /**
+     * @return Project Returns a Project objects
+     */
+    public function findOneByName($value): ?Project
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.name = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
 }

@@ -36,15 +36,15 @@ class StageRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Stage
+    /**
+     * @return Stage Returns a Stage objects
+     */
+    public function findOneByName($value): ?Stage
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.name = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
 }

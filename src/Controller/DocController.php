@@ -33,13 +33,9 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($findtype == 'SharedDocs') {
-            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Shared');
-            $docs = $docRepository->findDocsByLabel($course, $label);
+            $access = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Shared');
+            $docs = $docRepository->findSharedDocs($course, $access);
             $header = 'Shared Docs';
-        } elseif ($findtype == 'ReviewDocs') {
-            $label = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
-            $docs = $docRepository->findDocsByLabel($course, $label);
-            $header = 'Review Docs By Me';
         } else {
             $docs = $docRepository->findMyDocs($course, $user);
             $header = 'My Docs';
