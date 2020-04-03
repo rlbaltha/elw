@@ -72,13 +72,14 @@ class AccessController extends AbstractController
      */
     public function edit(Request $request, Access $access): Response
     {
+        $labelset = $access->getLabelset();
         $form = $this->createForm(AccessType::class, $access);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('access_index');
+            return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
         return $this->render('access/edit.html.twig', [

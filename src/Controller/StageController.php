@@ -25,24 +25,31 @@ class StageController extends AbstractController
         ]);
     }
 
+
     /**
-     * @Route("/new", name="stage_new", methods={"GET","POST"})
+     * @Route("/{labelsetid}/new", name="stage_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, $labelsetid): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $stage = new Stage();
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $labelset = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findOneById($labelsetid);
+        $stage->setLabelset( $labelset);
+        $stage->setUser($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager->persist($stage);
             $entityManager->flush();
 
-            return $this->redirectToRoute('stage_index');
+            return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
-        return $this->render('stage/new.html.twig', [
+        return $this->render('access/new.html.twig', [
             'stage' => $stage,
             'form' => $form->createView(),
         ]);
@@ -63,13 +70,14 @@ class StageController extends AbstractController
      */
     public function edit(Request $request, Stage $stage): Response
     {
+        $labelset = $stage->getLabelset();
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('stage_index');
+            return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
         return $this->render('stage/edit.html.twig', [
