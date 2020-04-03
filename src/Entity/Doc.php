@@ -73,13 +73,29 @@ class Doc
      */
     private $labels;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Stage")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $stage;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Access")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $access;
+
+
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
-        $this->stages = new ArrayCollection();
-        $this->access = new ArrayCollection();
-        $this->projects = new ArrayCollection();
         $this->labels = new ArrayCollection();
     }
 
@@ -229,6 +245,43 @@ class Doc
 
         return $this;
     }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getStage(): ?Stage
+    {
+        return $this->stage;
+    }
+
+    public function setStage(?Stage $stage): self
+    {
+        $this->stage = $stage;
+
+        return $this;
+    }
+
+    public function getAccess(): ?Access
+    {
+        return $this->access;
+    }
+
+    public function setAccess(?Access $access): self
+    {
+        $this->access = $access;
+
+        return $this;
+    }
+
     
 
 }

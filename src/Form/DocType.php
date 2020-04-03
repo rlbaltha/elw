@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Access;
 use App\Entity\Doc;
-use App\Entity\Label;
+use App\Entity\Project;
+use App\Entity\Stage;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,21 +22,30 @@ class DocType extends AbstractType
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('labels', EntityType::class, [
-                'class' => Label::class,
+            ->add('project', EntityType::class, [
+                'class' => Project::class,
                 'choice_label' => 'name',
-                'multiple' => true,
+                'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
+                'attr' => ['class' => 'radio'],
                 'label' => 'Project'
             ])
-            ->add('labels', EntityType::class, [
-                'class' => Label::class,
+            ->add('stage', EntityType::class, [
+                'class' => Stage::class,
                 'choice_label' => 'name',
-                'multiple' => true,
+                'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
+                'attr' => ['class' => 'radio'],
                 'label' => 'Stage'
+            ])
+            ->add('access', EntityType::class, [
+                'class' => Access
+                ::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => ['class' => 'radio'],
+                'label' => 'Access'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',

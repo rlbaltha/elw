@@ -49,7 +49,7 @@ class StageController extends AbstractController
             return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
-        return $this->render('access/new.html.twig', [
+        return $this->render('stage/new.html.twig', [
             'stage' => $stage,
             'form' => $form->createView(),
         ]);

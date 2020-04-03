@@ -25,7 +25,11 @@
     <div class="p-2">
         Filter:
         {% for labelset in course.labelsets %}
-            {% for label in labelset.labels %}
+            {% for label in labelset.projects %}
+                <span class="badge badge-primary p-2"
+                      style="cursor: pointer; background:{{ label.color }}">{{ label.name }}</span>
+            {% endfor %}
+            {% for label in labelset.stages %}
                 <span class="badge badge-primary p-2"
                       style="cursor: pointer; background:{{ label.color }}">{{ label.name }}</span>
             {% endfor %}
@@ -53,9 +57,11 @@
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
                 </td>
-                <td>{% for label in doc.labels %}
-                        <span class="badge badge-primary" style="background:{{ label.color }}">{{ label.name }}</span>
-                    {% endfor %}
+                <td>
+                    <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                    <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                    <span class="badge badge-primary" style="background:{{ doc.access.color }}">{{ doc.access.name }}</span>
+
                 </td>
 
                 <td>{% if doc.reviews|length > 0 %}

@@ -93,11 +93,15 @@
         $(document).ready(function () {
             $("label").toggle();
             $("#doc_title").toggle();
-            $("#doc_labels").toggle();
+            $("#doc_project").toggle();
+            $("#doc_stage").toggle();
+            $("#doc_access").toggle();
             $("#doc-title-toggle").click(function () {
                 $("label").toggle();
                 $("#doc_title").toggle();
-                $("#doc_labels").toggle();
+                $("#doc_project").toggle();
+                $("#doc_stage").toggle();
+                $("#doc_access").toggle();
                 var text = $('.material-icons').text();
                 $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
             });
