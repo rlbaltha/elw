@@ -2,3 +2,7 @@ index:
     path: /
     controller: App\Controller\CourseController::index
 
+app_logout:
+    path: /logout
+    methods: GET
+
