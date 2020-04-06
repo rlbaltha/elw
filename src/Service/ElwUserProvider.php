@@ -40,6 +40,8 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
             $user = New User();
             $user->setUsername($username);
             $user->setRoles(["ROLE_USER"]);
+            $user->setLastname('Please Update');
+            $user->setFirstname('Please Update');
             $this->entityManager->persist($user);
             $this->entityManager->flush();
             $password = '...';
