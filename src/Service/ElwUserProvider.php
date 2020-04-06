@@ -31,11 +31,10 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
         if ($username) {
             $password = '...';
             $salt = "";
-            $roles = ["ROLE_USER"];
 
             $user = $this->entityManager->getRepository('App:User')->findOneByUsername($username);
             if ($user) {
-                return new CasUser($username, $password, $salt, $roles);
+                return $user;
             }
             $user = New User();
             $user->setUsername($username);
