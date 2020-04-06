@@ -28,11 +28,8 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: index
+                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
             anonymous: ~
-#            logout:
-#                path: app_logout
-#                target: index
-#                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
             guard:
                 authenticators:
                     - prayno.cas_authenticator
