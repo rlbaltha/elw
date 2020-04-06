@@ -7,7 +7,7 @@ security:
 #                class: App\Entity\User
 #                property: username
         cas:
-            id: prayno.cas_user_provider
+            id: App\Service\ElwUserProvider
     encoders:
         # use your user class name here
         App\Entity\User:
