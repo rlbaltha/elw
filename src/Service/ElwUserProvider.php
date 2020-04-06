@@ -14,8 +14,10 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 class ElwUserProvider extends CasUserProvider implements UserProviderInterface
 {
 
-    public function __construct(EntityManagerInterface $em) {
-        $this->em = $em;
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -31,18 +33,23 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
             $salt = "";
             $roles = ["ROLE_USER"];
 
+            $user = $this->entityManager->getRepository('App:User')->findOneByUsername($username);
+            if ($user) {
+                return new CasUser($username, $password, $salt, $roles);
+            }
+            $user = New User();
+            $user->setUsername($username);
+            $user->setRoles(["ROLE_USER"]);
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+            $password = '...';
+            $salt = "";
+            $roles = ["ROLE_USER"];
             return new CasUser($username, $password, $salt, $roles);
+
         }
 
-        $user = New User();
-        $user->setUsername($username);
-        $user->setRoles(["ROLE_USER"]);
-        $this->em->persist($user);
-        $this->em->flush();
-        $password = '...';
-        $salt = "";
-        $roles = ["ROLE_USER"];
-        return new CasUser($username, $password, $salt, $roles);
+
 
     }
 
