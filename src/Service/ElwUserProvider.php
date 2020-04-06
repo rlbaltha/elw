@@ -23,7 +23,7 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
     /**
      * Provides the authenticated user a ROLE_USER
      * @param $username
-     * @return CasUser
+     * @return User
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username)
@@ -43,10 +43,7 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
             $user->setFirstname('Please Update');
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-            $password = '...';
-            $salt = "";
-            $roles = ["ROLE_USER"];
-            return new CasUser($username, $password, $salt, $roles);
+            return $user;
 
         }
 
@@ -56,13 +53,13 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
 
     /**
      * @param UserInterface $user
-     * @return CasUser
+     * @return User
      * @throws UnsupportedUserException
      * @throws UsernameNotFoundException
      */
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof CasUser) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(
                 sprintf('Instances of "%s" are not supported.', get_class($user))
             );
@@ -77,6 +74,6 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'PRayno\CasAuthBundle\Security\User\CasUser';
+        return $class === 'App\Entity\User';
     }
 }
