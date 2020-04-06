@@ -73,6 +73,11 @@ class CourseController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
+        if ($user->getLastname()=='') {
+            return $this->redirectToRoute('user_edit', ['id' => $user->getId()]);
+        }
+
+
         // check if on classlist
         if (!$classuser) {
             $classlist = new Classlist();

@@ -52,7 +52,7 @@ security:
         - { path: ^/classlist, roles: ROLE_USER }
         - { path: ^/doc, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/user, roles: ROLE_ADMIN }
+        - { path: ^/user, roles: ROLE_USER }
         - { path: ^/labelset, roles: ROLE_INSTRUCTOR }
         - { path: ^/label, roles: ROLE_INSTRUCTOR }
         - { path: ^/markupset, roles: ROLE_INSTRUCTOR }
