@@ -1,7 +1,9 @@
 <?php
-// src/AppBundle/Security/User/CasProvider.php
+
 namespace App\Service;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use PRayno\CasAuthBundle\Security\User\CasUserProvider;
 use PRayno\CasAuthBundle\Security\User\CasUser;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -11,6 +13,11 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class ElwUserProvider extends CasUserProvider implements UserProviderInterface
 {
+
+    public function __construct(EntityManagerInterface $em) {
+        $this->em = $em;
+    }
+
     /**
      * Provides the authenticated user a ROLE_USER
      * @param $username
@@ -27,9 +34,16 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
             return new CasUser($username, $password, $salt, $roles);
         }
 
-        throw new UsernameNotFoundException(
-            sprintf('Username "%s" does not exist.', $username)
-        );
+        $user = New User();
+        $user->setUsername($username);
+        $user->setRoles(["ROLE_USER"]);
+        $this->em->persist($user);
+        $this->em->flush();
+        $password = '...';
+        $salt = "";
+        $roles = ["ROLE_USER"];
+        return new CasUser($username, $password, $salt, $roles);
+
     }
 
     /**
