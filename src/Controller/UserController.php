@@ -97,7 +97,7 @@ class UserController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('course_show', [
-                'course' => $courseid,
+                'courseid' => $courseid,
             ]);
         }
 
