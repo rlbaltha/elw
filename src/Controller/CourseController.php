@@ -98,6 +98,7 @@ class CourseController extends AbstractController
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
             return $this->render('course/show.html.twig', [
                 'course' => $course,
+                'user' => $user
             ]);
         }
     }
