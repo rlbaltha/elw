@@ -22,12 +22,13 @@
     <a class="btn btn-primary float-right" href="{{ path('classlist_new') }}">Add Students</a>
     {% endif %}
     <table class="table">
-        <tbody>
+        <thead>
         <tr>
             <td>Students</td>
             <td>Status</td>
             <td>Role</td>
         </tr>
+        <thead>
         {% for classlist in course.classlists %}
                 <tr>
                     <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
@@ -35,7 +36,7 @@
                     <td>{{ classlist.role }}</td>
                 </tr>
         {% endfor %}
-        </tbody>
+        </thead>
     </table>
 
 
