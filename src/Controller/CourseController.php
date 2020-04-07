@@ -77,7 +77,6 @@ class CourseController extends AbstractController
             return $this->redirectToRoute('username_edit', ['id' => $user->getId(), 'courseid' => $courseid]);
         }
 
-
         // check if on classlist
         if (!$classuser) {
             $classlist = new Classlist();
@@ -92,13 +91,13 @@ class CourseController extends AbstractController
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }  // test role access
         else {
-            $allowed = ['Instructor', 'Student'];
-            $permissions->restrictAccessTo($courseid, $allowed);
 
+            $status = $classuser->getStatus();
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
             return $this->render('course/show.html.twig', [
                 'course' => $course,
-                'user' => $user
+                'user' => $user,
+                'status' => $status
             ]);
         }
     }

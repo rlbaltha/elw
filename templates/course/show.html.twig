@@ -4,13 +4,16 @@
 
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
+    {% if status !='Pending' %}
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
     </li>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
 
+    <h2>Welcome {{ user.firstname }}</h2>
     {% if course.announcement != '' %}
     <div class="alert alert-primary">{{ course.announcement|raw }}</div>
     {% endif %}
@@ -41,11 +44,9 @@
     </table>
     {% endif %}
 
-    {% for classlist in user.classlists %}
-    {% if classlist.course.id == course.id and classlist.status=='Pending' %}
+    {% if status=='Pending' %}
         <div class="alert alert-primary">Your entry to this course is pending.  Please check back soon.</div>
     {% endif %}
-    {% endfor %}
 
 
 

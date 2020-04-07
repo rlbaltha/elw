@@ -26,7 +26,7 @@ class Permissions
         $username = $this->security->getUser()->getUsername();
         $user = $this->em->getRepository('App:User')->findOneByUsername($username);
         $classlist =  $this->em->getRepository('App:Classlist')->findCourseUser($course, $user);
-        if(!$classlist){
+        if(!$classlist or $classlist->getStatus() == 'Pending'){
             return null;
         }
         else{
