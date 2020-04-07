@@ -42,7 +42,7 @@
     {% endif %}
 
     {% for classlist in user.classlists %}
-    {% if classlist.course_id == course.id and classlist.status=='Pending' %}
+    {% if classlist.course.id == course.id and classlist.status=='Pending' %}
         <div class="alert alert-primary">Your entry to this course is pending.  Please check back soon.</div>
     {% endif %}
     {% endfor %}
