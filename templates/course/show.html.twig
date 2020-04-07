@@ -45,7 +45,9 @@
     {% endif %}
 
     {% if status=='Pending' %}
-        <div class="alert alert-primary">Your entry to this course is pending.  Please check back soon.</div>
+        <div class="alert alert-primary">Your entry to this course is pending.  Please check back soon.
+            <a class="btn btn-primary" href="{{ course_path('course_show', {'id': course.id}) }}">Check Now</a>
+        </div>
     {% endif %}
 
 

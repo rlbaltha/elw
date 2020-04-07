@@ -67,7 +67,7 @@ class CourseController extends AbstractController
      */
     public function show(Permissions $permissions, String $courseid): Response
     {
-        //discover need info on request
+        //discover needed info on request
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -77,7 +77,7 @@ class CourseController extends AbstractController
             return $this->redirectToRoute('username_edit', ['id' => $user->getId(), 'courseid' => $courseid]);
         }
 
-        // check if on classlist
+        // check if on classlist, if not add
         if (!$classuser) {
             $classlist = new Classlist();
             $classlist->setUser($user);
@@ -89,9 +89,9 @@ class CourseController extends AbstractController
             $entityManager->flush();
             $this->addFlash('notice', 'Your admission to the course has not yet been approved.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-        }  // test role access
+        }
         else {
-
+            //check status and show course page
             $status = $classuser->getStatus();
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
             return $this->render('course/show.html.twig', [
