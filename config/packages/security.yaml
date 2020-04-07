@@ -42,6 +42,7 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    # User permissions handled in the controller
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -49,7 +50,6 @@ security:
         - { path: ^/classlist, roles: ROLE_USER }
         - { path: ^/doc, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/user, roles: ROLE_USER }
         - { path: ^/labelset, roles: ROLE_INSTRUCTOR }
         - { path: ^/label, roles: ROLE_INSTRUCTOR }
         - { path: ^/markupset, roles: ROLE_INSTRUCTOR }

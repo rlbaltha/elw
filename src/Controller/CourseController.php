@@ -74,7 +74,7 @@ class CourseController extends AbstractController
         $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
         if ($user->getLastname()=='Please Update') {
-            return $this->redirectToRoute('user_edit', ['id' => $user->getId()]);
+            return $this->redirectToRoute('username_edit', ['id' => $user->getId(), 'courseid' => $courseid]);
         }
 
 
