@@ -87,7 +87,7 @@ class CourseController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($classlist);
             $entityManager->flush();
-            $this->addFlash('notice', 'Your admission to the course has not yet been approved.');
+            $this->addFlash('notice', 'Your request for access to this course has been recorded.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
         else {

@@ -60,9 +60,11 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $access = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Shared');
         $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
+        $doc->setAccess($access);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 
