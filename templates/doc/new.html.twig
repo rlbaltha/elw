@@ -10,7 +10,7 @@
 {% block subnav %}
     <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }} <i class="material-icons">expand_less</i></a>
     <li class="nav-item">
-        <a href="#" id="submit-doc-form" class="btn btn-primary">Submit</a>
+        <a href="#" id="submit-doc-form" class="nav-link">Save</a>
     </li>
 {% endblock %}
 
@@ -90,7 +90,9 @@
             $("#doc-title-toggle").click(function () {
                 $("label").toggle();
                 $("#doc_title").toggle();
-                $("#doc_labels").toggle();
+                $("#doc_project").toggle();
+                $("#doc_stage").toggle();
+                $("#doc_access").toggle();
                 var text = $('.material-icons').text();
                 $('.material-icons').text(text == "expand_more" ? "expand_less" : "expand_more");
             });

@@ -96,7 +96,7 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $reviewlabel = $this->getDoctrine()->getManager()->getRepository('App:Label')->findOneByName('Review');
+        $accesslabel = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Review');
         $markupsets = $course->getMarkupsets();
         $doc_title = 'Review for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $labels = $origin->getLabels();
@@ -110,7 +110,9 @@ class DocController extends AbstractController
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        $doc->addLabel($reviewlabel);
+        $doc->setAccess($accesslabel);
+        $doc->setProject($origin->getProject());
+        $doc->setStage($origin->getStage());
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 
