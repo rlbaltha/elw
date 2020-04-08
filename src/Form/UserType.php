@@ -27,7 +27,8 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('roles', ChoiceType::class, [
-                'choices' => ['ROLE_USER' => 'ROLE_USER', 'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR', 'ROLE_ADMIN' => 'ROLE_ADMIN'],
+                'choices' => ['ROLE_USER' => 'ROLE_USER', 'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
+                    'ROLE_ADMIN' => 'ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH' => 'ROLE_ALLOWED_TO_SWITCH'],
                 'multiple' => true,
                 'expanded' => true,
                 'attr' => ['class' => 'checkbox'],

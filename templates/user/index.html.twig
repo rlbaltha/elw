@@ -18,7 +18,16 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.username }}</td>
+                <td>
+                    {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+                        <a class='' href="{{ path('course_index') }}?_switch_user={{ user.username }}">Login As</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <a class="" href="{{ path('course_index') }}?_switch_user=_exit">
+                            Exit login as</a>
+                    {% endif %}
+                    {{ user.username }}
+                </td>
                 <td><a href="{{ path('user_edit', {'id': user.id}) }}">{{ user.firstname }} {{ user.lastname }}</a></td>
                 <td>{% for role in user.roles %}{{ role }} {% endfor %}</td>
             </tr>
