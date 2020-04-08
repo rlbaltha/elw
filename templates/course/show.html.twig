@@ -13,7 +13,7 @@
 
 {% block body %}
 
-    <h2>Welcome {{ user.firstname }}</h2>
+    <h2>Hi {{ user.firstname }}</h2>
     {% if course.announcement != '' %}
     <div class="alert alert-primary">{{ course.announcement|raw }}</div>
     {% endif %}
