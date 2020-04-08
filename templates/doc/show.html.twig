@@ -8,35 +8,36 @@
 {% endblock %}
 
 {% block subnav %}
-    <a class="navbar-brand" href="#">{{ doc.title }} {% for label in doc.labels %}<span class="badge badge-primary"
-                                                                                        style="background:{{ label.color }}">{{ label.name }}</span>{% endfor %}
-    </a>
-    <td>{% if doc.reviews|length > 0 %}
-            <div class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Reviews <span class="badge badge-primary">{{ doc.reviews|length }}</span>
-                </a>
-                <div class="dropdown-menu">
-                    {% for review in doc.reviews %}
-                        <a class="dropdown-item"
-                           href="{{ course_path('doc_show', {'id': review.id}) }}">{{ review.user.firstname }} {{ review.user.lastname }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-    </td>
+    <a data-id="doc{{ doc.id }}" class="navbar-brand nav-link doc-click" href="#">{{ doc.title }}</a>
+    {% if doc.reviews|length > 0 %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            Reviews
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
+            {% for doc in doc.reviews %}
+                <a data-id='doc{{ doc.id }}' class="dropdown-item doc-click"
+                   href="#">Review By {{ doc.user.firstname }} {{ doc.user.lastname }}</a>
+            {% endfor %}
+        </div>
+    </li>
+    {% endif %}
+
     {# if owner #}
-    {%  if app.user == doc.user %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
-    </li>
-{#    <li class="nav-item">#}
-{#        {{ include('doc/_delete_form.html.twig') }}#}
-{#    </li>#}
-    {% elseif doc.access.name!='Review' %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
-    </li>
+    {% if app.user == doc.user %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
+        </li>
+            <li class="nav-item">
+                {{ include('doc/_delete_form.html.twig') }}
+            </li>
+    {% elseif doc.access!='Review' %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
+        </li>
     {% endif %}
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Close</a>
@@ -47,9 +48,17 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <div class="document-editor">
+
+            <div id="doc{{ doc.id }}" class="document-editor">
                 {{ doc.body|raw }}
             </div>
+            {% for review in doc.reviews %}
+                <div class="alert alert-info">Review by {{ review.user.firstname }} {{ review.user.lastname }}  of <span class="font-italic">{{ doc.title }}</span>
+                    by {{ doc.user.firstname }} {{ doc.user.lastname }} </div>
+                <div id="doc{{ review.id }}" class="review document-editor">
+                    {{ review.body|raw }}
+                </div>
+            {% endfor %}
         </div>
         <div class="col">
             {# Notes Panel #}
@@ -81,61 +90,70 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            {# Notes #}
-            $("#toggle-inline").click(function () {
-                $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
-                $('.note, .super').toggle();
-                $('#notes_container').toggle();
-            });
-            $('#notes_container').empty();
-            var numNotes = $('.note').length;
-            if (numNotes > 0) {
-                $('.note').each(function (index) {
-                    var p = $(this).position();
-                    var top = p.top;
-                    var note_index = index + 1;
-                    var note_number = '<span class="blue">' + note_index + '</span>';
-                    var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="card card-note" style="top:' + top + 'px"><div class="card-body">' + note_number + $(this).html() + '</div></div>';
+
+                    {# Notes #}
+                $("#toggle-inline").click(function () {
+                    $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
+                    $('.note, .super').toggle();
+                    $('#notes_container').toggle();
+                });
+                $('#notes_container').empty();
+                var numNotes = $('.note').length;
+                if (numNotes > 0) {
+                    $('.note').each(function (index) {
+                        var p = $(this).position();
+                        var top = p.top;
+                        var note_index = index + 1;
+                        var note_number = '<span class="blue">' + note_index + '</span>';
+                        var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="card card-note" style="top:' + top + 'px"><div class="card-body">' + note_number + $(this).html() + '</div></div>';
+                        $('#notes_container').append(note);
+                    });
+                } else {
+                    var note = '<div class="cell divider clear">There are no notes in this document.</div>';
                     $('#notes_container').append(note);
+                }
+                $('.card-note').each(function (index) {
+                    $(this).click(function () {
+                        $('.hfocus').addClass('highlight').removeClass('hfocus');
+                        var hid = $(this).attr("data-id")
+                        $('#' + hid).removeClass('highlight').addClass('hfocus');
+                        $('.notefocus').removeClass('notefocus');
+                        $(this).addClass('notefocus').parent().append($(this));
+                    });
                 });
-            } else {
-                var note = '<div class="cell divider clear">There are no notes in this document.</div>';
-                $('#notes_container').append(note);
+
+                $('.highlight').each(function (index) {
+                    var span_number = index + 1;
+                    $(this).attr('id', 'h' + span_number);
+                    var span_append = '<span class="super">' + span_number + '</span>';
+                    $(this).append(span_append);
+                    $(this).click(function () {
+                        $('.card').removeClass('notefocus')
+                        $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));
+                        $('.hfocus').addClass('highlight').removeClass('hfocus');
+                        $('#h' + span_number).removeClass('highlight').addClass('hfocus');
+                    });
+                });
+                $('.note').toggle();
+
+                    {# Markup #}
+                $('.popover').hide();
+                $('.markup').mouseover(function () {
+                    var id = "div[data-id='" + $(this).attr('data-id') + "']";
+                    var offset = $(this).offset();
+                    $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
+                });
+                $('.popover').click(function () {
+                    $(this).hide();
+                });
+
+                    {# Document/Reviews#}
+                $('.doc-click').click(function () {
+                    var id = '#' + $(this).attr('data-id');
+                    $('.document-editor').hide();
+                    $(id).show();
+                });
             }
-            $('.card-note').each(function (index) {
-                $(this).click(function () {
-                    $('.hfocus').addClass('highlight').removeClass('hfocus');
-                    var hid = $(this).attr("data-id")
-                    $('#' + hid).removeClass('highlight').addClass('hfocus');
-                    $('.notefocus').removeClass('notefocus');
-                    $(this).addClass('notefocus').parent().append($(this));
-                });
-            });
-
-            $('.highlight').each(function (index) {
-                var span_number = index + 1;
-                $(this).attr('id', 'h' + span_number);
-                var span_append = '<span class="super">' + span_number + '</span>';
-                $(this).append(span_append);
-                $(this).click(function () {
-                    $('.card').removeClass('notefocus')
-                    $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));
-                    $('.hfocus').addClass('highlight').removeClass('hfocus');
-                    $('#h' + span_number).removeClass('highlight').addClass('hfocus');
-                });
-            });
-            $('.note').toggle();
-            {# Markup #}
-            $('.popover').hide();
-            $('.markup').mouseover(function () {
-                var id = "div[data-id='" + $(this).attr('data-id') + "']";
-                var offset = $(this).offset();
-                $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
-            });
-            $('.popover').click(function () {
-                $(this).hide();
-            });
-
-        });
+        );
     </script>
 {% endblock %}

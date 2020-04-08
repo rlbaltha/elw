@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Classlist;
 use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
@@ -33,8 +32,7 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($findtype == 'SharedDocs') {
-            $access = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Shared');
-            $docs = $docRepository->findSharedDocs($course, $access);
+            $docs = $docRepository->findSharedDocs($course);
             $header = 'Shared Docs';
         } else {
             $docs = $docRepository->findMyDocs($course, $user);
@@ -60,11 +58,9 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $access = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Shared');
         $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
-        $doc->setAccess($access);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
 
@@ -96,21 +92,14 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $accesslabel = $this->getDoctrine()->getManager()->getRepository('App:Access')->findOneByName('Review');
         $markupsets = $course->getMarkupsets();
         $doc_title = 'Review for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
-        $labels = $origin->getLabels();
-        foreach ($labels as &$label) {
-            if ($label->getName() != 'Shared') {
-                $doc->addLabel($label);
-            }
-        }
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        $doc->setAccess($accesslabel);
+        $doc->setAccess('Review');
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);

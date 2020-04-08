@@ -44,7 +44,6 @@
             <th>Title</th>
             <th>Owner</th>
             <th>Labels</th>
-            <th>Reviews</th>
             <th>Updated</th>
         </tr>
         </thead>
@@ -53,6 +52,9 @@
             <tr class="body">
                 <td>
                     <a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
+                    {% if doc.reviews|length > 0 %}
+                     <span class="badge badge-primary ml-3">{{ doc.reviews|length }} Review(s)</span>
+                    {% endif %}
                 </td>
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
@@ -60,23 +62,6 @@
                 <td>
                     <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                     <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
-                    <span class="badge badge-primary" style="background:{{ doc.access.color }}">{{ doc.access.name }}</span>
-
-                </td>
-
-                <td>{% if doc.reviews|length > 0 %}
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                 Reviews <span class="badge badge-primary">{{ doc.reviews|length }}</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                {% for review in doc.reviews %}
-                                    <a class="dropdown-item"
-                                       href="{{ course_path('doc_show', {'id': review.id}) }}">{{ review.user.firstname }} {{ review.user.lastname }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
                 </td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
@@ -101,7 +86,7 @@
                 });
             });
             $("span.badge").click(function () {
-                if ($(this).text() == 'Clear') {
+                if ($(this).text() == 'Show All') {
                     $("table tr.body").show();
                 }
                 else {

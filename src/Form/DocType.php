@@ -6,6 +6,7 @@ use App\Entity\Access;
 use App\Entity\Doc;
 use App\Entity\Project;
 use App\Entity\Stage;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -38,15 +39,15 @@ class DocType extends AbstractType
                 'attr' => ['class' => 'radio'],
                 'label' => 'Stage'
             ])
-            ->add('access', EntityType::class, [
-                'class' => Access
-                ::class,
-                'choice_label' => 'name',
-                'multiple' => false,
-                'expanded' => true,
-                'attr' => ['class' => 'radio'],
-                'label' => 'Access'
-            ])
+//            ->add('access', ChoiceType::class, [
+//                'choices'  => [
+//                    'Private' => 'Private',
+//                    'Shared' => 'Shared',
+//                ],
+//                'expanded' => true,
+//                'attr' => ['class' => 'radio'],
+//                'label' => 'Access'
+//            ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
                 'label' => '',

@@ -35,10 +35,6 @@ class Labelset
      */
     private $level;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="labelset", orphanRemoval=true)
-     */
-    private $labels;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="labelset", orphanRemoval=true)
@@ -50,18 +46,12 @@ class Labelset
      */
     private $stages;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Access", mappedBy="labelset", orphanRemoval=true)
-     */
-    private $accesses;
 
     public function __construct()
     {
         $this->courses = new ArrayCollection();
-        $this->labels = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->stages = new ArrayCollection();
-        $this->accesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,37 +122,6 @@ class Labelset
     }
 
     /**
-     * @return Collection|Label[]
-     */
-    public function getLabels(): Collection
-    {
-        return $this->labels;
-    }
-
-    public function addLabel(Label $label): self
-    {
-        if (!$this->labels->contains($label)) {
-            $this->labels[] = $label;
-            $label->setLabelset($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLabel(Label $label): self
-    {
-        if ($this->labels->contains($label)) {
-            $this->labels->removeElement($label);
-            // set the owning side to null (unless already changed)
-            if ($label->getLabelset() === $this) {
-                $label->setLabelset(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Project[]
      */
     public function getProjects(): Collection
@@ -224,34 +183,4 @@ class Labelset
         return $this;
     }
 
-    /**
-     * @return Collection|Access[]
-     */
-    public function getAccesses(): Collection
-    {
-        return $this->accesses;
-    }
-
-    public function addAccess(Access $access): self
-    {
-        if (!$this->accesses->contains($access)) {
-            $this->accesses[] = $access;
-            $access->setLabelset($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAccess(Access $access): self
-    {
-        if ($this->accesses->contains($access)) {
-            $this->accesses->removeElement($access);
-            // set the owning side to null (unless already changed)
-            if ($access->getLabelset() === $this) {
-                $access->setLabelset(null);
-            }
-        }
-
-        return $this;
-    }
 }

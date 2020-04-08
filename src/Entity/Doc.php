@@ -68,10 +68,6 @@ class Doc
      */
     private $reviews;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Label")
-     */
-    private $labels;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project")
@@ -86,11 +82,9 @@ class Doc
     private $stage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Access")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $access;
-
+    private $access = 'Shared';
 
 
     public function __construct()
@@ -220,31 +214,6 @@ class Doc
         return $this;
     }
 
-    /**
-     * @return Collection|Label[]
-     */
-    public function getLabels(): Collection
-    {
-        return $this->labels;
-    }
-
-    public function addLabel(Label $label): self
-    {
-        if (!$this->labels->contains($label)) {
-            $this->labels[] = $label;
-        }
-
-        return $this;
-    }
-
-    public function removeLabel(Label $label): self
-    {
-        if ($this->labels->contains($label)) {
-            $this->labels->removeElement($label);
-        }
-
-        return $this;
-    }
 
     public function getProject(): ?Project
     {
@@ -270,18 +239,16 @@ class Doc
         return $this;
     }
 
-    public function getAccess(): ?Access
+    public function getAccess(): ?string
     {
         return $this->access;
     }
 
-    public function setAccess(?Access $access): self
+    public function setAccess(string $access): self
     {
         $this->access = $access;
 
         return $this;
     }
-
-    
 
 }

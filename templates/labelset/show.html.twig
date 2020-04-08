@@ -52,26 +52,5 @@
         </tbody>
     </table>
 
-    <h2>Access</h2>
-    <a class="btn btn-primary float-right" href="{{ path('access_new', {'labelsetid': labelset.id}) }}">Add Access</a>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for access in labelset.accesses %}
-            <tr>
-                <td><a class="badge badge-primary p-2" style="background:{{ access.color }}" href="{{ path('access_edit', {'id': access.id}) }}">{{ access.name }}</a></td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="1">No Records Found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
 
 {% endblock %}

@@ -49,10 +49,6 @@ class User implements UserInterface
      */
     private $classlists;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="user", orphanRemoval=true)
-     */
-    private $labels;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Labelset", mappedBy="user", orphanRemoval=true)
@@ -78,7 +74,6 @@ class User implements UserInterface
     {
         $this->docs = new ArrayCollection();
         $this->classlists = new ArrayCollection();
-        $this->labels = new ArrayCollection();
         $this->user = new ArrayCollection();
         $this->markups = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
@@ -240,37 +235,6 @@ class User implements UserInterface
         return $this;
     }
 
-
-    /**
-     * @return Collection|Label[]
-     */
-    public function getLabels(): Collection
-    {
-        return $this->labels;
-    }
-
-    public function addLabel(Label $label): self
-    {
-        if (!$this->labels->contains($label)) {
-            $this->labels[] = $label;
-            $label->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLabel(Label $label): self
-    {
-        if ($this->labels->contains($label)) {
-            $this->labels->removeElement($label);
-            // set the owning side to null (unless already changed)
-            if ($label->getUser() === $this) {
-                $label->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Labelset[]
