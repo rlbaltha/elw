@@ -45,6 +45,12 @@
                             </div>
                         </li>
                     {% endif %}
+                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('course_index') }}?_switch_user=_exit">
+                                Exit login as</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                     </li>
