@@ -107,7 +107,7 @@
     <script>
         $(document).ready(function () {
 
-                $('.note, .super, div.popover-note').toggle();
+
                 $("#toggle-inline").click(function () {
                     $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
                     $('.note, .super').toggle();
@@ -128,6 +128,7 @@
                     $(this).attr('id', 'h' + span_number);
                     var span_append = '<span class="super">' + span_number + '</span>';
                     $(this).append(span_append);
+                    $('.super').hide();
                     $(this).click(function () {
                         $('.card').removeClass('notefocus')
                         $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));

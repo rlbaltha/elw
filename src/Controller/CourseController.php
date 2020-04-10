@@ -45,7 +45,7 @@ class CourseController extends AbstractController
         $classlist->setUser($user);
         $classlist->setCourse($course);
         $classlist->setRole('Instructor');
-        $classlist->setStatus('Admitted');
+        $classlist->setStatus('Approved');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
