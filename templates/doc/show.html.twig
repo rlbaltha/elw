@@ -134,12 +134,6 @@
                     var span_append = '<span class="super">' + span_number + '</span>';
                     $(this).append(span_append);
                     $('.super').hide();
-                    $(this).click(function () {
-                        $('.card').removeClass('notefocus')
-                        $('#n' + span_number).addClass('notefocus').parent().append($('#n' + span_number));
-                        $('.hfocus').addClass('highlight').removeClass('hfocus');
-                        $('#h' + span_number).removeClass('highlight').addClass('hfocus');
-                    });
                 });
 
                 $('.popover').hide();
