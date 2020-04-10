@@ -68,6 +68,9 @@ span.highlight {
 span.note {
     color:blue;
     background-color:white;
+    border: #bababa solid 1px;
+    border-radius: 4px 4px 4px 4px;
+    padding:2px 2px 2px 2px;
 }
 span.markup {
     color:white;

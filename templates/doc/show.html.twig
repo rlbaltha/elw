@@ -5,6 +5,14 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <style type="text/css">
+        .note {
+            font-size:85%;
+        }
+        .badge {
+            font-size: 100%;
+        }
+    </style>
 {% endblock %}
 
 {% block subnav %}
@@ -119,7 +127,7 @@
                     var top = p.top;
                     var note_index = index + 1;
                     var note_number = '<span class="blue">' + note_index + '</span>';
-                    var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
+                    var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
                     $(this).prev().append(note);
                 });
 
