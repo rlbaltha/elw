@@ -52,6 +52,9 @@
 {% block body %}
     <div class="row doc-container" id="doc{{ doc.id }}">
         <div class="col">
+            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+            <span class="badge badge-primary" style="background:darkred">{{ doc.access }}</span>
             <div class="document-editor">
                 {{ doc.body|raw }}
             </div>
