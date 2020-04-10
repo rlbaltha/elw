@@ -27,12 +27,13 @@ class DocController extends AbstractController
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $role = $permissions->getCourseRole($courseid);
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($findtype == 'SharedDocs') {
-            $docs = $docRepository->findSharedDocs($course);
+            $docs = $docRepository->findSharedDocs($course, $role);
             $header = 'Shared Docs';
         } else {
             $docs = $docRepository->findMyDocs($course, $user);

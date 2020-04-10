@@ -13,12 +13,14 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared Docs</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('doc_new') }}">New Doc</a>
+    </li>
 {% endblock %}
 
 {% block body %}
     <h2>{{ header }}</h2>
 
-    <a class="btn btn-primary float-right" href="{{ course_path('doc_new') }}">Create Doc</a>
     <div class="p-1">
         <input class="form-control" style="width:25%" id="filter" type="text" placeholder="Search..">
     </div>
