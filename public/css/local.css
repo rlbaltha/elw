@@ -15,12 +15,24 @@ div.checkbox > label {
     margin-right:2em;
 }
 
+label.required {
+    margin-right:1em;
+}
+
 h1 {
     font-size: 2em;
     display: inline;
 }
 h2 {
     font-size: 1.5em;
+}
+
+/*ui for doc disply*/
+.note {
+    font-size:85%;
+}
+.badge {
+    font-size: 100%;
 }
 
 
