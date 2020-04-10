@@ -1,5 +1,5 @@
-<form method="post" action="{{ course_path('doc_delete', {'id': doc.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form class="d-none" id="delete-form" method="post" action="{{ course_path('doc_delete', {'id': doc.id}) }}" onsubmit="return confirm('Are you sure you want to delete this Doc?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ doc.id) }}">
-    <button class="nav-link">Delete</button>
+    <button >Delete</button>
 </form>

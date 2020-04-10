@@ -158,19 +158,6 @@ class Doc
     }
 
 
-    /**
-     * @return Boolean
-     */
-    public function isOwner($user)
-    {
-        if($user == $this->user){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     public function getOrigin(): ?self
     {
         return $this->origin;

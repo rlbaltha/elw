@@ -32,6 +32,7 @@
             <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
         </li>
         <li class="nav-item">
+            <a id="delete-trigger" class="nav-link" href="#">Delete</a>
             {{ include('doc/_delete_form.html.twig') }}
         </li>
     {% elseif doc.access!='Review' %}
@@ -40,7 +41,7 @@
         </li>
     {% endif %}
     <li class="nav-item">
-        <a id="toggle-inline" class="nav-link" href="#">Toggle Notes</a>
+        <a id="toggle-inline" class="nav-link" href="#">Notes <span id="toggle">Inline</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Close</a>
@@ -87,7 +88,8 @@
     {# Markup pops for this document #}
     {% for markupset in markupsets %}
         {% for markup in markupset.markups %}
-            <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup' style="min-width: 10rem">
+            <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
+                 style="min-width: 10rem">
                 <div class="popover-title"
                      style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
                 <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
@@ -109,7 +111,7 @@
 
 
                 $("#toggle-inline").click(function () {
-                    $('#inline-toggle').text(($('#inline-toggle').text() == 'Inline' ? 'Marginal' : 'Inline'));
+                    $('#toggle').text(($('#toggle').text() == 'Inline' ? 'Popover' : 'Inline'));
                     $('.note, .super').toggle();
                     $('.popover').hide();
                 });
@@ -145,11 +147,14 @@
                     $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
                 });
                 $('.highlight').mouseover(function () {
-                    $('.popover').hide();
-                    var id = "div[data-id='" + $(this).attr('id') + "']";
-                    var offset = $(this).position();
-                    var right = $(this).position().left + $(this).width()
-                    $(id).show().offset({top: offset.top - 0, left: right});;
+                    if ($('#toggle').text() != 'Inline') {
+                        $('.popover').hide();
+                        var id = "div[data-id='" + $(this).attr('id') + "']";
+                        var offset = $(this).position();
+                        var right = $(this).position().left + $(this).width();
+                        $(id).show().offset({top: offset.top - 0, left: right});
+                    }
+
                 });
                 $('.popover').click(function () {
                     $(this).hide();
@@ -160,6 +165,11 @@
                     var id = '#' + $(this).attr('data-id');
                     $('.doc-container').hide();
                     $(id).show();
+                });
+
+                    {# Delete doc trigger#}
+                $('#delete-trigger').click(function () {
+                    $( "#delete-form" ).submit();
                 });
             }
         );

@@ -35,7 +35,7 @@ class Permissions
         }
     }
 
-    /*
+    /**
      * checks if the current user is in the array of allowed roles
      * if not, throws an access denied exception
      * if so, returns true
@@ -48,6 +48,40 @@ class Permissions
             throw new AccessDeniedException();
         } else {
             return true;
+        }
+    }
+
+    /**
+    * checks if the current user is doc owner
+    * if not, throws an access denied exception
+    * if so, returns true
+    */
+    public function isOwner($doc)
+    {
+        $username = $this->security->getUser()->getUsername();
+        $user = $this->em->getRepository('App:User')->findOneByUsername($username);
+        if ($user == $doc->getUser()) {
+            return true;
+        } else {
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
+     * checks if the current user is allowed to view the doc
+     * if not, throws an access denied exception
+     * if so, returns true
+     */
+    public function isAllowedToView($courseid, $doc)
+    {
+        //grab our current user's role in our current course
+        $currentUserRole = $this->getCourseRole($courseid);
+        //test if user is allowed to see the doc
+        if($currentUserRole === 'Instructor' or $doc->getAccess()==='Shared' or $this->isOwner($doc)){
+
+            return true;
+        } else {
+            throw new AccessDeniedException();
         }
     }
 }

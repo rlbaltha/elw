@@ -30,6 +30,8 @@ h2 {
 /*ui for doc disply*/
 .note {
     font-size:85%;
+    margin-left: .5em;
+    margin-right: .5em;
 }
 .badge {
     font-size: 100%;

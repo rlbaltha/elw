@@ -125,8 +125,7 @@ class DocController extends AbstractController
      */
     public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
     {
-        $allowed = ['Instructor', 'Student'];
-        $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isAllowedToView($courseid, $doc);
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $markupsets = $course->getMarkupsets();
@@ -143,12 +142,8 @@ class DocController extends AbstractController
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
 
-        $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        if (!$doc->isOwner($user)) {
-            throw new AccessDeniedException();
-        }
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
         $form->handleRequest($request);
@@ -174,12 +169,8 @@ class DocController extends AbstractController
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
 
-        $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        if (!$doc->isOwner($user)) {
-            throw new AccessDeniedException();
-        }
         if ($this->isCsrfTokenValid('delete' . $doc->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($doc);
