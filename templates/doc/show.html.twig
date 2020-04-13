@@ -50,7 +50,7 @@
 
 
 {% block body %}
-    <div class="row doc-container" id="doc{{ doc.id }}">
+    <div class="row doc-container d-none" id="doc{{ doc.id }}">
         <div class="col">
             <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
             <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
@@ -65,21 +65,21 @@
                 <div id='notes_container'>
                 </div>
             </div>
-
-            {# Markup pops for this document #}
-            <div class="markup-container" class="d-none">
-                {% for markupset in markupsets %}
-                    {% for markup in markupset.markups %}
-                        <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
-                             style="min-width: 10rem">
-                            <div class="popover-title"
-                                 style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                            <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
-                        </div>
-                    {% endfor %}
+        </div>
+    </div>
+    <div class="row" class="d-none">
+        {# Markup pops for this document #}
+        <div class="markup-container">
+            {% for markupset in markupsets %}
+                {% for markup in markupset.markups %}
+                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
+                         style="min-width: 10rem">
+                        <div class="popover-title"
+                             style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                        <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
+                    </div>
                 {% endfor %}
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 
@@ -171,8 +171,10 @@
 
                     {# Delete doc trigger#}
                 $('#delete-trigger').click(function () {
-                    $( "#delete-form" ).submit();
+                    $("#delete-form").submit();
                 });
+
+                $('.row').removeClass('d-none');
             }
         );
     </script>
