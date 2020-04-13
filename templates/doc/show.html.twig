@@ -72,7 +72,7 @@
         <div class="markup-container">
             {% for markupset in markupsets %}
                 {% for markup in markupset.markups %}
-                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
+                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
                          style="min-width: 10rem">
                         <div class="popover-title"
                              style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
@@ -116,8 +116,6 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-
-
                 $("#toggle-inline").click(function () {
                     $('#toggle').text(($('#toggle').text() == 'Inline' ? 'Popover' : 'Inline'));
                     $('.note, .super').toggle();
@@ -174,7 +172,7 @@
                     $("#delete-form").submit();
                 });
 
-                $('.row').removeClass('d-none');
+                $('.doc-container, .popover-markup').removeClass('d-none');
             }
         );
     </script>
