@@ -58,6 +58,13 @@
             <div class="document-editor">
                 {{ doc.body|raw }}
             </div>
+        </div>
+        <div class="col">
+            {# Notes Panel #}
+            <div id="notes">
+                <div id='notes_container'>
+                </div>
+            </div>
 
             {# Markup pops for this document #}
             <div class="markup-container" class="d-none">
@@ -72,13 +79,7 @@
                     {% endfor %}
                 {% endfor %}
             </div>
-        </div>
-        <div class="col">
-            {# Notes Panel #}
-            <div id="notes">
-                <div id='notes_container'>
-                </div>
-            </div>
+
         </div>
     </div>
 
