@@ -58,6 +58,20 @@
             <div class="document-editor">
                 {{ doc.body|raw }}
             </div>
+
+            {# Markup pops for this document #}
+            <div class="markup-container" class="d-none">
+                {% for markupset in markupsets %}
+                    {% for markup in markupset.markups %}
+                        <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
+                             style="min-width: 10rem">
+                            <div class="popover-title"
+                                 style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                            <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
         </div>
         <div class="col">
             {# Notes Panel #}
@@ -88,19 +102,7 @@
         </div>
     {% endfor %}
 
-    {# Markup pops for this document #}
-    <div class="markup-container" class="d-none">
-    {% for markupset in markupsets %}
-        {% for markup in markupset.markups %}
-            <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup'
-                 style="min-width: 10rem">
-                <div class="popover-title"
-                     style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    </div>
+
 
 
 
