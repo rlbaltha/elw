@@ -94,7 +94,7 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $markupsets = $course->getMarkupsets();
-        $doc_title = 'Review for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
+        $doc_title = 'for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setOrigin($origin);
