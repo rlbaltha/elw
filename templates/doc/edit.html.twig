@@ -14,6 +14,13 @@
     </li>
 {% endblock %}
 
+{% block subnavright %}
+<li class="nav-item">
+    <a id="delete-trigger" class="nav-link" href="#">Delete</a>
+    {{ include('doc/_delete_form.html.twig') }}
+</li>
+{% endblock %}
+
 
 {% block body %}
     <div class="row">
@@ -112,6 +119,11 @@
                 $('#note_insert_submit').click(function () {
                     note();
                 });
+            });
+
+            {# Delete doc trigger#}
+            $('#delete-trigger').click(function () {
+                $("#delete-form").submit();
             });
         });
     </script>

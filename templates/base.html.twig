@@ -55,9 +55,13 @@
                         <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                     </li>
                 {% endblock %}
-                <li class="nav-item float-right">
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% block subnavright %}
+                <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
                 </li>
+                {% endblock %}
             </ul>
         </div>
     </div>

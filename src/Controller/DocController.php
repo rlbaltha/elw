@@ -100,7 +100,7 @@ class DocController extends AbstractController
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        $doc->setAccess('Review');
+        ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Private'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
@@ -129,10 +129,12 @@ class DocController extends AbstractController
         $permissions->isAllowedToView($courseid, $doc);
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $role = $permissions->getCourseRole($courseid);
         $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
             'markupsets' => $markupsets,
+            'role' => $role
         ]);
     }
 
@@ -161,6 +163,40 @@ class DocController extends AbstractController
             'markupsets' => $markupsets,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}/{courseid}/access", name="doc_access", methods={"GET","POST"})
+     */
+    public function access(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
+        $access = $doc->getAccess();
+        ($access==='Shared' ? $doc->setAccess('Private') : $doc->setAccess('Shared'));
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
+    }
+
+    /**
+     * @Route("/{id}/{courseid}/hidden", name="doc_hidden", methods={"GET","POST"})
+     */
+    public function hidden(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    {
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
+        $access = $doc->getAccess();
+        ($access==='Hidden' ? $doc->setAccess('Private') : $doc->setAccess('Hidden'));
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
 
     /**
