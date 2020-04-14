@@ -151,10 +151,10 @@ class CourseController extends AbstractController
     }
 
     /**
-     *  Approves all pending student
-     * @Route("/approve_all_pending/{courseid}" , name="approve_all_pending")
-     *
-     */
+ *  Approves all pending student
+ * @Route("/approve_all_pending/{courseid}" , name="approve_all_pending")
+ *
+ */
     public function approveAllAction(Permissions $permissions, $courseid)
     {
         $allowed = ['Instructor'];
@@ -172,6 +172,7 @@ class CourseController extends AbstractController
         return $this->redirect($this->generateUrl('course_show', ['courseid' => $courseid]));
 
     }
+
 
     /**
      * @Route("/{id}", name="course_delete", methods={"DELETE"})

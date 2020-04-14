@@ -38,6 +38,12 @@
                     <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
                     <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
                     <td>{{ classlist.role }}</td>
+                    <td>
+                    <a href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('classlist_delete', {'id': classlist.id}) }}">Remove</a>
+                    </td>
                 </tr>
         {% endfor %}
         </thead>

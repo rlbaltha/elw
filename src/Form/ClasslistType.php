@@ -31,6 +31,12 @@ class ClasslistType extends AbstractType
                 'class' => Course::class,
                 'choice_label' => 'name'
             ])
+            ->add('status', ChoiceType::class, [
+                'choices' => ['Pending' => 'Pending', 'Approved' => 'Approved'],
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox'],
+            ])
         ;
     }
 

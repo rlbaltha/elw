@@ -11,7 +11,8 @@
                 <th>Course</th>
                 <th>User</th>
                 <th>Role</th>
-                <th>actions</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
                 <td>{{ classlist.course.name }}</td>
                 <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
                 <td>{{ classlist.role }}</td>
+                <td>{{ classlist.status }}</td>
                 <td>
                     <a href="{{ path('classlist_edit', {'id': classlist.id}) }}">edit</a>
                 </td>
