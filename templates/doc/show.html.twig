@@ -95,6 +95,7 @@
     </div>
 
     {% for review in doc.reviews %}
+        {% if review.access !='Hidden' %}
         <div class="row doc-container" id="doc{{ review.id }}">
             <div class="col">
                 <div class="alert alert-info">Review by {{ review.user.firstname }} {{ review.user.lastname }} of <span
@@ -112,6 +113,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 
 
