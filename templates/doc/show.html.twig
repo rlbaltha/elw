@@ -9,7 +9,7 @@
 
 {% block subnav %}
     <a data-id="doc{{ doc.id }}" class="navbar-brand nav-link doc-click" href="#">{{ doc.title }}</a>
-    {% if doc.reviews|length > 0 and doc.access !='Hidden' %}
+    {% if doc.reviews|length > 0%}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                data-toggle="dropdown"
@@ -18,9 +18,11 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
-                {% for doc in doc.reviews %}
+                {% for doc in doc.reviews  %}
+                    {% if doc.access !='Hidden' %}
                     <a data-id='doc{{ doc.id }}' class="dropdown-item doc-click"
                        href="#">Review By {{ doc.user.firstname }} {{ doc.user.lastname }}</a>
+                    {% endif %}
                 {% endfor %}
             </div>
         </li>
