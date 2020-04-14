@@ -9,7 +9,7 @@
 
 {% block subnav %}
     <a data-id="doc{{ doc.id }}" class="navbar-brand nav-link doc-click" href="#">{{ doc.title }}</a>
-    {% if doc.reviews|length > 0 %}
+    {% if doc.reviews|length > 0 and doc.access !='Hidden' %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                data-toggle="dropdown"
