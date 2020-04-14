@@ -66,7 +66,7 @@
             <tr class="body">
                 <td>
                     {% if doc.origin %}
-                        <span class="badge badge-primary">Review</span>
+                        <span class="badge badge-primary" style="background-color: darkblue">Review</span>
                     {% endif %}
                     <a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
                     {% if doc.reviews|length > 0 %}

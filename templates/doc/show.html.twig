@@ -9,7 +9,7 @@
 
 {% block subnav %}
     <a data-id="doc{{ doc.id }}" class="navbar-brand nav-link doc-click" href="#">{% if doc.origin %}
-            <span class="badge badge-primary">Review</span>
+            <span class="badge badge-primary" style="background-color: darkblue">Review</span>
         {% endif %}{{ doc.title }}</a>
     {% if doc.reviews|length > 0%}
         <li class="nav-item dropdown">
