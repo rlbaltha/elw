@@ -5,6 +5,21 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <style>
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) {
+
+            div.document-editor {
+                min-width: 100%;
+            }
+            .document-editor {
+                width: 100%;
+                margin: 0;
+                font-size: 16px;
+                font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block subnav %}
@@ -64,15 +79,15 @@
 
 {% block body %}
     <div class="row doc-container d-none" id="doc{{ doc.id }}">
-        <div class="col">
-            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
-            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
-            <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}red{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+        <div class="col-lg-8 col-md-10 col-sm-12">
             <div class="document-editor">
                 {{ doc.body|raw }}
             </div>
         </div>
         <div class="col">
+            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+            <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}red{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
             {# Notes Panel #}
             <div id="notes">
                 <div id='notes_container'>
@@ -117,14 +132,6 @@
         </div>
         {% endif %}
     {% endfor %}
-
-
-
-
-
-
-    </div>
-
 {% endblock %}
 
 {% block javascripts %}

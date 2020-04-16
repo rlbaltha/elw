@@ -37,4 +37,14 @@ h2 {
     font-size: 90%;
 }
 
+.btn-primary {
+    background-color: darkblue;
+    border-color: blue;
+}
+
+.btn-danger {
+    background-color: darkred;
+    border-color: darkred;
+}
+
 

@@ -6,51 +6,62 @@
     <h1>{{ labelset.name }}</h1>
     (Level: {% if labelset.level == 0 %}Default{% else %}Instructor Created{% endif %})
 
-    {{ include('labelset/_delete_form.html.twig') }}
-    <a class="btn btn-primary float-right" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
-    <hr/>
-    <h2>Projects</h2>
-    <a class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add Project</a>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for project in labelset.projects %}
-            <tr>
-                <td><a class="badge badge-primary p-2" style="background:{{ project.color }}" href="{{ path('project_edit', {'id': project.id}) }}">{{ project.name }}</a></td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="1">No Records Found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            {{ include('labelset/_delete_form.html.twig') }}
+            <a class="btn btn-primary float-right" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2>Projects</h2>
+            <a class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add
+                Project</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for project in labelset.projects %}
+                    <tr>
+                        <td><a class="badge badge-primary p-2" style="background:{{ project.color }}"
+                               href="{{ path('project_edit', {'id': project.id}) }}">{{ project.name }}</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Records Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
 
-    <h2>Stages</h2>
-    <a class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add Stage</a>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for stage in labelset.stages %}
-            <tr>
-                <td><a class="badge badge-primary p-2" style="background:{{ stage.color }}" href="{{ path('stage_edit', {'id': stage.id}) }}">{{ stage.name }}</a></td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="1">No Records Found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+            <h2>Stages</h2>
+            <a class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add
+                Stage</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for stage in labelset.stages %}
+                    <tr>
+                        <td><a class="badge badge-primary p-2" style="background:{{ stage.color }}"
+                               href="{{ path('stage_edit', {'id': stage.id}) }}">{{ stage.name }}</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Records Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endblock %}
