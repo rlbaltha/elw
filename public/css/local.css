@@ -1,5 +1,5 @@
 body {
-    background-color: #F5F5F5;
+    background-color: #fcfcfc;
 }
 .navbar {
     border-top-style: solid;
@@ -38,13 +38,23 @@ h2 {
 }
 
 .btn-primary {
-    background-color: darkblue;
-    border-color: blue;
+    background-color: #20399D;
+    border-color: #20399D;
+}
+
+.badge-primary {
+    background-color: #20399D;
+    border-color: #20399D;
+    font-weight: bolder;
 }
 
 .btn-danger {
     background-color: darkred;
     border-color: darkred;
+}
+
+a {
+    color: #20399D;
 }
 
 

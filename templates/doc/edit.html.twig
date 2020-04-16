@@ -8,17 +8,19 @@
 {% endblock %}
 
 {% block subnav %}
-    <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }} <i class="material-icons">expand_more</i></a>
+    <li class="nav-item">
+        <a id="doc-title-toggle" class="nav-link" href="#">Edit Settings <i class="material-icons" style="font-size: medium;">expand_more</i></a>
+    </li>
     <li class="nav-item">
         <a href="#" id="submit-doc-form" class="nav-link">Save</a>
     </li>
 {% endblock %}
 
 {% block subnavright %}
-<li class="nav-item">
-    <a id="delete-trigger" class="nav-link" href="#">Delete</a>
-    {{ include('doc/_delete_form.html.twig') }}
-</li>
+    <li class="nav-item">
+        <a id="delete-trigger" class="nav-link" href="#">Delete</a>
+        {{ include('doc/_delete_form.html.twig') }}
+    </li>
 {% endblock %}
 
 
@@ -28,6 +30,10 @@
 
 
         <div class="col">
+            <h1 style="font-size: large">{% if doc.origin %}<span class="badge badge-primary"
+                                                                  style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
+            </h1>
+            <hr/>
             {# Note Insert#}
             <div class="card">
                 <div class="card-body">
@@ -97,6 +103,7 @@
             } else
                 alert('You must be on WYSIWYG mode!');
         }
+
         $(document).ready(function () {
             $("label").toggle();
             $("#doc_title").toggle();

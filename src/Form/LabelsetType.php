@@ -24,11 +24,6 @@ class LabelsetType extends AbstractType
                 'label'  => 'Level',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-                'multiple' => false,
-            ])
         ;
     }
 
