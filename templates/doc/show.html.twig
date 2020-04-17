@@ -72,6 +72,7 @@
                 {{ doc.body|raw }}
             </div>
         </div>
+
         <div class="col">
             <h1 style="font-size: large">{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}</h1>
             <hr/>
@@ -84,12 +85,23 @@
             <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
             <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
             <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
-
-            {# Notes Panel #}
-            <div id="notes">
-                <div id='notes_container'>
+            <hr/>
+            {# Comment Panel #}
+            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id}) }}">Give Feedback</a>
+            {% for comment in doc.comments %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        {{comment.type}} <a class="btn btn-primary btn-sm float-right" href="{{ course_path('comment_edit', {'docid': doc.id, 'id': comment.id}) }}">Edit Feedback</a>
+                    </div>
+                    <div class="card-body">
+                        {{ comment.body|raw }}
+                    </div>
+                    <div class="card-footer">
+                        Grade: {{comment.grade}}
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+
         </div>
     </div>
     <div class="row" class="d-none">

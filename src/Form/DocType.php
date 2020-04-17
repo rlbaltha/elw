@@ -39,15 +39,6 @@ class DocType extends AbstractType
                 'attr' => ['class' => 'radio'],
                 'label' => 'Stage'
             ])
-//            ->add('access', ChoiceType::class, [
-//                'choices'  => [
-//                    'Private' => 'Private',
-//                    'Shared' => 'Shared',
-//                ],
-//                'expanded' => true,
-//                'attr' => ['class' => 'radio'],
-//                'label' => 'Access'
-//            ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
                 'label' => '',

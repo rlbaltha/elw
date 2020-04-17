@@ -86,11 +86,17 @@ class Doc
      */
     private $access = 'Shared';
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="doc", orphanRemoval=true)
+     */
+    private $comments;
+
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->labels = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -234,6 +240,37 @@ class Doc
     public function setAccess(string $access): self
     {
         $this->access = $access;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setDoc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getDoc() === $this) {
+                $comment->setDoc(null);
+            }
+        }
 
         return $this;
     }
