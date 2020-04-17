@@ -23,14 +23,6 @@ class ClasslistType extends AbstractType
                 'expanded' => true,
                 'attr' => ['class' => 'checkbox'],
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username'
-            ])
-            ->add('course', EntityType::class, [
-                'class' => Course::class,
-                'choice_label' => 'name'
-            ])
             ->add('status', ChoiceType::class, [
                 'choices' => ['Pending' => 'Pending', 'Approved' => 'Approved'],
                 'multiple' => false,

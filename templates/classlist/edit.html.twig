@@ -3,10 +3,8 @@
 {% block title %}Edit Classlist{% endblock %}
 
 {% block body %}
-    <h1>Edit Classlist</h1>
+    <h1>{{classlist.user.firstname}} {{classlist.user.lastname}} in {{ classlist.course.name }}</h1>
 
     {{ include('classlist/_form.html.twig', {'button_label': 'Update'}) }}
 
-
-    {{ include('classlist/_delete_form.html.twig') }}
 {% endblock %}

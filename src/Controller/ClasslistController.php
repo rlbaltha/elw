@@ -27,9 +27,9 @@ class ClasslistController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="classlist_new", methods={"GET","POST"})
+     * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, $courseid): Response
     {
         $classlist = new Classlist();
         $form = $this->createForm(ClasslistType::class, $classlist);
@@ -40,7 +40,7 @@ class ClasslistController extends AbstractController
             $entityManager->persist($classlist);
             $entityManager->flush();
 
-            return $this->redirectToRoute('classlist_index');
+            return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
         }
 
         return $this->render('classlist/new.html.twig', [
@@ -71,7 +71,7 @@ class ClasslistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('classlist_index');
+            return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
         }
 
         return $this->render('classlist/edit.html.twig', [
@@ -85,12 +85,13 @@ class ClasslistController extends AbstractController
      */
     public function delete(Request $request, Classlist $classlist): Response
     {
+        $courseid = $classlist->getCourse()->getId();
         if ($this->isCsrfTokenValid('delete'.$classlist->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($classlist);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('classlist_index');
+        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 }

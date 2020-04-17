@@ -19,12 +19,11 @@
     {% endif %}
 
     {% if is_granted('ROLE_INSTRUCTOR') %}
-    {{ include('course/_delete_form.html.twig') }}
-    <a class="btn btn-primary float-right" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All Pending</a>
-    <a class="btn btn-primary float-right" href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit Announcement</a>
-    <a class="btn btn-primary float-right" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
-    <a class="btn btn-primary float-right" href="{{ path('classlist_new') }}">Add Students</a>
-
+        <a class="btn btn-primary" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
+        <a class="btn btn-primary" href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit Announcement</a>
+{#        <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a>#}
+        <a class="btn btn-primary" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All Pending</a>
+        {{ include('course/_delete_form.html.twig') }}
     <table class="table">
         <thead>
         <tr>
@@ -39,10 +38,10 @@
                     <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
                     <td>{{ classlist.role }}</td>
                     <td>
-                    <a href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                    <a class="btn btn-primary btn-sm" href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
                     </td>
                     <td>
-                        <a href="{{ path('classlist_delete', {'id': classlist.id}) }}">Remove</a>
+                        {{ include('classlist/_delete_form.html.twig') }}
                     </td>
                 </tr>
         {% endfor %}

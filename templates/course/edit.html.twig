@@ -22,5 +22,6 @@
 {% endblock %}
 
 {% block body %}
+    <h1>{{ course.name }}</h1>
     {{ include('course/_form.html.twig', {'button_label': 'Update'}) }}
 {% endblock %}
