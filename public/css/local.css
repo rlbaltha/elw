@@ -27,7 +27,8 @@ h2 {
     font-size: 1.5em;
 }
 
-/*ui for doc disply*/
+
+/********** Doc display **********/
 .note {
     font-size:85%;
     margin-left: .5em;
@@ -37,6 +38,29 @@ h2 {
     font-size: 90%;
 }
 
+
+
+/********** Accessibility **********/
+.skip-link a, .skip-link a:hover, .skip-link a:visited
+{
+    position:absolute;
+    left:0;
+    top:-500px;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
+.skip-link a:active, .skip-link a:focus
+{
+    position:static;
+    display: inline-block;
+    width:auto;
+    height:auto;
+    margin-bottom: -10px;
+}
+
+/********** Increase Contrast **********/
 .btn-primary {
     background-color: #20399D;
     border-color: #20399D;
@@ -56,5 +80,3 @@ h2 {
 a {
     color: #20399D;
 }
-
-
