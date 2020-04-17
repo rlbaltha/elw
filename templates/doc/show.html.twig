@@ -74,18 +74,17 @@
         </div>
 
         <div class="col">
-            <h1 style="font-size: large">{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}</h1>
+            <h1>{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}</h1>
+            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+            <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
             <hr/>
             {% if role == 'Instructor' and doc.origin %}
                 <a class="btn btn-primary btn-sm" href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden'%}Release{% else %}Hide{% endif %} Review</a>
             {% elseif app.user == doc.user %}
                 <a class="btn btn-primary btn-sm" href="{{ course_path('doc_access', {'id': doc.id}) }}">Make {% if doc.access=='Shared'%}Private{% else %}Shared{% endif %}</a>
             {% endif %}
-            <hr/>
-            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
-            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
-            <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
-            <hr/>
+
             {# Comment Panel #}
             <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id}) }}">Give Feedback</a>
             {% for comment in doc.comments %}

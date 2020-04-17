@@ -24,12 +24,12 @@
 
 {% block body %}
     <div class="row doc-container">
-        <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="col-lg-8">
             <div class="document-editor">
                 {{ doc.body|raw }}
             </div>
         </div>
-        <div class="col">
+        <div class="col-lg-4 col-sm-12">
             <h1 style="font-size: large">Edit Feedback</h1>
             <hr/>
             {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
