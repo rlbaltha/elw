@@ -17,8 +17,8 @@ class CommentType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'choices'  => [
-                    'Holistic' => 'Holistic',
-                    'Review Plan' => 'Review Plan',
+                    'Holistic Feedback' => 'Holistic Feedback',
+                    'Revision Plan' => 'Revision Plan',
                 ],
                 'expanded' => true,
                 'attr' => ['class' => 'radio'],
