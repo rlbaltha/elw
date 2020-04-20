@@ -12,6 +12,7 @@
             div.document-editor {
                 min-width: 100%;
             }
+
             .document-editor {
                 width: 100%;
                 margin: 0;
@@ -23,7 +24,7 @@
 {% endblock %}
 
 {% block subnav %}
-    {% if doc.reviews|length > 0%}
+    {% if doc.reviews|length > 0 %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                data-toggle="dropdown"
@@ -32,10 +33,10 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
-                {% for doc in doc.reviews  %}
+                {% for doc in doc.reviews %}
                     {% if doc.access !='Hidden' %}
-                    <a data-id='doc{{ doc.id }}' class="dropdown-item doc-click"
-                       href="#">Review By {{ doc.user.firstname }} {{ doc.user.lastname }}</a>
+                        <a data-id='doc{{ doc.id }}' class="dropdown-item doc-click"
+                           href="#">Review By {{ doc.user.firstname }} {{ doc.user.lastname }}</a>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -59,7 +60,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_index') }}">Close</a>
+        <a id='close-trigger' class="nav-link" href="#">Close</a>
     </li>
     {{ parent() }}
 {% endblock %}
@@ -74,30 +75,39 @@
         </div>
 
         <div class="col">
-            <h1>{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}</h1>
+            <h1>{% if doc.origin %}<span class="badge badge-primary"
+                                         style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
+            </h1>
             <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
             <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
             <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
-            <span class="badge badge-primary" style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+            <span class="badge badge-primary"
+                  style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
             <hr/>
             {% if role == 'Instructor' and doc.origin %}
-                <a class="btn btn-primary btn-sm" href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden'%}Release{% else %}Hide{% endif %} Review</a>
+                <a class="btn btn-primary btn-sm"
+                   href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %}
+                    Review</a>
             {% elseif app.user == doc.user %}
-                <a class="btn btn-primary btn-sm" href="{{ course_path('doc_access', {'id': doc.id}) }}">Make {% if doc.access=='Shared'%}Private{% else %}Shared{% endif %}</a>
+                <a class="btn btn-primary btn-sm"
+                   href="{{ course_path('doc_access', {'id': doc.id}) }}">Make {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>
             {% endif %}
 
             {# Comment Panel #}
-            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id}) }}">Give Feedback</a>
+            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id}) }}">Give
+                Feedback</a>
             {% for comment in doc.comments %}
                 <div class="card mt-3">
                     <div class="card-header">
-                        {{comment.type}} <a class="btn btn-primary btn-sm float-right" href="{{ course_path('comment_edit', {'docid': doc.id, 'id': comment.id}) }}">Edit Feedback</a>
+                        {{ comment.type }} <a class="btn btn-primary btn-sm float-right"
+                                              href="{{ course_path('comment_edit', {'docid': doc.id, 'id': comment.id}) }}">Edit
+                            Feedback</a>
                     </div>
                     <div class="card-body">
                         {{ comment.body|raw }}
                     </div>
                     <div class="card-footer">
-                        Grade: {{comment.grade}}
+                        Grade: {{ comment.grade }}
                     </div>
                 </div>
             {% endfor %}
@@ -122,23 +132,24 @@
 
     {% for review in doc.reviews %}
         {% if review.access !='Hidden' %}
-        <div class="row doc-container" id="doc{{ review.id }}">
-            <div class="col-lg-8 col-md-10 col-sm-12">
-                <div class="document-editor">
-                    {{ review.body|raw }}
+            <div class="row doc-container" id="doc{{ review.id }}">
+                <div class="col-lg-8 col-md-10 col-sm-12">
+                    <div class="document-editor">
+                        {{ review.body|raw }}
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
-                            class="font-italic">{{ doc.title }}</h2>
-                <p> by {{ review.user.firstname }} {{ review.user.lastname }} for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
-                {# Notes Panel #}
-                <div id="notes">
-                    <div id='notes_container'>
+                <div class="col">
+                    <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
+                                class="font-italic">{{ doc.title }}</h2>
+                    <p> by {{ review.user.firstname }} {{ review.user.lastname }}
+                        for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                    {# Notes Panel #}
+                    <div id="notes">
+                        <div id='notes_container'>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         {% endif %}
     {% endfor %}
 {% endblock %}
@@ -198,7 +209,9 @@
                     $(id).show();
                 });
 
-
+                $('#close-trigger').click(function () {
+                    window.close();
+                });
                 $('.doc-container, .popover-markup').removeClass('d-none');
             }
         );

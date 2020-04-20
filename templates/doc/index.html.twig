@@ -69,7 +69,7 @@
                     {% if doc.origin %}
                         <span class="badge badge-primary">Review</span>
                     {% endif %}
-                    <a href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
+                    <a target="_blank"  href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
                     {% if doc.reviews|length > 0 %}
                      <span class="badge badge-primary ml-3">{{ doc.reviews|length }} Review(s)</span>
                     {% endif %}
