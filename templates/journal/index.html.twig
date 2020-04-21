@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{% if app.user==doc.user %}My{% else %}{{ doc.user.firstname }} {{ doc.user.lastname }}'s{% endif %} Journal</h1>
+    <h1>{% if app.user==doc.user %}My{% elseif doc %}{{ doc.user.firstname }} {{ doc.user.lastname }}'s{% endif %} Journal</h1>
 
     <div class="row">
         <div class="col-4">
