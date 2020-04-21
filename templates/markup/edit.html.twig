@@ -2,6 +2,16 @@
 
 {% block title %}Edit Markup{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/colorPick.css') }}">
+    <style>
+        button {
+            margin-top: 2em;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <h1>Edit Markup</h1>
 
@@ -12,4 +22,23 @@
 
     <a href="{{ path('markup_index') }}">back to list</a>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/colorPick.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#markup_color").colorPick({
+                'initialColor': 'darkblue',
+                'palette': ['darkblue', 'rebeccapurple', 'darkred', 'brown', 'darkgreen', 'darkslateblue', 'darkolivegreen', 'darkcyan', 'maroon'],
+                'onColorSelected': function () {
+                    this.element.css({'backgroundColor': this.color, 'color': 'white'});
+                    var selectedColor = this.color;
+                    selectedColor = selectedColor.toLowerCase();
+                    this.element.val(selectedColor);
+                }
+            });
+        });
+    </script>
 {% endblock %}
