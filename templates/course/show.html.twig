@@ -5,9 +5,12 @@
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
     {% if status !='Pending' %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('journal_index') }}">Journals</a>
+        </li>
     {% endif %}
 {% endblock %}
 
@@ -15,42 +18,45 @@
 
     <h2>Hi {{ user.firstname }}</h2>
     {% if course.announcement != '' %}
-    <div class="alert alert-primary">{{ course.announcement|raw }}</div>
+        <div class="alert alert-primary">{{ course.announcement|raw }}</div>
     {% endif %}
 
     {% if is_granted('ROLE_INSTRUCTOR') %}
         <a class="btn btn-primary" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit Course</a>
-        <a class="btn btn-primary" href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit Announcement</a>
-{#        <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a>#}
-        <a class="btn btn-primary" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All Pending</a>
+        <a class="btn btn-primary" href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
+            Announcement</a>
+        {#        <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a>#}
+        <a class="btn btn-primary" href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All
+            Pending</a>
         {{ include('course/_delete_form.html.twig') }}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Students</th>
-            <th>Status</th>
-            <th>Role</th>
-        </tr>
-        <thead>
-        {% for classlist in course.classlists %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Students</th>
+                <th>Status</th>
+                <th>Role</th>
+            </tr>
+            <thead>
+            {% for classlist in course.classlists %}
                 <tr>
                     <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
                     <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
                     <td>{{ classlist.role }}</td>
                     <td>
-                    <a class="btn btn-primary btn-sm" href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                        <a class="btn btn-primary btn-sm"
+                           href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
                     </td>
                     <td>
                         {{ include('classlist/_delete_form.html.twig') }}
                     </td>
                 </tr>
-        {% endfor %}
-        </thead>
-    </table>
+            {% endfor %}
+            </thead>
+        </table>
     {% endif %}
 
     {% if status=='Pending' %}
-        <div class="alert alert-primary">Your entry to this course is pending.  Please check back soon.
+        <div class="alert alert-primary">Your entry to this course is pending. Please check back soon.
             <a class="btn btn-primary" href="{{ course_path('course_show', {'id': course.id}) }}">Check Now</a>
         </div>
     {% endif %}
