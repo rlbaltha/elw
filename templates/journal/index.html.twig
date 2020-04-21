@@ -12,11 +12,25 @@
         <a class="nav-link" href="{{ course_path('doc_index', {'id': course.id}) }}">Documents</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('journal_index') }}">My Journals</a>
+        <a class="nav-link" href="{{ course_path('journal_index') }}">My Journal</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal</a>
     </li>
+    {% if role=='Instructor' %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            Students
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for classlist in course.classlists %}
+            <a class="dropdown-item" href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{classlist.user.firstname}} {{classlist.user.lastname}}</a>
+            {% endfor %}
+        </div>
+    </li>
+    {% endif %}
 {% endblock %}
 
 {% block body %}

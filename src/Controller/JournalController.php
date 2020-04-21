@@ -18,28 +18,34 @@ class JournalController extends AbstractController
      * @Route("/journal", name="journal")
      */
     /**
-     * @Route("/{courseid}/{docid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0"})
+     * @Route("/{courseid}/{docid}/{userid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0"})
      */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $docid): Response
+    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $docid, $userid): Response
     {
-        $allowed = ['Student', 'Instructor'];
-        $permissions->restrictAccessTo($courseid, $allowed);
-        $role = $permissions->getCourseRole($courseid);
 
+        $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $docs = $docRepository->findJournal($course, $user);
-        if ($docid==0) {
-            $doc = $docRepository->findLatest($course, $user);
+        if ($userid==0) {
+            $allowed = ['Student', 'Instructor'];
+            $permissions->restrictAccessTo($courseid, $allowed);
+            $username = $this->getUser()->getUsername();
+            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         }
         else {
-            $doc = $docRepository->findOneById($docid);
+            $allowed = ['Instructor'];
+            $permissions->restrictAccessTo($courseid, $allowed);
+            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
+        }
+        $docs = $docRepository->findJournal($course, $user);
+        $doc = $docRepository->findOneById($docid);
+        if (!$doc) {
+            $doc = $docs[0];
         }
         return $this->render('journal/index.html.twig', [
             'docs' => $docs,
             'doc' => $doc,
-            'course' => $course
+            'course' => $course,
+            'role' => $role
         ]);
     }
 
