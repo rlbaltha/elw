@@ -49,7 +49,7 @@
                 {% for doc in docs %}
                     <tr class="body">
                         <td>
-                            <a href="{{ course_path('journal_index', {'docid': doc.id}) }}">{{ doc.title }}</a>
+                            <a href="{{ course_path('journal_index', {'docid': doc.id, 'userid': doc.user.id}) }}">{{ doc.title }}</a>
                         </td>
                         <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
                     </tr>
