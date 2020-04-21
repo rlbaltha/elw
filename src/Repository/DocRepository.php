@@ -93,4 +93,22 @@ class DocRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return Doc Returns a Doc objects
+     */
+    public function findLatest($user, $course): ?Doc
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.user = :val2')
+            ->andWhere('d.access = :val3')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $user)
+            ->setParameter('val3', 'Journal')
+            ->orderBy('d.updated', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

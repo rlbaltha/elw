@@ -30,7 +30,12 @@ class JournalController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $docs = $docRepository->findJournal($course, $user);
-        $doc = $docRepository->findOneById($docid);
+        if ($docid==0) {
+            $doc = $docRepository->findLatest($course, $user);
+        }
+        else {
+            $doc = $docRepository->findOneById($docid);
+        }
         return $this->render('journal/index.html.twig', [
             'docs' => $docs,
             'doc' => $doc,
@@ -70,4 +75,47 @@ class JournalController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/{id}/{courseid}/edit", name="journal_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
+
+        $form = $this->createForm(JournalType::class, $doc, ['attr' => ['id' => 'doc-form']]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'courseid' => $courseid]);
+        }
+
+        return $this->render('journal/edit.html.twig', [
+            'doc' => $doc,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $permissions->isOwner($doc);
+
+        if ($this->isCsrfTokenValid('delete' . $doc->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($doc);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('journal_index', ['docid' => 0, 'courseid' => $courseid]);
+    }
+
 }
