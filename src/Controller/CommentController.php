@@ -17,9 +17,9 @@ class CommentController extends AbstractController
 {
 
     /**
-     * @Route("/{courseid}/{docid}/new", name="comment_new", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $docid, $courseid): Response
+    public function new(Request $request, $docid, $courseid, $source): Response
     {
 
         $username = $this->getUser()->getUsername();
@@ -36,6 +36,9 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
+            if ($source!='doc') {
+                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'courseid' => $courseid]);
+            }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
         }
 
@@ -48,9 +51,9 @@ class CommentController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/{docid}/{id}/edit", name="comment_edit", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Comment $comment, $docid, $courseid): Response
+    public function edit(Request $request, Comment $comment, $docid, $courseid, $source): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $form = $this->createForm(CommentType::class, $comment);
@@ -59,20 +62,24 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid]);
+            if ($source!='doc') {
+                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'courseid' => $courseid]);
+            }
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
         }
 
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'source' => $source,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{id}", name="comment_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{docid}/{source}/{id}", name="comment_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Comment $comment, $docid, $courseid): Response
+    public function delete(Request $request, Comment $comment, $docid, $courseid, $source): Response
     {
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

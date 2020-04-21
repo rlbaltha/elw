@@ -93,13 +93,13 @@
             {% endif %}
 
             {# Comment Panel #}
-            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id}) }}">Give
+            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
             {% for comment in doc.comments %}
                 <div class="card mt-3">
                     <div class="card-header">
                         {{ comment.type }} <a class="btn btn-primary btn-sm float-right"
-                                              href="{{ course_path('comment_edit', {'docid': doc.id, 'id': comment.id}) }}">Edit
+                                              href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
                             Feedback</a>
                     </div>
                     <div class="card-body">

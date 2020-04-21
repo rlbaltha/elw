@@ -63,7 +63,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-8">
+        <div class="col-4">
             {% if doc %}
                 <h2 class="d-inline">{{ doc.title }}</h2>
                 {% if app.user==doc.user %}<a class="btn btn-primary btn-sm float-right"
@@ -72,6 +72,23 @@
                 <hr/>
                 {{ doc.body|raw }}
             {% endif %}
+        </div>
+        <div class="col-4">
+            {# Comment Panel #}
+            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'journal'}) }}">Give
+                Feedback</a>
+            {% for comment in doc.comments %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                         <a class="btn btn-primary btn-sm float-right"
+                                              href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}">Edit
+                            Feedback</a>
+                    </div>
+                    <div class="card-body">
+                        {{ comment.body|raw }}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 

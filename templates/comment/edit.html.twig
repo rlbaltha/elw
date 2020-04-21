@@ -34,7 +34,7 @@
             <hr/>
             {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
-            {{ include('comment/_delete_form.html.twig') }}
+            {{ include('comment/_delete_form.html.twig', {'source': source}) }}
         </div>
     </div>
 {% endblock %}
