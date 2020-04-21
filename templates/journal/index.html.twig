@@ -15,7 +15,7 @@
         <a class="nav-link" href="{{ course_path('journal_index') }}">My Journal</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal</a>
+        <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal Entry</a>
     </li>
     {% if role=='Instructor' %}
     <li class="nav-item dropdown">
@@ -55,7 +55,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No Journals found.</td>
+                        <td colspan="2">No Entries found.</td>
                     </tr>
                 {% endfor %}
                 </tbody>
