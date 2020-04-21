@@ -27,8 +27,27 @@ class DocRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->andWhere('d.course = :val1')
             ->andWhere('d.user = :val2')
+            ->andWhere('d.access != :val3')
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
+            ->setParameter('val3', 'Journal')
+            ->orderBy('d.updated', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findJournal($course, $user)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.user = :val2')
+            ->andWhere('d.access = :val3')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $user)
+            ->setParameter('val3', 'Journal')
             ->orderBy('d.updated', 'DESC')
             ->getQuery()
             ->getResult();
@@ -42,7 +61,9 @@ class DocRepository extends ServiceEntityRepository
         if ($role === 'Instructor') {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.course = :val1')
+                ->andWhere('d.access != :val3')
                 ->setParameter('val1', $course)
+                ->setParameter('val3', 'Journal')
                 ->orderBy('d.updated', 'DESC')
                 ->getQuery()
                 ->getResult();

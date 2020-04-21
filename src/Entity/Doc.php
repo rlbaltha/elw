@@ -71,13 +71,13 @@ class Doc
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $project;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Stage")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $stage;
 

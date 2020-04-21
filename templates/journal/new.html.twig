@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Doc{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block subnav %}
+    <a id="doc-title-toggle" class="navbar-brand" href="#">{{ doc.title }} <i class="material-icons">expand_less</i></a>
+    <li class="nav-item">
+        <a href="#" id="submit-doc-form" class="nav-link">Save</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">{{ include('doc/_form.html.twig') }}</div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $("#submit-doc-form").click(function () {
+                $("#doc-form").submit(); // Submit the form
+            });
+        });
+    </script>
+{% endblock %}
+
+
