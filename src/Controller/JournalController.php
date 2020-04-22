@@ -22,18 +22,15 @@ class JournalController extends AbstractController
      */
     public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $docid, $userid): Response
     {
-
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         if ($userid==0) {
-            $allowed = ['Student', 'Instructor'];
-            $permissions->restrictAccessTo($courseid, $allowed);
             $username = $this->getUser()->getUsername();
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         }
         else {
-            $allowed = ['Instructor'];
-            $permissions->restrictAccessTo($courseid, $allowed);
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
         }
         $docs = $docRepository->findJournal($course, $user);

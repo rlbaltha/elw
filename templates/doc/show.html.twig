@@ -105,9 +105,11 @@
                     <div class="card-body">
                         {{ comment.body|raw }}
                     </div>
+                    {% if comment.grade %}
                     <div class="card-footer">
                         Grade: {{ comment.grade }}
                     </div>
+                    {% endif %}
                 </div>
             {% endfor %}
 

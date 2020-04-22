@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,15 +20,17 @@ class CommentController extends AbstractController
     /**
      * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $docid, $courseid, $source): Response
+    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
     {
 
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $role = $permissions->getCourseRole($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $comment = new Comment();
         $comment->setUser($user);
         $comment->setDoc($doc);
+        $comment->setType('Holistic Feedback');
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -45,6 +48,7 @@ class CommentController extends AbstractController
         return $this->render('comment/new.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'role' => $role,
             'form' => $form->createView(),
         ]);
     }
@@ -53,9 +57,10 @@ class CommentController extends AbstractController
     /**
      * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Comment $comment, $docid, $courseid, $source): Response
+    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $role = $permissions->getCourseRole($courseid);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -71,6 +76,7 @@ class CommentController extends AbstractController
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'role' => $role,
             'source' => $source,
             'form' => $form->createView(),
         ]);

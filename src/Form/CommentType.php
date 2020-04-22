@@ -30,7 +30,8 @@ class CommentType extends AbstractType
             ])
             ->add('grade', TextType::class, [
                 'label'  => 'Grade',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
+                'required' => false
             ])
         ;
     }

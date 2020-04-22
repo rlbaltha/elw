@@ -24,10 +24,18 @@
 
 {% block body %}
     <div class="row doc-container">
-        <div class="col-lg-8">
-            <div class="document-editor">
-                {{ doc.body|raw }}
-            </div>
+        <div class="col-lg-8 col-sm-12">
+            {% if doc.access!='Journal' %}
+                <div class="document-editor">
+                    {{ doc.body|raw }}
+                </div>
+            {% else %}
+                <h2>{{ doc.title }}</h2>
+                <hr/>
+                <div>
+                    {{ doc.body|raw }}
+                </div>
+            {% endif %}
         </div>
         <div class="col-lg-4 col-sm-12">
             <h1 style="font-size: large">Edit Feedback</h1>
@@ -37,4 +45,19 @@
             {{ include('comment/_delete_form.html.twig', {'source': source}) }}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            let access = "{{ doc.access }}";
+            if ( access === "Journal") {
+                $('#comment_grade').hide();
+                $('#comment_grade').prev().hide();
+                $('#comment_type').hide();
+                $('#comment_type').prev().hide();
+            }
+        });
+    </script>
 {% endblock %}
