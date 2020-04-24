@@ -55,6 +55,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
+
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $docs = $docRepository->findByUser($course, $role, $user);

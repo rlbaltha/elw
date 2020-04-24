@@ -2,11 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Access;
 use App\Entity\Doc;
 use App\Entity\Project;
 use App\Entity\Stage;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

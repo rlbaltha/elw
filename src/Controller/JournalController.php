@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Doc;
-use App\Form\DocType;
 use App\Form\JournalType;
 use App\Repository\DocRepository;
 use App\Service\Permissions;
@@ -12,11 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/journal")
+ */
 class JournalController extends AbstractController
 {
-    /**
-     * @Route("/journal", name="journal")
-     */
+
     /**
      * @Route("/{courseid}/{docid}/{userid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0"})
      */
