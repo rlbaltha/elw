@@ -12,26 +12,47 @@
         <a class="nav-link" href="{{ course_path('doc_index', {'id': course.id}) }}">Documents</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('journal_index') }}">My Journal</a>
+        <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal Entry</a>
-    </li>
-    {% if role=='Instructor' %}
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-               data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                Students
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for classlist in course.classlists %}
-                    <a class="dropdown-item"
-                       href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.firstname }} {{ classlist.user.lastname }}</a>
-                {% endfor %}
-            </div>
-        </li>
-    {% endif %}
+{% endblock %}
+
+{% block toolnav %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item skip-link">
+                    <a class="nav-link" href="#main-content">Skip to content</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ course_path('journal_index') }}">My Journal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal Entry</a>
+                </li>
+                {% if role=='Instructor' %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Select Author
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for classlist in course.classlists %}
+                                <a class="dropdown-item"
+                                   href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.firstname }} {{ classlist.user.lastname }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 {% endblock %}
 
 {% block body %}

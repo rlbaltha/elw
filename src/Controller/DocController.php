@@ -48,6 +48,26 @@ class DocController extends AbstractController
 
 
     /**
+     * @Route("/{courseid}/{findtype}/{userid}/byuser", name="doc_byuser", methods={"GET"}, defaults={"findtype":"MyDocs"})
+     */
+    public function byuser(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
+    {
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $role = $permissions->getCourseRole($courseid);
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $docs = $docRepository->findByUser($course, $role, $user);
+        $header = 'Docs by '. $user->getFirstname().' '.$user->getLastname();
+        return $this->render('doc/index.html.twig', [
+            'header' => $header,
+            'docs' => $docs,
+            'course' => $course
+        ]);
+    }
+
+
+    /**
      * @Route("/{courseid}/new", name="doc_new", methods={"GET","POST"})
      */
     public function new(Request $request, Permissions $permissions, $courseid): Response

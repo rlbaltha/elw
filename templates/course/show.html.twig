@@ -4,6 +4,9 @@
 
 {% block subnav %}
     <a class="navbar-brand" href="#">{{ course.name }}</a>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ course_path('course_show', {'id': course.id}) }}">Course Home</a>
+    </li>
     {% if status !='Pending' %}
         <li class="nav-item">
             <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>

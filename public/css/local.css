@@ -2,9 +2,6 @@ body {
     background-color: #fcfcfc;
 }
 .navbar {
-    border-top-style: solid;
-    border-top-width: 5px;
-    border-top-color: #ba0c2f;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: #dcdcdc;
@@ -36,8 +33,6 @@ h2 {
 .badge {
     font-size: 90%;
 }
-
-
 
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
