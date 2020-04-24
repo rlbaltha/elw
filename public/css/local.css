@@ -8,6 +8,10 @@ body {
     z-index: 1000;
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: #343a40;
+}
+
 div.checkbox > label {
     margin-right:2em;
 }
