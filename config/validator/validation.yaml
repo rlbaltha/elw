@@ -1,6 +1,10 @@
 App\Entity\Doc:
   properties:
     project:
-      - NotBlank: ~
+      - NotBlank:
+          payload:
+            severity: warning
     stage:
-      - NotBlank: ~
+      - NotBlank:
+          payload:
+            severity: warning

@@ -38,6 +38,9 @@ h2 {
     font-size: 90%;
 }
 
+.alert-ul {
+    list-style-type:none
+}
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
 {
