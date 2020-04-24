@@ -27,7 +27,8 @@ class DocType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'attr' => ['class' => 'radio'],
-                'label' => 'Project'
+                'label' => 'Project',
+                'required' => 'true'
             ])
             ->add('stage', EntityType::class, [
                 'class' => Stage::class,
@@ -35,7 +36,8 @@ class DocType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'attr' => ['class' => 'radio'],
-                'label' => 'Stage'
+                'label' => 'Stage',
+                'required' => 'true'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
