@@ -15,13 +15,13 @@
 {% block body %}
     <h1>Edit Markup</h1>
 
-    {{ include('markup/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            {{ include('markup/_form.html.twig', {'button_label': 'Update'}) }}
 
-
-    {{ include('markup/_delete_form.html.twig') }}
-
-    <a href="{{ path('markup_index') }}">back to list</a>
-
+            {{ include('markup/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -29,8 +29,9 @@
     <script src="{{ asset('js/colorPick.js') }}"></script>
     <script>
         $(document).ready(function () {
+            var color = $("#markup_color").val();
             $("#markup_color").colorPick({
-                'initialColor': 'darkblue',
+                'initialColor': color,
                 'palette': ['darkblue', 'rebeccapurple', 'darkred', 'brown', 'darkgreen', 'darkslateblue', 'darkolivegreen', 'darkcyan', 'maroon'],
                 'onColorSelected': function () {
                     this.element.css({'backgroundColor': this.color, 'color': 'white'});
