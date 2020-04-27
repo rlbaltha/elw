@@ -64,6 +64,11 @@
 {% block body %}
     <h1>{{ header }}</h1>
 
+{% if is_granted('ROLE_INSTRUCTOR') %}
+<a class="btn btn-primary" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release All Hidden Reviews</a>
+{% endif %}
+
+
     <div class="p-1">
         <label for="filter" class="required">Search/Filter Docs</label>
         <input class="form-control" style="width:25%" id="filter" type="text">

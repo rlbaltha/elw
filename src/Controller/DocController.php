@@ -46,6 +46,37 @@ class DocController extends AbstractController
         ]);
     }
 
+    /**
+     *  Release All Hidden
+     * @Route("/release_all_hidden/{courseid}" , name="release_all_hidden")
+     *
+     */
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid)
+    {
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $entityManager = $this->getDoctrine()->getManager();
+        $docs = $docRepository->findMyDocs($course, $user);
+        $header = 'My Docs';
+        foreach($docs as $doc){
+            if ($doc->getAccess() == 'Hidden'){
+                $doc->setAccess('Private');
+                $entityManager->persist($doc);
+            }
+        }
+        $entityManager->flush();
+        return $this->render('doc/index.html.twig', [
+            'header' => $header,
+            'docs' => $docs,
+            'course' => $course
+        ]);
+
+    }
+
 
     /**
      * @Route("/{courseid}/{findtype}/{userid}/byuser", name="doc_byuser", methods={"GET"}, defaults={"findtype":"MyDocs"})
