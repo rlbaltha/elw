@@ -37,7 +37,8 @@
                         <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared Docs</a>
+                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared
+                            Docs</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -55,6 +56,12 @@
                     <li class="nav-item">
                         <a target="_blank" class="nav-link" href="{{ course_path('doc_new') }}">New Doc</a>
                     </li>
+                    {% if is_granted('ROLE_INSTRUCTOR') and header=="My Docs" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release
+                                Hidden Reviews</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -63,11 +70,6 @@
 
 {% block body %}
     <h1>{{ header }}</h1>
-
-{% if is_granted('ROLE_INSTRUCTOR') and header=="My Docs"%}
-<a class="btn btn-primary" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release All Hidden Reviews</a>
-{% endif %}
-
 
     <div class="p-1">
         <label for="filter" class="required">Search/Filter Docs</label>
