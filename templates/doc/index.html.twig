@@ -64,7 +64,7 @@
 {% block body %}
     <h1>{{ header }}</h1>
 
-{% if is_granted('ROLE_INSTRUCTOR') %}
+{% if is_granted('ROLE_INSTRUCTOR') and header=="My Docs"%}
 <a class="btn btn-primary" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release All Hidden Reviews</a>
 {% endif %}
 
