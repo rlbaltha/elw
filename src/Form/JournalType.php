@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Doc;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
@@ -21,6 +22,12 @@ class JournalType extends AbstractType
             ->add('body', CKEditorType::class, [
                 'config_name' => 'simple_config',
                 'label' => '',
+            ])
+            ->add('project', HiddenType::class, [
+                'required'=>false
+            ])
+            ->add('stage', HiddenType::class, [
+                'required'=>false
             ])
         ;
     }

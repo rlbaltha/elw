@@ -1,10 +1,10 @@
-App\Entity\Doc:
-  properties:
-    project:
-      - NotBlank:
-          payload:
-            severity: warning
-    stage:
-      - NotBlank:
-          payload:
-            severity: warning
+#App\Entity\Doc:
+#  properties:
+#    project:
+#      - NotBlank:
+#          payload:
+#            severity: warning
+#    stage:
+#      - NotBlank:
+#          payload:
+#            severity: warning
