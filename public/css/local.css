@@ -63,8 +63,13 @@ h2 {
 
 /********** Increase Contrast **********/
 .btn-primary {
-    background-color: #20399D;
-    border-color: #20399D;
+    background-color: #434747;
+    border-color: #434747;
+}
+
+.btn-primary:hover {
+    background-color: #ba0c2f;
+    border-color: #ba0c2f;
 }
 
 .badge-primary {

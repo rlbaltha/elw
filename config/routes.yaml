@@ -1,6 +1,6 @@
 index:
     path: /
-    controller: App\Controller\CourseController::index
+    controller: App\Controller\DefaultController::index
 
 app_logout:
     path: /logout

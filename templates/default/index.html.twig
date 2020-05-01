@@ -1,27 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ELW Homepage{% endblock %}
+{% block title %}eLW Homepage{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>eLC for Writing</h1>
-    {% if data %}
-    {% for obj in data %}
-    {{ obj }}
-    {% endfor %}
-    {% endif %}
-    {% if user %}
-        {% for obj in user %}
-            {{ obj }}
-        {% endfor %}
-    {% endif %}
-    {% if val %}{{ val }}{% endif %}
+    <div class="jumbotron">
+        <h1 class="display-4" style='color:#ba0c2f; font-family: "serif"; '>eLearning for Writers</h1>
+        <p class="lead" style="opacity: 0">Learn together.  Write better.</p>
+        <hr class="my-4">
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a class="btn btn-primary" href="{{ path('course_index') }}">UGA MyID Login</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
 
 
-</div>
+{% block javascripts %}
+    {{ parent() }}
+<script>
+    $(document).ready(function () {
+        $(".lead").animate({
+            opacity: '1'
+        }, "slow");
+    });
+</script>
+
 {% endblock %}

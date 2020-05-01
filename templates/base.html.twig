@@ -27,7 +27,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavMain">
             <a href="{{ path('course_index') }}" class="navbar-brand">
-                <img src="https://brand.uga.edu/wp-content/uploads/GEORGIA-GTV-FC-611x1024.png" height="35" alt="UGA logo">
+                <img src="https://brand.uga.edu/wp-content/uploads/GEORGIA-FS-FC-768x252.png" height="40" alt="UGA logo">
             </a>
 
             <ul class="navbar-nav">
@@ -55,15 +55,19 @@
                                 Exit login as</a>
                         </li>
                     {% endif %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                     </li>
+                    {% endif %}
                 {% endblock %}
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% block subnavright %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                        {% endif %}
                     </li>
                 {% endblock %}
             </ul>
