@@ -30,11 +30,12 @@
     <h1>My Courses</h1>
 
         {% for course in courses %}
-            <div class="card mt-3">
+            <div class="card mt-3"  style="width: 18rem;">
                 <div class="card-header">
+                    <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a>
                 </div>
                 <div class="card-body">
-                    <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a>
+                    {{ course.announcement|raw }}
                 </div>
             </div>
 
