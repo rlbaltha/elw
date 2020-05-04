@@ -28,20 +28,21 @@
 {% block body %}
 
     <h1>My Courses</h1>
-
+    <div class="row">
         {% for course in courses %}
-            <div class="card mt-3"  style="width: 18rem;">
-                <div class="card-header">
-                    <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a>
-                </div>
-                <div class="card-body">
-                    {{ course.announcement|raw }}
+            <div class="col-lg-4 col-sm-12  mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a>
+                    </div>
+                    <div class="card-body">
+                        {{ course.announcement|raw }}
+                    </div>
                 </div>
             </div>
-
         {% else %}
             No Courses Found
         {% endfor %}
-
+    </div>
 
 {% endblock %}
