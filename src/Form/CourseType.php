@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Course;
 use App\Entity\Labelset;
 use App\Entity\Markupset;
+use App\Entity\Term;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,6 +20,16 @@ class CourseType extends AbstractType
             ->add('name', TextType::class, [
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('time', TextType::class, [
+                'label'  => 'Time',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('term', EntityType::class, [
+                'class' => Term::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => false
             ])
             ->add('labelsets', EntityType::class, [
                 'class' => Labelset::class,

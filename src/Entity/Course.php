@@ -48,6 +48,16 @@ class Course
      */
     private $announcement = "Welcome to our class.";
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $time;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Term")
+     */
+    private $term;
+
 
     public function __construct()
     {
@@ -199,5 +209,30 @@ class Course
 
         return $this;
     }
+
+    public function getTime(): ?string
+    {
+        return $this->time;
+    }
+
+    public function setTime(?string $time): self
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    public function getTerm(): ?Term
+    {
+        return $this->term;
+    }
+
+    public function setTerm(?Term $term): self
+    {
+        $this->term = $term;
+
+        return $this;
+    }
+
 
 }

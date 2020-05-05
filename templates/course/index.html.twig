@@ -33,9 +33,17 @@
             <div class="col-lg-4 col-sm-12  mt-3">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}</a>
+                        <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}  </a> {{ course.term.name }}
+                        ({{ course.time }})
                     </div>
                     <div class="card-body">
+                        Instructor:
+                        {% for classlist in course.classlists %}
+                            {% if classlist.role == 'Instructor' %}
+                                {{ classlist.user.firstname }} {{ classlist.user.lastname }}
+                            {% endif %}
+                        {% endfor %}
+                        <hr/>
                         {{ course.announcement|raw }}
                     </div>
                 </div>
