@@ -61,7 +61,7 @@
                             <a class="nav-link" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release
                                 Hidden Reviews</a>
                         </li>
-                        {% if hidden > 1 %}
+                        {% if hidden > 0 %}
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ course_path('release_all_comments', {'courseid': course.id}) }}">Release
