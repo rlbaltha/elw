@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Doc;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use PhpParser\Node\Scalar;
 
 /**
  * @method Doc|null find($id, $lockMode = null, $lockVersion = null)
@@ -122,6 +123,16 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val', $docid)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @return count of docs with hidden comments
+     */
+    public function countHidden($course): ?String
+    {
+        $dql = 'SELECT count(d.id) FROM App\Entity\Doc d JOIN d.comments c WHERE c.access = ?1 and d.course = ?2 ';
+        $query = $this->getEntityManager()->createQuery($dql)->setParameter('1', 'Hidden')->setParameter('2', $course);
+        return $query->getSingleScalarResult();
     }
 
 

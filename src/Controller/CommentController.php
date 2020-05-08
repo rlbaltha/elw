@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Repository\DocRepository;
 use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,6 +81,37 @@ class CommentController extends AbstractController
             'source' => $source,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     *  Release All Hidden
+     * @Route("/release_all_comments/{courseid}" , name="release_all_comments")
+     *
+     */
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid)
+    {
+        $findtype = 'MyDocs';
+
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $entityManager = $this->getDoctrine()->getManager();
+        $docs = $docRepository->findMyDocs($course, $user);
+        $header = 'My Docs';
+        foreach($docs as $doc){
+            if ($doc->getComments()){
+                foreach ($doc->getComments() as $comment) {
+                    $comment->setAccess('Private');
+                    $entityManager->persist($comment);
+                }
+            }
+        }
+        $entityManager->flush();
+        return $this->redirectToRoute('doc_index', ['courseid' => $courseid, 'findtype' => $findtype]);
+
     }
 
     /**

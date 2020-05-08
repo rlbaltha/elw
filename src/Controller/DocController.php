@@ -32,6 +32,7 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $hidden = $docRepository->countHidden($course);
         if ($findtype == 'SharedDocs') {
             $docs = $docRepository->findSharedDocs($course, $role);
             $header = 'Shared Docs';
@@ -42,7 +43,8 @@ class DocController extends AbstractController
         return $this->render('doc/index.html.twig', [
             'header' => $header,
             'docs' => $docs,
-            'course' => $course
+            'course' => $course,
+            'hidden' => $hidden
         ]);
     }
 
@@ -53,6 +55,7 @@ class DocController extends AbstractController
      */
     public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid)
     {
+        $findtype = 'MyDocs';
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
@@ -61,7 +64,7 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $entityManager = $this->getDoctrine()->getManager();
         $docs = $docRepository->findMyDocs($course, $user);
-        $header = 'My Docs';
+
         foreach($docs as $doc){
             if ($doc->getAccess() == 'Hidden'){
                 $doc->setAccess('Private');
@@ -69,11 +72,7 @@ class DocController extends AbstractController
             }
         }
         $entityManager->flush();
-        return $this->render('doc/index.html.twig', [
-            'header' => $header,
-            'docs' => $docs,
-            'course' => $course
-        ]);
+        return $this->redirectToRoute('doc_index', ['courseid' => $courseid, 'findtype' => $findtype]);
 
     }
 

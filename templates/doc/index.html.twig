@@ -61,6 +61,13 @@
                             <a class="nav-link" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release
                                 Hidden Reviews</a>
                         </li>
+                        {% if hidden > 1 %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ course_path('release_all_comments', {'courseid': course.id}) }}">Release
+                                    Hidden Comments</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </div>
@@ -109,7 +116,7 @@
                     {% endif %}
                     <a target="_blank" href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
                     {% if doc.reviews|length > 0 %}
-                        <span class="badge badge-primary ml-3">{{ doc.reviews|length }} Review(s)</span>
+                        <span class="badge badge-primary ml-3"> Reviews ({{ doc.reviews|length }})</span>
                     {% endif %}
                 </td>
                 <td>
@@ -122,6 +129,10 @@
                           style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                     <span class="badge badge-primary"
                           style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+                    {% if doc.comments|length > 0 %}
+                        <span class="badge badge-primary"
+                              style="background:darkblue">Feedback ({{ doc.comments|length }})</span>
+                    {% endif %}
                 </td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
