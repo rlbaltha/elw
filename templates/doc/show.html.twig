@@ -89,28 +89,38 @@
                     Review</a>
             {% elseif app.user == doc.user %}
                 <a class="btn btn-primary btn-sm"
-                   href="{{ course_path('doc_access', {'id': doc.id}) }}">Make {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>
+                   href="{{ course_path('doc_access', {'id': doc.id}) }}">Make
+                    Doc {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>
             {% endif %}
 
             {# Comment Panel #}
-            <a class="btn btn-primary btn-sm" href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
+            <a class="btn btn-primary btn-sm"
+               href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
             {% for comment in doc.comments %}
-                <div class="card mt-3">
-                    <div class="card-header">
-                        {{ comment.type }} <a class="btn btn-primary btn-sm float-right"
-                                              href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                            Feedback</a>
+                {% if comment.access == 'Private' or role == 'Instructor' %}
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
+                            {% if comment.access=='Hidden' %}
+                                <span class="badge badge-primary" style="background:black">Hidden</span>
+                            {% endif %}
+                            {% if app.user == comment.user %}
+                                <a class="btn btn-primary btn-sm float-right"
+                                   href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
+                                    Feedback</a>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            {{ comment.body|raw }}
+                        </div>
+                        {% if comment.grade %}
+                            <div class="card-footer">
+                                Grade: {{ comment.grade }}
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="card-body">
-                        {{ comment.body|raw }}
-                    </div>
-                    {% if comment.grade %}
-                    <div class="card-footer">
-                        Grade: {{ comment.grade }}
-                    </div>
-                    {% endif %}
-                </div>
+                {% endif %}
             {% endfor %}
 
         </div>

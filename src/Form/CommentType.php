@@ -33,6 +33,15 @@ class CommentType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'required' => false
             ])
+            ->add('access', ChoiceType::class, [
+                'choices'  => [
+                    'Hidden' => 'Hidden',
+                    'Private' => 'Private',
+                ],
+                'expanded' => true,
+                'attr' => ['class' => 'radio'],
+                'label' => 'Access'
+            ])
         ;
     }
 

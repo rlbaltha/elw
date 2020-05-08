@@ -43,6 +43,11 @@ class Comment
      */
     private $doc;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $access='Private';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class Comment
     public function setDoc(?Doc $doc): self
     {
         $this->doc = $doc;
+
+        return $this;
+    }
+
+    public function getAccess(): ?string
+    {
+        return $this->access;
+    }
+
+    public function setAccess(?string $access): self
+    {
+        $this->access = $access;
 
         return $this;
     }

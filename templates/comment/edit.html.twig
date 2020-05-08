@@ -52,9 +52,14 @@
     <script>
         $(document).ready(function () {
             let access = "{{ doc.access }}";
-            if ( access === "Journal") {
+            let role = "{{ role }}";
+            if ( role==="Student") {
                 $('#comment_grade').hide();
                 $('#comment_grade').prev().hide();
+                $('#comment_access').hide();
+                $('#comment_access').prev().hide();
+            }
+            if ( access === "Journal") {
                 $('#comment_type').hide();
                 $('#comment_type').prev().hide();
             }

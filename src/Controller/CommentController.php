@@ -40,7 +40,7 @@ class CommentController extends AbstractController
             $entityManager->flush();
 
             if ($source!='doc') {
-                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'courseid' => $courseid]);
+                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
         }
@@ -68,7 +68,7 @@ class CommentController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             if ($source!='doc') {
-                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'courseid' => $courseid]);
+                return $this->redirectToRoute('journal_index', ['id' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
         }
