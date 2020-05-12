@@ -2,31 +2,7 @@
 
 {% block title %}Course index{% endblock %}
 
-
-{% block toolnav %}
-    {% if is_granted('ROLE_INSTRUCTOR') %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_new') }}">Create Course</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    {% endif %}
-{% endblock %}
-
-
 {% block body %}
-
     <h1>My Courses</h1>
     <div class="row">
         {% for course in courses %}

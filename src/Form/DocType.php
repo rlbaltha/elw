@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Doc;
 use App\Entity\Project;
 use App\Entity\Stage;
+use App\Repository\ProjectRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -14,8 +15,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocType extends AbstractType
 {
+    private $projectRepository;
+    public function __construct(ProjectRepository $projectRepository)
+    {
+        $this->projectRepository = $projectRepository;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->options = $options['options'];
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
@@ -50,6 +57,7 @@ class DocType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Doc::class,
+            'options' => null,
         ]);
     }
 }

@@ -115,7 +115,8 @@ class DocController extends AbstractController
         $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
-        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
+        $options = ['courseid' => $courseid];
+        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -156,7 +157,8 @@ class DocController extends AbstractController
         ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Private'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
-        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form']]);
+        $options = ['courseid' => $courseid];
+        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

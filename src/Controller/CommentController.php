@@ -29,6 +29,9 @@ class CommentController extends AbstractController
         $role = $permissions->getCourseRole($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $comment = new Comment();
+        if ($role=='Instructor' and $source=='doc') {
+            $comment->setAccess('Hidden');
+        }
         $comment->setUser($user);
         $comment->setDoc($doc);
         $comment->setType('Holistic Feedback');
