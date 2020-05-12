@@ -34,7 +34,7 @@ class Course
     private $docs;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset", inversedBy="courses")
      */
     private $labelsets;
 

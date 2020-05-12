@@ -46,6 +46,11 @@ class Labelset
      */
     private $stages;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Course", mappedBy="labelsets")
+     */
+    private $courses;
+
 
     public function __construct()
     {

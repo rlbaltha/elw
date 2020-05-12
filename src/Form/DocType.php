@@ -6,6 +6,7 @@ use App\Entity\Doc;
 use App\Entity\Project;
 use App\Entity\Stage;
 use App\Repository\ProjectRepository;
+use App\Repository\StageRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,13 +17,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DocType extends AbstractType
 {
     private $projectRepository;
-    public function __construct(ProjectRepository $projectRepository)
+    private $stageRepository;
+    public function __construct(StageRepository $stageRepository, ProjectRepository $projectRepository)
     {
         $this->projectRepository = $projectRepository;
+        $this->stageRepository = $stageRepository;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->options = $options['options'];
+        $courseid = $this->options['courseid'] ;
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
@@ -30,6 +34,7 @@ class DocType extends AbstractType
             ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
+                'choices' => $this->projectRepository->findProjectsByCourse($courseid),
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,
@@ -39,6 +44,7 @@ class DocType extends AbstractType
             ])
             ->add('stage', EntityType::class, [
                 'class' => Stage::class,
+                'choices' => $this->stageRepository->findStagesByCourse($courseid),
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,

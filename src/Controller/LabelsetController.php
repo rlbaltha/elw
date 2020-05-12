@@ -20,6 +20,8 @@ class LabelsetController extends AbstractController
      */
     public function index(LabelsetRepository $labelsetRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         return $this->render('labelset/index.html.twig', [
             'labelsets' => $labelsetRepository->findAll(),
         ]);
@@ -30,7 +32,13 @@ class LabelsetController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+
         $labelset = new Labelset();
+        $labelset->setUser($user);
         $form = $this->createForm(LabelsetType::class, $labelset);
         $form->handleRequest($request);
 
@@ -53,6 +61,8 @@ class LabelsetController extends AbstractController
      */
     public function show(Labelset $labelset): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         return $this->render('labelset/show.html.twig', [
             'labelset' => $labelset,
         ]);
@@ -63,6 +73,8 @@ class LabelsetController extends AbstractController
      */
     public function edit(Request $request, Labelset $labelset): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         $form = $this->createForm(LabelsetType::class, $labelset);
         $form->handleRequest($request);
 
@@ -83,6 +95,8 @@ class LabelsetController extends AbstractController
      */
     public function delete(Request $request, Labelset $labelset): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
         if ($this->isCsrfTokenValid('delete'.$labelset->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($labelset);
