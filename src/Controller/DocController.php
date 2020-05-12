@@ -112,9 +112,13 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $stages = $this->getDoctrine()->getManager()->getRepository('App:Stage')->findStagesByCourse($courseid);
+        $projects = $this->getDoctrine()->getManager()->getRepository('App:Project')->findProjectsByCourse($courseid);
         $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
+        $doc->setProject($projects[0]);
+        $doc->setStage($stages[0]);
         $options = ['courseid' => $courseid];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
