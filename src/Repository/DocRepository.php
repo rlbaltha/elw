@@ -37,6 +37,24 @@ class DocRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    /**
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findDocComments($course, $user)
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.comments', 'c')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.access != :val3')
+            ->andWhere('c.user = :val2')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $user)
+            ->setParameter('val3', 'Journal')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @return Doc[] Returns an array of Doc objects
      */
@@ -128,9 +146,19 @@ class DocRepository extends ServiceEntityRepository
     /**
      * @return count of docs with hidden comments
      */
-    public function countHidden($course): ?String
+    public function countHiddenComments($course): ?String
     {
         $dql = 'SELECT count(d.id) FROM App\Entity\Doc d JOIN d.comments c WHERE c.access = ?1 and d.course = ?2 ';
+        $query = $this->getEntityManager()->createQuery($dql)->setParameter('1', 'Hidden')->setParameter('2', $course);
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * @return count of docs with hidden reviews
+     */
+    public function countHiddenReviews($course): ?String
+    {
+        $dql = 'SELECT count(d.id) FROM App\Entity\Doc d WHERE d.access = ?1 and d.course = ?2 ';
         $query = $this->getEntityManager()->createQuery($dql)->setParameter('1', 'Hidden')->setParameter('2', $course);
         return $query->getSingleScalarResult();
     }

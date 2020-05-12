@@ -32,7 +32,8 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $hidden = $docRepository->countHidden($course);
+        $hidden_reviews = $docRepository->countHiddenReviews($course);
+        $hidden_comments = $docRepository->countHiddenComments($course);
         if ($findtype == 'SharedDocs') {
             $docs = $docRepository->findSharedDocs($course, $role);
             $header = 'Shared Docs';
@@ -42,20 +43,21 @@ class DocController extends AbstractController
         }
         return $this->render('doc/index.html.twig', [
             'header' => $header,
+            'findtype' => $findtype,
             'docs' => $docs,
             'course' => $course,
-            'hidden' => $hidden
+            'hidden_comments' => $hidden_comments,
+            'hidden_reviews' => $hidden_reviews
         ]);
     }
 
     /**
      *  Release All Hidden
-     * @Route("/release_all_hidden/{courseid}" , name="release_all_hidden")
+     * @Route("/release_all_hidden/{courseid}/{findtype}" , name="release_all_hidden")
      *
      */
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid)
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype)
     {
-        $findtype = 'MyDocs';
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 

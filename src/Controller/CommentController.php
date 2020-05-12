@@ -85,13 +85,11 @@ class CommentController extends AbstractController
 
     /**
      *  Release All Hidden
-     * @Route("/release_all_comments/{courseid}" , name="release_all_comments")
+     * @Route("/release_all_comments/{courseid}/{findtype}" , name="release_all_comments")
      *
      */
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid)
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype)
     {
-        $findtype = 'MyDocs';
-
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
@@ -99,8 +97,7 @@ class CommentController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $entityManager = $this->getDoctrine()->getManager();
-        $docs = $docRepository->findMyDocs($course, $user);
-        $header = 'My Docs';
+        $docs = $docRepository->findDocComments($course, $user);
         foreach($docs as $doc){
             if ($doc->getComments()){
                 foreach ($doc->getComments() as $comment) {

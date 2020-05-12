@@ -56,15 +56,18 @@
                     <li class="nav-item">
                         <a target="_blank" class="nav-link" href="{{ course_path('doc_new') }}">New Doc</a>
                     </li>
-                    {% if is_granted('ROLE_INSTRUCTOR') and header=="My Docs" %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ course_path('release_all_hidden', {'courseid': course.id}) }}">Release
-                                Hidden Reviews</a>
-                        </li>
-                        {% if hidden > 0 %}
+                    {% if is_granted('ROLE_INSTRUCTOR') %}
+                        {% if hidden_reviews > 0 %}
                             <li class="nav-item">
                                 <a class="nav-link"
-                                   href="{{ course_path('release_all_comments', {'courseid': course.id}) }}">Release
+                                   href="{{ course_path('release_all_hidden', {'courseid': course.id, 'findtype': findtype}) }}">Release
+                                    Hidden Reviews</a>
+                            </li>
+                        {% endif %}
+                        {% if hidden_comments > 0 %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ course_path('release_all_comments', {'courseid': course.id, 'findtype': findtype}) }}">Release
                                     Hidden Comments</a>
                             </li>
                         {% endif %}
