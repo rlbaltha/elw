@@ -84,10 +84,13 @@ class DocController extends AbstractController
      */
     public function byuser(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
     {
+        $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $hidden_reviews = $docRepository->countHiddenReviews($course);
+        $hidden_comments = $docRepository->countHiddenComments($course);
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $docs = $docRepository->findByUser($course, $role, $user);
@@ -95,7 +98,10 @@ class DocController extends AbstractController
         return $this->render('doc/index.html.twig', [
             'header' => $header,
             'docs' => $docs,
-            'course' => $course
+            'course' => $course,
+            'findtype' => $findtype,
+            'hidden_comments' => $hidden_comments,
+            'hidden_reviews' => $hidden_reviews
         ]);
     }
 

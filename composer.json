@@ -52,7 +52,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Elw\\LTIBundle\\": "lib/LTIBundle/src",
             "App\\": "src/"
         }
     },

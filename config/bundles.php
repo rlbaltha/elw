@@ -14,6 +14,5 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
-    Elw\LTIBundle\LTIBundle::class => ['all' => true],
     PRayno\CasAuthBundle\PRaynoCasAuthBundle::class => ['all' => true],
 ];

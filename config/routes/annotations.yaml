@@ -1,6 +1,4 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
-lti:
-    resource: ../../lib/LTIBundle/src/Controller/
-    type: annotation
+
