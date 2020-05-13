@@ -140,6 +140,7 @@
             });
 
             {# Doc autosave#}
+            $('#saving_alert').hide();
             var editor = CKEDITOR.instances.doc_body;
             var autoSave = setInterval(function () {
                 var buffer = editor.checkDirty();
