@@ -2,8 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,400,400i,600,600i,700,700i');
+
+        html  {
+            background-color: rgb(232, 232, 232);
+        }
+
+        .document-editor {
+            padding: 1cm 1cm 1cm;
+            background: white;
+            font-size: 16px;
+            line-height: 24px;
+            font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+        }
+
+        .document-editor td, body.document-editor th {
+            font-size: 0.9em;
+        }
+
+        .document-editor h1 {
+            margin-bottom:1cm;
+        }
+
+        .document-editor table {
+            margin-top:0.5cm;
+            margin-bottom:0.5cm;
+        }
+
+        .document-editor table td {
+            border-right: 1px solid #d0d0d0;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .document-editor table td:first-of-type {
+            border-left: 1px solid #d0d0d0;
+        }
+
+        .document-editor table tr:first-of-type td {
+            border-top: 1px solid #d0d0d0;
+        }
+
+        .document-editor table thead th {
+            border-top: 1px solid #d0d0d0;
+            border-right: 1px solid #d0d0d0;
+        }
+
+        .document-editor table thead th:first-of-type {
+            border-left: 1px solid #d0d0d0;
+        }
+
+        span.highlight {
+            background-color: lightgoldenrodyellow;
+        }
+        .hfocus {
+            background-color: yellow;
+        }
+        span.note {
+            color:blue;
+            background-color:white;
+            border: #bababa solid 1px;
+            border-radius: 4px 4px 4px 4px;
+            padding:2px 2px 2px 2px;
+        }
+        span.markup {
+            color:white;
+            border-radius: 4px 4px 4px 4px;
+            padding:2px 2px 2px 2px;
+        }
+        .popover-title {
+            padding: 2em;
+        }
+
+        .popover-content {
+            padding: 2em;
+        }
+
+        .notefocus {
+            border-color: #0f74a8;
+            left: -5em;
+        }
+        .super {
+            color:blue;
+            vertical-align:super;
+            font-size:smaller;
+            line-height: normal;
+        }
+        .card-note {
+            margin-bottom:1em;
+            width:80%;
+            position:absolute;
+            font-size: smaller;
+            overflow: auto;
+        }
+
+
+
 
     </style>
 </head>
