@@ -143,44 +143,46 @@
 
     {% for review in doc.reviews %}
         {% if review.access !='Hidden' %}
-            <div class="row doc-container" id="doc{{ review.id }}">
-                <div class="col-lg-8 col-md-10 col-sm-12">
-                    <div class="document-editor">
-                        {{ review.body|raw }}
+            {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
+                <div class="row doc-container" id="doc{{ review.id }}">
+                    <div class="col-lg-8 col-md-10 col-sm-12">
+                        <div class="document-editor">
+                            {{ review.body|raw }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
+                                    class="font-italic">{{ doc.title }}</h2>
+                        <p> by {{ review.user.firstname }} {{ review.user.lastname }}
+                            for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                        {% for comment in review.comments %}
+                            {% if comment.access == 'Private' or role == 'Instructor' %}
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
+                                        {% if comment.access=='Hidden' %}
+                                            <span class="badge badge-primary" style="background:black">Hidden</span>
+                                        {% endif %}
+                                        {% if app.user == comment.user %}
+                                            <a class="btn btn-primary btn-sm float-right"
+                                               href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
+                                                Feedback</a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        {{ comment.body|raw }}
+                                    </div>
+                                    {% if comment.grade %}
+                                        <div class="card-footer">
+                                            Grade: {{ comment.grade }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="col">
-                    <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
-                                class="font-italic">{{ doc.title }}</h2>
-                    <p> by {{ review.user.firstname }} {{ review.user.lastname }}
-                        for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
-                    {% for comment in review.comments %}
-                        {% if comment.access == 'Private' or role == 'Instructor' %}
-                            <div class="card mt-3">
-                                <div class="card-header">
-                                    {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
-                                    {% if comment.access=='Hidden' %}
-                                        <span class="badge badge-primary" style="background:black">Hidden</span>
-                                    {% endif %}
-                                    {% if app.user == comment.user %}
-                                        <a class="btn btn-primary btn-sm float-right"
-                                           href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                            Feedback</a>
-                                    {% endif %}
-                                </div>
-                                <div class="card-body">
-                                    {{ comment.body|raw }}
-                                </div>
-                                {% if comment.grade %}
-                                    <div class="card-footer">
-                                        Grade: {{ comment.grade }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}
