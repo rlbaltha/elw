@@ -33,10 +33,12 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
-                {% for doc in doc.reviews %}
-                    {% if doc.access !='Hidden' %}
-                        <a data-id='doc{{ doc.id }}' class="dropdown-item doc-click"
-                           href="#">Review By {{ doc.user.firstname }} {{ doc.user.lastname }}</a>
+                {% for review in doc.reviews %}
+                    {% if review.access !='Hidden' %}
+                    {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
+                        <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
+                           href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
