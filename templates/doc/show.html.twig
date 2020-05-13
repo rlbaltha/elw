@@ -35,10 +35,10 @@
                 <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
                 {% for review in doc.reviews %}
                     {% if review.access !='Hidden' %}
-                    {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
-                        <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
-                           href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
-                    {% endif %}
+                        {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
+                            <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
+                               href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
@@ -219,12 +219,22 @@
                     $('.super').hide();
                 });
 
-                $('.popover').hide();
-                $('.markup').mouseover(function () {
-                    $('.popover').hide();
+                $('.markup').each(function () {
                     var id = "div[data-id='" + $(this).attr('data-id') + "']";
-                    var offset = $(this).offset();
-                    $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
+                    var markupbody = $(id).children(".popover-title").text() + ": " + $(id).children(".popover-content").text();
+                    var span_append = '<span class="note markupbody">' + markupbody + '</span>';
+                    $(this).after(span_append);
+                });
+
+                $('.popover').hide();
+
+                $('.markup').mouseover(function () {
+                    if ($('#toggle').text() != 'Inline') {
+                        $('.popover').hide();
+                        var id = "div[data-id='" + $(this).attr('data-id') + "']";
+                        var offset = $(this).offset();
+                        $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
+                    }
                 });
                 $('.highlight').mouseover(function () {
                     if ($('#toggle').text() != 'Inline') {

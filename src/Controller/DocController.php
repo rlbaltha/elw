@@ -270,6 +270,31 @@ class DocController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Saves via AJAX
+     * @Route("/{courseid}/{id}/autosave", name="doc_autosave", methods={"POST"})
+     */
+    public function autosave(Request $request, Permissions $permissions, Doc $doc, string $courseid)
+    {
+        $allowed = ['Instructor', 'Student'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+
+        $update = $request->request->get('docBody');
+
+        if (!$doc) {
+            throw $this->createNotFoundException('Unable to find Doc entity.');
+        }
+
+        $doc->setBody($update);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+
+        $return = "success";
+        return new Response($return, 200, array('Content-Type' => 'application/json'));
+    }
+
     /**
      * @Route("/{id}/{courseid}/access", name="doc_access", methods={"GET","POST"})
      */
