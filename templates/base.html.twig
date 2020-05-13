@@ -61,6 +61,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
                         </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_INSTRUCTOR') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('course_new') }}">Create Course</a>
                         </li>

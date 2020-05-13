@@ -67,6 +67,10 @@ class CourseController extends AbstractController
      */
     public function show(Permissions $permissions, String $courseid): Response
     {
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $role = $permissions->getCourseRole($courseid);
+
         //discover needed info on request
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
@@ -96,6 +100,7 @@ class CourseController extends AbstractController
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
             return $this->render('course/show.html.twig', [
                 'course' => $course,
+                'role' => $role,
                 'user' => $user,
                 'status' => $status
             ]);

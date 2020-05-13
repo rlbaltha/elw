@@ -46,6 +46,7 @@ class DocController extends AbstractController
             'findtype' => $findtype,
             'docs' => $docs,
             'course' => $course,
+            'role' => $role,
             'hidden_comments' => $hidden_comments,
             'hidden_reviews' => $hidden_reviews
         ]);
@@ -99,6 +100,7 @@ class DocController extends AbstractController
             'header' => $header,
             'docs' => $docs,
             'course' => $course,
+            'role' => $role,
             'findtype' => $findtype,
             'hidden_comments' => $hidden_comments,
             'hidden_reviews' => $hidden_reviews
