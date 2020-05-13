@@ -108,6 +108,9 @@ class CourseController extends AbstractController
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
         else {
+            $allowed = ['Student', 'Instructor'];
+            $permissions->restrictAccessTo($courseid, $allowed);
+            $role = $permissions->getCourseRole($courseid);
             //check status and show course page
             $status = $classuser->getStatus();
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
