@@ -13,6 +13,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "antishov/doctrine-extensions-bundle": "^1.4",
+        "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "imsglobal/lti-1p3-tool": "dev-master",
         "prayno/casauth-bundle": "^1.4",

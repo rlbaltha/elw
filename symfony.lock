@@ -90,6 +90,9 @@
     "doctrine/reflection": {
         "version": "v1.1.0"
     },
+    "dompdf/dompdf": {
+        "version": "v0.8.5"
+    },
     "egulias/email-validator": {
         "version": "2.1.14"
     },
@@ -138,6 +141,12 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "phenx/php-font-lib": {
+        "version": "0.5.2"
+    },
+    "phenx/php-svg-lib": {
+        "version": "v0.3.3"
+    },
     "php": {
         "version": "7.2"
     },
@@ -173,6 +182,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "sabberworm/php-css-parser": {
+        "version": "8.3.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
