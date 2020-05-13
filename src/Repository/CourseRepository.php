@@ -36,6 +36,19 @@ class CourseRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+    * @return Course[] Returns an array of Course objects
+    */
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.classlists', 'cl')
+            ->andWhere('cl.user = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     public function findOneByCourseid($courseid): ?Course
     {

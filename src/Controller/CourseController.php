@@ -18,13 +18,30 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CourseController extends AbstractController
 {
+
+    /**
+     * @Route("/admin", name="course_admin", methods={"GET"})
+     */
+    public function admin(CourseRepository $courseRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        return $this->render('course/index.html.twig', [
+            'courses' => $courseRepository->findAll(),
+        ]);
+    }
+
+
     /**
      * @Route("/", name="course_index", methods={"GET"})
      */
     public function index(CourseRepository $courseRepository): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+
         return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findAll(),
+            'courses' => $courseRepository->findByUser($user),
         ]);
     }
 
