@@ -186,6 +186,8 @@ class DocController extends AbstractController
      */
     public function pdf(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
     {
+        $permissions->isAllowedToView($courseid, $doc);
+
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'sans-serif');
