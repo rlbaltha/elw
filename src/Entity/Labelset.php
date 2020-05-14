@@ -33,7 +33,7 @@ class Labelset
     /**
      * @ORM\Column(type="integer")
      */
-    private $level;
+    private $level=1;
 
 
     /**

@@ -7,6 +7,7 @@ use App\Entity\Labelset;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,9 +21,11 @@ class LabelsetType extends AbstractType
                 'label'  => 'Name',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('level', TextType::class, [
-                'label'  => 'Level',
-                'attr' => ['class' => 'form-control']
+            ->add('level', ChoiceType::class, [
+                'choices' => ['Default' => '0', 'Instructor Created' => '1'],
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox'],
             ])
         ;
     }

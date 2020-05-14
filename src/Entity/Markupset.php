@@ -26,7 +26,7 @@ class Markupset
     /**
      * @ORM\Column(type="integer")
      */
-    private $level;
+    private $level=1;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Markup", mappedBy="markupset", orphanRemoval=true)

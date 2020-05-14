@@ -3,9 +3,21 @@
 {% block title %}New Labelset{% endblock %}
 
 {% block body %}
-    <h1>Create new Labelset</h1>
+    <h1>Create New Labelset</h1>
 
     {{ include('labelset/_form.html.twig') }}
 
-    <a href="{{ path('labelset_index') }}">back to list</a>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#labelset_level').hide();
+            $('#labelset_level').prev().hide();
+            {% endif %}
+        });
+    </script>
 {% endblock %}

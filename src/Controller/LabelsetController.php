@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route("/labelset")
@@ -45,7 +46,7 @@ class LabelsetController extends AbstractController
     /**
      * @Route("/new", name="labelset_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
@@ -62,7 +63,10 @@ class LabelsetController extends AbstractController
             $entityManager->persist($labelset);
             $entityManager->flush();
 
-            return $this->redirectToRoute('labelset_index');
+            if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('labelset_index');
+            }
+            return $this->redirectToRoute('labelset_byuser');
         }
 
         return $this->render('labelset/new.html.twig', [
@@ -86,7 +90,7 @@ class LabelsetController extends AbstractController
     /**
      * @Route("/{id}/edit", name="labelset_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Labelset $labelset): Response
+    public function edit(Request $request, Labelset $labelset, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
@@ -96,7 +100,10 @@ class LabelsetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('labelset_index');
+            if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('labelset_index');
+            }
+            return $this->redirectToRoute('labelset_byuser');
         }
 
         return $this->render('labelset/edit.html.twig', [

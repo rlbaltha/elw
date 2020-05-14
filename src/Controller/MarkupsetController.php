@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route("/markupset")
@@ -45,9 +47,14 @@ class MarkupsetController extends AbstractController
     /**
      * @Route("/new", name="markupset_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+
         $markupset = new Markupset();
+        $markupset->setUser($user);
+
         $form = $this->createForm(MarkupsetType::class, $markupset);
         $form->handleRequest($request);
 
@@ -56,7 +63,10 @@ class MarkupsetController extends AbstractController
             $entityManager->persist($markupset);
             $entityManager->flush();
 
-            return $this->redirectToRoute('markupset_index');
+            if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('markupset_index');
+            }
+            return $this->redirectToRoute('markupset_byuser');
         }
 
         return $this->render('markupset/new.html.twig', [
@@ -78,7 +88,7 @@ class MarkupsetController extends AbstractController
     /**
      * @Route("/{id}/edit", name="markupset_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Markupset $markupset): Response
+    public function edit(Request $request, Markupset $markupset, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $form = $this->createForm(MarkupsetType::class, $markupset);
         $form->handleRequest($request);
@@ -86,7 +96,10 @@ class MarkupsetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('markupset_index');
+            if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('markupset_index');
+            }
+            return $this->redirectToRoute('markupset_byuser');
         }
 
         return $this->render('markupset/edit.html.twig', [

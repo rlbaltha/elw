@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Markupset{% endblock %}
+{% block title %}New Markup Set{% endblock %}
 
 {% block body %}
-    <h1>Create new Markupset</h1>
+    <h1>Create New Markup Set</h1>
 
     {{ include('markupset/_form.html.twig') }}
 
-    <a href="{{ path('markupset_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#markupset_level').hide();
+            $('#markupset_level').prev().hide();
+            {% endif %}
+        });
+    </script>
 {% endblock %}

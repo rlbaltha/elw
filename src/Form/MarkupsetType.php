@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Markupset;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,14 +20,11 @@ class MarkupsetType extends AbstractType
                 'label'  => 'Title',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('level', TextType::class, [
-                'label'  => 'Level',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
+            ->add('level', ChoiceType::class, [
+                'choices' => ['Default' => '0', 'Instructor Created' => '1'],
                 'multiple' => false,
+                'expanded' => true,
+                'attr' => ['class' => 'checkbox'],
             ])
         ;
     }

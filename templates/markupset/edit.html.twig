@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Markupset{% endblock %}
+{% block title %}Edit Markup Set{% endblock %}
 
 {% block body %}
-    <h1>Edit Markupset</h1>
+    <h1>Edit Markup Set</h1>
 
     {{ include('markupset/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('markupset_index') }}">back to list</a>
-
     {{ include('markupset/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#markupset_level').hide();
+            $('#markupset_level').prev().hide();
+            {% endif %}
+        });
+    </script>
 {% endblock %}
