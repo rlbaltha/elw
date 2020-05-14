@@ -186,8 +186,6 @@ class DocController extends AbstractController
      */
     public function pdf(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
     {
-        $permissions->isAllowedToView($courseid, $doc);
-
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'sans-serif');
@@ -213,6 +211,8 @@ class DocController extends AbstractController
         $dompdf->stream($doc->getTitle(), [
             "Attachment" => true
         ]);
+        // Send some text response
+        return new Response("The PDF file has been succesfully generated !");
     }
 
     /**
