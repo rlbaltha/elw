@@ -36,6 +36,19 @@ class LabelsetRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+     * @return Labelset[] Returns an array of Labelset objects
+     */
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.user = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Labelset
     {

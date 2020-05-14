@@ -20,10 +20,25 @@ class LabelsetController extends AbstractController
      */
     public function index(LabelsetRepository $labelsetRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         return $this->render('labelset/index.html.twig', [
             'labelsets' => $labelsetRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/byuser", name="labelset_byuser", methods={"GET"})
+     */
+    public function byuser(LabelsetRepository $labelsetRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+
+        return $this->render('labelset/index.html.twig', [
+            'labelsets' => $labelsetRepository->findByUser($user),
         ]);
     }
 

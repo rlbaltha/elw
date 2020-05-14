@@ -20,11 +20,28 @@ class MarkupsetController extends AbstractController
      */
     public function index(MarkupsetRepository $markupsetRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('markupset/index.html.twig', [
             'markupsets' => $markupsetRepository->findAll(),
         ]);
     }
 
+
+    /**
+     * @Route("/byuser", name="markupset_byuser", methods={"GET"})
+     */
+    public function byuser(MarkupsetRepository $markupsetRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+
+        return $this->render('markupset/index.html.twig', [
+            'markupsets' => $markupsetRepository->findByUser($user),
+        ]);
+    }
     /**
      * @Route("/new", name="markupset_new", methods={"GET","POST"})
      */
