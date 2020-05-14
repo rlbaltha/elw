@@ -124,28 +124,15 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $stages = $this->getDoctrine()->getManager()->getRepository('App:Stage')->findStagesByCourse($courseid);
         $projects = $this->getDoctrine()->getManager()->getRepository('App:Project')->findProjectsByCourse($courseid);
-        $markupsets = $course->getMarkupsets();
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setProject($projects[0]);
         $doc->setStage($stages[0]);
-        $options = ['courseid' => $courseid];
-        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
-        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($doc);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
-        }
-
-        return $this->render('doc/new.html.twig', [
-            'doc' => $doc,
-            'markupsets' => $markupsets,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -161,7 +148,6 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $markupsets = $course->getMarkupsets();
         $doc_title = 'for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $doc->setUser($user);
         $doc->setCourse($course);
@@ -171,23 +157,10 @@ class DocController extends AbstractController
         ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Private'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
-        $options = ['courseid' => $courseid];
-        $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($doc);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
-        }
-
-        return $this->render('doc/new.html.twig', [
-            'doc' => $doc,
-            'markupsets' => $markupsets,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
 
     /**

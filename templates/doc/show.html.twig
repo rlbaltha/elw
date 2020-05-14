@@ -221,7 +221,7 @@
 
                 $('.markup').each(function () {
                     var id = "div[data-id='" + $(this).attr('data-id') + "']";
-                    var markupbody = $(id).children(".popover-title").text() + ": " + $(id).children(".popover-content").text();
+                    var markupbody = $(id).children(".popover-title").text();
                     var span_append = '<span class="note markupbody">' + markupbody + '</span>';
                     $(this).after(span_append);
                 });

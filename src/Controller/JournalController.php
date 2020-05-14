@@ -62,21 +62,10 @@ class JournalController extends AbstractController
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setAccess('Journal');
-        $form = $this->createForm(JournalType::class, $doc, ['attr' => ['id' => 'doc-form']]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($doc);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'courseid' => $courseid]);
-        }
-
-        return $this->render('journal/new.html.twig', [
-            'doc' => $doc,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($doc);
+        $entityManager->flush();
+        return $this->redirectToRoute('journal_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
 
     /**

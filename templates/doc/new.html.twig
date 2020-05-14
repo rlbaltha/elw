@@ -14,6 +14,7 @@
     </li>
 {% endblock %}
 
+
 {% block body %}
     <div class="row">
         <div class="col">{{ include('doc/_form.html.twig') }}</div>
@@ -105,6 +106,7 @@
                 });
             });
             $('label.required').next('ul').addClass('alert alert-danger alert-ul');
+
         });
     </script>
 {% endblock %}

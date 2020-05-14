@@ -14,6 +14,8 @@
     </li>
 {% endblock %}
 
+
+
 {% block body %}
     <div class="row">
         <div class="col">{{ include('doc/_form.html.twig') }}</div>
@@ -27,6 +29,7 @@
             $("#submit-doc-form").click(function () {
                 $("#doc-form").submit(); // Submit the form
             });
+
         });
     </script>
 {% endblock %}

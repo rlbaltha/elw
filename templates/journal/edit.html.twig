@@ -11,6 +11,9 @@
 
 {% block subnavright %}
     <li class="nav-item">
+        <a id='saving_alert' href="javascript:void(0);" class="nav-link" id="doc_save">Saving</a>
+    </li>
+    <li class="nav-item">
         <a id="delete-trigger" class="nav-link" href="#">Delete</a>
         {{ include('journal/_delete_form.html.twig') }}
     </li>
@@ -34,6 +37,21 @@
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
             });
+
+            {# Doc autosave#}
+            $('#saving_alert').hide();
+            var editor = CKEDITOR.instances.journal_body;
+            var autoSave = setInterval(function () {
+                var buffer = editor.checkDirty();
+                if (buffer == 1) {
+                    editor.resetDirty();
+                    var body = editor.getData();
+                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body}, function (data) {
+                    });
+                    $('#saving_alert').fadeIn();
+                    $('#saving_alert').delay(3000).fadeOut();
+                }
+            }, 15000);
         });
     </script>
 {% endblock %}
