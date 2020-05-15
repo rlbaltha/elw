@@ -37,6 +37,7 @@ class CommentType extends AbstractType
                 'choices'  => [
                     'Hidden' => 'Hidden',
                     'Private' => 'Private',
+                    'Shared' => 'Shared',
                 ],
                 'expanded' => true,
                 'attr' => ['class' => 'radio'],
