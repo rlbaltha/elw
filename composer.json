@@ -16,6 +16,7 @@
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "imsglobal/lti-1p3-tool": "dev-master",
+        "knplabs/knp-paginator-bundle": "^5.2",
         "prayno/casauth-bundle": "^1.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",
