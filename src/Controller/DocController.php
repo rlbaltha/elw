@@ -154,7 +154,7 @@ class DocController extends AbstractController
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Private'));
+        ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Review'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
         $entityManager = $this->getDoctrine()->getManager();

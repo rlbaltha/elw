@@ -35,7 +35,7 @@
                 <a data-id="doc{{ doc.id }}" class="dropdown-item doc-click" href="#">Original Doc</a>
                 {% for review in doc.reviews %}
                     {% if review.access !='Hidden' %}
-                        {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
+                        {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                             <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
                                href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
                         {% endif %}
@@ -63,7 +63,7 @@
         <a class="nav-link"
            href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %}
             Review</a>
-    {% elseif app.user == doc.user %}
+    {% elseif app.user == doc.user and doc.origin|length == 0 %}
         <a class="nav-link"
            href="{{ course_path('doc_access', {'id': doc.id}) }}">Make
             {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>
@@ -156,7 +156,7 @@
 
     {% for review in doc.reviews %}
         {% if review.access !='Hidden' %}
-            {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' %}
+            {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                 <div class="row doc-container" id="doc{{ review.id }}">
                     <div class="col-lg-8 col-md-10 col-sm-12">
                         <div class="document-editor">
