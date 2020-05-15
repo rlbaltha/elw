@@ -95,6 +95,8 @@
             {% endfor %}
         {% endfor %}
         <span class="badge badge-primary p-2"
+              style="cursor: pointer; background: green">Review</span>
+        <span class="badge badge-primary p-2"
               style="cursor: pointer; background: #3e3e3e">Show All</span>
     </div>
 
@@ -103,6 +105,7 @@
         <tr>
             <th>Title</th>
             <th>Owner</th>
+            <th>Reviews</th>
             <th>Labels</th>
             <th>Updated</th>
         </tr>
@@ -120,19 +123,32 @@
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
                 </td>
                 <td>
+                    {% if doc.reviews|length > 0 %}
+                        <a class="dropdown dropdown-toggle d-inline" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reviews ({{ doc.reviews|length }})
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for review in doc.reviews %}
+                            <a class="dropdown-item" href="#">By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                            {% endfor %}
+                        </div>
+                        </div>
+                    {% endif %}
+
+                </td>
+                <td>
                     <span class="badge badge-primary"
                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                     <span class="badge badge-primary"
                           style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                     <span class="badge badge-primary"
                           style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
-                    {% if doc.reviews|length > 0 %}
-                        <span class="badge badge-primary"> Reviews ({{ doc.reviews|length }})</span>
-                    {% endif %}
                     {% if doc.comments|length > 0 %}
                         <span class="badge badge-primary"
                               style="background:darkblue">Feedback ({{ doc.comments|length }})</span>
+
                     {% endif %}
+
                 </td>
                 <td>{{ doc.updated | date("m/d/y g:ia") }}</td>
             </tr>
