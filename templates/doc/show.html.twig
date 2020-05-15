@@ -109,6 +109,10 @@
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
                                 <span class="badge badge-primary" style="background:black">Hidden</span>
+                            {% elseif comment.access=='Private' %}
+                                <span class="badge badge-primary" style="background:darkred">Private</span>
+                            {% elseif comment.access=='Shared' %}
+                                <span class="badge badge-primary" style="background:darkgreen">Shared</span>
                             {% endif %}
                             {% if app.user == comment.user %}
                                 <a class="btn btn-primary btn-sm float-right"
@@ -161,12 +165,16 @@
                         <p> by {{ review.user.firstname }} {{ review.user.lastname }}
                             for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
                         {% for comment in review.comments %}
-                            {% if comment.access == 'Private' or role == 'Instructor' %}
+                            {% if comment.access == 'Shared' or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
                                 <div class="card mt-3">
                                     <div class="card-header">
                                         {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                         {% if comment.access=='Hidden' %}
                                             <span class="badge badge-primary" style="background:black">Hidden</span>
+                                        {% elseif comment.access=='Private' %}
+                                            <span class="badge badge-primary" style="background:darkred">Private</span>
+                                        {% elseif comment.access=='Shared' %}
+                                            <span class="badge badge-primary" style="background:darkgreen">Shared</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-right"
