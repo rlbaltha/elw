@@ -76,13 +76,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ header }} ({{ docs.getTotalItemCount }})</h1>
+    <h1>{{ header }} </h1>
+
 
     <div class="p-1">
-        <label for="filter" class="required">Search/Filter Docs</label>
-        <input class="form-control" style="width:25%" id="filter" type="text">
+        <label for="filter" class="required">Search Docs</label>
+        <input class="form-control d-inline" style="width:25%" id="filter" type="text">
     </div>
-    <div class="p-2">
+    <div class="d-inline p-2">
         Filter:
         {% for labelset in course.labelsets %}
             {% for label in labelset.projects %}
@@ -99,6 +100,7 @@
         <span class="badge badge-primary p-2"
               style="cursor: pointer; background: #3e3e3e">Show All</span>
     </div>
+    <div class="float-right">Docs found: {{ docs.getTotalItemCount }}</div>
 
     <table class="table">
         <thead>
@@ -161,9 +163,10 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="alert alert-info">
+
+    <nav aria-label="Pagination navigation">
         {{ knp_pagination_render(docs) }}
-    </div>
+    </nav>
 
 {% endblock %}
 
