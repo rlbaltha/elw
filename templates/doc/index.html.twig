@@ -100,7 +100,7 @@
         <span class="badge badge-primary p-2"
               style="cursor: pointer; background: #3e3e3e">Show All</span>
     </div>
-    <div class="float-right">Docs found: {{ docs.getTotalItemCount }}</div>
+    <div class="float-right">Docs found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif  %}</div>
 
     <table class="table">
         <thead>
