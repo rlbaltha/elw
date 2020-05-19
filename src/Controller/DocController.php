@@ -104,6 +104,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
+        $page_limit = 25;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
@@ -113,11 +114,12 @@ class DocController extends AbstractController
         $docs = $paginator->paginate(
             $querybuilder, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            25 /*limit per page*/
+            $page_limit /*limit per page*/
         );
         $header = 'Docs by '. $user->getFirstname().' '.$user->getLastname();
         return $this->render('doc/index.html.twig', [
             'header' => $header,
+            'page_limit' => $page_limit,
             'docs' => $docs,
             'course' => $course,
             'role' => $role,
