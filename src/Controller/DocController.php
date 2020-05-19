@@ -6,6 +6,7 @@ use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
 use App\Service\Permissions;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyDocs"})
      */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
+    public function index(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -37,10 +38,20 @@ class DocController extends AbstractController
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
         if ($findtype == 'SharedDocs') {
-            $docs = $docRepository->findSharedDocs($course, $role);
+            $querybuilder = $docRepository->findSharedDocs($course, $role);
+            $docs = $paginator->paginate(
+                $querybuilder, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
             $header = 'Shared Docs';
         } else {
-            $docs = $docRepository->findMyDocs($course, $user);
+            $querybuilder = $docRepository->findMyDocs($course, $user);
+            $docs = $paginator->paginate(
+                $querybuilder, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
             $header = 'My Docs';
         }
         return $this->render('doc/index.html.twig', [
@@ -85,7 +96,7 @@ class DocController extends AbstractController
     /**
      * @Route("/{courseid}/{findtype}/{userid}/byuser", name="doc_byuser", methods={"GET"}, defaults={"findtype":"MyDocs"})
      */
-    public function byuser(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
+    public function byuser(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
     {
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
@@ -96,7 +107,12 @@ class DocController extends AbstractController
         $hidden_comments = $docRepository->countHiddenComments($course);
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $docs = $docRepository->findByUser($course, $role, $user);
+        $querybuilder = $docRepository->findByUser($course, $role, $user);
+        $docs = $paginator->paginate(
+            $querybuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            25 /*limit per page*/
+        );
         $header = 'Docs by '. $user->getFirstname().' '.$user->getLastname();
         return $this->render('doc/index.html.twig', [
             'header' => $header,

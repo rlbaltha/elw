@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Doc;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node\Scalar;
 
 /**
@@ -21,9 +22,8 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Doc[] Returns an array of Doc objects
      */
-    public function findMyDocs($course, $user)
+    public function findMyDocs($course, $user): QueryBuilder
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.course = :val1')
@@ -32,11 +32,56 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
             ->setParameter('val3', 'Journal')
-            ->orderBy('d.updated', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('d.updated', 'DESC');
     }
 
+    /**
+     */
+    public function findSharedDocs($course, $role): QueryBuilder
+    {
+        if ($role === 'Instructor') {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.access != :val3')
+                ->setParameter('val1', $course)
+                ->setParameter('val3', 'Journal')
+                ->orderBy('d.updated', 'DESC');
+        } else {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.access = :val2')
+                ->setParameter('val1', $course)
+                ->setParameter('val2', 'Shared')
+                ->orderBy('d.updated', 'DESC');
+        }
+
+    }
+
+    /**
+     */
+    public function findByUser($course, $role, $user): QueryBuilder
+    {
+        if ($role === 'Instructor') {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.access != :val2')
+                ->andWhere('d.user = :val3')
+                ->setParameter('val1', $course)
+                ->setParameter('val2', 'Journal')
+                ->setParameter('val3', $user)
+                ->orderBy('d.updated', 'DESC');
+        } else {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.access = :val2')
+                ->andWhere('d.user = :val3')
+                ->setParameter('val1', $course)
+                ->setParameter('val2', 'Shared')
+                ->setParameter('val3', $user)
+                ->orderBy('d.updated', 'DESC');
+        }
+
+    }
 
     /**
      * @return Doc[] Returns an array of Doc objects
@@ -72,63 +117,9 @@ class DocRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @return Doc[] Returns an array of Doc objects
-     */
-    public function findSharedDocs($course, $role)
-    {
-        if ($role === 'Instructor') {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.course = :val1')
-                ->andWhere('d.access != :val3')
-                ->setParameter('val1', $course)
-                ->setParameter('val3', 'Journal')
-                ->orderBy('d.updated', 'DESC')
-                ->getQuery()
-                ->getResult();
-        } else {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.course = :val1')
-                ->andWhere('d.access = :val2')
-                ->setParameter('val1', $course)
-                ->setParameter('val2', 'Shared')
-                ->orderBy('d.updated', 'DESC')
-                ->getQuery()
-                ->getResult();
-        }
 
-    }
 
-    /**
-     * @return Doc[] Returns an array of Doc objects
-     */
-    public function findByUser($course, $role, $user)
-    {
-        if ($role === 'Instructor') {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.course = :val1')
-                ->andWhere('d.access != :val2')
-                ->andWhere('d.user = :val3')
-                ->setParameter('val1', $course)
-                ->setParameter('val2', 'Journal')
-                ->setParameter('val3', $user)
-                ->orderBy('d.updated', 'DESC')
-                ->getQuery()
-                ->getResult();
-        } else {
-            return $this->createQueryBuilder('d')
-                ->andWhere('d.course = :val1')
-                ->andWhere('d.access = :val2')
-                ->andWhere('d.user = :val3')
-                ->setParameter('val1', $course)
-                ->setParameter('val2', 'Shared')
-                ->setParameter('val3', $user)
-                ->orderBy('d.updated', 'DESC')
-                ->getQuery()
-                ->getResult();
-        }
 
-    }
 
 
     /**

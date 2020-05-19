@@ -86,3 +86,8 @@ h2 {
 a {
     color: #20399D;
 }
+
+/********** Pagination **********/
+.pagination > span {
+    padding: 1em;
+}

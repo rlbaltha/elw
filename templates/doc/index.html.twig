@@ -76,7 +76,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ header }}</h1>
+    <h1>{{ header }} ({{ docs.getTotalItemCount }})</h1>
 
     <div class="p-1">
         <label for="filter" class="required">Search/Filter Docs</label>
@@ -124,12 +124,14 @@
                 </td>
                 <td>
                     {% if doc.reviews|length > 0 %}
-                        <a class="dropdown dropdown-toggle d-inline" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown dropdown-toggle d-inline" href="#" role="button" id="dropdownMenuLink1"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Reviews ({{ doc.reviews|length }})
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {% for review in doc.reviews %}
-                            <a class="dropdown-item" href="#">By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                                <a class="dropdown-item"
+                                   href="#">By {{ review.user.firstname }} {{ review.user.lastname }}</a>
                             {% endfor %}
                         </div>
                         </div>
@@ -159,6 +161,9 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="alert alert-info">
+        {{ knp_pagination_render(docs) }}
+    </div>
 
 {% endblock %}
 
