@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         th {
             cursor: pointer;
@@ -105,11 +106,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Title</th>
+            <th>Title<i class="fa fa-fw fa-sort"></i></th>
             <th>Owner</th>
             <th>Reviews</th>
             <th>Labels</th>
-            <th>Updated</th>
+            <th>Updated<i class="fa fa-fw fa-sort"></i></th>
         </tr>
         </thead>
         <tbody>
