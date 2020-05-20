@@ -30,7 +30,7 @@
         $(document).ready(function () {
             var color = $("#stage_color").val();
             $("#stage_color").colorPick({
-                'initialColor': color,
+                'initialColor': 'darkblue',
                 'palette': ['darkblue', 'rebeccapurple', 'darkred', 'brown', 'darkgreen', 'darkslateblue', 'darkolivegreen', 'darkcyan', 'maroon'],
                 'onColorSelected': function () {
                     this.element.css({'backgroundColor': this.color, 'color': 'white'});

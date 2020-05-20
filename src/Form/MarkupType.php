@@ -29,20 +29,6 @@ class MarkupType extends AbstractType
                 'config_name' => 'simple_config',
                 'label' => '',
             ])
-            ->add('sort', TextType::class, [
-                'label'  => 'Sort',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-                'multiple' => false,
-            ])
-            ->add('markupset', EntityType::class, [
-                'class' => Markupset::class,
-                'choice_label' => 'name',
-                'multiple' => false,
-            ])
 
         ;
     }
