@@ -16,4 +16,5 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     PRayno\CasAuthBundle\PRaynoCasAuthBundle::class => ['all' => true],
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
+    OAT\Bundle\Lti1p3Bundle\Lti1p3Bundle::class => ['all' => true],
 ];

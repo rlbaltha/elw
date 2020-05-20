@@ -14,6 +14,12 @@
     "behat/transliterator": {
         "version": "v1.3.0"
     },
+    "codercat/jwk-to-pem": {
+        "version": "0.0.3"
+    },
+    "defuse/php-encryption": {
+        "version": "v2.2.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -96,9 +102,6 @@
     "egulias/email-validator": {
         "version": "2.1.14"
     },
-    "fproject/php-jwt": {
-        "version": "4.0.5"
-    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
         "recipe": {
@@ -123,9 +126,6 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
-    "imsglobal/lti-1p3-tool": {
-        "version": "dev-master"
-    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -135,11 +135,51 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v5.2.0"
     },
+    "lcobucci/jwt": {
+        "version": "3.3.1"
+    },
+    "league/event": {
+        "version": "2.2.0"
+    },
+    "league/oauth2-server": {
+        "version": "8.1.0"
+    },
     "monolog/monolog": {
         "version": "1.25.3"
     },
+    "nesbot/carbon": {
+        "version": "2.34.2"
+    },
     "nikic/php-parser": {
         "version": "v4.3.0"
+    },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "7c0a9352a57376f04f5444e74565102c3a23d0c7"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
+    "oat-sa/bundle-lti1p3": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "9bd752512cc28eda69880cabfb3b9fb62afc399e"
+        },
+        "files": [
+            "config/packages/lti1p3.yaml",
+            "config/routes/lti1p3.yaml"
+        ]
+    },
+    "oat-sa/lib-lti1p3-core": {
+        "version": "2.0.2"
     },
     "ocramius/package-versions": {
         "version": "1.4.2"
@@ -156,6 +196,9 @@
     "php": {
         "version": "7.2"
     },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
+    },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
     },
@@ -166,7 +209,7 @@
         "version": "1.0.1"
     },
     "phpseclib/phpseclib": {
-        "version": "2.0.25"
+        "version": "2.0.27"
     },
     "prayno/casauth-bundle": {
         "version": "1.4"
@@ -176,6 +219,9 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
@@ -188,6 +234,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "ramsey/uuid": {
+        "version": "3.9.3"
     },
     "sabberworm/php-css-parser": {
         "version": "8.3.0"
@@ -425,6 +474,9 @@
     },
     "symfony/property-info": {
         "version": "v4.4.2"
+    },
+    "symfony/psr-http-message-bridge": {
+        "version": "v2.0.0"
     },
     "symfony/routing": {
         "version": "4.2",
