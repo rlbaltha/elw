@@ -35,6 +35,7 @@ class LtiLaunchAction
 
         // Your service endpoint logic ...
 
-        return new Response(...);
+//        return new Response(...);
+        return $this->redirectToRoute('course_index');
     }
 }
