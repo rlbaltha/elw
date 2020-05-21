@@ -19,7 +19,7 @@ lti1p3:
     tools:
         elw:
             name: "englvm01.english.uga.edu"
-            audience: "https://englvm01.english.uga.edu/tool"
+            audience: "https://englvm01.english.uga.edu/"
             oidc_login_initiation_url: "https://englvm01.english.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://englvm01.english.uga.edu/lti_login"
             deep_link_launch_url: null
@@ -33,5 +33,5 @@ lti1p3:
             platform_key_chain: "platformKey"
             tool_key_chain: "toolKey"
             platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
-            tool_jwks_url: "https://englvm01.english.uga.edu//lti1p3/.well-known/jwks/toolSet.json"
+            tool_jwks_url: "https://englvm01.english.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
 
