@@ -31,7 +31,7 @@ class ElwUserProvider extends CasUserProvider implements UserProviderInterface
         if ($username) {
             $password = '...';
             $salt = "";
-            $length = strlen(substr("abcdef", -1));
+            $length = strlen($username);
             $init = substr($username, 0, 1);
             $user = $this->entityManager->getRepository('App:User')->findOneByUsername($username);
 //          if user exits or is loginas else create new user
