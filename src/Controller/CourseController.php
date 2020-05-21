@@ -55,8 +55,17 @@ class CourseController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
 
+        $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
+        $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
         $course = new Course();
-        $form = $this->createForm(CourseType::class, $course);
+        foreach($labelsets as $labelset){
+            $course->addLabelset($labelset);
+        }
+        foreach($markupsets as $markupset){
+            $course->addMarkupset($markupset);
+        }
+        $options = ['user' => $user];
+        $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
         $form->handleRequest($request);
         $classlist = new Classlist();
         $classlist->setUser($user);
@@ -129,8 +138,11 @@ class CourseController extends AbstractController
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $form = $this->createForm(CourseType::class, $course);
+        $options = ['user' => $user];
+        $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

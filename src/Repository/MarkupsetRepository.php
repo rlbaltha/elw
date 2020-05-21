@@ -39,11 +39,26 @@ class MarkupsetRepository extends ServiceEntityRepository
     /**
      * @return Markupset[] Returns an array of Markupset objects
      */
+    public function findDefault()
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.level = :val')
+            ->setParameter('val', 0)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Markupset[] Returns an array of Markupset objects
+     */
     public function findByUser($user)
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.user = :val')
-            ->setParameter('val', $user)
+            ->andWhere('m.user = :val1')
+            ->orWhere('m.level = :val2')
+            ->setParameter('val1', $user)
+            ->setParameter('val2', 0)
             ->getQuery()
             ->getResult()
             ;

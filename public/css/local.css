@@ -16,6 +16,10 @@ div.checkbox > label {
     margin-right:2em;
 }
 
+div.radio > label {
+    margin-right:2em;
+}
+
 label.required {
     margin-right:1em;
 }
