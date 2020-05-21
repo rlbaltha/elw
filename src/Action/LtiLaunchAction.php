@@ -35,7 +35,7 @@ class LtiLaunchAction
 
         // Your service endpoint logic ...
 
-        return new Response($registration);
+        return new Response($ltiMessage);
 
     }
 }

@@ -21,7 +21,7 @@ lti1p3:
             name: "englvm01.english.uga.edu"
             audience: "https://englvm01.english.uga.edu/tool"
             oidc_login_initiation_url: "https://englvm01.english.uga.edu/lti1p3/oidc/login-initiation"
-            launch_url: "https://englvm01.english.uga.edu//lti1p3/tool/launch"
+            launch_url: "https://englvm01.english.uga.edu/lti1p3/tool/launch"
             deep_link_launch_url: null
     registrations:
         local:
