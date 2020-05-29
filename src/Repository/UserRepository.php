@@ -43,7 +43,8 @@ class UserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->andWhere('u.lastname LIKE :val')
             ->setParameter('val', $namesearch)
-            ->orderBy('u.firstname', 'DESC')
+            ->orderBy('u.lastname', 'ASC')
+            ->orderBy('u.firstname', 'ASC')
             ->getQuery()
             ->getResult()
         ;
