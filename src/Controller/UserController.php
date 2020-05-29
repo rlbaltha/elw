@@ -27,7 +27,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
         $form = $this->createFindForm($user);
-        $page_limit = 5;
+        $page_limit = 50;
 
         $querybuilder = $userRepository->findUsers();
         $users = $paginator->paginate(
@@ -90,7 +90,7 @@ class UserController extends AbstractController
         $postData = $request->request->get('form');
         $name = $postData['lastname'];
 
-        $page_limit = 5;
+        $page_limit = 50;
 
         $querybuilder = $userRepository->findByLastname($name);
         $users = $paginator->paginate(
