@@ -6,7 +6,10 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UsernameType;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,11 +22,24 @@ class UserController extends AbstractController
     /**
      * @Route("/admin/", name="user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(PaginatorInterface $paginator, UserRepository $userRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = new User();
+        $form = $this->createFindForm($user);
+        $page_limit = 5;
+
+        $querybuilder = $userRepository->findUsers();
+        $users = $paginator->paginate(
+            $querybuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            $page_limit /*limit per page*/
+        );
+
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
+            'form'=>$form->createView()
         ]);
     }
 
@@ -60,6 +76,41 @@ class UserController extends AbstractController
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+    }
+
+
+    /**
+     * @Route("/admin/find", name="user_find", methods={"GET","POST"})
+     */
+    public function find(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = new User();
+        $form = $this->createFindForm($user);
+        $postData = $request->request->get('form');
+        $name = $postData['lastname'];
+        $users = $this->getDoctrine()->getManager()->getRepository('App:User')->findByLastname($name);
+        return $this->render('user/index.html.twig', [
+            'users' => $users,
+            'form'=>$form->createView()
+        ]);
+    }
+
+
+    /**
+     * Creates a form to find Users by lastname.
+     *
+     * @param User $user The entity
+     *
+     * @return Form form
+     */
+    private function createFindForm(User $user)
+    {
+        $form = $this->createFormBuilder($user)
+            ->add('lastname',TextType::class, array('label'  => 'Find by Lastname','attr' => array('class' => 'form-control'),))
+            ->getForm();
+
+        return $form;
     }
 
     /**

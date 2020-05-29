@@ -5,8 +5,13 @@
 {% block body %}
     <h1>User index</h1>
 
-    <a class="btn btn-primary float-right" href="{{ path('user_new') }}">New User</a>
+{#    <a class="btn btn-primary float-right" href="{{ path('user_new') }}">New User</a>#}
 
+    <form id="find" action="{{ path('user_find') }}" method="post">
+        {{ form(form) }}
+        <button class="btn btn-primary btn-sm" type="submit">Find</button>
+    </form>
+    <a class='btn btn-primary btn-sm' href="{{ path('user_index') }}">Find All</a>
     <table class="table">
         <thead>
             <tr>
@@ -34,5 +39,9 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <nav aria-label="Pagination navigation">
+        {{ knp_pagination_render(users) }}
+    </nav>
 
 {% endblock %}
