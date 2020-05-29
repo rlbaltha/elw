@@ -82,14 +82,24 @@ class UserController extends AbstractController
     /**
      * @Route("/admin/find", name="user_find", methods={"GET","POST"})
      */
-    public function find(Request $request): Response
+    public function find(PaginatorInterface $paginator, UserRepository $userRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
         $form = $this->createFindForm($user);
         $postData = $request->request->get('form');
         $name = $postData['lastname'];
-        $users = $this->getDoctrine()->getManager()->getRepository('App:User')->findByLastname($name);
+
+        $page_limit = 5;
+
+        $querybuilder = $userRepository->findByLastname($name);
+        $users = $paginator->paginate(
+            $querybuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            $page_limit /*limit per page*/
+        );
+
+
         return $this->render('user/index.html.twig', [
             'users' => $users,
             'form'=>$form->createView()
@@ -107,10 +117,13 @@ class UserController extends AbstractController
     private function createFindForm(User $user)
     {
         $form = $this->createFormBuilder($user)
+            ->setAction($this->generateUrl('user_find'))
             ->add('lastname',TextType::class, array('label'  => 'Find by Lastname','attr' => array('class' => 'form-control'),))
             ->getForm();
 
         return $form;
+
+
     }
 
     /**

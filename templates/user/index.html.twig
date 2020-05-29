@@ -4,14 +4,14 @@
 
 {% block body %}
     <h1>User index</h1>
-
+    <a class='btn btn-primary btn-sm float-right' href="{{ path('user_index') }}">Find All</a>
 {#    <a class="btn btn-primary float-right" href="{{ path('user_new') }}">New User</a>#}
 
-    <form id="find" action="{{ path('user_find') }}" method="post">
-        {{ form(form) }}
-        <button class="btn btn-primary btn-sm" type="submit">Find</button>
-    </form>
-    <a class='btn btn-primary btn-sm' href="{{ path('user_index') }}">Find All</a>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary btn-sm">{{ button_label|default('Find') }}</button>
+        {{ form_end(form) }}
+
     <table class="table">
         <thead>
             <tr>
