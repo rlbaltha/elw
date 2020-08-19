@@ -6,10 +6,11 @@
     <h1>{{ markupset.name }}</h1>
     (Level: {% if markupset.level == 0 %}Default{% else %}Instructor Created{% endif %})
 
+    {% if (is_granted('ROLE_ADMIN')) or (markupset.user == app.user) %}
     {{ include('markupset/_delete_form.html.twig') }}
     <a class="btn btn-primary float-right" href="{{ path('markupset_edit', {'id': markupset.id}) }}">Edit</a>
-    #<a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>#
-
+    <a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>
+    {% endif %}
 
     <table class="table">
         <thead>
