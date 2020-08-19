@@ -103,7 +103,7 @@
                 {% endif %}
 
                 {% for comment in doc.comments %}
-                    {% if comment.access == 'Private' or role == 'Instructor' %}
+{#                    {% if comment.access == 'Private' or role == 'Instructor' %}#}
                         <div class="card mt-3">
                             <div class="card-header">
                                 {% if comment.access=='Hidden' %}
@@ -124,7 +124,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                    {% endif %}
+{#                    {% endif %}#}
                 {% else %}
                     {# only Instructors can offer feedback on Journal #}
                     {% if role == "Instructor" %}
