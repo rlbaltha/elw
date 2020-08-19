@@ -16,7 +16,7 @@
         {% for markupset in markupsets %}
             <tr>
                 <td><a href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
-                <td>{% if markupset.level == 0 %}Default{% else %}Instructor Created{% endif %}</td>
+                <td>{% if markupset.level == 0 %}Default{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
             </tr>
         {% else %}
             <tr>

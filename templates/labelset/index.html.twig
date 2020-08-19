@@ -17,7 +17,7 @@
             <tr>
                 <td><a href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
                 <td>
-                    {% if labelset.level == 0 %}Default{% else %}Instructor Created{% endif %}
+                    {% if labelset.level == 0 %}Default{% else %}Created by {{ labelset.user.firstname }} {{ labelset.user.lastname }}{% endif %}
                 </td>
             </tr>
         {% else %}
