@@ -83,12 +83,17 @@
         </div>
         <div class="col-lg-6 col-sm-12">
             {% if doc %}
-                <h2 class="d-inline">{{ doc.title }}</h2>
-                {% if app.user==doc.user %}<a class="btn btn-primary btn-sm float-right"
-                                              href="{{ course_path('journal_edit', {'id': doc.id}) }}">
-                        Edit</a>{% endif %}
-                <hr/>
-                {{ doc.body|raw }}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="d-inline">{{ doc.title }}</h2>
+                        {% if app.user==doc.user %}
+                        <a class="btn btn-primary btn-sm float-right" href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        {{ doc.body|raw }}
+                    </div>
+                </div>
             {% endif %}
         </div>
 
