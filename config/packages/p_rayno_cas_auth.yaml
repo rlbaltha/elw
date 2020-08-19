@@ -1,6 +1,6 @@
 p_rayno_cas_auth:
-  server_login_url: https://sso.stage.uga.edu/cas/login
-  server_validation_url: https://sso.stage.uga.edu/cas/serviceValidate
-  server_logout_url: https://sso.stage.uga.edu/cas/logout
+  server_login_url: https://sso.uga.edu/cas/login
+  server_validation_url: https://sso.uga.edu/cas/serviceValidate
+  server_logout_url: https://sso.uga.edu/cas/logout
   xml_namespace: cas
 #  options:[] see http://docs.guzzlephp.org/en/latest/request-options.html
