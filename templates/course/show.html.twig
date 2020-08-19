@@ -70,9 +70,9 @@
                 <th>Actions</th>
             </tr>
             <thead>
-            {% for classlist in course.classlists %}
+            {% for classlist in course.classlists|sort %}
                 <tr>
-                    <td>{{ classlist.user.firstname }} {{ classlist.user.lastname }}</td>
+                    <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                     <td>{{ classlist.role }}</td>
                     <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
                     <td>
