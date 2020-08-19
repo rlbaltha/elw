@@ -29,8 +29,8 @@ class ClasslistRepository extends ServiceEntityRepository
             ->join('c.user', 'u')
             ->andWhere('c.course = :val')
             ->setParameter('val', $courseid)
-            ->orderBy('u.lastname', 'ASC')
-            ->orderBy('u.firstname', 'ASC')
+            ->orderBy('u.lastname', 'DESC')
+            ->orderBy('u.firstname', 'DESC')
             ->getQuery()
             ->getResult()
         ;
