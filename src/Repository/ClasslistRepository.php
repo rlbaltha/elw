@@ -26,8 +26,11 @@ class ClasslistRepository extends ServiceEntityRepository
     public function findByCourseid($courseid)
     {
         return $this->createQueryBuilder('c')
+            ->join('c.user', 'u')
             ->andWhere('c.course = :val')
             ->setParameter('val', $courseid)
+            ->orderBy('u.lastname', 'ASC')
+            ->orderBy('u.firstname', 'ASC')
             ->getQuery()
             ->getResult()
         ;
