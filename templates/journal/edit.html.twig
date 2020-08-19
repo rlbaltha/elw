@@ -14,8 +14,12 @@
         <a id='saving_alert' href="javascript:void(0);" class="nav-link" id="doc_save">Saving</a>
     </li>
     <li class="nav-item">
-        <a id="delete-trigger" class="nav-link" href="#">Delete</a>
-        {{ include('journal/_delete_form.html.twig') }}
+        {% if doc.comments|length == 0 %}
+            <a id="delete-trigger" class="nav-link" href="#">Delete</a>
+            {{ include('journal/_delete_form.html.twig') }}
+        {% else %}
+            <p class="navbar-text">Journal entries that have feedback cannot be deleted.</p>
+        {% endif %}
     </li>
 {% endblock %}
 
