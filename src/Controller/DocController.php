@@ -38,6 +38,8 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+
         if ($findtype == 'SharedDocs') {
             $querybuilder = $docRepository->findSharedDocs($course, $role);
             $docs = $paginator->paginate(
@@ -61,6 +63,7 @@ class DocController extends AbstractController
             'findtype' => $findtype,
             'docs' => $docs,
             'course' => $course,
+            'classlists' => $classlists,
             'role' => $role,
             'hidden_comments' => $hidden_comments,
             'hidden_reviews' => $hidden_reviews

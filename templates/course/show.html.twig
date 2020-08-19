@@ -61,7 +61,7 @@
     {% endif %}
 
     {% if role=='Instructor' %}
-        <table class="table">
+        <table id="classlist" class="table">
             <thead>
             <tr>
                 <th>Students</th>
@@ -70,7 +70,8 @@
                 <th>Actions</th>
             </tr>
             <thead>
-            {% for classlist in course.classlists|sort %}
+            <tbody>
+            {% for classlist in classlists %}
                 <tr>
                     <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                     <td>{{ classlist.role }}</td>
@@ -82,7 +83,7 @@
                     </td>
                 </tr>
             {% endfor %}
-            </thead>
+            </tbody>
         </table>
     {% endif %}
 

@@ -26,6 +26,7 @@ class JournalController extends AbstractController
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         if ($userid==0) {
             $username = $this->getUser()->getUsername();
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -42,6 +43,7 @@ class JournalController extends AbstractController
             'docs' => $docs,
             'doc' => $doc,
             'course' => $course,
+            'classlists' => $classlists,
             'role' => $role
         ]);
     }

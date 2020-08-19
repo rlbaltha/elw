@@ -36,7 +36,7 @@
                                 Select Author
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% for classlist in course.classlists|sort %}
+                                {% for classlist in classlists %}
                                     <a class="dropdown-item"
                                        href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
                                 {% endfor %}

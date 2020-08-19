@@ -121,8 +121,10 @@ class CourseController extends AbstractController
             //check status and show course page
             $status = $classuser->getStatus();
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
+            $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
             return $this->render('course/show.html.twig', [
                 'course' => $course,
+                'classlists' => $classlists,
                 'role' => $role,
                 'user' => $user,
                 'status' => $status
