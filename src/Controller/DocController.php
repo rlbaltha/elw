@@ -111,6 +111,7 @@ class DocController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $querybuilder = $docRepository->findByUser($course, $role, $user);
@@ -127,6 +128,7 @@ class DocController extends AbstractController
             'course' => $course,
             'role' => $role,
             'findtype' => $findtype,
+            'classlists' => $classlists,
             'hidden_comments' => $hidden_comments,
             'hidden_reviews' => $hidden_reviews
         ]);
