@@ -18,6 +18,7 @@
                 <th>Username</th>
                 <th>Name</th>
                 <th>Roles</th>
+                <th>Account Created</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                 </td>
                 <td><a href="{{ path('user_edit', {'id': user.id}) }}">{{ user.firstname }} {{ user.lastname }}</a></td>
                 <td>{% for role in user.roles %}{{ role }} {% endfor %}</td>
+                <td>{{ user.created | date("m/d/y g:ia") }}</td>
             </tr>
         {% else %}
             <tr>

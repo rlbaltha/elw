@@ -127,11 +127,12 @@
                         <div class="card-body">
                             {{ comment.body|raw }}
                         </div>
-                        {% if comment.grade %}
+
                             <div class="card-footer">
-                                Grade: {{ comment.grade }}
+                                {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
+                                <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
                             </div>
-                        {% endif %}
+
                     </div>
                 {% endif %}
             {% endfor %}
