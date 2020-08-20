@@ -57,6 +57,7 @@ class DocController extends AbstractController
             );
             $header = 'My Docs';
         }
+
         return $this->render('doc/index.html.twig', [
             'header' => $header,
             'page_limit' => $page_limit,
@@ -84,15 +85,13 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $entityManager = $this->getDoctrine()->getManager();
-        $docs = $docRepository->findMyDocs($course, $user);
-
+        $docs = $docRepository->findHiddenDocs($course, $user);
         foreach($docs as $doc){
-            if ($doc->getAccess() == 'Hidden'){
                 $doc->setAccess('Private');
                 $entityManager->persist($doc);
             }
-        }
         $entityManager->flush();
+
         return $this->redirectToRoute('doc_index', ['courseid' => $courseid, 'findtype' => $findtype]);
 
     }

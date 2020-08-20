@@ -36,6 +36,23 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findHiddenDocs($course, $user)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.course = :val1')
+            ->andWhere('d.user = :val2')
+            ->andWhere('d.access = :val3')
+            ->setParameter('val1', $course)
+            ->setParameter('val2', $user)
+            ->setParameter('val3', 'Hidden')
+            ->orderBy('d.updated', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      */
     public function findSharedDocs($course, $role): QueryBuilder
     {
