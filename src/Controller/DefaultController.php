@@ -23,12 +23,13 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/testing", name="lti_default")
+     * @Route("/testing", name="prod_test")
      */
     public function testing()
     {
+        $terms = $this->getDoctrine()->getManager()->getRepository('App:Term')->findAll();
         return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
+            'terms' => $terms,
         ]);
     }
 

@@ -11,6 +11,16 @@
         {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
             <a class="btn btn-primary" href="{{ path('course_index') }}">UGA MyID Login</a>
         {% endif %}
+
+
+        {% if app.request.attributes.get('_route')=='prod_test' %}
+            <hr/>
+            {% if terms %}
+                {% for term in terms %}
+                {{ term.name }}
+                {% endfor %}
+                {% endif %}
+        {% endif %}
     </div>
 
 {% endblock %}
