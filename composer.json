@@ -16,7 +16,7 @@
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
-        "oat-sa/bundle-lti1p3": "^2.0",
+        "oat-sa/bundle-lti1p3": "^2.1",
         "prayno/casauth-bundle": "^1.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",

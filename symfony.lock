@@ -139,7 +139,7 @@
         "version": "v5.3.0"
     },
     "lcobucci/jwt": {
-        "version": "3.3.2"
+        "version": "3.3.3"
     },
     "league/event": {
         "version": "2.2.0"
@@ -151,7 +151,7 @@
         "version": "1.25.5"
     },
     "nesbot/carbon": {
-        "version": "2.38.0"
+        "version": "2.39.0"
     },
     "nikic/php-parser": {
         "version": "v4.7.0"
@@ -182,7 +182,7 @@
         ]
     },
     "oat-sa/lib-lti1p3-core": {
-        "version": "2.0.4"
+        "version": "2.4.0"
     },
     "ocramius/package-versions": {
         "version": "1.4.2"
