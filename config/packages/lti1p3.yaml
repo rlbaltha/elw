@@ -1,10 +1,21 @@
 lti1p3:
     key_chains:
+        platformKey:
+            key_set_name: "platformSet"
+            public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
+            private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
+            private_key_passphrase: ~
         toolKey:
             key_set_name: "toolSet"
             public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
             private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
             private_key_passphrase: null
+    platforms:
+        ugatest2:
+            name: "elc"
+            audience: "https://elw.uga.edu"
+            oidc_authentication_url: "https://ugatest2.view.usg.edu/d2l/lti/authenticate"
+            oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
     tools:
         localTool:
             name: "elw"
@@ -15,10 +26,12 @@ lti1p3:
     registrations:
         ugatest2:
             client_id: "90fd07d4-0a1d-449d-82e6-2fb566eabf33"
-            platform: "https://ugatest2.view.usg.edu"
+            platform: "ugatest2"
             tool: "localTool"
             deployment_ids:
                 - "a7d49f55-1470-444a-b9eb-c9baf5c1d69e"
+            platform_key_chain: "platformKey"
+            platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
             tool_key_chain: "toolKey"
             tool_jwks_url: "https://127.0.0.1:8000/lti1p3/.well-known/jwks/toolSet.json"
 
