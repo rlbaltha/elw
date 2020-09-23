@@ -33,5 +33,5 @@ lti1p3:
             platform_key_chain: "platformKey"
             platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
             tool_key_chain: "toolKey"
-            tool_jwks_url: "https://127.0.0.1:8000/lti1p3/.well-known/jwks/toolSet.json"
+            tool_jwks_url: "https://elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
 
