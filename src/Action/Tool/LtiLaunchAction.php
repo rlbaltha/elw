@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Action\Tool;
 
-
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiMessageToken;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 
-class LtiLaunchAction extends AbstractController
+class LtiLaunchAction
 {
     /** @var Security */
     private $security;
@@ -37,7 +35,6 @@ class LtiLaunchAction extends AbstractController
 
         // Your service endpoint logic ...
 
-//        return new Response(...);
-        return $this->redirectToRoute('course_index');
+        return new Response("Success");
     }
 }
