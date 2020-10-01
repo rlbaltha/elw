@@ -42,29 +42,22 @@ class LtiAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function supports(Request $request)
     {
-        /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
-        return $token;
+        if ($token instanceof LtiMessageToken) {
+        return true;
+        }
 
     }
 
     public function getCredentials(Request $request)
     {
-        $credentials = [
-//            'username' => $request->request->get('username'),
-//            'password' => $request->request->get('password'),
-//            'csrf_token' => $request->request->get('_csrf_token'),
-        ];
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $credentials['username']
-        );
-
-        return $credentials;
+        return $this->security->getToken();;
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
+        dd($credentials);
+
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
