@@ -17,7 +17,7 @@ class DefaultController extends AbstractController
     /** @var Security */
     private $security;
 
-    public function __construct(Security $security, SessionInterface $session)
+    public function __construct(Security $security)
     {
         $this->security = $security;
     }
