@@ -11,18 +11,15 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DefaultController extends AbstractController
 {
     /** @var Security */
     private $security;
-    private $session;
 
     public function __construct(Security $security, SessionInterface $session)
     {
         $this->security = $security;
-        $this->session = $session;
     }
 
     /**
@@ -40,7 +37,6 @@ class DefaultController extends AbstractController
      */
     public function testing()
     {
-        $this->session->set('user', 'rlbaltha');
 //        /** @var LtiMessageToken $token */
 //        $token = $this->security->getToken();
 //
