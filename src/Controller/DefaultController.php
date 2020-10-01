@@ -49,9 +49,12 @@ class DefaultController extends AbstractController
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
+        var_dump($token);
+        
         return $this->render('default/index.html.twig', [
             'lti_message' => $ltiMessage,
         ]);
+        var_dump($token);
     }
 
 
