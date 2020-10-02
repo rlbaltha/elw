@@ -37,22 +37,24 @@ class DefaultController extends AbstractController
      */
     public function testing()
     {
-//        /** @var LtiMessageToken $token */
-//        $token = $this->security->getToken();
-//
-//        // Related registration
-//        $registration = $token->getRegistration();
+        /** @var LtiMessageToken $token */
+        $token = $this->security->getToken();
+
+        // Related registration
+        $registration = $token->getRegistration();
 
         // Related LTI message
         $ltiMessage = "It worked";
 
-//        // You can even access validation results
-//        $validationResults = $token->getValidationResult();
+        // You can even access validation results
+        $validationResults = $token->getValidationResult();
 
-//        return $this->render('default/index.html.twig', [
-//            'lti_message' => $ltiMessage,
-//        ]);
-        return $this->redirectToRoute('course_index');
+        dd($token);
+
+        return $this->render('default/index.html.twig', [
+            'lti_message' => $ltiMessage,
+        ]);
+//        return $this->redirectToRoute('course_index');
     }
 
 
