@@ -56,7 +56,6 @@ class LtiAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        dd($credentials);
 
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
