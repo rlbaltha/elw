@@ -46,11 +46,12 @@ class DefaultController extends AbstractController
         // Related LTI message
         $ltiMessage = $token->getLtiMessage();
         $user = $ltiMessage->getUserIdentity();
+        $username = $ltiMessage->getClaim("http://www.brightspace.com");
 
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        dd($ltiMessage);
+        dd($username);
 
         return $this->render('default/index.html.twig', [
             'lti_message' => $ltiMessage,
