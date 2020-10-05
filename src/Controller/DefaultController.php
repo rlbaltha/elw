@@ -44,12 +44,12 @@ class DefaultController extends AbstractController
         $registration = $token->getRegistration();
 
         // Related LTI message
-        $ltiMessage = "It worked";
+        $ltiMessage = $token->getLtiMessage();
 
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        dd($token);
+        dd($ltiMessage);
 
         return $this->render('default/index.html.twig', [
             'lti_message' => $ltiMessage,
