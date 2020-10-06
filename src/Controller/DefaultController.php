@@ -51,12 +51,13 @@ class DefaultController extends AbstractController
 //        $firstname = $userIdentity['givenName'];
 //        $lastname = $userIdentity['familyName'];
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
-//        $username = $username_claim['username'];
+        $username_key='username';
+        $username = $username_claim[$username_key];
 //        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        dd($username_claim);
+        dd($username);
 
         return $this->render('default/index.html.twig', [
             'email' => $email,
