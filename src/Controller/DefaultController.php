@@ -76,11 +76,11 @@ class DefaultController extends AbstractController
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
         $context_key = 'id';
         $lti_id = $context[$context_key];
-        $course =  $courseRepository->findOneByLtiId($lti_id);
-        if (!$course) {
-            //Create Course
-            //Add User to Roll
-        }
+//        $course =  $courseRepository->findOneByLtiId($lti_id);
+//        if (!$course) {
+//            //Create Course
+//            //Add User to Roll
+//        }
         $courseid = $courseRepository->findCourseIdByLtiId($lti_id);
 
         // Actual passing of auth to Symfony firewall and sessioning
