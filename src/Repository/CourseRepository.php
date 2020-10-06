@@ -60,9 +60,10 @@ class CourseRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findOneByLtiId($lti_id): ?Course
+    public function findCourseIdByLtiId($lti_id): ?Course
     {
         return $this->createQueryBuilder('c')
+            ->select('c.id')
             ->andWhere('c.lti_id = :val')
             ->setParameter('val', $lti_id)
             ->getQuery()

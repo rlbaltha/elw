@@ -81,15 +81,12 @@ class DefaultController extends AbstractController
             //Create Course
             //Add User to Roll
         }
-
-        dd($lti_id);
+        $courseid = $courseRepository->findCourseIdByLtiId($lti_id);
 
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-        return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findOneByLtiId($lti_id),
-        ]);
+        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
 
     }
 
