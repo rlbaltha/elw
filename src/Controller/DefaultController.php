@@ -47,20 +47,20 @@ class DefaultController extends AbstractController
         // Related LTI message
         $ltiMessage = $token->getLtiMessage();
         $userIdentity = $ltiMessage->getUserIdentity();
-        $email_key = 'email';
-        $email = $userIdentity[$email_key];
-        $firstname_key = 'givenName';
-        $firstname = $userIdentity[$firstname_key];
-        $lastname_key = 'familyName';
-        $lastname = $userIdentity[$lastname_key];
+//        $email_key = 'email';
+//        $email = $userIdentity[$email_key];
+//        $firstname_key = 'givenName';
+//        $firstname = $userIdentity[$firstname_key];
+//        $lastname_key = 'familyName';
+//        $lastname = $userIdentity[$lastname_key];
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
         $username_key='username';
         $username = $username_claim[$username_key];
-//        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        dd($email);
+        dd($user);
 
         return $this->render('default/index.html.twig', [
             'email' => $email,
