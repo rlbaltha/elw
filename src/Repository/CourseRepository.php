@@ -67,6 +67,7 @@ class CourseRepository extends ServiceEntityRepository
             ->select('c.id')
             ->andWhere('c.lti_id = :val')
             ->setParameter('val', $lti_id)
+            ->setMaxResults(1)
             ->getQuery()
             ->getSingleScalarResult()
             ;
