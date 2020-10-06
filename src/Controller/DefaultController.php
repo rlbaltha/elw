@@ -60,7 +60,7 @@ class DefaultController extends AbstractController
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-//        dd($username);
+        dd($email);
 
         return $this->render('default/index.html.twig', [
             'email' => $email,
