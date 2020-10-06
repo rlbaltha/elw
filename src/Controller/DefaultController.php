@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\CourseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiMessageToken;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +36,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/lti_test", name="lti_test")
      */
-    public function testing(CourseRepository $courseRepository)
+    public function testing()
     {
         /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
@@ -54,14 +53,18 @@ class DefaultController extends AbstractController
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
         $username = $username_claim['username'];
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
-        
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findByUser($user),
-        ]);
+//        dd($username);
 
+        return $this->render('default/index.html.twig', [
+            'email' => $email,
+            'firstname' => $firstname,
+            'laststname' => $laststname,
+            'username' => $username,
+        ]);
+//        return $this->redirectToRoute('course_index');
     }
 
 
