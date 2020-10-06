@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Course;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use PhpParser\Node\Scalar;
 
 /**
  * @method Course|null find($id, $lockMode = null, $lockVersion = null)
@@ -61,15 +60,13 @@ class CourseRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findCourseIdByLtiId($lti_id): ?Scalar
+    public function findOneByLtiId($lti_id): ?Course
     {
         return $this->createQueryBuilder('c')
-            ->select('c.id')
             ->andWhere('c.lti_id = :val')
             ->setParameter('val', $lti_id)
-            ->setMaxResults(1)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getOneOrNullResult()
             ;
     }
 
