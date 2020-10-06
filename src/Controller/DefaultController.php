@@ -87,6 +87,7 @@ class DefaultController extends AbstractController
             $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
             $course = new Course();
             $course->setName($course_name);
+            $course->setLtiId($lti_id);
             foreach($labelsets as $labelset){
                 $course->addLabelset($labelset);
             }
@@ -108,7 +109,6 @@ class DefaultController extends AbstractController
             $classlist = new Classlist();
             $classlist->setUser($user);
             $classlist->setCourse($course);
-            //Will need to be updated
             $classlist->setRole('Student');
             $classlist->setStatus('Approved');
             $entityManager = $this->getDoctrine()->getManager();
