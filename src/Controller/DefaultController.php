@@ -49,30 +49,44 @@ class DefaultController extends AbstractController
 
         // Related registration
         $registration = $token->getRegistration();
-
-        // Related LTI message
-        $ltiMessage = $token->getLtiMessage();
-        $userIdentity = $ltiMessage->getUserIdentity();
-//        $email_key = 'email';
-//        $email = $userIdentity[$email_key];
-//        $firstname_key = 'givenName';
-//        $firstname = $userIdentity[$firstname_key];
-//        $lastname_key = 'familyName';
-//        $lastname = $userIdentity[$lastname_key];
-        $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
-        $username_key='username';
-        $username = $username_claim[$username_key];
-        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
-
-        $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
-
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-//        dd($user);
+        // Related LTI message
+        //all the payload from ELC; payload depend on how Deployment is created on platform;
+        // be sure to include all user and course info in Security Settings
+        $ltiMessage = $token->getLtiMessage();
+
+        $userIdentity = $ltiMessage->getUserIdentity();
+        $email = $userIdentity->getEmail();
+        $firstname = $userIdentity->getGivenName();
+        $lastname = $userIdentity->getFamilyName();
+        $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
+
+        $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
+        $username_key='username';
+        $username = $username_claim[$username_key];
+
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
+        if (!$user) {
+            //Create User
+            //Set Role
+        }
+
+        $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
+        $context_key = 'id';
+        $lti_id = $context[$context_key];
+        $course =  $courseRepository->findOneByLtiId($lti_id);
+        if (!$course) {
+            //Create Course
+            //Add User to Roll
+        }
+
+        // Actual passing of auth to Symfony firewall and sessioning
+        $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
         return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findByUser($user),
+            'courses' => $courseRepository->findOneByLtiId($lti_id),
         ]);
 
     }
