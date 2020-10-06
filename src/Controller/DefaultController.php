@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Classlist;
+use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
@@ -75,11 +76,31 @@ class DefaultController extends AbstractController
         }
 
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
-        $context_key = 'id';
-        $lti_id = $context[$context_key];
+        $context_key_id = 'id';
+        $context_key_name = 'title';
+        $lti_id = $context[$context_key_id];
+        $course_name = $context[$context_key_name];
         $course =  $courseRepository->findOneByLtiId($lti_id);
         if (!$course) {
-            //Create Course
+            //Check if Instructor
+            $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
+            $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
+            $course = new Course();
+            $course->setName($course_name);
+            foreach($labelsets as $labelset){
+                $course->addLabelset($labelset);
+            }
+            foreach($markupsets as $markupset){
+                $course->addMarkupset($markupset);
+            }
+            $classlist = new Classlist();
+            $classlist->setUser($user);
+            $classlist->setCourse($course);
+            $classlist->setRole('Instructor');
+            $classlist->setStatus('Approved');
+            $this->getDoctrine()->getManager()->persist($classlist);
+            $this->getDoctrine()->getManager()->persist($course);
+            $this->getDoctrine()->getManager()->flush();
         }
         //Check if on Roll (Classlist)
         $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
