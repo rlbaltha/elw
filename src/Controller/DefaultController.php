@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Classlist;
 use App\Entity\User;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
@@ -79,7 +80,19 @@ class DefaultController extends AbstractController
         $course =  $courseRepository->findOneByLtiId($lti_id);
         if (!$course) {
             //Create Course
-            //Add User to Roll
+        }
+        //Check if on Roll (Classlist)
+        $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
+        if (!$classuser) {
+            $classlist = new Classlist();
+            $classlist->setUser($user);
+            $classlist->setCourse($course);
+            //Will need to be updated
+            $classlist->setRole('Student');
+            $classlist->setStatus('Approved');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($classlist);
+            $entityManager->flush();
         }
         $courseid = $course->getId();
 
