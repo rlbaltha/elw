@@ -82,6 +82,8 @@ class DefaultController extends AbstractController
             //Add User to Roll
         }
 
+        dd($lti_id);
+
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
