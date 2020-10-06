@@ -42,11 +42,11 @@ class LtiAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function supports(Request $request)
     {
-        $token = $this->security->getToken();
-        if ($token instanceof LtiMessageToken) {
-        return true;
-        }
-
+//        $token = $this->security->getToken();
+//        if ($token instanceof LtiMessageToken) {
+//        return false;
+//        }
+        return false;
     }
 
     public function getCredentials(Request $request)

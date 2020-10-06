@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\CourseRepository;
+use App\Security\LtiAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiMessageToken;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class DefaultController extends AbstractController
 {
@@ -37,10 +39,13 @@ class DefaultController extends AbstractController
     /**
      * @Route("/lti_test", name="lti_test")
      */
-    public function testing(CourseRepository $courseRepository)
+    public function testing(CourseRepository $courseRepository, GuardAuthenticatorHandler $guardAuthenticatorHandler, LtiAuthenticator $ltiAuthenticator, Request $request)
     {
         /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
+        if (!$token instanceof LtiMessageToken) {
+            throw $this->createAccessDeniedException("Ryan is going to come and get you!!");
+        }
 
         // Related registration
         $registration = $token->getRegistration();
@@ -58,6 +63,9 @@ class DefaultController extends AbstractController
         $username_key='username';
         $username = $username_claim[$username_key];
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
+
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
