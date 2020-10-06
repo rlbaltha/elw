@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\CourseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiMessageToken;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/lti_test", name="lti_test")
      */
-    public function testing()
+    public function testing(CourseRepository $courseRepository)
     {
         /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
@@ -60,15 +61,12 @@ class DefaultController extends AbstractController
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
-        dd($user);
+//        dd($user);
 
-        return $this->render('default/index.html.twig', [
-            'email' => $email,
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'username' => $username,
+        return $this->render('course/index.html.twig', [
+            'courses' => $courseRepository->findByUser($user),
         ]);
-//        return $this->redirectToRoute('course_index');
+
     }
 
 
