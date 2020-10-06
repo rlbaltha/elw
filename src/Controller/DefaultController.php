@@ -41,7 +41,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/lti_test", name="lti_test")
      */
-    public function testing(CourseRepository $courseRepository, GuardAuthenticatorHandler $guardAuthenticatorHandler, LtiAuthenticator $ltiAuthenticator, Request $request)
+    public function lti_launch(CourseRepository $courseRepository, GuardAuthenticatorHandler $guardAuthenticatorHandler, LtiAuthenticator $ltiAuthenticator, Request $request)
     {
         /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
@@ -71,7 +71,13 @@ class DefaultController extends AbstractController
 
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$user) {
-            //Create User
+            $user = New User();
+            $user->setUsername($username);
+            $user->setRoles(["ROLE_USER"]);
+            $user->setLastname($lastname);
+            $user->setFirstname($firstname);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
             //Set Role
         }
 
@@ -81,6 +87,8 @@ class DefaultController extends AbstractController
         $lti_id = $context[$context_key_id];
         $course_name = $context[$context_key_name];
         $course =  $courseRepository->findOneByLtiId($lti_id);
+
+        //Check for Course
         if (!$course) {
             //Check if Instructor
             $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
@@ -103,6 +111,7 @@ class DefaultController extends AbstractController
             $this->getDoctrine()->getManager()->persist($course);
             $this->getDoctrine()->getManager()->flush();
         }
+
         //Check if on Roll (Classlist)
         $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
         if (!$classuser) {
