@@ -82,7 +82,6 @@ class DefaultController extends AbstractController
             //Add User to Roll
         }
         $courseid = $courseRepository->findCourseIdByLtiId($lti_id);
-        dd($courseid);
 
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
