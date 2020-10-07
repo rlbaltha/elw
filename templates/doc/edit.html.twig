@@ -94,7 +94,7 @@
         function insert_markup(id, name, color) {
             var nEditor = CKEDITOR.instances.doc_body;
             nEditor.focus();
-            var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + name + '" class="badge badge-primary markup" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
+            var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + name + '" class="markup" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
             nEditor.insertElement(markup_html);
         }
         {# Note insert #}
