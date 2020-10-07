@@ -88,7 +88,7 @@ class DefaultController extends AbstractController
 
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
-
+        
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
         $context_key_id = 'id';
         $context_key_name = 'title';
