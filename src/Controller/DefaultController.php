@@ -73,7 +73,12 @@ class DefaultController extends AbstractController
         if (!$user) {
             $user = New User();
             $user->setUsername($username);
-            $user->setRoles(["ROLE_USER"]);
+            if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
+                $user->setRoles(["ROLE_INSTRUCTOR"]);
+            }
+            else {
+                $user->setRoles(["ROLE_USER"]);
+            }
             $user->setLastname($lastname);
             $user->setFirstname($firstname);
             $this->getDoctrine()->getManager()->persist($user);
@@ -91,25 +96,31 @@ class DefaultController extends AbstractController
         //Check for Course
         if (!$course) {
             //Check if Instructor
-            $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
-            $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
-            $course = new Course();
-            $course->setName($course_name);
-            $course->setLtiId($lti_id);
-            foreach($labelsets as $labelset){
-                $course->addLabelset($labelset);
+            if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
+                $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
+                $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
+                $course = new Course();
+                $course->setName($course_name);
+                $course->setLtiId($lti_id);
+                foreach($labelsets as $labelset){
+                    $course->addLabelset($labelset);
+                }
+                foreach($markupsets as $markupset){
+                    $course->addMarkupset($markupset);
+                }
+                $classlist = new Classlist();
+                $classlist->setUser($user);
+                $classlist->setCourse($course);
+                $classlist->setRole('Instructor');
+                $classlist->setStatus('Approved');
+                $this->getDoctrine()->getManager()->persist($classlist);
+                $this->getDoctrine()->getManager()->persist($course);
+                $this->getDoctrine()->getManager()->flush();
             }
-            foreach($markupsets as $markupset){
-                $course->addMarkupset($markupset);
+            else {
+                throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
-            $classlist = new Classlist();
-            $classlist->setUser($user);
-            $classlist->setCourse($course);
-            $classlist->setRole('Instructor');
-            $classlist->setStatus('Approved');
-            $this->getDoctrine()->getManager()->persist($classlist);
-            $this->getDoctrine()->getManager()->persist($course);
-            $this->getDoctrine()->getManager()->flush();
+
         }
 
         //Check if on Roll (Classlist)
