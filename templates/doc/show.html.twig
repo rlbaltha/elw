@@ -37,7 +37,13 @@
                     {% if review.access !='Hidden' %}
                         {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                             <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
-                               href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                               href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}
+                                {% if review.comments|length > 0 %}
+                                    <span class="badge badge-primary"
+                                          style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+
+                                {% endif %}
+                            </a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}

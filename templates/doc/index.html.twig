@@ -134,7 +134,13 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {% for review in doc.reviews %}
                                 <a class="dropdown-item"
-                                   href="#">By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                                   href="#">By {{ review.user.firstname }} {{ review.user.lastname }}
+                                    {% if review.comments|length > 0 %}
+                                        <span class="badge badge-primary"
+                                              style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+
+                                    {% endif %}
+                                </a>
                             {% endfor %}
                         </div>
                         </div>
@@ -148,6 +154,8 @@
                           style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                     <span class="badge badge-primary"
                           style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+
+
                     {% if doc.comments|length > 0 %}
                         <span class="badge badge-primary"
                               style="background:darkblue">Feedback ({{ doc.comments|length }})</span>
