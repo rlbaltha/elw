@@ -46,7 +46,7 @@ class DefaultController extends AbstractController
         /** @var LtiMessageToken $token */
         $token = $this->security->getToken();
         if (!$token instanceof LtiMessageToken) {
-            throw $this->createAccessDeniedException("Ryan is going to come and get you!!");
+            throw $this->createAccessDeniedException("This page is not available.");
         }
 
         // Related registration
@@ -60,7 +60,6 @@ class DefaultController extends AbstractController
         $ltiMessage = $token->getLtiMessage();
 
         $userIdentity = $ltiMessage->getUserIdentity();
-        $email = $userIdentity->getEmail();
         $firstname = $userIdentity->getGivenName();
         $lastname = $userIdentity->getFamilyName();
         $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
@@ -73,7 +72,9 @@ class DefaultController extends AbstractController
         if (!$user) {
             $user = New User();
             $user->setUsername($username);
-            if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
+            //Set User Role
+            //Check if Instructor
+            if (in_array("http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor", $roles)) {
                 $user->setRoles(["ROLE_INSTRUCTOR"]);
             }
             else {
@@ -83,7 +84,6 @@ class DefaultController extends AbstractController
             $user->setFirstname($firstname);
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
-            //Set Role
         }
 
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
@@ -116,6 +116,7 @@ class DefaultController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($classlist);
                 $this->getDoctrine()->getManager()->persist($course);
                 $this->getDoctrine()->getManager()->flush();
+                return $this->redirectToRoute('course_edit', ['courseid' => $course->getId()]);
             }
             else {
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
