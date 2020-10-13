@@ -143,11 +143,8 @@
                                             {% if review.comments|length > 0 %}
                                                 <span class="badge badge-primary"
                                                       style="background:darkblue">Feedback ({{ review.comments|length }})</span>
-
                                             {% endif %}
                                         </a>
-                                        {% else %}
-                                        Review Not Available
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
