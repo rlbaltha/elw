@@ -120,7 +120,7 @@
                     {% if doc.origin %}
                         <span class="badge badge-primary">Review</span>
                     {% endif %}
-                    <a target="_blank" href="{{ course_path('doc_show', {'id': doc.id}) }}">{{ doc.title }}</a>
+                    <a target="_blank" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                 </td>
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
@@ -133,8 +133,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {% for review in doc.reviews %}
-                                <a class="dropdown-item"
-                                   href="#">By {{ review.user.firstname }} {{ review.user.lastname }}
+                                <a target="_blank" class="dropdown-item"
+                                   href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                     {% if review.comments|length > 0 %}
                                         <span class="badge badge-primary"
                                               style="background:darkblue">Feedback ({{ review.comments|length }})</span>

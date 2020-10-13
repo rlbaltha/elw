@@ -188,9 +188,9 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/{courseid}/show", name="doc_show", methods={"GET"})
+     * @Route("/{id}/{courseid}/{target}/show", name="doc_show", methods={"GET"}, defaults={"target" = "0" })
      */
-    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
+    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request, string $target): Response
     {
         $permissions->isAllowedToView($courseid, $doc);
 
@@ -200,7 +200,8 @@ class DocController extends AbstractController
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
             'markupsets' => $markupsets,
-            'role' => $role
+            'role' => $role,
+            'target' => $target
         ]);
     }
 
