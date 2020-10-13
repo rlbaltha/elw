@@ -45,9 +45,10 @@
                             Select Author
                         </a>
                         <div id="classlist" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% for classlist in classlists%}
+                            {% for classlist in classlists %}
                                 <a class="dropdown-item"
-                                   href="{{ course_path('doc_byuser', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
+                                   href="{{ course_path('doc_byuser', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}
+                                    , {{ classlist.user.firstname }}</a>
                             {% endfor %}
                         </div>
                     </li>
@@ -101,7 +102,8 @@
         <span class="badge badge-primary p-2"
               style="cursor: pointer; background: #3e3e3e">Show All</span>
     </div>
-    <div class="float-right">Docs found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif  %}</div>
+    <div class="float-right">Docs
+        found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
 
     <table class="table">
         <thead>
@@ -120,7 +122,8 @@
                     {% if doc.origin %}
                         <span class="badge badge-primary">Review</span>
                     {% endif %}
-                    <a target="_blank" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
+                    <a target="_blank"
+                       href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                 </td>
                 <td>
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
@@ -133,14 +136,18 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {% for review in doc.reviews %}
-                                <a target="_blank" class="dropdown-item"
-                                   href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
-                                    {% if review.comments|length > 0 %}
-                                        <span class="badge badge-primary"
-                                              style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+                                {% if review.access !='Hidden' %}
+                                    {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
+                                        <a target="_blank" class="dropdown-item"
+                                           href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
+                                            {% if review.comments|length > 0 %}
+                                                <span class="badge badge-primary"
+                                                      style="background:darkblue">Feedback ({{ review.comments|length }})</span>
 
+                                            {% endif %}
+                                        </a>
                                     {% endif %}
-                                </a>
+                                {% endif %}
                             {% endfor %}
                         </div>
                         </div>
@@ -202,7 +209,7 @@
             });
         });
     </script>
-    {#    Simple table sort#}
+    {# Simple table sort #}
     <script>
         const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
