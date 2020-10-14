@@ -142,11 +142,6 @@ class DefaultController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-
-        $lineitems = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti-ags/claim/endpoint");
-
-        dd($lineitems);
-
         return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
 
     }
