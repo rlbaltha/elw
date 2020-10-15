@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tool - LTI Service Client Request Builder{% endblock %}
+
+{% block body %}
+    <div class="card bg-light">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <span class="mr-auto"><i class="fas fa-cogs"></i>&nbsp;LTI service client request builder</span>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-secondary" href="{{ path('tool_service_client') }}">Reset</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{ form(form) }}
+        </div>
+    </div>
+    {% if serviceData %}
+        <br/>
+        <div class="card bg-light">
+            <div class="card-header">
+                LTI Service Response
+            </div>
+            <div class="card-body">
+                {% if serviceOk %}
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check"></i>&nbsp;
+                        Lti service called with success
+                    </div>
+                    <dl class="list-unstyled">
+                        <dt>Url</dt>
+                        <dd>
+                            {% if serviceUrl %}
+                                <a target="_blank" href="{{ serviceUrl }}">{{ serviceUrl }}</a>
+                            {% else %}
+                                n/a
+                            {% endif %}
+                        </dd>
+                        <dt>Response</dt>
+                        <dd>
+                        <pre>
+                            <code class="language-json">{{ serviceData|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}</code>
+                        </pre>
+                        </dd>
+                    </dl>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;
+                        Error on LTI service call
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock body %}
+
+{% block scripts %}
+{#    <script>#}
+{#        hljs.initHighlightingOnLoad();#}
+{#    </script>#}
+{% endblock %}
