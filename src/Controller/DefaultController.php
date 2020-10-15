@@ -142,7 +142,12 @@ class DefaultController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        return $this->render('lti/index.html.twig', [
+            'course' => $course,
+            'token' => $token,
+        ]);
+
+//        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
 
     }
 
