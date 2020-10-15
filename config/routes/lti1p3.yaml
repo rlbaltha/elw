@@ -1,6 +1,11 @@
 lti1p3_jwks:
     resource: '@Lti1p3Bundle/Resources/config/routing/jwks.yaml'
 
+#lti1p3_message_tool:
+#    resource: '@Lti1p3Bundle/Resources/config/routing/message/tool.yaml'
+
 lti1p3_message_tool:
-    resource: '@Lti1p3Bundle/Resources/config/routing/message/tool.yaml'
+    path: '/lti1p3/oidc/login-initiation'
+    methods: [GET, POST]
+    controller: OAT\Bundle\Lti1p3Bundle\Action\Tool\Message\OidcInitiationAction
 
