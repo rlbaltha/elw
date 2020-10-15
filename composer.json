@@ -17,6 +17,7 @@
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
         "oat-sa/bundle-lti1p3": "^3.0",
+        "oat-sa/lib-lti1p3-nrps": "^2.0",
         "prayno/casauth-bundle": "^1.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",

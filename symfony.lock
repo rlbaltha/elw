@@ -184,6 +184,9 @@
     "oat-sa/lib-lti1p3-core": {
         "version": "2.4.0"
     },
+    "oat-sa/lib-lti1p3-nrps": {
+        "version": "2.0.0"
+    },
     "ocramius/package-versions": {
         "version": "1.4.2"
     },
@@ -197,7 +200,7 @@
         "version": "v0.3.3"
     },
     "php": {
-        "version": "7.3"
+        "version": "7.2"
     },
     "php-http/message-factory": {
         "version": "v1.0.2"
