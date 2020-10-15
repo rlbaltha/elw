@@ -47,9 +47,9 @@
                             <hr/>
                             <dl class="list-unstyled">
                                 <dt>LTI Version</dt>
-                                <dd><code>{{  token.ltiMessage.version }}</code></dd>
+                                <dd><code>{{  token.payload.version }}</code></dd>
                                 <dt>LTI Message Type</dt>
-                                <dd><code>{{ token.ltiMessage.messageType }}</code></dd>
+                                <dd><code>{{ token.payload.messageType }}</code></dd>
                             </dl>
                             <h5 class="card-title">
                                 <i class="fas fa-check-circle"></i>&nbsp;Validations
@@ -89,7 +89,7 @@
                                 <i class="fas fa-sign-in-alt"></i>&nbsp;OpenID Connect Login Initiation
                             </h5>
                             <hr/>
-                            {% if token.validationResult.oidcState %}
+                            {% if token.validationResult.state %}
                                 <div class="alert alert-success" role="alert">
                                     <i class="fas fa-check"></i>&nbsp;
                                     Message launched using OpenID Connect login initiation flow
@@ -99,11 +99,11 @@
                                     <dd>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
-                                                <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.validationResult.oidcState.token }}" role="button" title="See on jwt.io">
+                                                <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.validationResult.state.token }}" role="button" title="See on jwt.io">
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="state" value="{{ token.validationResult.oidcState.token }}" readonly>
+                                            <input type="text" class="form-control" placeholder="state" value="{{ token.validationResult.state.token }}" readonly>
                                         </div>
                                     </dd>
                                 </dl>
@@ -122,11 +122,11 @@
                                 <dd>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.ltiMessage.token }}" role="button" title="See on jwt.io">
+                                            <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.payload.token }}" role="button" title="See on jwt.io">
                                                 <i class="fas fa-external-link-alt"></i>
                                             </a>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="token" value="{{ token.ltiMessage.token }}" readonly>
+                                        <input type="text" class="form-control" placeholder="token" value="{{ token.payload.token }}" readonly>
                                     </div>
                                 </dd>
                             </dl>
@@ -198,16 +198,16 @@
                                     <dd><a target="_blank" href="{{ token.registration.tool.launchUrl }}">{{ token.registration.tool.launchUrl }}</a></dd>
                                     <dt>Deep Launch Url</dt>
                                     <dd>
-                                        {% if token.registration.tool.deepLinkLaunchUrl %}
-                                            <a target="_blank" href="{{ token.registration.tool.deepLinkLaunchUrl }}">{{ token.registration.tool.deepLinkLaunchUrl }}</a>
+                                        {% if token.registration.tool.deepLinkingUrl %}
+                                            <a target="_blank" href="{{ token.registration.tool.deepLinkingUrl }}">{{ token.registration.tool.deepLinkingUrl }}</a>
                                         {% else %}
                                             n/a
                                         {% endif %}
                                     </dd>
                                     <dt>OIDC Login Initiation Url</dt>
                                     <dd>
-                                        {% if token.registration.tool.deepLinkLaunchUrl %}
-                                            <a target="_blank" href="{{ token.registration.tool.oidcLoginInitiationUrl }}">{{ token.registration.tool.oidcLoginInitiationUrl }}</a>
+                                        {% if token.registration.tool.deepLinkingUrl %}
+                                            <a target="_blank" href="{{ token.registration.tool.oidcInitiationUrl }}">{{ token.registration.tool.oidcInitiationUrl }}</a>
                                         {% else %}
                                             n/a
                                         {% endif %}
@@ -226,7 +226,7 @@
                                 <i class="fas fa-user-shield"></i>&nbsp;Type
                             </h5>
                             <hr/>
-                            {% if not token.ltiMessage.userIdentity %}
+                            {% if not token.payload.userIdentity %}
                                 <div class="alert alert-dark" role="alert">
                                     <i class="fas fa-user-secret"></i>&nbsp;
                                     Anonymous User
@@ -238,7 +238,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                        {% if token.ltiMessage.userIdentity %}
+                        {% if token.payload.userIdentity %}
                             <h5 class="card-title">
                                 <i class="fas fa-info-circle"></i>&nbsp;Details
                             </h5>
@@ -246,30 +246,30 @@
                             <div class="float-left">
                                 <dl class="list-unstyled">
                                     <dt>ID</dt>
-                                    <dd><code>{{ token.ltiMessage.userIdentity.identifier }}</code></dd>
+                                    <dd><code>{{ token.payload.userIdentity.identifier }}</code></dd>
                                     <dt>Name</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.name|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.name|default('n/a') }}</dd>
                                     <dt>Email</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.email|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.email|default('n/a') }}</dd>
                                     <dt>Given name</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.givenName|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.givenName|default('n/a') }}</dd>
                                     <dt>Family name</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.familyName|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.familyName|default('n/a') }}</dd>
                                     <dt>Middle name</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.middleName|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.middleName|default('n/a') }}</dd>
                                     <dt>Locale</dt>
-                                    <dd>{{ token.ltiMessage.userIdentity.locale|default('n/a') }}</dd>
+                                    <dd>{{ token.payload.userIdentity.locale|default('n/a') }}</dd>
                                 </dl>
                             </div>
                             <div class="float-right">
                                 <dl class="list-unstyled">
                                     <dt>Picture</dt>
                                     <dd>
-                                        {% if token.ltiMessage.userIdentity.picture %}
+                                        {% if token.payload.userIdentity.picture %}
                                             <img
-                                                    src="{{ token.ltiMessage.userIdentity.picture }}"
+                                                    src="{{ token.payload.userIdentity.picture }}"
                                                     class="img-thumbnail rounded"
-                                                    alt="{{ token.ltiMessage.userIdentity.picture }}"
+                                                    alt="{{ token.payload.userIdentity.picture }}"
                                                     height="350"
                                                     width="350"
                                             />
@@ -291,16 +291,16 @@
                                 <i class="fas fa-info-circle"></i>&nbsp;NRPS Claim Details
                             </h5>
                             <hr/>
-                            {% if token.ltiMessage.nrps %}
+                            {% if token.payload.nrps %}
                                 <div class="alert alert-success" role="alert">
                                     <i class="fas fa-check"></i>&nbsp;
                                     NRPS claim provided in message
                                 </div>
                                 <dl class="list-unstyled">
                                     <dt>Claim Service Url</dt>
-                                    <dd><a href="{{ token.ltiMessage.nrps.contextMembershipsUrl }}" target="_blank">{{ token.ltiMessage.nrps.contextMembershipsUrl }}</a></dd>
+                                    <dd><a href="{{ token.payload.nrps.contextMembershipsUrl }}" target="_blank">{{ token.payload.nrps.contextMembershipsUrl }}</a></dd>
                                     <dt>Claim Service Versions</dt>
-                                    <dd><code>{{ token.ltiMessage.nrps.serviceVersions|join(', ') }}</code></dd>
+                                    <dd><code>{{ token.payload.nrps.serviceVersions|join(', ') }}</code></dd>
                                 </dl>
                                 <h5 class="card-title">
                                     <i class="fas fa-sign-in-alt"></i>&nbsp;NRPS Service
@@ -310,7 +310,7 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
-                                                <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="{{ token.ltiMessage.nrps.contextMembershipsUrl }}">
+                                                <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
                                             </div>
                                         </div>
                                         <br/>
@@ -382,7 +382,7 @@
                                 </div>
                             </div>
                             <pre>
-                                <code id="claimZone" class="language-json">{{ token.ltiMessage.token.claims|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}</code>
+                                <code id="claimZone" class="language-json">{{ token.payload.token.claims|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}</code>
                             </pre>
                         </div>
                     </div>
@@ -394,7 +394,7 @@
 
 {% block scripts %}
     <script>
-        {% if token.ltiMessage.nrps %}
+        {% if token.payload.nrps %}
         $("#nrpsLoad").click(function(){
             $.ajax({
                 url: "{{ path('tool_ajax_service_nrps') }}",
@@ -416,7 +416,7 @@
         });
         $("#nrpsReset").click(function(){
             $("#nrpsZone").html("");
-            $("#nrpsUrl").val("{{ token.ltiMessage.nrps.contextMembershipsUrl }}");
+            $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}");
             $("#nrpsRole").val("");
             $("#nrpsLimit").val("");
         });
