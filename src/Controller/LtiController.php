@@ -12,7 +12,7 @@ use App\Security\LtiAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiMessageToken;
+use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessageSecurityToken;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -32,9 +32,9 @@ class LtiController extends AbstractController
      */
     public function lti_launch(CourseRepository $courseRepository, GuardAuthenticatorHandler $guardAuthenticatorHandler, LtiAuthenticator $ltiAuthenticator, Request $request)
     {
-        /** @var LtiMessageToken $token */
+        /** @var LtiToolMessageSecurityToken $token */
         $token = $this->security->getToken();
-        if (!$token instanceof LtiMessageToken) {
+        if (!$token instanceof LtiToolMessageSecurityToken) {
             throw $this->createAccessDeniedException("This page is not available.");
         }
 
@@ -46,7 +46,7 @@ class LtiController extends AbstractController
         // Related LTI message
         //all the payload from ELC; payload depend on how Deployment is created on platform;
         // be sure to include all user and course info in Security Settings
-        $ltiMessage = $token->getLtiMessage();
+        $ltiMessage = $token->getPayload();
 
         $userIdentity = $ltiMessage->getUserIdentity();
         $firstname = $userIdentity->getGivenName();
