@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessageSecurityToken;
+use OAT\Library\Lti1p3Nrps\Service\Client\MembershipServiceClient;
+use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -22,10 +24,22 @@ class LtiController extends AbstractController
     /** @var Security */
     private $security;
 
-    public function __construct(Security $security)
+    /** @var MembershipServiceClient */
+    private $client;
+
+    /** @var RegistrationRepositoryInterface */
+    private $repository;
+
+    public function __construct(
+        Security $security,
+        MembershipServiceClient $client,
+        RegistrationRepositoryInterface $repository)
     {
         $this->security = $security;
+        $this->client = $client;
+        $this->repository = $repository;
     }
+
 
     /**
      * @Route("/lti_test", name="lti_test")
@@ -138,5 +152,22 @@ class LtiController extends AbstractController
 
 //        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
 
+    }
+
+    /**
+     * @Route("/lti_nrps", name="lti_nrps")
+     */
+    public function nrps(Request $request)
+    {
+        $membership = $this->client->getContextMembership(
+            $this->repository->find($request->get('registration')),
+            $request->get('url'),
+            $request->get('role'),
+            intval($request->get('limit'))
+        );
+
+        return $this->render('lti/nrps.html.twig', [
+            'membership' => $membership,
+        ]);
     }
 }
