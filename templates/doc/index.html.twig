@@ -105,6 +105,8 @@
     <div class="float-right">Docs
         found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
 
+
+    {# table of documents #}
     <table class="table">
         <thead>
         <tr>
@@ -129,8 +131,7 @@
                     {{ doc.user.firstname }} {{ doc.user.lastname }}
                 </td>
                 <td>
-                    {% if doc.reviews|length > 0 %}
-                        <a class="dropdown dropdown-toggle d-inline" href="#" role="button" id="dropdownMenuLink1"
+                <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button" id="dropdownMenuLink1"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Reviews
                         </a>
@@ -150,7 +151,6 @@
                             {% endfor %}
                         </div>
                         </div>
-                    {% endif %}
 
                 </td>
                 <td>
@@ -224,6 +224,10 @@
                 .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
                 .forEach(tr => tbody.appendChild(tr));
         })));
+        $( ".dropdown-menu" ).each(function() {
+            var count = $( this ).children().length;
+            if (count !== 0 ) {$(this).parent().children(":first").removeClass('invisible')};
+        });
     </script>
 {% endblock %}
 
