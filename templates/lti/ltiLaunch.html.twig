@@ -392,7 +392,9 @@
     </div>
 {% endblock body %}
 
-{% block scripts %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js"></script>
     <script>
         {% if token.payload.nrps %}
         $("#nrpsLoad").click(function(){
