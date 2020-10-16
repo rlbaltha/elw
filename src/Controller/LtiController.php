@@ -155,7 +155,7 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/lti_nrps", name="lti_nrps")
+     * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
     public function nrps(Request $request, MembershipServiceClient $client, RegistrationRepositoryInterface $repository)
     {
