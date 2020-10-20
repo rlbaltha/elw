@@ -159,14 +159,14 @@ class LtiController extends AbstractController
      */
     public function nrps(Request $request)
     {
-
+        dd($request);
         $membership = $this->client->getContextMembership(
             $this->repository->find($request->get('registration')),
             $request->get('url'),
             $request->get('role'),
             intval($request->get('limit'))
         );
-        dd($membership);
+
         return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
