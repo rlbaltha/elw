@@ -459,10 +459,11 @@
         {% if token.payload.nrps %}
         $("#agsLineItemLoad").click(function(){
             $.ajax({
-                url: "{{ token.payload.ags.lineItemsContainerUrl }}",
+                url: "{{ path('lti_test') }}",
                 method: "POST",
                 data: {
                     registration: "{{ token.registration.identifier }}",
+                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",
                     scoreMaximum : 100,
                     label : "Essay 2",
                     resourceId : "elw-1",
