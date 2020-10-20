@@ -397,7 +397,7 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
-                                                <input type="text" id="lineItemsContainerUrl" class="form-control" placeholder="Service Url" value="{{ token.payload.ags.lineItemsContainerUrl }}">
+                                                <input type="text" id="lineItemsContainerUrl" class="form-control" value="{{ token.payload.ags.lineItemsContainerUrl }}">
                                             </div>
                                         </div>
                                         <br/>
@@ -410,8 +410,6 @@
 {#                                            </div>#}
                                             <div class="col col col-md-4">
                                                 <button id="agsLineItemLoad" class="btn-primary btn">Add AGS Lineitem</button>
-                                                &nbsp;
-                                                <i id="nrpsSpinner" class="invisible fa-lg fas fa-spinner fa-spin"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -467,10 +465,10 @@
         {% if token.payload.nrps %}
         $("#agsLineItemLoad").click(function(){
             $.ajax({
+                url: "{{ token.payload.ags.lineItemsContainerUrl }}",
                 method: "POST",
                 data: {
                     registration: "{{ token.registration.identifier }}",
-                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",
                     scoreMaximum : 100,
                     label : "Essay 2",
                     resourceId : "elw-1",
