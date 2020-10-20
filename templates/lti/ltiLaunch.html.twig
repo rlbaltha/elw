@@ -330,7 +330,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="nrpsZone"></div>
+                                <div id="nrpsZone">NRPS data</div>
                                 <div class="modal fade" id="nrpsMemberModal" tabindex="-1" role="dialog" aria-labelledby="nrpsMemberModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
@@ -361,6 +361,91 @@
                     </div>
                 </div>
             </div>
+
+
+            AGS Pane
+            <div class="tab-pane fade" id="ags" role="tabpanel" aria-labelledby="ags-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-text">
+                            <h5 class="card-title">
+                                <i class="fas fa-info-circle"></i>&nbsp;AGS Claim Details
+                            </h5>
+                            <hr/>
+                            {% if token.payload.ags %}
+                                <div class="alert alert-success" role="alert">
+                                    <i class="fas fa-check"></i>&nbsp;
+                                    AGS claim provided in message
+                                </div>
+                                <dl class="list-unstyled">
+                                    <dt>AGS Claim Information</dt>
+                                    <dd>claimName:  {{ token.payload.ags.claimName }}</dd>
+                                    <dd>lineItemsContainerUrl:  {{ token.payload.ags.lineItemsContainerUrl }}</dd>
+                                    <dd>lineItemUrl:  {{ token.payload.ags.lineItemUrl }}</dd>
+                                    <dd>lineItemUrl:  {{ token.payload.ags.scopes }}</dd>
+                                </dl>
+                                <h5 class="card-title">
+                                    <i class="fas fa-sign-in-alt"></i>&nbsp;AGS Service
+                                </h5>
+                                <hr/>
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col col col-md-12">
+                                                <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="">
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="form-row">
+{#                                            <div class="col col col-md-4">#}
+{#                                                <input type="text" id="nrpsRole" class="form-control" placeholder="Role filter">#}
+{#                                            </div>#}
+{#                                            <div class="col col col-md-4">#}
+{#                                                <input type="text" id="nrpsLimit"class="form-control" placeholder="Limit filter">#}
+{#                                            </div>#}
+                                            <div class="col col col-md-4">
+                                                <button id="nrpsLoad" class="btn-primary btn">Call AGS Service</button>
+                                                <button id="nrpsReset" class="btn-secondary btn">Reset</button>
+                                                &nbsp;
+                                                <i id="nrpsSpinner" class="invisible fa-lg fas fa-spinner fa-spin"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id=agsZone">AGS data</div>
+{#                                <div class="modal fade" id="nrpsMemberModal" tabindex="-1" role="dialog" aria-labelledby="nrpsMemberModalLabel" aria-hidden="true">#}
+{#                                    <div class="modal-dialog modal-lg" role="document">#}
+{#                                        <div class="modal-content">#}
+{#                                            <div class="modal-header">#}
+{#                                                <h5 class="modal-title" id="nrpsMemberModalLabel">Member Properties</h5>#}
+{#                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                                    <span aria-hidden="true">&times;</span>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                            <div class="modal-body">#}
+{#                                                <pre>#}
+{#                                                    <code id="nrpsMemberDetailsZone" class="language-json"></code>#}
+{#                                                </pre>#}
+{#                                            </div>#}
+{#                                            <div class="modal-footer">#}
+{#                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+                            {% else %}
+                                <div class="alert alert-dark" role="alert">
+                                    <i class="fas fa-exclamation-triangle"></i>&nbsp;
+                                    No AGS claim provided in message
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <div class="tab-pane fade" id="claims" role="tabpanel" aria-labelledby="claims-tab">
                 <div class="card">
                     <div class="card-body">
