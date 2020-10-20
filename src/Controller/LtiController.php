@@ -166,7 +166,7 @@ class LtiController extends AbstractController
             $request->get('role'),
             intval($request->get('limit'))
         );
-        dd($membership);
+
         return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
