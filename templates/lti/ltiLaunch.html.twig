@@ -397,7 +397,7 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
-                                                <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="">
+                                                <input type="text" id="lineItemsContainerUrl" class="form-control" placeholder="Service Url" value="{{ token.payload.ags.lineItemsContainerUrl }}">
                                             </div>
                                         </div>
                                         <br/>
@@ -409,7 +409,7 @@
 {#                                                <input type="text" id="nrpsLimit"class="form-control" placeholder="Limit filter">#}
 {#                                            </div>#}
                                             <div class="col col col-md-4">
-                                                <button id="nrpsLoad" class="btn-primary btn">Call AGS Service</button>
+                                                <button id="nrpsLoad" class="btn-primary btn">Add AGS Lineitem</button>
                                                 <button id="nrpsReset" class="btn-secondary btn">Reset</button>
                                                 &nbsp;
                                                 <i id="nrpsSpinner" class="invisible fa-lg fas fa-spinner fa-spin"></i>
@@ -418,26 +418,6 @@
                                     </div>
                                 </div>
                                 <div id=agsZone">AGS data</div>
-{#                                <div class="modal fade" id="nrpsMemberModal" tabindex="-1" role="dialog" aria-labelledby="nrpsMemberModalLabel" aria-hidden="true">#}
-{#                                    <div class="modal-dialog modal-lg" role="document">#}
-{#                                        <div class="modal-content">#}
-{#                                            <div class="modal-header">#}
-{#                                                <h5 class="modal-title" id="nrpsMemberModalLabel">Member Properties</h5>#}
-{#                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#                                                    <span aria-hidden="true">&times;</span>#}
-{#                                                </button>#}
-{#                                            </div>#}
-{#                                            <div class="modal-body">#}
-{#                                                <pre>#}
-{#                                                    <code id="nrpsMemberDetailsZone" class="language-json"></code>#}
-{#                                                </pre>#}
-{#                                            </div>#}
-{#                                            <div class="modal-footer">#}
-{#                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
                             {% else %}
                                 <div class="alert alert-dark" role="alert">
                                     <i class="fas fa-exclamation-triangle"></i>&nbsp;
@@ -486,6 +466,27 @@
     {{ parent() }}
     <script>
         {% if token.payload.nrps %}
+        $("#agsLineItemLoad").click(function(){
+            $.ajax({
+                method: "POST",
+                data: {
+                    registration: "{{ token.registration.identifier }}",
+                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",
+                    scoreMaximum : 100,
+                    label : "Essay 2",
+                    resourceId : "elw-1",
+                    tag : "grade",
+                    startDateTime: "2020-01-06T20:05:02Z",
+                    endDateTime: "2020-12-06T22:05:03Z"
+                },
+                success: function(result){
+                    $("#agsZone").html("Success");
+                }
+            });
+        });
+        {% endif %}
+
+        {% if token.payload.nrps %}
         $("#nrpsLoad").click(function(){
             $.ajax({
                 url: "{{ path('lti_nrps') }}",
@@ -511,6 +512,9 @@
             $("#nrpsMemberDetailsZone").html($(event.relatedTarget).attr("data-nrps"));
         });
         {% endif %}
+
+
+
         $("#claimSearch").on("input", function(){
             $("#claimZone").unmark({
                 done: function() {
