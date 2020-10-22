@@ -157,9 +157,11 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Request $request)
+    public function nrps(Request $request, LoggerInterface $logger)
     {
-
+        $logger->error('Test error');
+        $registration = $this->repository->find($request->get('registration'));
+        dd($registration);
         $membership = $this->client->getContextMembership(
             $this->repository->find($request->get('registration')),
             $request->get('url'),

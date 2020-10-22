@@ -456,10 +456,10 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        {% if token.payload.nrps %}
+        {% if token.payload.ags %}
         $("#agsLineItemLoad").click(function(){
             $.ajax({
-                url: "{{ path('lti_test') }}",
+                url: "{{ path('lti_ags') }}",
                 method: "POST",
                 data: {
                     registration: "{{ token.registration.identifier }}",
