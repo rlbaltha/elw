@@ -456,27 +456,27 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        {% if token.payload.ags %}
-        $("#agsLineItemLoad").click(function(){
-            $.ajax({
-                url: "{{ path('lti_ags') }}",
-                method: "POST",
-                data: {
-                    registration: "{{ token.registration.identifier }}",
-                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",
-                    scoreMaximum : 100,
-                    label : "Essay 2",
-                    resourceId : "elw-1",
-                    tag : "grade",
-                    startDateTime: "2020-01-06T20:05:02Z",
-                    endDateTime: "2020-12-06T22:05:03Z"
-                },
-                success: function(result){
-                    $("#agsZone").html("Success");
-                }
-            });
-        });
-        {% endif %}
+{#        {% if token.payload.ags %}#}
+{#        $("#agsLineItemLoad").click(function(){#}
+{#            $.ajax({#}
+{#                url: "{{ path('lti_ags') }}",#}
+{#                method: "POST",#}
+{#                data: {#}
+{#                    registration: "{{ token.registration.identifier }}",#}
+{#                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",#}
+{#                    scoreMaximum : 100,#}
+{#                    label : "Essay 2",#}
+{#                    resourceId : "elw-1",#}
+{#                    tag : "grade",#}
+{#                    startDateTime: "2020-01-06T20:05:02Z",#}
+{#                    endDateTime: "2020-12-06T22:05:03Z"#}
+{#                },#}
+{#                success: function(result){#}
+{#                    $("#agsZone").html("Success");#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#        {% endif %}#}
 
         {% if token.payload.nrps %}
         $("#nrpsLoad").click(function(){
