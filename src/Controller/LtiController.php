@@ -18,6 +18,7 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Psr\Log\LoggerInterface;
 
 class LtiController extends AbstractController
 {
