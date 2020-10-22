@@ -160,7 +160,6 @@ class LtiController extends AbstractController
      */
     public function nrps(Request $request, LoggerInterface $logger)
     {
-        $logger->error('Test error');
         $registration = $this->repository->find($request->get('registration'));
         dd($registration);
         $membership = $this->client->getContextMembership(
