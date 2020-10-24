@@ -143,18 +143,12 @@ class LtiController extends AbstractController
         }
         $courseid = $course->getId();
 
-        $membership = $this->client->getContextMembershipFromPayload(
-            $registration, // [required] as the tool, it will call the platform of this registration
-            $ltiMessage,      // [required] from the LTI message payload containing the NRPS claim (got at LTI launch)
-        );
-
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
         return $this->render('lti/ltiLaunch.html.twig', [
             'course' => $course,
             'token' => $token,
-            'membership' => $membership,
         ]);
 
 //        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
@@ -167,7 +161,6 @@ class LtiController extends AbstractController
     public function nrps(Request $request, LoggerInterface $logger)
     {
         $registration = $this->repository->find($request->get('registration'));
-
 //        dd($registration);
         $membership = $this->client->getContextMembership(
             $this->repository->find($request->get('registration')),
