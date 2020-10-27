@@ -9,7 +9,6 @@ use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
-use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,8 +34,7 @@ class LtiController extends AbstractController
     public function __construct(
         Security $security,
         MembershipServiceClient $client,
-        RegistrationRepositoryInterface $repository
-    )
+        RegistrationRepositoryInterface $repository)
     {
         $this->security = $security;
         $this->client = $client;
@@ -71,18 +69,19 @@ class LtiController extends AbstractController
         $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
 
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
-        $username_key = 'username';
+        $username_key='username';
         $username = $username_claim[$username_key];
 
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$user) {
-            $user = new User();
+            $user = New User();
             $user->setUsername($username);
             //Set User Role
             //Check if Instructor
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor", $roles)) {
                 $user->setRoles(["ROLE_INSTRUCTOR"]);
-            } else {
+            }
+            else {
                 $user->setRoles(["ROLE_USER"]);
             }
             $user->setLastname($lastname);
@@ -97,7 +96,7 @@ class LtiController extends AbstractController
         $context_key_name = 'title';
         $lti_id = $context[$context_key_id];
         $course_name = $context[$context_key_name];
-        $course = $courseRepository->findOneByLtiId($lti_id);
+        $course =  $courseRepository->findOneByLtiId($lti_id);
 
         //Check for Course
         if (!$course) {
@@ -108,10 +107,10 @@ class LtiController extends AbstractController
                 $course = new Course();
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
-                foreach ($labelsets as $labelset) {
+                foreach($labelsets as $labelset){
                     $course->addLabelset($labelset);
                 }
-                foreach ($markupsets as $markupset) {
+                foreach($markupsets as $markupset){
                     $course->addMarkupset($markupset);
                 }
                 $classlist = new Classlist();
@@ -123,7 +122,8 @@ class LtiController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($course);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('course_edit', ['courseid' => $course->getId()]);
-            } else {
+            }
+            else {
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
 
@@ -158,28 +158,16 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Request $request)
+    public function nrps(Request $request, LoggerInterface $logger)
     {
 
-//        $request = $this->service_client->request(
-//            $this->repository->find($request->get('registration')),
-//            $method = 'GET',
-//            $uri = $request->get('url'),
-//            $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly']
-//        );
-//        $response = $request->send();
-//
-//        if ($response->isError()) {
-//            throw new \Exception($response->getBody(true));
-//        }
-//        $access_token = json_decode($response->getBody(), true);
-//        dd($access_token);
         $membership = $this->client->getContextMembership(
             $this->repository->find($request->get('registration')),
             $request->get('url'),
             $request->get('role'),
             intval($request->get('limit'))
         );
+
         return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
