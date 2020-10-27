@@ -9,6 +9,14 @@ use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
+use Carbon\Carbon;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer;
+use OAT\Library\Lti1p3Core\Exception\LtiException;
+use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
+use OAT\Library\Lti1p3Core\Message\Payload\MessagePayloadInterface;
+use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
+use OAT\Library\Lti1p3Core\Service\Server\Grant\ClientAssertionCredentialsGrant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +27,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Psr\Log\LoggerInterface;
+use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use OAT\Library\Lti1p3Core\Service\Client\ServiceClient;
 
 class LtiController extends AbstractController
 {
@@ -28,17 +40,38 @@ class LtiController extends AbstractController
     /** @var MembershipServiceClient */
     private $client;
 
+    /** @var ServiceClientInterface */
+    private $service_client;
+
     /** @var RegistrationRepositoryInterface */
     private $repository;
+
+    /** @var ClientInterface */
+    private $guzzle;
+
+    /** @var Builder */
+    private $builder;
+
+    /** @var Signer */
+    private $signer;
 
     public function __construct(
         Security $security,
         MembershipServiceClient $client,
-        RegistrationRepositoryInterface $repository)
+        RegistrationRepositoryInterface $repository,
+        ClientInterface $guzzle,
+        ServiceClientInterface $service_client,
+        Builder $builder,
+        Signer $signer
+)
     {
         $this->security = $security;
         $this->client = $client;
         $this->repository = $repository;
+        $this->guzzle = $guzzle;
+        $this->service_client = $service_client;
+        $this->builder = $builder;
+        $this->signer = $signer;
     }
 
 
@@ -173,5 +206,43 @@ class LtiController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/lti_membership", name="lti_membership", methods={"GET","POST"})
+     */
+    public function membership()
+    {
+            $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly'];
+            $registration= $this->repository->find('ugatest2');
+            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+                'form_params' => [
+                    'grant_type' => 'client_credentials',
+                    'client_assertion_type' => ClientAssertionCredentialsGrant::CLIENT_ASSERTION_TYPE,
+                    'client_assertion' => $this->generateCredentials($registration),
+                    'scope' => implode(' ', $scopes)
+                ]
+            ]);
+            dd($access_token);
+    }
 
+    /**
+     * @throws LtiExceptionInterface
+     */
+    public function generateCredentials(RegistrationInterface $registration): string
+    {
+
+            $now = Carbon::now();
+
+            return $this->builder
+                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+                ->issuedBy($registration->getTool()->getAudience())
+                ->relatedTo($registration->getClientId())
+                ->permittedFor($registration->getPlatform()->getAudience())
+                ->issuedAt($now->getTimestamp())
+                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
+                ->__toString();
+
+
+    }
 }
