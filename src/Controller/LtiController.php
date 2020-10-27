@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Psr\Log\LoggerInterface;
-use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 
 class LtiController extends AbstractController
 {
@@ -30,17 +29,13 @@ class LtiController extends AbstractController
     /** @var MembershipServiceClient */
     private $client;
 
-    /** @var  ServiceClientInterface */
-    private $service_client;
-
     /** @var RegistrationRepositoryInterface */
     private $repository;
 
     public function __construct(
         Security $security,
         MembershipServiceClient $client,
-        RegistrationRepositoryInterface $repository,
-        ServiceClientInterface $service_client
+        RegistrationRepositoryInterface $repository
     )
     {
         $this->security = $security;
