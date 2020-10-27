@@ -9,6 +9,7 @@ use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
+use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Psr\Log\LoggerInterface;
+use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 
 class LtiController extends AbstractController
 {
@@ -28,13 +30,18 @@ class LtiController extends AbstractController
     /** @var MembershipServiceClient */
     private $client;
 
+    /** @var  ServiceClientInterface */
+    private $service_client;
+
     /** @var RegistrationRepositoryInterface */
     private $repository;
 
     public function __construct(
         Security $security,
         MembershipServiceClient $client,
-        RegistrationRepositoryInterface $repository)
+        RegistrationRepositoryInterface $repository,
+        ServiceClientInterface $service_client
+    )
     {
         $this->security = $security;
         $this->client = $client;
@@ -161,8 +168,13 @@ class LtiController extends AbstractController
     public function nrps(Request $request)
     {
 
-        $client = $this->client();
-        dd($client);
+          $access_token = $this->service_client->request(
+              $this->repository->find($request->get('registration')),
+              $method ='GET',
+              $uri = $request->get('url'),
+              $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly']
+          );
+          dd($access_token);
 //        $membership = $this->client->getContextMembership(
 //            $this->repository->find($request->get('registration')),
 //            $request->get('url'),
