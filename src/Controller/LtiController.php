@@ -166,28 +166,28 @@ class LtiController extends AbstractController
     public function nrps(Request $request)
     {
 
-        $request = $this->service_client->request(
-            $this->repository->find($request->get('registration')),
-            $method = 'GET',
-            $uri = $request->get('url'),
-            $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly']
-        );
-        $response = $request->send();
-
-        if ($response->isError()) {
-            throw new \Exception($response->getBody(true));
-        }
-        $access_token = json_decode($response->getBody(), true);
-        dd($access_token);
-//        $membership = $this->client->getContextMembership(
+//        $request = $this->service_client->request(
 //            $this->repository->find($request->get('registration')),
-//            $request->get('url'),
-//            $request->get('role'),
-//            intval($request->get('limit'))
+//            $method = 'GET',
+//            $uri = $request->get('url'),
+//            $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly']
 //        );
-//        return $this->render('lti/nrps.html.twig', [
-//            'membership' => $membership,
-//        ]);
+//        $response = $request->send();
+//
+//        if ($response->isError()) {
+//            throw new \Exception($response->getBody(true));
+//        }
+//        $access_token = json_decode($response->getBody(), true);
+//        dd($access_token);
+        $membership = $this->client->getContextMembership(
+            $this->repository->find($request->get('registration')),
+            $request->get('url'),
+            $request->get('role'),
+            intval($request->get('limit'))
+        );
+        return $this->render('lti/nrps.html.twig', [
+            'membership' => $membership,
+        ]);
     }
 
 
