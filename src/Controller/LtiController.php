@@ -219,8 +219,7 @@ class LtiController extends AbstractController
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     'client_assertion' => $this->generateCredentials($registration),
                     'scope' => implode(' ', $scopes),
-                    'redirect_uri' => 'https://elw.uga.edu/lti_test',
-                    'client_assertion'
+                    'redirect_uri' => 'https://elw.uga.edu/lti_test'
                 ]
             ]);
             $response = $request->send();
