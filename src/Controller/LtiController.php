@@ -213,15 +213,19 @@ class LtiController extends AbstractController
     {
             $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
-            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+            $request = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
-                    'client_assertion_type' => ClientAssertionCredentialsGrant::CLIENT_ASSERTION_TYPE,
+                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => implode(' ', $scopes)
+                    'scope' => implode(' ', $scopes),
+                    'redirect_uri' => 'https://elw.uga.edu/lti_test',
+                    'client_assertion'
                 ]
             ]);
-            dd($access_token);
+            $response = $request->send();
+            $responseBody = $response->getBody(true);
+            dd($responseBody);
     }
 
     /**
