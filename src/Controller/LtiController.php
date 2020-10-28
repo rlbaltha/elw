@@ -207,11 +207,11 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/lti_membership", name="lti_membership", methods={"GET","POST"})
+     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
      */
     public function membership()
     {
-            $scopes = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly'];
+            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
             $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
                 'form_params' => [
