@@ -223,7 +223,8 @@ class LtiController extends AbstractController
                     'scope' => implode(' ', $scopes)
                 ]
             ]);
-            dd($access_token);
+
+            dd($registration->getToolKeyChain()->getPrivateKey());
     }
 
     /**
