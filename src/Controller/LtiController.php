@@ -225,7 +225,7 @@ class LtiController extends AbstractController
             ->issuedAt($now->getTimestamp())
             ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
             ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
-         dd($tokenBuilder);
+         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
 
 
             $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
