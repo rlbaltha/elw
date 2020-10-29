@@ -184,6 +184,9 @@
     "oat-sa/lib-lti1p3-core": {
         "version": "2.4.0"
     },
+    "oat-sa/lib-lti1p3-nrps": {
+        "version": "2.0.0"
+    },
     "ocramius/package-versions": {
         "version": "1.4.2"
     },
@@ -227,6 +230,9 @@
         "version": "1.0.1"
     },
     "psr/http-message": {
+        "version": "1.0.1"
+    },
+    "psr/http-server-handler": {
         "version": "1.0.1"
     },
     "psr/link": {

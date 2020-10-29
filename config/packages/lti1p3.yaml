@@ -4,33 +4,34 @@ lti1p3:
             key_set_name: "platformSet"
             public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
             private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
-            private_key_passphrase: null
+            private_key_passphrase: ~
         toolKey:
             key_set_name: "toolSet"
             public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
             private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
             private_key_passphrase: null
     platforms:
-        d2l:
-            name: "ugatest2.view.usg.edu"
-            audience: "https://api.brightspace.com/auth/token"
+        ugatest2:
+            name: "elc"
+            audience: "https://elw.uga.edu"
             oidc_authentication_url: "https://ugatest2.view.usg.edu/d2l/lti/authenticate"
             oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
     tools:
-        elw:
-            name: "englvm01.english.uga.edu"
-            audience: "https://englvm01.english.uga.edu/"
-            oidc_login_initiation_url: "https://englvm01.english.uga.edu/lti1p3/oidc/login-initiation"
-            launch_url: "https://englvm01.english.uga.edu/lti_login"
+        localTool:
+            name: "elw"
+            audience: "https://ugatest2.view.usg.edu/"
+            oidc_login_initiation_url: "https://elw.uga.edu/lti1p3/oidc/login-initiation"
+            launch_url: "https://elw.uga.edu/lti1p3/tool/launch"
             deep_link_launch_url: null
     registrations:
-        local:
+        ugatest2:
             client_id: "90fd07d4-0a1d-449d-82e6-2fb566eabf33"
-            platform: "d2l"
-            tool: "elw"
+            platform: "ugatest2"
+            tool: "localTool"
             deployment_ids:
-                - "deploymentId1"
+                - "a7d49f55-1470-444a-b9eb-c9baf5c1d69e"
             platform_key_chain: "platformKey"
-            tool_key_chain: "toolKey"
             platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
-            tool_jwks_url: "https://englvm01.english.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
+            tool_key_chain: "toolKey"
+            tool_jwks_url: "https://elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
+

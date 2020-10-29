@@ -3,12 +3,8 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\HttpKernel\KernelInterface;
+
 
 class DefaultController extends AbstractController
 {
@@ -22,16 +18,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/testing", name="prod_test")
-     */
-    public function testing()
-    {
-        $terms = $this->getDoctrine()->getManager()->getRepository('App:Term')->findAll();
-        return $this->render('default/index.html.twig', [
-            'terms' => $terms,
-        ]);
-    }
+
 
 
 }

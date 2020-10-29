@@ -37,7 +37,13 @@
                     {% if review.access !='Hidden' %}
                         {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                             <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
-                               href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}</a>
+                               href="#">Review By {{ review.user.firstname }} {{ review.user.lastname }}
+                                {% if review.comments|length > 0 %}
+                                    <span class="badge badge-primary"
+                                          style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+
+                                {% endif %}
+                            </a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -241,7 +247,7 @@
                 $('.popover').hide();
 
                 $('.markup').mouseover(function () {
-                    if ($('#toggle').text() != 'Inline') {
+                    if ($('#toggle').text() != 'Popover') {
                         $('.popover').hide();
                         var id = "div[data-id='" + $(this).attr('data-id') + "']";
                         var offset = $(this).offset();
@@ -249,7 +255,7 @@
                     }
                 });
                 $('.highlight').mouseover(function () {
-                    if ($('#toggle').text() != 'Inline') {
+                    if ($('#toggle').text() != 'Popover') {
                         $('.popover').hide();
                         var id = "div[data-id='" + $(this).attr('id') + "']";
                         var offset = $(this).position();
@@ -273,6 +279,9 @@
                     window.close();
                 });
                 $('.doc-container, .popover-markup').removeClass('d-none');
+                $('.doc-container').hide();
+                $('#doc{{ target }}').show()
+
             }
         );
     </script>

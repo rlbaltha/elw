@@ -58,6 +58,11 @@ class Course
      */
     private $term;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lti_id;
+
 
     public function __construct()
     {
@@ -230,6 +235,18 @@ class Course
     public function setTerm(?Term $term): self
     {
         $this->term = $term;
+
+        return $this;
+    }
+
+    public function getLtiId(): ?string
+    {
+        return $this->lti_id;
+    }
+
+    public function setLtiId(?string $lti_id): self
+    {
+        $this->lti_id = $lti_id;
 
         return $this;
     }

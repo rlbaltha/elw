@@ -125,6 +125,6 @@ class LabelsetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('labelset_index');
+        return $this->redirectToRoute('labelset_byuser');
     }
 }

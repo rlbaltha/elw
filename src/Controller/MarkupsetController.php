@@ -119,6 +119,6 @@ class MarkupsetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('markupset_index');
+        return $this->redirectToRoute('markupset_byuser');
     }
 }

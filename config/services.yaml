@@ -34,3 +34,8 @@ services:
     PRayno\CasAuthBundle\Event\LogoutSuccessHandler:
         arguments:
             $logoutUrl: "https://sso.uga.edu/cas/logout"
+
+
+    OAT\Library\Lti1p3Nrps\: #Add the global namespace
+        resource: '../vendor/oat-sa/lib-lti1p3-nrps/src/*' #Where can we find your external lib ?
+        autowire: true  #Turn autowire to true
