@@ -216,15 +216,15 @@ class LtiController extends AbstractController
             $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
         $now = Carbon::now();
-        $tokenBuilder = $this->builder
-            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-            ->issuedBy($registration->getTool()->getAudience())
-            ->relatedTo($registration->getClientId())
-            ->permittedFor($registration->getPlatform()->getAudience())
-            ->issuedAt($now->getTimestamp())
-            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp());
-              dd($tokenBuilder);
+//        $tokenBuilder = $this->builder
+//            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+//            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+//            ->issuedBy($registration->getTool()->getAudience())
+//            ->relatedTo($registration->getClientId())
+//            ->permittedFor($registration->getPlatform()->getAudience())
+//            ->issuedAt($now->getTimestamp())
+//            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp());
+//              dd($tokenBuilder);
 
 
             $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
@@ -248,7 +248,7 @@ class LtiController extends AbstractController
             $now = Carbon::now();
 
             return $this->builder
-                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+//                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
                 ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
                 ->issuedBy($registration->getTool()->getAudience())
                 ->relatedTo($registration->getClientId())
