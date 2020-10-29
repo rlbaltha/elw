@@ -254,7 +254,7 @@ class LtiController extends AbstractController
                 ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
                 ->issuedBy($registration->getTool()->getAudience())
                 ->relatedTo($registration->getClientId())
-                ->permittedFor($registration->getPlatform()->getAudience())
+                ->permittedFor('https://api.brightspace.com/auth/token')
                 ->issuedAt($now->getTimestamp())
                 ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
                 ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
