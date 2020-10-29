@@ -179,13 +179,15 @@ class LtiController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-        return $this->render('lti/ltiLaunch.html.twig', [
-            'course' => $course,
-            'token' => $token,
-        ]);
-
-//        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-
+        if (is_granted('ROLE_ADMIN')) {
+            return $this->render('lti/ltiLaunch.html.twig', [
+                'course' => $course,
+                'token' => $token,
+            ]);
+        }
+        else {
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+        }
     }
 
     /**
@@ -213,18 +215,15 @@ class LtiController extends AbstractController
     {
             $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
-            $request = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => implode(' ', $scopes),
-                    'redirect_uri' => 'https://elw.uga.edu/lti_test'
+                    'scope' => implode(' ', $scopes)
                 ]
             ]);
-            $response = $request->send();
-            $responseBody = $response->getBody(true);
-            dd($responseBody);
+            dd($access_token);
     }
 
     /**
