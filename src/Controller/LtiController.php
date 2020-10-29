@@ -215,6 +215,9 @@ class LtiController extends AbstractController
     {
             $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
+            dd($registration->getToolKeyChain()->getPrivateKey());
+
+            
             $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
@@ -224,7 +227,7 @@ class LtiController extends AbstractController
                 ]
             ]);
 
-            dd($registration->getToolKeyChain()->getPrivateKey());
+
     }
 
     /**
