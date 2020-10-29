@@ -208,37 +208,37 @@ class LtiController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
-//     */
-//    public function membership()
-//    {
-//            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
-//            $registration= $this->repository->find('ugatest2');
-//        $now = Carbon::now();
-//        $tokenBuilder = $this->builder
-//            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-//            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-//            ->issuedBy($registration->getTool()->getAudience())
-//            ->relatedTo($registration->getClientId())
-//            ->permittedFor($registration->getPlatform()->getAudience())
-//            ->issuedAt($now->getTimestamp())
-//            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-//            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
-//         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
-//
-//
-//            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
-//                'form_params' => [
-//                    'grant_type' => 'client_credentials',
-//                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-//                    'client_assertion' => $this->generateCredentials($registration),
-//                    'scope' => implode(' ', $scopes)
-//                ]
-//            ]);
-//
-//
-//    }
+    /**
+     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
+     */
+    public function access_token()
+    {
+            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
+            $registration= $this->repository->find('ugatest2');
+        $now = Carbon::now();
+        $tokenBuilder = $this->builder
+            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+            ->issuedBy($registration->getTool()->getAudience())
+            ->relatedTo($registration->getClientId())
+            ->permittedFor($registration->getPlatform()->getAudience())
+            ->issuedAt($now->getTimestamp())
+            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
+         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
+
+
+            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+                'form_params' => [
+                    'grant_type' => 'client_credentials',
+                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                    'client_assertion' => $this->generateCredentials($registration),
+                    'scope' => implode(' ', $scopes)
+                ]
+            ]);
+
+
+    }
 
     /**
      * @throws LtiExceptionInterface
