@@ -179,7 +179,7 @@ class LtiController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-        if (is_granted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->render('lti/ltiLaunch.html.twig', [
                 'course' => $course,
                 'token' => $token,
