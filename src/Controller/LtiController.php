@@ -196,9 +196,9 @@ class LtiController extends AbstractController
     public function nrps(Request $request)
     {
         $registration = $request->get('registration');
-        dd($registration);
+
         $membership = $this->client->getContextMembership(
-            $this->repository->find(),
+            $this->repository->find($registration),
             $request->get('url'),
             $request->get('role'),
             intval($request->get('limit'))
