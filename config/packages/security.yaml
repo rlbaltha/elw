@@ -1,6 +1,10 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
+#        app_user_provider:
+#            entity:
+#                class: App\Entity\User
+#                property: username
         cas:
             id: App\Service\ElwUserProvider
     encoders:
@@ -11,6 +15,9 @@ security:
             # (i.e. Sodium when available).
             algorithm: auto
     firewalls:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
         main:
             logout:
                 path: app_logout
