@@ -20,9 +20,9 @@ lti1p3:
         localTool:
             name: "elw"
             audience: "https://ugatest2.view.usg.edu/"
-            oidc_login_initiation_url: "https://elw.uga.edu/lti1p3/oidc/login-initiation"
+            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://elw.uga.edu/lti1p3/tool/launch"
-            deep_link_launch_url: null
+            deep_linking_url: null
     registrations:
         ugatest2:
             client_id: "90fd07d4-0a1d-449d-82e6-2fb566eabf33"
