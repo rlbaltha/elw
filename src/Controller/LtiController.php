@@ -193,11 +193,11 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Request $request, LoggerInterface $logger)
+    public function nrps(Request $request)
     {
 
         $membership = $this->client->getContextMembership(
-            $this->repository->find($request->get('registration')),
+            $this->repository->find($request->get('ugatest2')),
             $request->get('url'),
             $request->get('role'),
             intval($request->get('limit'))
@@ -208,58 +208,58 @@ class LtiController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
-     */
-    public function access_token()
-    {
-            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
-            $registration= $this->repository->find('ugatest2');
-//        $now = Carbon::now();
-//        $tokenBuilder = $this->builder
-//            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-//            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-//            ->issuedBy($registration->getTool()->getAudience())
-//            ->relatedTo($registration->getClientId())
-//            ->permittedFor('https://api.brightspace.com/auth/token')
-//            ->issuedAt($now->getTimestamp())
-//            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-//            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
-//         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
-
-
-            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
-                'form_params' => [
-                    'grant_type' => 'client_credentials',
-                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                    'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => implode(' ', $scopes)
-                ]
-            ]);
-            dd($access_token);
-
-
-    }
-
-    /**
-     * @throws LtiExceptionInterface
-     */
-    public function generateCredentials(RegistrationInterface $registration): string
-    {
-
-            $now = Carbon::now();
-
-            return $this->builder
-                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-                ->issuedBy($registration->getTool()->getAudience())
-                ->relatedTo($registration->getClientId())
-                ->permittedFor('https://api.brightspace.com/auth/token')
-                ->issuedAt($now->getTimestamp())
-                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
-                ->__toString();
-
-
-    }
+//    /**
+//     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
+//     */
+//    public function access_token()
+//    {
+//            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
+//            $registration= $this->repository->find('ugatest2');
+////        $now = Carbon::now();
+////        $tokenBuilder = $this->builder
+////            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+////            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+////            ->issuedBy($registration->getTool()->getAudience())
+////            ->relatedTo($registration->getClientId())
+////            ->permittedFor('https://api.brightspace.com/auth/token')
+////            ->issuedAt($now->getTimestamp())
+////            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+////            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
+////         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
+//
+//
+//            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+//                'form_params' => [
+//                    'grant_type' => 'client_credentials',
+//                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+//                    'client_assertion' => $this->generateCredentials($registration),
+//                    'scope' => implode(' ', $scopes)
+//                ]
+//            ]);
+//            dd($access_token);
+//
+//
+//    }
+//
+//    /**
+//     * @throws LtiExceptionInterface
+//     */
+//    public function generateCredentials(RegistrationInterface $registration): string
+//    {
+//
+//            $now = Carbon::now();
+//
+//            return $this->builder
+//                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+//                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+//                ->issuedBy($registration->getTool()->getAudience())
+//                ->relatedTo($registration->getClientId())
+//                ->permittedFor($registration->getPlatform()->getAudience())
+//                ->issuedAt($now->getTimestamp())
+//                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+//                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
+//                ->__toString();
+//
+//
+//    }
 }
