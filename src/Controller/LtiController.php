@@ -40,38 +40,38 @@ class LtiController extends AbstractController
     /** @var MembershipServiceClient */
     private $client;
 
-    /** @var ServiceClientInterface */
-    private $service_client;
+//    /** @var ServiceClientInterface */
+//    private $service_client;
 
     /** @var RegistrationRepositoryInterface */
     private $repository;
 
-    /** @var ClientInterface */
-    private $guzzle;
-
-    /** @var Builder */
-    private $builder;
-
-    /** @var Signer */
-    private $signer;
+//    /** @var ClientInterface */
+//    private $guzzle;
+//
+//    /** @var Builder */
+//    private $builder;
+//
+//    /** @var Signer */
+//    private $signer;
 
     public function __construct(
         Security $security,
         MembershipServiceClient $client,
-        RegistrationRepositoryInterface $repository,
-        ClientInterface $guzzle,
-        ServiceClientInterface $service_client,
-        Builder $builder,
-        Signer $signer
+        RegistrationRepositoryInterface $repository
+//        ClientInterface $guzzle,
+//        ServiceClientInterface $service_client,
+//        Builder $builder,
+//        Signer $signer
 )
     {
         $this->security = $security;
         $this->client = $client;
         $this->repository = $repository;
-        $this->guzzle = $guzzle;
-        $this->service_client = $service_client;
-        $this->builder = $builder;
-        $this->signer = $signer;
+//        $this->guzzle = $guzzle;
+//        $this->service_client = $service_client;
+//        $this->builder = $builder;
+//        $this->signer = $signer;
     }
 
 
