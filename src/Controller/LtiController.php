@@ -197,10 +197,10 @@ class LtiController extends AbstractController
     {
 
         $membership = $this->client->getContextMembership(
-            $this->repository->find($request->get('ugatest2')),
-            $request->get('url'),
-            $request->get('role'),
-            intval($request->get('limit'))
+            'ugatest2',
+            'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships',
+            null,
+            null
         );
 
         return $this->render('lti/nrps.html.twig', [
