@@ -221,18 +221,6 @@ class LtiController extends AbstractController
     {
             $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
             $registration= $this->repository->find('ugatest2');
-//        $now = Carbon::now();
-//        $tokenBuilder = $this->builder
-//            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-//            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-//            ->issuedBy($registration->getClientId())
-//            ->relatedTo($registration->getClientId())
-//            ->permittedFor('https://api.brightspace.com/auth/token')
-//            ->issuedAt($now->getTimestamp())
-//            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-//            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
-//         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
-
             $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
@@ -242,7 +230,7 @@ class LtiController extends AbstractController
                 ]
             ]);
             $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-        $access_token = $responseData['access_token'] ?? '';
+            $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
@@ -251,7 +239,7 @@ class LtiController extends AbstractController
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
         ]);
 
-        $response = $this->service_client->request($registration, $method, $uri, $options);
+        $response = $this->guzzle->request($method, $uri, $options);
         return json_decode($response->getBody()->__toString(), true);
 
     }
