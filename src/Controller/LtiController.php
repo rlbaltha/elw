@@ -246,7 +246,7 @@ class LtiController extends AbstractController
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
         $options = [];
         $options = array_merge_recursive($options, [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token)]
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'headers' => ['Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']]
         ]);
 
         $response = $this->service_client->request($registration, $method, $uri, $options);
