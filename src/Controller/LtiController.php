@@ -250,7 +250,7 @@ class LtiController extends AbstractController
         ]);
 
         $response = $this->service_client->request($registration, $method, $uri, $options);
-        $membership = json_encode(json_decode($response->getBody()->getContents(), true));
+        $membership = json_encode(json_decode($response->getBody()->__toString(), true));
         return $membership;
     }
 
