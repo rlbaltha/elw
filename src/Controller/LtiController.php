@@ -242,7 +242,6 @@ class LtiController extends AbstractController
         $response = $this->guzzle->request($method, $uri, $options);
         $membership =  json_decode($response->getBody()->__toString(), true);
 //        $response = new JsonResponse($membership);
-dd($membership);
         return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
