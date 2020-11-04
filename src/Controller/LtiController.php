@@ -233,7 +233,7 @@ class LtiController extends AbstractController
 //            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
 //         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
 
-            $access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
+            $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
@@ -241,6 +241,8 @@ class LtiController extends AbstractController
                     'scope' => $scope
                 ]
             ]);
+            $responseData = json_decode($request_access_token->getBody()->__toString(), true);
+        $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
@@ -250,8 +252,8 @@ class LtiController extends AbstractController
         ]);
 
         $response = $this->service_client->request($registration, $method, $uri, $options);
-        dd($response->getStatusCode());
         return json_decode($response->getBody()->__toString(), true);
+
     }
 
     /**
