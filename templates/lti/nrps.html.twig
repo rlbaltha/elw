@@ -1,4 +1,8 @@
-<br/>
+{% extends 'base.html.twig' %}
+
+{% block title %}Tool - LTI Launch Request Result{% endblock %}
+
+{% block body %}
 <div class="card bg-light">
     <div class="card-body">
         <ul class="nav nav-tabs nav-fill nav-hover" id="nrpsTab" role="tablist">
@@ -84,8 +88,4 @@
         </div>
     </div>
 </div>
-<script>
-    $("#nrpsLinkUpdate").click(function(){
-        $("#nrpsUrl").val($("#nrpsLinkUpdate").data("link"));
-    });
-</script>
+{% endblock %}
