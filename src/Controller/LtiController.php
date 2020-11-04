@@ -214,7 +214,7 @@ class LtiController extends AbstractController
      */
     public function access_token()
     {
-            $scope = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
+            $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
             $registration= $this->repository->find('ugatest2');
 //        $now = Carbon::now();
 //        $tokenBuilder = $this->builder
