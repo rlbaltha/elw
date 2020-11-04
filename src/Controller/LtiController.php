@@ -246,7 +246,7 @@ class LtiController extends AbstractController
         ]);
 
         $response = $this->service_client->request($registration, $method, $uri, $options);
-        $membership = $response->getBody()->__toString();
+        $membership = $response->getBody()->getContents();;
         return $membership;
     }
 
