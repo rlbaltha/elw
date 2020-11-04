@@ -240,7 +240,9 @@ class LtiController extends AbstractController
         ]);
 
         $response = $this->guzzle->request($method, $uri, $options);
-        return json_decode($response->getBody()->__toString(), true);
+        $membership =  json_decode($response->getBody()->__toString(), true);
+        $response = new JsonResponse($membership);
+        return $response;
 
     }
 
