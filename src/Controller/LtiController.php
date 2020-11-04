@@ -220,7 +220,7 @@ class LtiController extends AbstractController
         $tokenBuilder = $this->builder
             ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
             ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-            ->issuedBy($registration->getTool()->getAudience())
+            ->issuedBy($registration->getTool()->getIdentifier())
             ->relatedTo($registration->getClientId())
             ->permittedFor('https://api.brightspace.com/auth/token')
             ->issuedAt($now->getTimestamp())
