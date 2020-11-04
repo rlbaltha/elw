@@ -26,21 +26,15 @@
                         <th scope="col">Identifier</th>
                         <th scope="col">Name</th>
                         <th scope="col">Roles</th>
-                        <th scope="col">View</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for member in membership.members %}
                         <tr>
                             <td style="width: 3%" class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
-                            <td><code>{{ member.userIdentity.identifier }}</code></td>
-                            <td>{{ member.userIdentity.name }}</td>
+                            <td><code>{{ member.identifier }}</code></td>
+                            <td>{{ member.name }}</td>
                             <td>{{ member.roles|join(', ') }}</td>
-                            <td style="width: 3%">
-                                <button class="btn btn-secondary btn-sm" role="button" data-toggle="modal" data-target="#nrpsMemberModal" data-nrps="{{ member.properties|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </button>
-                            </td>
                         </tr>
                     {% else %}
                         <tr>
