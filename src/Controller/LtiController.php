@@ -31,6 +31,7 @@ use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use OAT\Library\Lti1p3Core\Service\Client\ServiceClient;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LtiController extends AbstractController
 {
@@ -244,8 +245,9 @@ class LtiController extends AbstractController
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token)]
         ]);
 
-        return $this->service_client->request($registration, $method, $uri, $options);
-
+        $response = $this->service_client->request($registration, $method, $uri, $options);
+        $membership = $response->getBody()->__toString();
+        return $membership;
     }
 
     /**
