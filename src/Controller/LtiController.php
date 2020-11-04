@@ -17,6 +17,7 @@ use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\MessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Service\Server\Grant\ClientAssertionCredentialsGrant;
+use OAT\Library\Lti1p3Nrps\Serializer\MembershipSerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,6 +56,9 @@ class LtiController extends AbstractController
 
     /** @var Signer */
     private $signer;
+
+    /** @var MembershipSerializerInterface */
+    private $serializer;
 
     public function __construct(
         Security $security,
@@ -246,7 +250,7 @@ class LtiController extends AbstractController
         ]);
 
         $response = $this->service_client->request($registration, $method, $uri, $options);
-        $membership = $response->getBody()->getContents();;
+        $membership = json_encode($response->getBody()->getContents());
         return $membership;
     }
 
