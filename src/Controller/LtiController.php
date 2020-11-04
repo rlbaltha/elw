@@ -249,9 +249,8 @@ class LtiController extends AbstractController
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
         ]);
 
-        $membership = $this->service_client->request($registration, $method, $uri, $options);
-        $membership = json_decode($membership->getBody()->__toString(), true);
-        return $membership;
+        $response = $this->service_client->request($registration, $method, $uri, $options);
+        return json_decode($response->getBody(), true);
     }
 
     /**
