@@ -214,27 +214,26 @@ class LtiController extends AbstractController
      */
     public function access_token()
     {
-            $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
+            $scope = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
             $registration= $this->repository->find('ugatest2');
-        $now = Carbon::now();
-        $tokenBuilder = $this->builder
-            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-            ->issuedBy($registration->getTool()->getIdentifier())
-            ->relatedTo($registration->getClientId())
-            ->permittedFor('https://api.brightspace.com/auth/token')
-            ->issuedAt($now->getTimestamp())
-            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
-         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
+//        $now = Carbon::now();
+//        $tokenBuilder = $this->builder
+//            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+//            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+//            ->issuedBy($registration->getClientId())
+//            ->relatedTo($registration->getClientId())
+//            ->permittedFor('https://api.brightspace.com/auth/token')
+//            ->issuedAt($now->getTimestamp())
+//            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+//            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey());
+//         dd($tokenBuilder, $tokenBuilder->verify($this->signer, $registration->getToolKeyChain()->getPublicKey()));
 
-
-            $access_token = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+            $access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => implode(' ', $scopes)
+                    'scope' => $scope
                 ]
             ]);
             dd($access_token);
@@ -253,9 +252,9 @@ class LtiController extends AbstractController
             return $this->builder
                 ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
                 ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-                ->issuedBy($registration->getTool()->getAudience())
+                ->issuedBy($registration->getClientId())
                 ->relatedTo($registration->getClientId())
-                ->permittedFor($registration->getPlatform()->getAudience())
+                ->permittedFor('https://api.brightspace.com/auth/token')
                 ->issuedAt($now->getTimestamp())
                 ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
                 ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
