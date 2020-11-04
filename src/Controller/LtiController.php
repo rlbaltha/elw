@@ -68,7 +68,7 @@ class LtiController extends AbstractController
         ServiceClientInterface $service_client,
         Builder $builder,
         Signer $signer
-)
+    )
     {
         $this->security = $security;
         $this->client = $client;
@@ -107,19 +107,18 @@ class LtiController extends AbstractController
         $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
 
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
-        $username_key='username';
+        $username_key = 'username';
         $username = $username_claim[$username_key];
 
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$user) {
-            $user = New User();
+            $user = new User();
             $user->setUsername($username);
             //Set User Role
             //Check if Instructor
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor", $roles)) {
                 $user->setRoles(["ROLE_INSTRUCTOR"]);
-            }
-            else {
+            } else {
                 $user->setRoles(["ROLE_USER"]);
             }
             $user->setLastname($lastname);
@@ -134,7 +133,7 @@ class LtiController extends AbstractController
         $context_key_name = 'title';
         $lti_id = $context[$context_key_id];
         $course_name = $context[$context_key_name];
-        $course =  $courseRepository->findOneByLtiId($lti_id);
+        $course = $courseRepository->findOneByLtiId($lti_id);
 
         //Check for Course
         if (!$course) {
@@ -145,10 +144,10 @@ class LtiController extends AbstractController
                 $course = new Course();
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
-                foreach($labelsets as $labelset){
+                foreach ($labelsets as $labelset) {
                     $course->addLabelset($labelset);
                 }
-                foreach($markupsets as $markupset){
+                foreach ($markupsets as $markupset) {
                     $course->addMarkupset($markupset);
                 }
                 $classlist = new Classlist();
@@ -160,8 +159,7 @@ class LtiController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($course);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('course_edit', ['courseid' => $course->getId()]);
-            }
-            else {
+            } else {
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
 
@@ -189,59 +187,39 @@ class LtiController extends AbstractController
                 'course' => $course,
                 'token' => $token,
             ]);
-        }
-        else {
+        } else {
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
     }
 
-    /**
-     * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
-     */
-    public function nrps(Request $request)
-    {
-        $registration = $request->get('registration');
-
-        $membership = $this->client->getContextMembership(
-            $this->repository->find($registration),
-            $request->get('url'),
-            $request->get('role'),
-            intval($request->get('limit'))
-        );
-
-        return $this->render('lti/nrps.html.twig', [
-            'membership' => $membership,
-        ]);
-    }
 
     /**
      * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
      */
-    public function access_token()
+    public function lti_ags()
     {
-            $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
-            $registration= $this->repository->find('ugatest2');
-            $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
-                'form_params' => [
-                    'grant_type' => 'client_credentials',
-                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                    'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => $scope
-                ]
-            ]);
-            $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-            $access_token = $responseData['access_token'] ?? '';
+        $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
+        $registration = $this->repository->find('ugatest2');
+        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
+            'form_params' => [
+                'grant_type' => 'client_credentials',
+                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                'client_assertion' => $this->generateCredentials($registration),
+                'scope' => $scope
+            ]
+        ]);
+        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
+        $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
-        $options = [];
-        $options = array_merge_recursive($options, [
+        $options = [
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
-        ]);
-
+        ];
         $response = $this->guzzle->request($method, $uri, $options);
-        $membership =  json_decode($response->getBody()->__toString(), true);
-//        $response = new JsonResponse($membership);
+        $membership = json_decode($response->getBody()->__toString(), true);
+
+
         return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
@@ -253,18 +231,18 @@ class LtiController extends AbstractController
     public function generateCredentials(RegistrationInterface $registration): string
     {
 
-            $now = Carbon::now();
+        $now = Carbon::now();
 
-            return $this->builder
-                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-                ->issuedBy($registration->getClientId())
-                ->relatedTo($registration->getClientId())
-                ->permittedFor('https://api.brightspace.com/auth/token')
-                ->issuedAt($now->getTimestamp())
-                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
-                ->__toString();
+        return $this->builder
+            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+            ->issuedBy($registration->getClientId())
+            ->relatedTo($registration->getClientId())
+            ->permittedFor('https://api.brightspace.com/auth/token')
+            ->issuedAt($now->getTimestamp())
+            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
+            ->__toString();
 
 
     }
