@@ -236,8 +236,15 @@ class LtiController extends AbstractController
                     'scope' => $scope
                 ]
             ]);
-            dd($access_token);
 
+        $method = 'GET';
+        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
+        $options = [];
+        $options = array_merge_recursive($options, [
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token)]
+        ]);
+
+        return $this->service_client->request($registration, $method, $uri, $options);
 
     }
 
