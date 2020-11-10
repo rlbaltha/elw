@@ -352,13 +352,9 @@
                                             <div class="form-row">
                                                 <div class="col col col-md-12">
                                                     <label for="scope">Scope:</label>
-                                                    <select class="form-control" id="scope" type="text" name="scope">
-                                                        <option>https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly</option>
-                                                        <option>https://purl.imsglobal.org/spec/lti-ags/scope/lineitem</option>
-                                                        <option>https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly</option>
-                                                        <option>https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly</option>
-                                                        <option>https://purl.imsglobal.org/spec/lti-ags/scope/score</option>
-                                                    </select>
+                                                    <input id="scope" type="text" name="scope" class="form-control"
+                                                           placeholder="Scope"
+                                                           value="https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly">
                                                 </div>
                                             </div>
                                             <br/>
@@ -376,11 +372,6 @@
                                                     <label for="method">Method:</label>
                                                     <input id="method" type="text" name="method" class="form-control"
                                                            placeholder="Method" value="get">
-                                                    <select class="form-control" id="method" type="text" name="method">
-                                                        <option>get</option>
-                                                        <option>post</option>
-                                                        <option>put</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                             <br/>

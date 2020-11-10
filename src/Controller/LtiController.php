@@ -220,11 +220,11 @@ class LtiController extends AbstractController
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
         ];
         $response = $this->guzzle->request($method, $uri, $options);
-        $membership = json_decode($response->getBody()->__toString(), true);
+        $data = json_decode($response->getBody()->__toString(), true);
 
 
         return $this->render('lti/nrps.html.twig', [
-            'membership' => $membership,
+            'membership' => $data,
         ]);
     }
 
