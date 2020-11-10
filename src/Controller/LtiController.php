@@ -198,7 +198,11 @@ class LtiController extends AbstractController
      */
     public function nrps(Request $request)
     {
-        $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
+        $method = $request->get('method');
+        $uri = $request->get('url');
+        $scope = $request->get('scope');
+        $accept_header = $request->get('accept');
+
         $registration = $this->repository->find('ugatest2');
         $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
             'form_params' => [
@@ -211,10 +215,9 @@ class LtiController extends AbstractController
         $responseData = json_decode($request_access_token->getBody()->__toString(), true);
         $access_token = $responseData['access_token'] ?? '';
 
-        $method = 'GET';
-        $uri = $request->get('url');
+
         $options = [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
         ];
         $response = $this->guzzle->request($method, $uri, $options);
         $membership = json_decode($response->getBody()->__toString(), true);

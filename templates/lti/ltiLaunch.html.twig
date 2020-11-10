@@ -318,16 +318,19 @@
                                         <form name="lti_form" method="post" action="{{ path('lti_nrps') }}">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
-                                                <input type="text" id="nrpsUrl" name="url" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
+                                                <input type="text" name="url" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
                                             </div>
                                         </div>
                                         <br/>
                                         <div class="form-row">
                                             <div class="col col col-md-4">
-                                                <input type="text" id="nrpsRole" class="form-control" placeholder="Role filter">
+                                                <input type="text" name="scope" class="form-control" placeholder="Scope" value="https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly">
                                             </div>
                                             <div class="col col col-md-4">
-                                                <input type="text" id="nrpsLimit"class="form-control" placeholder="Limit filter">
+                                                <input type="text" name="accept" class="form-control" placeholder="Accept header" vale="application/vnd.ims.lti-nrps.v2.membershipcontainer+json">
+                                            </div>
+                                            <div class="col col col-md-4">
+                                                <input type="text" name="method" class="form-control" placeholder="Method" vale="get">
                                             </div>
                                             <div class="col col col-md-4">
                                                 <button id="nrpsLoad" class="btn-primary btn">Call NRPS Service</button>
