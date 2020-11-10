@@ -481,7 +481,7 @@
         {% if token.payload.nrps %}
         $("#nrpsLoad").click(function(){
             $.ajax({
-                url: "",
+                url: "{{ path('lti_nrps') }}",
                 method: "POST",
                 data: {
                     registration: "{{ token.registration.identifier }}",

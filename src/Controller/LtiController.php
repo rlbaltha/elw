@@ -27,7 +27,6 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Psr\Log\LoggerInterface;
 use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -57,8 +56,6 @@ class LtiController extends AbstractController
     /** @var Signer */
     private $signer;
 
-    /** @var MembershipSerializerInterface */
-    private $serializer;
 
     public function __construct(
         Security $security,
@@ -192,6 +189,45 @@ class LtiController extends AbstractController
         }
     }
 
+    /**
+     * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
+     */
+    public function nrps(Request $request)
+    {
+//        $registration = $request->get('registration');
+//
+//        $membership = $this->client->getContextMembership(
+//            $this->repository->find($registration),
+//            $request->get('url'),
+//            $request->get('role'),
+//            intval($request->get('limit'))
+//        );
+
+        $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
+        $registration = $this->repository->find('ugatest2');
+        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
+            'form_params' => [
+                'grant_type' => 'client_credentials',
+                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                'client_assertion' => $this->generateCredentials($registration),
+                'scope' => $scope
+            ]
+        ]);
+        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
+        $access_token = $responseData['access_token'] ?? '';
+
+        $method = 'GET';
+        $uri = $request->get('url');
+        $options = [
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
+        ];
+        $response = $this->guzzle->request($method, $uri, $options);
+        $membership = $response->getBody()->__toString();
+
+        return $this->render('lti/nrps_ajax.html.twig', [
+            'membership' => $membership,
+        ]);
+    }
 
     /**
      * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
