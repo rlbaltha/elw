@@ -206,7 +206,6 @@ class LtiController extends AbstractController
 //            $request->get('role'),
 //            intval($request->get('limit'))
 //        );
-        dd($request);
 
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $registration = $this->repository->find('ugatest2');
