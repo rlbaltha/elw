@@ -212,7 +212,7 @@ class LtiController extends AbstractController
         $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
+        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/memberships';
         $options = [
             'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
         ];
