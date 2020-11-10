@@ -6,37 +6,44 @@
     <div class="jumbotron">
         <ul class="nav nav-tabs nav-fill nav-hover" id="tab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="message-tab" data-toggle="tab" href="#message" role="tab" aria-controls="message" aria-selected="true">
+                <a class="nav-link active" id="message-tab" data-toggle="tab" href="#message" role="tab"
+                   aria-controls="message" aria-selected="true">
                     <i class="fas fa-envelope-open"></i>&nbsp;Message
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="security-tab" data-toggle="tab" href="#security" role="tab" aria-controls="security" aria-selected="false">
+                <a class="nav-link" id="security-tab" data-toggle="tab" href="#security" role="tab"
+                   aria-controls="security" aria-selected="false">
                     <i class="fas fa-shield-alt"></i>&nbsp;Security
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="deploy-tab" data-toggle="tab" href="#deploy" role="tab" aria-controls="deploy" aria-selected="false">
+                <a class="nav-link" id="deploy-tab" data-toggle="tab" href="#deploy" role="tab" aria-controls="deploy"
+                   aria-selected="false">
                     <i class="fas fa-project-diagram"></i>&nbsp;Registration
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="false">
+                <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user"
+                   aria-selected="false">
                     <i class="fas fa-user"></i>&nbsp;User
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="nrps-tab" data-toggle="tab" href="#nrps" role="tab" aria-controls="nrps" aria-selected="false">
+                <a class="nav-link" id="nrps-tab" data-toggle="tab" href="#nrps" role="tab" aria-controls="nrps"
+                   aria-selected="false">
                     <i class="fas fa-users"></i>&nbsp;NRPS
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="ags-tab" data-toggle="tab" href="#ags" role="tab" aria-controls="ags" aria-selected="false">
+                <a class="nav-link" id="ags-tab" data-toggle="tab" href="#ags" role="tab" aria-controls="ags"
+                   aria-selected="false">
                     <i class="fas fa-users"></i>&nbsp;AGS
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="claims-tab" data-toggle="tab" href="#claims" role="tab" aria-controls="claims" aria-selected="false">
+                <a class="nav-link" id="claims-tab" data-toggle="tab" href="#claims" role="tab" aria-controls="claims"
+                   aria-selected="false">
                     <i class="fas fa-database"></i>&nbsp;Claims
                 </a>
             </li>
@@ -52,7 +59,7 @@
                             <hr/>
                             <dl class="list-unstyled">
                                 <dt>LTI Version</dt>
-                                <dd><code>{{  token.payload.version }}</code></dd>
+                                <dd><code>{{ token.payload.version }}</code></dd>
                                 <dt>LTI Message Type</dt>
                                 <dd><code>{{ token.payload.messageType }}</code></dd>
                             </dl>
@@ -104,11 +111,14 @@
                                     <dd>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
-                                                <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.validationResult.state.token }}" role="button" title="See on jwt.io">
+                                                <a target="_blank" class="btn btn-secondary"
+                                                   href="https://jwt.io?token={{ token.validationResult.state.token }}"
+                                                   role="button" title="See on jwt.io">
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="state" value="{{ token.validationResult.state.token }}" readonly>
+                                            <input type="text" class="form-control" placeholder="state"
+                                                   value="{{ token.validationResult.state.token }}" readonly>
                                         </div>
                                     </dd>
                                 </dl>
@@ -127,11 +137,14 @@
                                 <dd>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <a target="_blank" class="btn btn-secondary" href="https://jwt.io?token={{ token.payload.token }}" role="button" title="See on jwt.io">
+                                            <a target="_blank" class="btn btn-secondary"
+                                               href="https://jwt.io?token={{ token.payload.token }}" role="button"
+                                               title="See on jwt.io">
                                                 <i class="fas fa-external-link-alt"></i>
                                             </a>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="token" value="{{ token.payload.token }}" readonly>
+                                        <input type="text" class="form-control" placeholder="token"
+                                               value="{{ token.payload.token }}" readonly>
                                     </div>
                                 </dd>
                             </dl>
@@ -155,7 +168,8 @@
                                 <dt>Platform Jwks Url</dt>
                                 <dd>
                                     {% if token.registration.platformJwksUrl %}
-                                        <a target="_blank" href="{{ token.registration.platformJwksUrl }}">{{ token.registration.platformJwksUrl }}</a>
+                                        <a target="_blank"
+                                           href="{{ token.registration.platformJwksUrl }}">{{ token.registration.platformJwksUrl }}</a>
                                     {% else %}
                                         n/a
                                     {% endif %}
@@ -163,7 +177,8 @@
                                 <dt>Tool Jwks Url</dt>
                                 <dd>
                                     {% if token.registration.toolJwksUrl %}
-                                        <a target="_blank" href="{{ token.registration.toolJwksUrl }}">{{ token.registration.toolJwksUrl }}</a>
+                                        <a target="_blank"
+                                           href="{{ token.registration.toolJwksUrl }}">{{ token.registration.toolJwksUrl }}</a>
                                     {% else %}
                                         n/a
                                     {% endif %}
@@ -182,9 +197,13 @@
                                     <dt>Audience</dt>
                                     <dd>{{ token.registration.platform.audience }}</dd>
                                     <dt>OAuth2 Access Token Url</dt>
-                                    <dd><a target="_blank" href="{{ token.registration.platform.oAuth2AccessTokenUrl }}">{{ token.registration.platform.oAuth2AccessTokenUrl }}</a></dd>
+                                    <dd><a target="_blank"
+                                           href="{{ token.registration.platform.oAuth2AccessTokenUrl }}">{{ token.registration.platform.oAuth2AccessTokenUrl }}</a>
+                                    </dd>
                                     <dt>OIDC Auth Url</dt>
-                                    <dd><a href="{{ token.registration.platform.oidcAuthenticationUrl }}">{{ token.registration.platform.oidcAuthenticationUrl }}</a></dd>
+                                    <dd>
+                                        <a href="{{ token.registration.platform.oidcAuthenticationUrl }}">{{ token.registration.platform.oidcAuthenticationUrl }}</a>
+                                    </dd>
                                 </dl>
                             </div>
                             <div class="float-right">
@@ -200,11 +219,14 @@
                                     <dt>Audience</dt>
                                     <dd>{{ token.registration.tool.audience }}</dd>
                                     <dt>Launch Url</dt>
-                                    <dd><a target="_blank" href="{{ token.registration.tool.launchUrl }}">{{ token.registration.tool.launchUrl }}</a></dd>
+                                    <dd><a target="_blank"
+                                           href="{{ token.registration.tool.launchUrl }}">{{ token.registration.tool.launchUrl }}</a>
+                                    </dd>
                                     <dt>Deep Launch Url</dt>
                                     <dd>
                                         {% if token.registration.tool.deepLinkingUrl %}
-                                            <a target="_blank" href="{{ token.registration.tool.deepLinkingUrl }}">{{ token.registration.tool.deepLinkingUrl }}</a>
+                                            <a target="_blank"
+                                               href="{{ token.registration.tool.deepLinkingUrl }}">{{ token.registration.tool.deepLinkingUrl }}</a>
                                         {% else %}
                                             n/a
                                         {% endif %}
@@ -212,7 +234,8 @@
                                     <dt>OIDC Login Initiation Url</dt>
                                     <dd>
                                         {% if token.registration.tool.deepLinkingUrl %}
-                                            <a target="_blank" href="{{ token.registration.tool.oidcInitiationUrl }}">{{ token.registration.tool.oidcInitiationUrl }}</a>
+                                            <a target="_blank"
+                                               href="{{ token.registration.tool.oidcInitiationUrl }}">{{ token.registration.tool.oidcInitiationUrl }}</a>
                                         {% else %}
                                             n/a
                                         {% endif %}
@@ -303,7 +326,8 @@
                                 </div>
                                 <dl class="list-unstyled">
                                     <dt>Claim Service Url</dt>
-                                    <dd><a href="{{ token.payload.nrps.contextMembershipsUrl }}" target="_blank">{{ token.payload.nrps.contextMembershipsUrl }}</a></dd>
+                                    <dd><a href="{{ token.payload.nrps.contextMembershipsUrl }}"
+                                           target="_blank">{{ token.payload.nrps.contextMembershipsUrl }}</a></dd>
                                     <dt>Claim Service Versions</dt>
                                     <dd><code>{{ token.payload.nrps.serviceVersions|join(', ') }}</code></dd>
                                 </dl>
@@ -316,37 +340,55 @@
                                 <div class="card bg-light">
                                     <div class="card-body">
                                         <form name="lti_form" method="post" action="{{ path('lti_nrps') }}">
-                                        <div class="form-row">
-                                            <div class="col col col-md-12">
-                                                <input type="text" name="url" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
+                                            <div class="form-row">
+                                                <div class="col col col-md-12">
+                                                    <label for="url">Service Url:</label>
+                                                    <input id="url" type="text" name="url" class="form-control"
+                                                           placeholder="Service Url"
+                                                           value="{{ token.payload.nrps.contextMembershipsUrl }}">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <br/>
-                                        <div class="form-row">
-                                            <div class="col col col-md-12">
-                                                <input type="text" name="scope" class="form-control" placeholder="Scope" value="https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly">
+                                            <br/>
+                                            <div class="form-row">
+                                                <div class="col col col-md-12">
+                                                    <label for="scope">Scope:</label>
+                                                    <input id="scope" type="text" name="scope" class="form-control"
+                                                           placeholder="Scope"
+                                                           value="https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly">
+                                                </div>
                                             </div>
-                                        </div>
-                                            <div class="col col col-md-5">
-                                                <input type="text" name="accept" class="form-control" placeholder="Accept header" value="application/vnd.ims.lti-nrps.v2.membershipcontainer+json">
+                                            <div class="form-row">
+                                                <div class="col col col-md-12">
+                                                    <label for="accept">Accept Header:</label>
+                                                    <input id="accept" type="text" name="accept" class="form-control"
+                                                           placeholder="Accept header"
+                                                           value="application/vnd.ims.lti-nrps.v2.membershipcontainer+json">
+                                                </div>
                                             </div>
-                                            <div class="col col col-md-5">
-                                                <input type="text" name="method" class="form-control" placeholder="Method" value="get">
+                                            <div class="form-row">
+                                                <div class="col col col-md-12">
+                                                    <label for="method">Method:</label>
+                                                    <input id="method" type="text" name="method" class="form-control"
+                                                           placeholder="Method" value="get">
+                                                </div>
                                             </div>
-                                            <div class="col col col-md-2">
-                                                <button class="btn-primary btn">Call NRPS Service</button>
+                                            <div class="form-row">
+                                                <div class="col col col-md-12">
+                                                    <button class="btn-primary btn">Call NRPS Service</button>
+                                                </div>
                                             </div>
-                                        </div>
                                         </form>
                                     </div>
                                 </div>
                                 <div id="nrpsZone">NRPS data</div>
-                                <div class="modal fade" id="nrpsMemberModal" tabindex="-1" role="dialog" aria-labelledby="nrpsMemberModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="nrpsMemberModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="nrpsMemberModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="nrpsMemberModalLabel">Member Properties</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
@@ -356,7 +398,9 @@
                                                 </pre>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -386,10 +430,11 @@
                                 </div>
                                 <dl class="list-unstyled">
                                     <dt>AGS Claim Information</dt>
-                                    <dd>claimName:  {{ token.payload.ags.claimName }}</dd>
-                                    <dd>lineItemsContainerUrl:  {{ token.payload.ags.lineItemsContainerUrl }}</dd>
-                                    <dd>lineItemUrl:  {{ token.payload.ags.lineItemUrl }}</dd>
-                                    <dd>scopes:  {% for scope in token.payload.ags.scopes %}{{ scope }}, {% endfor %}</dd>
+                                    <dd>claimName: {{ token.payload.ags.claimName }}</dd>
+                                    <dd>lineItemsContainerUrl: {{ token.payload.ags.lineItemsContainerUrl }}</dd>
+                                    <dd>lineItemUrl: {{ token.payload.ags.lineItemUrl }}</dd>
+                                    <dd>
+                                        scopes: {% for scope in token.payload.ags.scopes %}{{ scope }}, {% endfor %}</dd>
                                 </dl>
                                 <h5 class="card-title">
                                     <i class="fas fa-sign-in-alt"></i>&nbsp;AGS Service
@@ -399,19 +444,21 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
-                                                <input type="text" id="lineItemsContainerUrl" class="form-control" value="{{ token.payload.ags.lineItemsContainerUrl }}">
+                                                <input type="text" id="lineItemsContainerUrl" class="form-control"
+                                                       value="{{ token.payload.ags.lineItemsContainerUrl }}">
                                             </div>
                                         </div>
                                         <br/>
                                         <div class="form-row">
-{#                                            <div class="col col col-md-4">#}
-{#                                                <input type="text" id="nrpsRole" class="form-control" placeholder="Role filter">#}
-{#                                            </div>#}
-{#                                            <div class="col col col-md-4">#}
-{#                                                <input type="text" id="nrpsLimit"class="form-control" placeholder="Limit filter">#}
-{#                                            </div>#}
+                                            {# <div class="col col col-md-4"> #}
+                                            {# <input type="text" id="nrpsRole" class="form-control" placeholder="Role filter"> #}
+                                            {# </div> #}
+                                            {# <div class="col col col-md-4"> #}
+                                            {# <input type="text" id="nrpsLimit"class="form-control" placeholder="Limit filter"> #}
+                                            {# </div> #}
                                             <div class="col col col-md-4">
-                                                <button id="agsLineItemLoad" class="btn-primary btn">Add AGS Lineitem</button>
+                                                <button id="agsLineItemLoad" class="btn-primary btn">Add AGS Lineitem
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -439,7 +486,8 @@
                                 <div class="card-body">
                                     <div class="form-row">
                                         <div class="col col-md-11">
-                                            <input type="text" id="claimSearch" class="form-control" placeholder="Search">
+                                            <input type="text" id="claimSearch" class="form-control"
+                                                   placeholder="Search">
                                         </div>
                                         <div class="col col-md-1">
                                             <button id="claimSearchReset" class="btn-secondary btn">Reset</button>
@@ -448,7 +496,8 @@
                                 </div>
                             </div>
                             <pre>
-                                <code id="claimZone" class="language-json">{{ token.payload.token.claims|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}</code>
+                                <code id="claimZone"
+                                      class="language-json">{{ token.payload.token.claims|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES')) }}</code>
                             </pre>
                         </div>
                     </div>
@@ -461,65 +510,65 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-{#        {% if token.payload.ags %}#}
-{#        $("#agsLineItemLoad").click(function(){#}
-{#            $.ajax({#}
-{#                url: "{{ path('lti_ags') }}",#}
-{#                method: "POST",#}
-{#                data: {#}
-{#                    registration: "{{ token.registration.identifier }}",#}
-{#                    url: "{{ token.payload.ags.lineItemsContainerUrl }}",#}
-{#                    scoreMaximum : 100,#}
-{#                    label : "Essay 2",#}
-{#                    resourceId : "elw-1",#}
-{#                    tag : "grade",#}
-{#                    startDateTime: "2020-01-06T20:05:02Z",#}
-{#                    endDateTime: "2020-12-06T22:05:03Z"#}
-{#                },#}
-{#                success: function(result){#}
-{#                    $("#agsZone").html("Success");#}
-{#                }#}
-{#            });#}
-{#        });#}
-{#        {% endif %}#}
+        {# {% if token.payload.ags %} #}
+        {# $("#agsLineItemLoad").click(function(){ #}
+        {# $.ajax({ #}
+        {# url: "{{ path('lti_ags') }}", #}
+        {# method: "POST", #}
+        {# data: { #}
+        {# registration: "{{ token.registration.identifier }}", #}
+        {# url: "{{ token.payload.ags.lineItemsContainerUrl }}", #}
+        {# scoreMaximum : 100, #}
+        {# label : "Essay 2", #}
+        {# resourceId : "elw-1", #}
+        {# tag : "grade", #}
+        {# startDateTime: "2020-01-06T20:05:02Z", #}
+        {# endDateTime: "2020-12-06T22:05:03Z" #}
+        {# }, #}
+        {# success: function(result){ #}
+        {# $("#agsZone").html("Success"); #}
+        {# } #}
+        {# }); #}
+        {# }); #}
+        {# {% endif %} #}
 
-{#        {% if token.payload.nrps %}#}
-{#        $("#nrpsLoad").click(function(){#}
-{#            $.ajax({#}
-{#                url: "",#}
-{#                method: "POST",#}
-{#                data: {#}
-{#                    registration: "{{ token.registration.identifier }}",#}
-{#                    url: $("#nrpsUrl").val(),#}
-{#                    role: $("#nrpsRole").val(),#}
-{#                    limit: $("#nrpsLimit").val()#}
-{#                },#}
-{#                success: function(result){#}
-{#                    $("#nrpsZone").html(result);#}
-{#                }#}
-{#            });#}
-{#        });#}
-{#        $("#nrpsReset").click(function(){#}
-{#            $("#nrpsZone").html("");#}
-{#            $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}");#}
-{#            $("#nrpsRole").val("");#}
-{#            $("#nrpsLimit").val("");#}
-{#        });#}
-{#        $('#nrpsMemberModal').on("show.bs.modal", function (event) {#}
-{#            $("#nrpsMemberDetailsZone").html($(event.relatedTarget).attr("data-nrps"));#}
-{#        });#}
-{#        {% endif %}#}
+        {# {% if token.payload.nrps %} #}
+        {# $("#nrpsLoad").click(function(){ #}
+        {# $.ajax({ #}
+        {# url: "", #}
+        {# method: "POST", #}
+        {# data: { #}
+        {# registration: "{{ token.registration.identifier }}", #}
+        {# url: $("#nrpsUrl").val(), #}
+        {# role: $("#nrpsRole").val(), #}
+        {# limit: $("#nrpsLimit").val() #}
+        {# }, #}
+        {# success: function(result){ #}
+        {# $("#nrpsZone").html(result); #}
+        {# } #}
+        {# }); #}
+        {# }); #}
+        {# $("#nrpsReset").click(function(){ #}
+        {# $("#nrpsZone").html(""); #}
+        {# $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}"); #}
+        {# $("#nrpsRole").val(""); #}
+        {# $("#nrpsLimit").val(""); #}
+        {# }); #}
+        {# $('#nrpsMemberModal').on("show.bs.modal", function (event) { #}
+        {# $("#nrpsMemberDetailsZone").html($(event.relatedTarget).attr("data-nrps")); #}
+        {# }); #}
+        {# {% endif %} #}
 
 
 
-        $("#claimSearch").on("input", function(){
+        $("#claimSearch").on("input", function () {
             $("#claimZone").unmark({
-                done: function() {
+                done: function () {
                     $("#claimZone").mark($("#claimSearch").val());
                 }
             });
         });
-        $("#claimSearchReset").click(function(){
+        $("#claimSearchReset").click(function () {
             $("#claimSearch").val("");
             $("#claimZone").unmark();
         });
