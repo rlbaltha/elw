@@ -8,8 +8,10 @@ use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
+use App\Repository\UserRepository;
 use App\Security\LtiAuthenticator;
 use Carbon\Carbon;
+use Knp\Component\Pager\PaginatorInterface;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
@@ -188,6 +190,8 @@ class LtiController extends AbstractController
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
     }
+
+
 
     /**
      * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
