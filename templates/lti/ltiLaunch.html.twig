@@ -495,16 +495,16 @@
 {#                }#}
 {#            });#}
 {#        });#}
-        $("#nrpsReset").click(function(){
-            $("#nrpsZone").html("");
-            $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}");
-            $("#nrpsRole").val("");
-            $("#nrpsLimit").val("");
-        });
-        $('#nrpsMemberModal').on("show.bs.modal", function (event) {
-            $("#nrpsMemberDetailsZone").html($(event.relatedTarget).attr("data-nrps"));
-        });
-        {% endif %}
+{#        $("#nrpsReset").click(function(){#}
+{#            $("#nrpsZone").html("");#}
+{#            $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}");#}
+{#            $("#nrpsRole").val("");#}
+{#            $("#nrpsLimit").val("");#}
+{#        });#}
+{#        $('#nrpsMemberModal').on("show.bs.modal", function (event) {#}
+{#            $("#nrpsMemberDetailsZone").html($(event.relatedTarget).attr("data-nrps"));#}
+{#        });#}
+{#        {% endif %}#}
 
 
 
