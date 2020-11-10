@@ -202,6 +202,7 @@ class LtiController extends AbstractController
 //            $request->get('role'),
 //            intval($request->get('limit'))
 //        );
+        dd($request);
 
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $registration = $this->repository->find('ugatest2');
@@ -224,7 +225,7 @@ class LtiController extends AbstractController
         $response = $this->guzzle->request($method, $uri, $options);
         $membership = $response->getBody()->__toString();
 
-        return $this->render('lti/nrps_ajax.html.twig', [
+        return $this->render('lti/nrps.html.twig', [
             'membership' => $membership,
         ]);
     }
