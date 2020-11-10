@@ -311,8 +311,11 @@
                                     <i class="fas fa-sign-in-alt"></i>&nbsp;NRPS Service
                                 </h5>
                                 <hr/>
+
+
                                 <div class="card bg-light">
                                     <div class="card-body">
+                                        <form name="lti_form" method="get" action="{{ path(lti_ags) }}">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
                                                 <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
@@ -328,11 +331,9 @@
                                             </div>
                                             <div class="col col col-md-4">
                                                 <button id="nrpsLoad" class="btn-primary btn">Call NRPS Service</button>
-                                                <button id="nrpsReset" class="btn-secondary btn">Reset</button>
-                                                &nbsp;
-                                                <i id="nrpsSpinner" class="invisible fa-lg fas fa-spinner fa-spin"></i>
                                             </div>
                                         </div>
+                                        </form>
                                     </div>
                                 </div>
                                 <div id="nrpsZone">NRPS data</div>
@@ -478,22 +479,22 @@
 {#        });#}
 {#        {% endif %}#}
 
-        {% if token.payload.nrps %}
-        $("#nrpsLoad").click(function(){
-            $.ajax({
-                url: "{{ path('lti_nrps') }}",
-                method: "POST",
-                data: {
-                    registration: "{{ token.registration.identifier }}",
-                    url: $("#nrpsUrl").val(),
-                    role: $("#nrpsRole").val(),
-                    limit: $("#nrpsLimit").val()
-                },
-                success: function(result){
-                    $("#nrpsZone").html(result);
-                }
-            });
-        });
+{#        {% if token.payload.nrps %}#}
+{#        $("#nrpsLoad").click(function(){#}
+{#            $.ajax({#}
+{#                url: "",#}
+{#                method: "POST",#}
+{#                data: {#}
+{#                    registration: "{{ token.registration.identifier }}",#}
+{#                    url: $("#nrpsUrl").val(),#}
+{#                    role: $("#nrpsRole").val(),#}
+{#                    limit: $("#nrpsLimit").val()#}
+{#                },#}
+{#                success: function(result){#}
+{#                    $("#nrpsZone").html(result);#}
+{#                }#}
+{#            });#}
+{#        });#}
         $("#nrpsReset").click(function(){
             $("#nrpsZone").html("");
             $("#nrpsUrl").val("{{ token.payload.nrps.contextMembershipsUrl }}");
