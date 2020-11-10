@@ -315,7 +315,7 @@
 
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <form name="lti_form" method="get" action="{{ path(lti_ags) }}">
+                                        <form name="lti_form" method="post" action="{{ path('lti_nrps') }}">
                                         <div class="form-row">
                                             <div class="col col col-md-12">
                                                 <input type="text" id="nrpsUrl" class="form-control" placeholder="Service Url" value="{{ token.payload.nrps.contextMembershipsUrl }}">
