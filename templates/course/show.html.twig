@@ -61,8 +61,8 @@
     {% endif %}
 
     {% if role=='Instructor' %}
-
-        {% if course.ltiId is defined and course.ltiId is not null %}
+{{ course.ltiId }}
+        {% if course.ltiId > 0 %}
             <a class="btn btn-primary btn-sm"
                href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
         {% endif %}
