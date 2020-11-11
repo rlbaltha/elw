@@ -38,7 +38,7 @@
         <tbody>
         {% for classlist in classlists %}
             <tr>
-                <td class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
+                <td style="width: 3%" class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
                 </td>
                 <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                 <td>{{ classlist.role }}</td>
