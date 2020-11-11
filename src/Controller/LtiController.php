@@ -216,25 +216,34 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/lti_ags", name="lti_ags", methods={"GET","POST"})
+     * @Route("/{courseid}/lti_ags", name="lti_ags", methods={"GET"})
      */
     public function lti_ags()
     {
+        //needs to move to config
+        $registration_name = 'ugatest2';
+        //move to course entity??
+        $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
+
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $method = 'get';
+
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
-        $registration = $this->repository->find('ugatest2');
+        $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
+
+        $registration = $this->repository->find($registration_name);
+        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
         $access_token = $this->getAccessToken($registration, $scope);
-
-        $method = 'GET';
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
-        $options = [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json']
-        ];
+        $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
-        $membership = json_decode($response->getBody()->__toString(), true);
-
+        $data = json_decode($response->getBody()->__toString(), true);
+        dd($data);
 
         return $this->render('lti/nrps.html.twig', [
-            'membership' => $membership,
+            'grade_lineitems' => $data,
+            'classlists' => $classlists,
+            'course' => $course,
         ]);
     }
 

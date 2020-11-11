@@ -64,6 +64,8 @@
         {% if course.ltiId > 0 %}
             <a class="btn btn-primary btn-sm"
                href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
+            <a class="btn btn-primary btn-sm"
+               href="{{ path('lti_ags', {'courseid': course.id}) }}">List eLC Gradebook Line Items</a>
         {% endif %}
         <table id="classlist" class="table table-bordered">
             <thead class="thead-light">
