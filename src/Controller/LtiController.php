@@ -269,7 +269,7 @@ class LtiController extends AbstractController
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
-                'form_params' => [
+                'json' => [
                     "scoreMaximum" => $data['scoreMaximum'],
                     "label" => $data['label'],
                     "resourceId" => $data['resourceId'],
