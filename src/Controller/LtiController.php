@@ -178,7 +178,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
+     * @Route("/{courseid}/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
     public function nrps(String $courseid)
     {
