@@ -8,10 +8,8 @@ use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Entity\User;
 use App\Repository\CourseRepository;
-use App\Repository\UserRepository;
 use App\Security\LtiAuthenticator;
 use Carbon\Carbon;
-use Knp\Component\Pager\PaginatorInterface;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
@@ -19,21 +17,19 @@ use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\MessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Service\Server\Grant\ClientAssertionCredentialsGrant;
-use OAT\Library\Lti1p3Nrps\Serializer\MembershipSerializerInterface;
+use Psr\Cache\CacheException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessageSecurityToken;
 use OAT\Library\Lti1p3Nrps\Service\Client\MembershipServiceClient;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use OAT\Library\Lti1p3Core\Service\Client\ServiceClient;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Throwable;
+use RuntimeException;
 
 class LtiController extends AbstractController
 {
@@ -202,18 +198,19 @@ class LtiController extends AbstractController
         $uri = $request->get('url');
         $scope = $request->get('scope');
         $accept_header = $request->get('accept');
-
         $registration = $this->repository->find('ugatest2');
-        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
-            'form_params' => [
-                'grant_type' => 'client_credentials',
-                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                'client_assertion' => $this->generateCredentials($registration),
-                'scope' => $scope
-            ]
-        ]);
-        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-        $access_token = $responseData['access_token'] ?? '';
+        $access_token = $this->getAccessToken($registration, $scope);
+
+//        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
+//            'form_params' => [
+//                'grant_type' => 'client_credentials',
+//                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+//                'client_assertion' => $this->generateCredentials($registration),
+//                'scope' => $scope
+//            ]
+//        ]);
+//        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
+//        $access_token = $responseData['access_token'] ?? '';
 
 
         $options = [
@@ -235,16 +232,17 @@ class LtiController extends AbstractController
     {
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $registration = $this->repository->find('ugatest2');
-        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
-            'form_params' => [
-                'grant_type' => 'client_credentials',
-                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                'client_assertion' => $this->generateCredentials($registration),
-                'scope' => $scope
-            ]
-        ]);
-        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-        $access_token = $responseData['access_token'] ?? '';
+        $access_token = $this->getAccessToken($registration, $scope);
+//        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
+//            'form_params' => [
+//                'grant_type' => 'client_credentials',
+//                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+//                'client_assertion' => $this->generateCredentials($registration),
+//                'scope' => $scope
+//            ]
+//        ]);
+//        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
+//        $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
@@ -263,21 +261,67 @@ class LtiController extends AbstractController
     /**
      * @throws LtiExceptionInterface
      */
+    private function getAccessToken(RegistrationInterface $registration, $scope): string
+    {
+            $response = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
+                'form_params' => [
+                    'grant_type' => 'client_credentials',
+                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                    'client_assertion' => $this->generateCredentials($registration),
+                    'scope' => $scope
+                ]
+            ]);
+
+            if ($response->getStatusCode() !== 200) {
+                throw new RuntimeException('invalid response http status code');
+            }
+
+            $responseData = json_decode($response->getBody()->__toString(), true);
+
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new RuntimeException(sprintf('json_decode error: %s', json_last_error_msg()));
+            }
+
+            $accessToken = $responseData['access_token'] ?? '';
+            $expiresIn = $responseData['expires_in'] ?? '';
+
+            if (empty($accessToken) || empty($expiresIn)) {
+                throw new RuntimeException('invalid response body');
+            }
+
+            return $accessToken;
+    }
+
+    /**
+     * @throws LtiExceptionInterface
+     */
     public function generateCredentials(RegistrationInterface $registration): string
     {
+        try {
+            if (null === $registration->getToolKeyChain()) {
+                throw new LtiException('Tool key chain is not configured');
+            }
 
-        $now = Carbon::now();
+            $now = Carbon::now();
+            return $this->builder
+                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
+                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
+                ->issuedBy($registration->getClientId())
+                ->relatedTo($registration->getClientId())
+                ->permittedFor($registration->getTool()->getAudience())
+                ->issuedAt($now->getTimestamp())
+                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
+                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
+                ->__toString();
 
-        return $this->builder
-            ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-            ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-            ->issuedBy($registration->getClientId())
-            ->relatedTo($registration->getClientId())
-            ->permittedFor('https://api.brightspace.com/auth/token')
-            ->issuedAt($now->getTimestamp())
-            ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-            ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
-            ->__toString();
+        } catch (Throwable $exception) {
+            throw new LtiException(
+                sprintf('Cannot generate credentials: %s', $exception->getMessage()),
+                $exception->getCode(),
+                $exception
+            );
+        }
+
 
 
     }
