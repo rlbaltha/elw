@@ -223,7 +223,7 @@ class LtiController extends AbstractController
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $method = 'get';
 
-        $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
+        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration_name);
