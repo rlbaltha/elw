@@ -262,7 +262,7 @@ class LtiController extends AbstractController
 
             $method = 'post';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
-            $accept_header = 'application/vnd.ims.lis.v2.lineitem';
+            $accept_header = 'application/vnd.ims.lis.v2.lineitem+json';
 
             $registration = $this->repository->find($registration_name);
             $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
