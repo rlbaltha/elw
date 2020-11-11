@@ -180,16 +180,22 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Request $request)
+    public function nrps(String $courseid)
     {
         //needs to move to config
         $registration_name = 'ugatest2';
+        //move to course entity??
+        $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
+
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $method = 'get';
-        $uri = $request->get('url');
+
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
 
         $registration = $this->repository->find($registration_name);
+        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/'.$course->getLtiId().'/memberships'.
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
@@ -197,6 +203,7 @@ class LtiController extends AbstractController
 
         return $this->render('lti/nrps.html.twig', [
             'membership' => $data,
+            'classlists' => $classlists
         ]);
     }
 
