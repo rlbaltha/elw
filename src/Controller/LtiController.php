@@ -202,7 +202,7 @@ class LtiController extends AbstractController
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
-dd($data);
+
         return $this->render('lti/nrps.html.twig', [
             'membership' => $data,
             'classlists' => $classlists,
@@ -234,7 +234,7 @@ dd($data);
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
-dd($data);
+
         return $this->render('lti/ags_index.html.twig', [
             'lineitems' => $data,
             'classlists' => $classlists,
