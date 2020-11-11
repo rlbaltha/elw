@@ -4,42 +4,45 @@
 
 {% block body %}
 
-        Course: {{ membership.context.title }}
+    Course: {{ membership.context.title }}
 
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for member in membership.members %}
-                        <tr>
-                            <td>{{ member.name }}</td>
-                            <td>{{ member.roles|join(', ') }}</td>
-                            <td style="width: 3%" class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Status</th>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for member in membership.members %}
+            <tr>
+                <td style="width: 3%"
+                    class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.roles|join(', ') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     <table id="classlist" class="table table-bordered">
         <thead class="thead-light">
         <tr>
-            <th>Name</th>
-            <th>Role</th>
             <th>Status</th>
+            <th>Students</th>
+            <th>Role</th>
             <th>Actions</th>
         </tr>
         <thead>
         <tbody>
         {% for classlist in classlists %}
             <tr>
+                <td class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
+                </td>
                 <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                 <td>{{ classlist.role }}</td>
-                <td class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
+                <td>
                     <a class="btn btn-primary btn-sm"
                        href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
                     {{ include('classlist/_delete_form.html.twig') }}
