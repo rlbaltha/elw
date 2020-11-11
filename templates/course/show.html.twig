@@ -61,9 +61,10 @@
     {% endif %}
 
     {% if role=='Instructor' %}
+
         <a class="btn btn-primary btn-sm"
            href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
-        <table id="classlist" class="table">
+        <table id="classlist" class="table table-bordered">
             <thead>
             <tr>
                 <th>Students</th>
