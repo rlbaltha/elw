@@ -18,8 +18,8 @@
                     {% for member in membership.members %}
                         <tr>
                             <td>{{ member.name }}</td>
-                            <td style="width: 3%" class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
                             <td>{{ member.roles|join(', ') }}</td>
+                            <td style="width: 3%" class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -39,7 +39,7 @@
             <tr>
                 <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                 <td>{{ classlist.role }}</td>
-                <td><span class="badge badge-primary">{{ classlist.status }}</span></td>
+                <td style="width: 3%" class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}</td>
                 <td>
                     <a class="btn btn-primary btn-sm"
                        href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
