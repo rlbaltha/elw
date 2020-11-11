@@ -208,17 +208,11 @@ class LtiController extends AbstractController
         ]);
     }
 
-    private function getHeaderOptions($access_token, $accept_header) {
-        $options = [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
-        ];
-        return $options;
-    }
 
     /**
      * @Route("/{courseid}/lti_ags", name="lti_ags", methods={"GET"})
      */
-    public function lti_ags()
+    public function ags(String $courseid)
     {
         //needs to move to config
         $registration_name = 'ugatest2';
@@ -230,7 +224,7 @@ class LtiController extends AbstractController
         $method = 'get';
 
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
-        $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
+        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration_name);
         $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
@@ -245,6 +239,13 @@ class LtiController extends AbstractController
             'classlists' => $classlists,
             'course' => $course,
         ]);
+    }
+
+    private function getHeaderOptions($access_token, $accept_header) {
+        $options = [
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
+        ];
+        return $options;
     }
 
     /**
