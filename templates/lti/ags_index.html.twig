@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LTI Grades
+{% block body %}
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Max Score</th>
+            <th scope="col">Label</th>
+            <th scope="col">Tag</th>
+            <th scope="col">Resource Id</th>
+            <th scope="col">Resource Link Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lineitem in lineitems.lineitem %}
+            <tr>
+                <td>{{ lineitem.id }}</td>
+                <td>{{ lineitem.scoreMaximum }}</td>
+                <td>{{ lineitem.label }}</td>
+                <td>{{ lineitem.tag }}</td>
+                <td>{{ lineitem.resourceId }}</td>
+                <td>{{ lineitem.resourceLinkId }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
+
+{% endblock %}
+
