@@ -16,8 +16,6 @@ use OAT\Library\Lti1p3Core\Exception\LtiException;
 use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\MessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
-use OAT\Library\Lti1p3Core\Service\Server\Grant\ClientAssertionCredentialsGrant;
-use Psr\Cache\CacheException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,12 +34,6 @@ class LtiController extends AbstractController
     /** @var Security */
     private $security;
 
-    /** @var MembershipServiceClient */
-    private $client;
-
-    /** @var ServiceClientInterface */
-    private $service_client;
-
     /** @var RegistrationRepositoryInterface */
     private $repository;
 
@@ -57,19 +49,15 @@ class LtiController extends AbstractController
 
     public function __construct(
         Security $security,
-        MembershipServiceClient $client,
         RegistrationRepositoryInterface $repository,
         ClientInterface $guzzle,
-        ServiceClientInterface $service_client,
         Builder $builder,
         Signer $signer
     )
     {
         $this->security = $security;
-        $this->client = $client;
         $this->repository = $repository;
         $this->guzzle = $guzzle;
-        $this->service_client = $service_client;
         $this->builder = $builder;
         $this->signer = $signer;
     }
@@ -194,35 +182,29 @@ class LtiController extends AbstractController
      */
     public function nrps(Request $request)
     {
-        $method = $request->get('method');
+        //needs to move to config
+        $registration_name = 'ugatest2';
+        $method = 'get';
         $uri = $request->get('url');
-        $scope = $request->get('scope');
-        $accept_header = $request->get('accept');
-        $registration = $this->repository->find('ugatest2');
+        $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
+        $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
+
+        $registration = $this->repository->find($registration_name);
         $access_token = $this->getAccessToken($registration, $scope);
-
-//        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
-//            'form_params' => [
-//                'grant_type' => 'client_credentials',
-//                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-//                'client_assertion' => $this->generateCredentials($registration),
-//                'scope' => $scope
-//            ]
-//        ]);
-//        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-//        $access_token = $responseData['access_token'] ?? '';
-
-
-        $options = [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
-        ];
+        $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
-
 
         return $this->render('lti/nrps.html.twig', [
             'membership' => $data,
         ]);
+    }
+
+    private function getHeaderOptions($access_token, $accept_header) {
+        $options = [
+            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
+        ];
+        return $options;
     }
 
     /**
@@ -233,16 +215,6 @@ class LtiController extends AbstractController
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $registration = $this->repository->find('ugatest2');
         $access_token = $this->getAccessToken($registration, $scope);
-//        $request_access_token = $this->guzzle->request('POST', 'https://auth.brightspace.com/core/connect/token', [
-//            'form_params' => [
-//                'grant_type' => 'client_credentials',
-//                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-//                'client_assertion' => $this->generateCredentials($registration),
-//                'scope' => $scope
-//            ]
-//        ]);
-//        $responseData = json_decode($request_access_token->getBody()->__toString(), true);
-//        $access_token = $responseData['access_token'] ?? '';
 
         $method = 'GET';
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/nrps/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/1162868/memberships';
