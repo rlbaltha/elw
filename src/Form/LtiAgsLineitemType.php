@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,14 +29,12 @@ class LtiAgsLineitemType extends AbstractType
                 'label'  => 'Tag',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('startDateTime', TextType::class, [
+            ->add('startDateTime', DateTimeType::class, [
                 'label'  => 'Start Time',
-                'attr' => ['class' => 'form-control'],
                 'required' => false
             ])
-            ->add('endDateTime', TextType::class, [
+            ->add('endDateTime', DateTimeType::class, [
                 'label'  => 'End Time',
-                'attr' => ['class' => 'form-control'],
                 'required' => false
             ])
         ;
