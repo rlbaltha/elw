@@ -61,7 +61,6 @@
     {% endif %}
 
     {% if role=='Instructor' %}
-{{ course.ltiId }}
         {% if course.ltiId > 0 %}
             <a class="btn btn-primary btn-sm"
                href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
