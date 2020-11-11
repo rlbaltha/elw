@@ -44,7 +44,7 @@
                             <a id="delete-trigger" class="nav-link" href="#">Delete</a>
                             {{ include('course/_delete_form.html.twig') }}
                         </li>
-                        {#        <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a>#}
+                        {# <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a> #}
 
                     </ul>
                 </div>
@@ -62,8 +62,10 @@
 
     {% if role=='Instructor' %}
 
-        <a class="btn btn-primary btn-sm"
-           href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
+        {% if course.ltiId is defined and course.ltiId is not null %}
+            <a class="btn btn-primary btn-sm"
+               href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
+        {% endif %}
         <table id="classlist" class="table table-bordered">
             <thead class="thead-light">
             <tr>
@@ -76,7 +78,8 @@
             <tbody>
             {% for classlist in classlists %}
                 <tr>
-                    <td style="width: 3%" class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
+                    <td style="width: 3%"
+                        class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
                     </td>
                     <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                     <td>{{ classlist.role }}</td>
@@ -103,7 +106,7 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            {# Delete course trigger#}
+            {# Delete course trigger #}
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
             });
