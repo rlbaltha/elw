@@ -6,14 +6,17 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LtiApiType extends AbstractType
+class LtiAgsLineitemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('method')
-            ->add('uri')
-            ->add('accept_header')
+            ->add('scoreMaximum')
+            ->add('label')
+            ->add('resourceId')
+            ->add('tag')
+            ->add('startDateTime')
+            ->add('endDateTime')
         ;
     }
 

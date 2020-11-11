@@ -7,6 +7,8 @@ namespace App\Controller;
 use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Entity\User;
+use App\Form\LtiAgsLineitemType;
+use App\Form\LtiAgsLineType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use Carbon\Carbon;
@@ -189,8 +191,8 @@ class LtiController extends AbstractController
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $method = 'get';
 
+        $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
 
@@ -221,8 +223,8 @@ class LtiController extends AbstractController
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $method = 'get';
 
+        $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
@@ -238,6 +240,43 @@ class LtiController extends AbstractController
             'grade_lineitems' => $data,
             'classlists' => $classlists,
             'course' => $course,
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/lti_ags_new", name="lti_ags_new", methods={"GET","POST"})
+     */
+    public function ags_new(Request $request, string $courseid)
+    {
+        $form = $this->createForm(LtiAgsLineitemType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //needs to move to config
+            $registration_name = 'ugatest2';
+            //move to course entity??
+            $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
+
+            $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+
+            $method = 'post';
+            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
+            $accept_header = 'application/vnd.ims.lis.v2.lineitem';
+
+            $registration = $this->repository->find($registration_name);
+            $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
+            $access_token = $this->getAccessToken($registration, $scope);
+            $options = $this->getHeaderOptions($access_token, $accept_header);
+            $response = $this->guzzle->request($method, $uri, $options);
+            $data = json_decode($response->getBody()->__toString(), true);
+
+
+            dd($data);
+        }
+
+        return $this->render('lti/new.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
@@ -311,8 +350,6 @@ class LtiController extends AbstractController
                 $exception
             );
         }
-
-
 
     }
 }
