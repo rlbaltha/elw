@@ -212,7 +212,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/lti_ags", name="lti_ags", methods={"GET"})
+     * @Route("/{courseid}/lti_ags_index", name="lti_ags", methods={"GET"})
      */
     public function ags(String $courseid)
     {
