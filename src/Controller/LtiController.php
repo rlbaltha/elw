@@ -203,7 +203,8 @@ class LtiController extends AbstractController
 
         return $this->render('lti/nrps.html.twig', [
             'membership' => $data,
-            'classlists' => $classlists
+            'classlists' => $classlists,
+            'course' => $course,
         ]);
     }
 
