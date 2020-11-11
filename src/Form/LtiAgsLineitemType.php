@@ -27,7 +27,8 @@ class LtiAgsLineitemType extends AbstractType
             ])
             ->add('tag', TextType::class, [
                 'label'  => 'Tag',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
+                'required' => false
             ])
             ->add('startDateTime', DateTimeType::class, [
                 'label'  => 'Start Time',
