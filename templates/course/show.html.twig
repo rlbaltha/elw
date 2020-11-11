@@ -65,12 +65,11 @@
         <a class="btn btn-primary btn-sm"
            href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC Classlist</a>
         <table id="classlist" class="table table-bordered">
-            <thead>
+            <thead class="thead-light">
             <tr>
                 <th>Students</th>
                 <th>Role</th>
                 <th>Status</th>
-                <th>Actions</th>
             </tr>
             <thead>
             <tbody>
@@ -78,8 +77,7 @@
                 <tr>
                     <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                     <td>{{ classlist.role }}</td>
-                    <td style="width: 3%" class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}</td>
-                    <td>
+                    <td class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
                         <a class="btn btn-primary btn-sm"
                            href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
                         {{ include('classlist/_delete_form.html.twig') }}
