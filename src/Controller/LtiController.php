@@ -227,7 +227,7 @@ class LtiController extends AbstractController
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration_name);
-        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
+        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
