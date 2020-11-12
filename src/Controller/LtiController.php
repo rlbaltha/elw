@@ -216,10 +216,11 @@ class LtiController extends AbstractController
     /**
      * @Route("/{courseid}/lti_ags_index", name="lti_ags", methods={"GET"})
      */
-    public function ags(String $courseid)
+    public function ags(Permissions $permissions, String $courseid)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $role = $permissions->getCourseRole($courseid);
 
         $registration_name = $this->getParameter('lti_registration');
         $deployment_id = $this->getParameter('lti_deployment_id');
@@ -238,19 +239,21 @@ class LtiController extends AbstractController
             'lineitems' => $data,
             'classlists' => $classlists,
             'course' => $course,
+            'role' => $role,
         ]);
     }
 
     /**
      * @Route("/{courseid}/lti_ags_new", name="lti_ags_new", methods={"GET","POST"})
      */
-    public function ags_new(Request $request, string $courseid)
+    public function ags_new(Request $request, Permissions $permissions, string $courseid)
     {
         $form = $this->createForm(LtiAgsLineitemType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+            $role = $permissions->getCourseRole($courseid);
 
             $registration_name = $this->getParameter('lti_registration');
             $deployment_id = $this->getParameter('lti_deployment_id');
