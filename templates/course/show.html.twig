@@ -72,38 +72,37 @@
 
 {% block body %}
 
-<h2>Hi {{ user.firstname }}</h2>
-{% if course.announcement != '' %}
-    <div class="alert alert-primary">{{ course.announcement|raw }}</div>
-{% endif %}
+    <h2>Hi {{ user.firstname }}</h2>
+    {% if course.announcement != '' %}
+        <div class="alert alert-primary">{{ course.announcement|raw }}</div>
+    {% endif %}
 
-<table id="classlist" class="table table-bordered">
-    <thead class="thead-light">
-    <tr>
-        <th>Status</th>
-        <th>Students</th>
-        <th>Role</th>
-        <th>Actions</th>
-    </tr>
-    <thead>
-    <tbody>
-    {% for classlist in classlists %}
+    <table id="classlist" class="table table-bordered">
+        <thead class="thead-light">
         <tr>
-            <td style="width: 3%"
-                class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
-            </td>
-            <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
-            <td>{{ classlist.role }}</td>
-            <td>
-                <a class="btn btn-primary btn-sm"
-                   href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
-                {{ include('classlist/_delete_form.html.twig') }}
-            </td>
+            <th>Status</th>
+            <th>Students</th>
+            <th>Role</th>
+            <th>Actions</th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
-{% endif %}
+        <thead>
+        <tbody>
+        {% for classlist in classlists %}
+            <tr>
+                <td style="width: 3%"
+                    class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
+                </td>
+                <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
+                <td>{{ classlist.role }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                    {{ include('classlist/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     {% if status=='Pending' %}
         <div class="alert alert-primary">Your entry to this course is pending. Please check back soon.
