@@ -167,14 +167,16 @@ class LtiController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
 
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            return $this->render('lti/ltiLaunch.html.twig', [
-                'course' => $course,
-                'token' => $token,
-            ]);
-        } else {
-            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-        }
+//        LTI token info
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+//            return $this->render('lti/ltiLaunch.html.twig', [
+//                'course' => $course,
+//                'token' => $token,
+//            ]);
+//        } else {
+//            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+//        }
+        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 
 
@@ -184,14 +186,11 @@ class LtiController extends AbstractController
      */
     public function nrps(String $courseid)
     {
-        //needs to move to config
-        $registration_name = 'ugatest2';
-        //move to course entity??
-        $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
-
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
 
+        $registration_name = $this->getParameter('lti_registration');
+        $deployment_id = $this->getParameter('lti_deployment_id');
         $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
@@ -216,14 +215,11 @@ class LtiController extends AbstractController
      */
     public function ags(String $courseid)
     {
-        //needs to move to config
-        $registration_name = 'ugatest2';
-        //move to course entity??
-        $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
-
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
 
+        $registration_name = $this->getParameter('lti_registration');
+        $deployment_id = $this->getParameter('lti_deployment_id');
         $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
@@ -251,18 +247,15 @@ class LtiController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //needs to move to config
-            $registration_name = 'ugatest2';
-            //move to course entity??
-            $deployment_id = 'ce0f6d44-e598-4400-a2bd-ce6884eb416d';
-
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
 
+            $registration_name = $this->getParameter('lti_registration');
+            $deployment_id = $this->getParameter('lti_deployment_id');
             $method = 'post';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
             $accept_header = 'application/vnd.ims.lis.v2.lineitem+json';
             $data = $form->getData();
+
             $registration = $this->repository->find($registration_name);
             $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
             $access_token = $this->getAccessToken($registration, $scope);
