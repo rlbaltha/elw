@@ -11,6 +11,7 @@ use App\Form\LtiAgsLineitemType;
 use App\Form\LtiAgsLineType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
+use App\Service\Permissions;
 use Carbon\Carbon;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
@@ -184,10 +185,11 @@ class LtiController extends AbstractController
     /**
      * @Route("/{courseid}/lti_nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(String $courseid)
+    public function nrps(Permissions $permissions, String $courseid)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $role = $permissions->getCourseRole($courseid);
 
         $registration_name = $this->getParameter('lti_registration');
         $deployment_id = $this->getParameter('lti_deployment_id');
@@ -206,6 +208,7 @@ class LtiController extends AbstractController
             'membership' => $data,
             'classlists' => $classlists,
             'course' => $course,
+            'role' => $role,
         ]);
     }
 
