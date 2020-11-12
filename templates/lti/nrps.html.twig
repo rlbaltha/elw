@@ -14,7 +14,6 @@
     {% endif %}
 {% endblock %}
 
-
 {% block toolnav %}
     {% if role=='Instructor' %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,7 +39,7 @@
                                 Pending</a>
                         </li>
                         <li class="nav-item">
-                            <a id="delete-trigger" class="nav-link" href="#">Delete</a>
+                            <a id="delete-trigger" class="nav-link" href="#">Delete Course</a>
                             {{ include('course/_delete_form.html.twig') }}
                         </li>
                         {% if course.ltiId > 0 %}
@@ -60,7 +59,6 @@
                             </li>
                         {% endif %}
                         {# <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a> #}
-
                     </ul>
                 </div>
             </div>
