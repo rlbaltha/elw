@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     lti_deployment_id: '%env(LTI_DEPLOYMENT_ID)%'
-    lti_registration: '%env(LTI_REGISTRATION))%'
+    lti_registration: '%env(LTI_REGISTRATION)%'
 
 services:
     # default configuration for services in *this* file
