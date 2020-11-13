@@ -184,7 +184,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/lti_nrps", name="lti_nrps", methods={"GET","POST"})
+     * @Route("/lti/{courseid}/nrps", name="lti_nrps", methods={"GET","POST"})
      */
     public function nrps(Permissions $permissions, String $courseid)
     {
@@ -215,7 +215,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/lti_ags_index", name="lti_ags", methods={"GET"})
+     * @Route("/lti/{courseid}/ags_index", name="lti_ags", methods={"GET"})
      */
     public function ags(Permissions $permissions, String $courseid)
     {
@@ -245,7 +245,7 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/lti_ags_new", name="lti_ags_new", methods={"GET","POST"})
+     * @Route("/lti/{courseid}/ags_new", name="lti_ags_new", methods={"GET","POST"})
      */
     public function ags_new(Request $request, Permissions $permissions, string $courseid)
     {
@@ -286,7 +286,7 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/lti_ags_score_new", name="lti_ags_score_new", methods={"GET","POST"})
+     * @Route("/lti/{courseid}/ags_score", name="lti_ags_score_new", methods={"GET","POST"})
      */
     public function ags_score_new(Request $request, Permissions $permissions, string $courseid)
     {
