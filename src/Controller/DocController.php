@@ -309,7 +309,7 @@ class DocController extends AbstractController
         $entityManager->persist($doc);
         $entityManager->flush();
 
-        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
 
     /**
@@ -326,7 +326,7 @@ class DocController extends AbstractController
         $entityManager->persist($doc);
         $entityManager->flush();
 
-        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
 
     /**
