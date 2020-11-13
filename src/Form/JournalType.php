@@ -16,12 +16,11 @@ class JournalType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'  => 'Title',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Title'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'simple_config',
-                'label' => '',
+                'label' => ''
             ])
             ->add('project', HiddenType::class, [
                 'required'=>false

@@ -30,7 +30,6 @@ class DocType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
-                'attr' => ['class' => 'form-control']
             ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
@@ -38,7 +37,7 @@ class DocType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Project',
                 'required' => 'true'
             ])
@@ -48,7 +47,7 @@ class DocType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Stage',
                 'required' => 'true'
             ])

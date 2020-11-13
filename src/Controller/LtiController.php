@@ -9,6 +9,7 @@ use App\Entity\Course;
 use App\Entity\User;
 use App\Form\LtiAgsLineitemType;
 use App\Form\LtiAgsLineType;
+use App\Form\LtiAgsScoreType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Permissions;
@@ -279,13 +280,50 @@ class LtiController extends AbstractController
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
 
+        }
 
+        return $this->redirectToRoute('lti_ags', ['courseid' => $courseid]);
+    }
+
+    /**
+     * @Route("/{courseid}/lti_ags_score_new", name="lti_ags_score_new", methods={"GET","POST"})
+     */
+    public function ags_score_new(Request $request, Permissions $permissions, string $courseid)
+    {
+        $form = $this->createForm(LtiAgsScoreType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+            $role = $permissions->getCourseRole($courseid);
+
+            $registration_name = $this->getParameter('lti_registration');
+            $deployment_id = $this->getParameter('lti_deployment_id');
+            $method = 'post';
+            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
+            $accept_header = 'application/vnd.ims.lis.v1.score+json';
+            $data = $form->getData();
+
+            $registration = $this->repository->find($registration_name);
+            $uri = $data['uri'];
+            $access_token = $this->getAccessToken($registration, $scope);
+            $options = [
+                'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
+                'json' => [
+                    "userId" => $data['userId'],
+                    "scoreGiven" => $data['scoreGiven'],
+                    "scoreMaximun" => $data['scoreMaximun'],
+                    "comment" => $data['comment'],
+                    "activityProgress"=> $data['activityProgress'],
+                    "gradingProgress"=> $data['gradingProgress']
+                ]
+            ];
+            $response = $this->guzzle->request($method, $uri, $options);
+            $data = json_decode($response->getBody()->__toString(), true);
             dd($data);
         }
 
-        return $this->render('lti/new.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->redirectToRoute('lti_ags', ['courseid' => $courseid]);
     }
 
     private function getHeaderOptions($access_token, $accept_header) {

@@ -18,16 +18,14 @@ class MarkupType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Name',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Name'
             ])
             ->add('color', TextType::class, [
-                'label'  => 'Color',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Color'
             ])
             ->add('description', CKEditorType::class, [
                 'config_name' => 'simple_config',
-                'label' => '',
+                'label' => ''
             ])
 
         ;

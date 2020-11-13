@@ -18,29 +18,28 @@ class CommentType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'choices'  => [
                     'Holistic Feedback' => 'Holistic Feedback',
-                    'Revision Plan' => 'Revision Plan',
+                    'Revision Plan' => 'Revision Plan'
                 ],
                 'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Type of Feedback'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'simple_config',
-                'label' => '',
+                'label' => ''
             ])
             ->add('grade', TextType::class, [
                 'label'  => 'Grade (optional, must be a number)',
-                'attr' => ['class' => 'form-control'],
                 'required' => false
             ])
             ->add('access', ChoiceType::class, [
                 'choices'  => [
                     'Hidden' => 'Hidden',
                     'Private' => 'Private',
-                    'Shared' => 'Shared',
+                    'Shared' => 'Shared'
                 ],
                 'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Access'
             ])
         ;

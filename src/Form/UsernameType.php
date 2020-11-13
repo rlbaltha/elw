@@ -14,12 +14,10 @@ class UsernameType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'label' => 'First Name',
-                'attr' => ['class' => 'form-control']
+                'label' => 'First Name'
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Last Name',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Last Name'
             ]);
     }
 

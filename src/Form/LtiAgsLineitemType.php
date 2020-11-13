@@ -14,20 +14,16 @@ class LtiAgsLineitemType extends AbstractType
     {
         $builder
             ->add('scoreMaximum', TextType::class, [
-                'label'  => 'Maximum Score',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Maximum Score'
             ])
             ->add('label', TextType::class, [
-                'label'  => 'Grade Label',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Grade Label'
             ])
             ->add('resourceId', TextType::class, [
-                'label'  => 'Resource Id',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Resource Id'
             ])
             ->add('tag', TextType::class, [
                 'label'  => 'Tag',
-                'attr' => ['class' => 'form-control'],
                 'required' => false
             ])
             ->add('startDateTime', DateTimeType::class, [

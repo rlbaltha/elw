@@ -32,35 +32,30 @@ class CourseType extends AbstractType
         $user = $this->options['user'] ;
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Title',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Title'
             ])
             ->add('time', TextType::class, [
-                'label'  => 'Time',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Time'
             ])
             ->add('term', EntityType::class, [
                 'class' => Term::class,
                 'choice_label' => 'name',
                 'multiple' => false,
-                'expanded' => false,
-                'attr' => ['class' => 'form-control']
+                'expanded' => false
             ])
             ->add('labelsets', EntityType::class, [
                 'class' => Labelset::class,
                 'choices' => $this->labelsetRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'expanded' => true
             ])
             ->add('markupsets', EntityType::class, [
                 'class' => Markupset::class,
                 'choices' => $this->markupsetRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true,
-                'attr' => ['class' => 'radio'],
+                'expanded' => true
             ])
         ;
     }

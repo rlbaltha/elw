@@ -17,14 +17,12 @@ class MarkupsetType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Title',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Title'
             ])
             ->add('level', ChoiceType::class, [
                 'choices' => ['Default' => '0', 'Instructor Created' => '1'],
                 'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
             ])
         ;
     }

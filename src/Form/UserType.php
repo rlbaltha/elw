@@ -15,23 +15,19 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => 'Username',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Username'
             ])
             ->add('firstname', TextType::class, [
-                'label' => 'Firstname',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Firstname'
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Lastname',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Lastname'
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => ['ROLE_USER' => 'ROLE_USER', 'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
                     'ROLE_ADMIN' => 'ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH' => 'ROLE_ALLOWED_TO_SWITCH'],
                 'multiple' => true,
-                'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
+                'expanded' => true
             ]);
     }
 

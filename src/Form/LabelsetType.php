@@ -18,14 +18,12 @@ class LabelsetType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'  => 'Name',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Name'
             ])
             ->add('level', ChoiceType::class, [
                 'choices' => ['Default' => '0', 'Instructor Created' => '1'],
                 'multiple' => false,
                 'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
             ])
         ;
     }

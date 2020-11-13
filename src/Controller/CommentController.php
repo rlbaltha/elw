@@ -46,7 +46,7 @@ class CommentController extends AbstractController
             if ($source!='doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid]);
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
 
         return $this->render('comment/new.html.twig', [

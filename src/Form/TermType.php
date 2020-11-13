@@ -15,20 +15,17 @@ class TermType extends AbstractType
     {
         $builder
             ->add('year', TextType::class, [
-                'label'  => 'Year (e.g. 2020)',
-                'attr' => ['class' => 'form-control']
+                'label'  => 'Year (e.g. 2020)'
             ])
             ->add('semester', ChoiceType::class, [
                 'choices' => ['Fall' => 'Fall', 'Spring' => 'Spring', 'May' => 'May', 'Summer' => 'Summer'],
                 'multiple' => false,
-                'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
+                'expanded' => true
             ])
             ->add('status', ChoiceType::class, [
                 'choices' => ['Default' => 'Default', 'Archive' => 'Archive', 'Continuing' => 'Continuing'],
                 'multiple' => false,
-                'expanded' => true,
-                'attr' => ['class' => 'checkbox'],
+                'expanded' => true
             ])
 
         ;
