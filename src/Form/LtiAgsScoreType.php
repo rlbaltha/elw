@@ -25,7 +25,7 @@ class LtiAgsScoreType extends AbstractType
             ->add('scoreGiven', NumberType::class, [
                 'label'  => 'Score'
             ])
-            ->add('scoreMaximun', NumberType::class, [
+            ->add('scoreMaximum', NumberType::class, [
                 'label'  => 'Score'
             ])
             ->add('comment', CKEditorType::class, [

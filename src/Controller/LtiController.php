@@ -313,7 +313,7 @@ class LtiController extends AbstractController
                 'json' => [
                     "userId" => $data['userId'],
                     "scoreGiven" => $data['scoreGiven'],
-                    "scoreMaximun" => $data['scoreMaximun'],
+                    "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
                     "activityProgress"=> $data['activityProgress'],
                     "gradingProgress"=> $data['gradingProgress']
