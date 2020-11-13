@@ -8,7 +8,6 @@ use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Entity\User;
 use App\Form\LtiAgsLineitemType;
-use App\Form\LtiAgsLineType;
 use App\Form\LtiAgsScoreType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
@@ -282,7 +281,9 @@ class LtiController extends AbstractController
 
         }
 
-        return $this->redirectToRoute('lti_ags', ['courseid' => $courseid]);
+        return $this->render('lti/new_ags_lineitem.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -323,7 +324,9 @@ class LtiController extends AbstractController
             dd($data);
         }
 
-        return $this->redirectToRoute('lti_ags', ['courseid' => $courseid]);
+        return $this->render('lti/new_ags_score.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     private function getHeaderOptions($access_token, $accept_header) {
