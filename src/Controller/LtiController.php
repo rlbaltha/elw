@@ -118,6 +118,8 @@ class LtiController extends AbstractController
         }
         if (is_null($user->getLtiId())) {
             $user->setLtiId($lti_id);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
         }
 
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
