@@ -88,6 +88,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $projects;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lti_id;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -391,6 +396,18 @@ class User implements UserInterface, EquatableInterface
     public function isEqualTo(UserInterface $user)
     {
         return true;
+    }
+
+    public function getLtiId(): ?string
+    {
+        return $this->lti_id;
+    }
+
+    public function setLtiId(?string $lti_id): self
+    {
+        $this->lti_id = $lti_id;
+
+        return $this;
     }
 
 }

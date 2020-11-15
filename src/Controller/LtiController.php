@@ -90,11 +90,14 @@ class LtiController extends AbstractController
         $userIdentity = $ltiMessage->getUserIdentity();
         $firstname = $userIdentity->getGivenName();
         $lastname = $userIdentity->getFamilyName();
+
         $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
 
         $username_claim = $ltiMessage->getClaim("http://www.brightspace.com");
         $username_key = 'username';
+        $user_id_key = 'user_id';
         $username = $username_claim[$username_key];
+        $lti_id = $username_claim[$user_id_key];
 
         $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$user) {
@@ -109,6 +112,7 @@ class LtiController extends AbstractController
             }
             $user->setLastname($lastname);
             $user->setFirstname($firstname);
+            $user->setLtiId($lti_id);
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
         }
