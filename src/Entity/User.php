@@ -89,7 +89,7 @@ class User implements UserInterface, EquatableInterface
     private $projects;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $lti_id;
 
@@ -398,12 +398,12 @@ class User implements UserInterface, EquatableInterface
         return true;
     }
 
-    public function getLtiId(): ?string
+    public function getLtiId(): ?int
     {
         return $this->lti_id;
     }
 
-    public function setLtiId(?string $lti_id): self
+    public function setLtiId(?int $lti_id): self
     {
         $this->lti_id = $lti_id;
 
