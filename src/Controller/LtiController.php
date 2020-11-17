@@ -314,6 +314,9 @@ class LtiController extends AbstractController
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
 
+            $date = new DateTime();
+            $timestamp = $date->getTimestamp();
+
             $registration = $this->repository->find($registration_name);
             $uri = $data['uri'];
             $access_token = $this->getAccessToken($registration, $scope);
@@ -324,7 +327,7 @@ class LtiController extends AbstractController
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
-                    "timestamp" => $data['timestamp'],
+                    "timestamp" => $timestamp,
                     "activityProgress"=> $data['activityProgress'],
                     "gradingProgress"=> $data['gradingProgress']
                 ]
