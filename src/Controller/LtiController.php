@@ -31,6 +31,7 @@ use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 use GuzzleHttp\ClientInterface;
 use Throwable;
 use RuntimeException;
+use DateTime;
 
 class LtiController extends AbstractController
 {
@@ -314,7 +315,7 @@ class LtiController extends AbstractController
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
 
-            $date = new DateTime();
+            $date = new \DateTime();
             $timestamp = $date->getTimestamp();
 
             $registration = $this->repository->find($registration_name);
