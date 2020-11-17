@@ -59,23 +59,17 @@
     <table class="table table-bordered">
         <thead class="thead-light">
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Max Score</th>
             <th scope="col">Label</th>
-            <th scope="col">Tag</th>
-            <th scope="col">Resource Id</th>
-            <th scope="col">Resource Link Id</th>
+            <th scope="col">Max Score</th>
+            <th scope="col">Id</th>
         </tr>
         </thead>
         <tbody>
         {% for lineitem in lineitems %}
             <tr>
-                <td>{{ lineitem.id }}</td>
-                <td>{{ lineitem.scoreMaximum }}</td>
                 <td>{{ lineitem.label }}</td>
-                <td>{{ lineitem.tag }}</td>
-                <td>{{ lineitem.resourceId }}</td>
-                <td>{{ lineitem.resourceLinkId }}</td>
+                <td>{{ lineitem.scoreMaximum }}</td>
+                <td>{{ lineitem.id }}</td>
             </tr>
         {% endfor %}
         </tbody>

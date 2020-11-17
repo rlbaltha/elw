@@ -19,22 +19,6 @@ class LtiAgsLineitemType extends AbstractType
             ->add('label', TextType::class, [
                 'label'  => 'Grade Label'
             ])
-            ->add('resourceId', TextType::class, [
-                'label'  => 'Resource Id',
-                'required' => false
-            ])
-            ->add('tag', TextType::class, [
-                'label'  => 'Tag',
-                'required' => false
-            ])
-            ->add('startDateTime', DateTimeType::class, [
-                'label'  => 'Start Time',
-                'required' => false
-            ])
-            ->add('endDateTime', DateTimeType::class, [
-                'label'  => 'End Time',
-                'required' => false
-            ])
         ;
     }
 

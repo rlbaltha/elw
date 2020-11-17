@@ -343,10 +343,6 @@ class LtiController extends AbstractController
                 'json' => [
                     "scoreMaximum" => $data['scoreMaximum'],
                     "label" => $data['label'],
-                    "resourceId" => $data['resourceId'],
-                    "tag" => $data['tag'],
-                    "startDateTime"=> $data['startDateTime'],
-                    "endDateTime"=> $data['endDateTime']
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
