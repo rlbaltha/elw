@@ -33,30 +33,6 @@ class LtiAgsScoreType extends AbstractType
                 'label' => '',
                 'required' => false
             ])
-            ->add('activityProgress', ChoiceType::class, [
-                'choices'  => [
-                    'Initialized' => 'Initialized',
-                    'Started' => 'Started',
-                    'InProgress' => 'InProgress',
-                    'Submitted' => 'Submitted',
-                    'Completed' => 'Completed',
-                ],
-                'expanded' => true,
-                'attr' => ['class' => 'form-check-inline'],
-                'label' => 'Activitity Progress'
-            ])
-            ->add('gradingProgress', ChoiceType::class, [
-                'choices'  => [
-                    'NotReady' => 'NotReady',
-                    'Failed' => 'Failed',
-                    'Pending' => 'Pending',
-                    'PendingManual' => 'PendingManual',
-                    'FullyGraded' => 'FullyGraded',
-                ],
-                'expanded' => true,
-                'attr' => ['class' => 'form-check-inline'],
-                'label' => 'Grading Progress'
-            ])
         ;
     }
 

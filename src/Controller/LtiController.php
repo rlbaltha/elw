@@ -266,7 +266,7 @@ class LtiController extends AbstractController
 
             $registration_name = $this->getParameter('lti_registration');
             $deployment_id = $this->getParameter('lti_deployment_id');
-            $method = 'post';
+            $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
             $accept_header = 'application/vnd.ims.lis.v2.lineitem+json';
             $data = $form->getData();
@@ -310,7 +310,7 @@ class LtiController extends AbstractController
 
             $registration_name = $this->getParameter('lti_registration');
             $deployment_id = $this->getParameter('lti_deployment_id');
-            $method = 'post';
+            $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
@@ -327,7 +327,9 @@ class LtiController extends AbstractController
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
-                    "timestamp" => $timestamp
+                    "timestamp" => $timestamp,
+                    "activityProgress"=> 'Completed',
+                    "gradingProgress"=> 'FullyGraded'
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
@@ -352,7 +354,7 @@ class LtiController extends AbstractController
 
         $registration_name = $this->getParameter('lti_registration');
         $deployment_id = $this->getParameter('lti_deployment_id');
-        $method = 'get';
+        $method = 'GET';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
         $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
 
