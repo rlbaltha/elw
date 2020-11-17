@@ -33,9 +33,6 @@ class LtiAgsScoreType extends AbstractType
                 'label' => '',
                 'required' => false
             ])
-            ->add('timestamp', DateTimeType::class, [
-                'label'  => 'Time Submitted',
-            ])
             ->add('activityProgress', ChoiceType::class, [
                 'choices'  => [
                     'Initialized' => 'Initialized',
