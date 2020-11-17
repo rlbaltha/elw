@@ -327,9 +327,7 @@ class LtiController extends AbstractController
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
-                    "timestamp" => $timestamp,
-                    "activityProgress"=> $data['activityProgress'],
-                    "gradingProgress"=> $data['gradingProgress']
+                    "timestamp" => $timestamp
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
