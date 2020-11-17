@@ -315,8 +315,7 @@ class LtiController extends AbstractController
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
 
-            $date = new \DateTime();
-            $timestamp = $date->getTimestamp();
+            $timestamp = date(\DateTime::ISO8601);
 
             $registration = $this->repository->find($registration_name);
             $uri = $data['uri'];
