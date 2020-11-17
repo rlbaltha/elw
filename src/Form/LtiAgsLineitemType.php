@@ -20,7 +20,8 @@ class LtiAgsLineitemType extends AbstractType
                 'label'  => 'Grade Label'
             ])
             ->add('resourceId', TextType::class, [
-                'label'  => 'Resource Id'
+                'label'  => 'Resource Id',
+                'required' => false
             ])
             ->add('tag', TextType::class, [
                 'label'  => 'Tag',

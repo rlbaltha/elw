@@ -286,6 +286,7 @@ class LtiController extends AbstractController
             ];
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
+            // to do : confirmation response; redirect to grade index
 
         }
 
@@ -336,6 +337,41 @@ class LtiController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET"})
+     */
+    public function ags_results(Permissions $permissions, String $courseid)
+    {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $role = $permissions->getCourseRole($courseid);
+
+        $registration_name = $this->getParameter('lti_registration');
+        $deployment_id = $this->getParameter('lti_deployment_id');
+        $method = 'get';
+        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
+        $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
+
+        $registration = $this->repository->find($registration_name);
+        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4/results';
+        $access_token = $this->getAccessToken($registration, $scope);
+        $options = $this->getHeaderOptions($access_token, $accept_header);
+        $response = $this->guzzle->request($method, $uri, $options);
+        $data = json_decode($response->getBody()->__toString(), true);
+
+        dd($data);
+
+
+        return $this->render('lti/ags_index.html.twig', [
+            'lineitems' => $data,
+            'classlists' => $classlists,
+            'course' => $course,
+            'role' => $role,
+        ]);
+    }
+
 
     private function getHeaderOptions($access_token, $accept_header) {
         $options = [
