@@ -324,6 +324,7 @@ class LtiController extends AbstractController
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
+                    "timestamp" => $data['timestamp'],
                     "activityProgress"=> $data['activityProgress'],
                     "gradingProgress"=> $data['gradingProgress']
                 ]
