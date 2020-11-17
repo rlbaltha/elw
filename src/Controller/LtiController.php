@@ -346,8 +346,8 @@ class LtiController extends AbstractController
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
-            $data = json_decode($response->getBody()->__toString(), true);
-            // to do : confirmation response; redirect to grade index
+//            $data = json_decode($response->getBody()->__toString(), true);
+            return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
 
         }
 
