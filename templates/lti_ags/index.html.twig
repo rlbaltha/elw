@@ -23,9 +23,8 @@
                 <td>{{ lti_ag.max }}</td>
                 <td>{{ lti_ag.course.name}}</td>
                 <td>
-                    <a href="{{ path('lti_ags_show', {'id': lti_ag.id}) }}">show</a>
-                    <a href="{{ path('lti_ags_edit', {'id': lti_ag.id}) }}">edit</a>
-                    <a href="{{ path('ags_delete', {'agsid': lti_ag.ltiId, 'courseid': lti_ag.course.id}) }}">delete remove</a>
+                    <a class="btn btn-primary" href="{{ path('lti_ags_edit', {'id': lti_ag.id}) }}">edit</a>
+                    <a class="btn btn-danger" href="{{ path('ags_delete', {'agsid': lti_ag.id, 'courseid': lti_ag.course.id}) }}">delete remote</a>
                 </td>
             </tr>
         {% else %}
