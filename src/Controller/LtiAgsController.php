@@ -21,10 +21,12 @@ class LtiAgsController extends AbstractController
      */
     public function index(Permissions $permissions, LtiAgsRepository $ltiAgsRepository, string $courseid): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         return $this->render('lti_ags/index.html.twig', [
             'lti_ags' => $ltiAgsRepository->findByCourseid($courseid),
             'role' => $role,
+            'course' => $course,
         ]);
     }
 
