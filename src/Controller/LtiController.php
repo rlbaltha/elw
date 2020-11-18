@@ -286,34 +286,29 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/lti/{courseid}/ags_delete", name="ags_delete", methods={"GET"})
+     * @Route("/lti/{courseid}/{agsid}/ags_delete", name="ags_delete", methods={"GET"})
      */
-    public function ags_delete(Permissions $permissions, String $courseid)
+    public function ags_delete(Permissions $permissions, String $courseid, String $agsid)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
+        $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
         $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
         $method = 'DELETE';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration_name);
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/b8625542-bdaf-42b7-9f05-7d2a8db9d8ec';
+        $uri = $local_ags->getLtiId();
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
-        dd($data);
+//        dd($data);
 
-        return $this->render('lti/ags_index.html.twig', [
-            'lineitems' => $data,
-            'classlists' => $classlists,
-            'course' => $course,
-            'role' => $role,
-        ]);
+        return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
     }
 
 

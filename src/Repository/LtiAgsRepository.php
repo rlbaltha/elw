@@ -36,15 +36,15 @@ class LtiAgsRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?LtiAgs
+
+    public function findOneByAgsid($value): ?LtiAgs
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
+            ->andWhere('l.id = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
