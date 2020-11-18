@@ -55,7 +55,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>LtiAgs index</h1>
+    <h1>eLW/eLC Gradebook</h1>
 
     <table class="table">
         <thead>
@@ -73,7 +73,7 @@
                 <td>{{ lti_ag.ltiId }}</td>
                 <td>{{ lti_ag.max }}</td>
                 <td>
-                    <a class="btn btn-danger" href="{{ path('ags_delete', {'agsid': lti_ag.id, 'courseid': lti_ag.course.id}) }}">delete remote</a>
+                    <a class="btn btn-danger" href="{{ path('ags_delete', {'agsid': lti_ag.id, 'courseid': lti_ag.course.id}) }}">Delete</a>
                 </td>
             </tr>
         {% else %}
@@ -84,5 +84,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('lti_ags_new') }}">Create new</a>
 {% endblock %}
