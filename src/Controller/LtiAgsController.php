@@ -85,12 +85,13 @@ class LtiAgsController extends AbstractController
      */
     public function delete(Request $request, LtiAgs $ltiAg): Response
     {
+        $courseid = $ltiAg->getCourse()->getId();
         if ($this->isCsrfTokenValid('delete'.$ltiAg->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ltiAg);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('lti_ags_index');
+        return $this->redirectToRoute('lti_ags_index', ['courseid' => $courseid]);
     }
 }
