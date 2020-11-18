@@ -347,7 +347,7 @@ class LtiController extends AbstractController
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
-//          $data = json_decode($response->getBody()->__toString(), true);
+            $data = json_decode($response->getBody()->__toString(), true);
             dd($data);
 
             //write the new lineitem locally
