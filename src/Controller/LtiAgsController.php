@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\LtiAgs;
 use App\Form\LtiAgsType;
 use App\Repository\LtiAgsRepository;
+use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,12 @@ class LtiAgsController extends AbstractController
     /**
      * @Route("/{courseid}/local_index", name="lti_ags_index", methods={"GET"})
      */
-    public function index(LtiAgsRepository $ltiAgsRepository, string $courseid): Response
+    public function index(Permissions $permissions, LtiAgsRepository $ltiAgsRepository, string $courseid): Response
     {
+        $role = $permissions->getCourseRole($courseid);
         return $this->render('lti_ags/index.html.twig', [
             'lti_ags' => $ltiAgsRepository->findByCourseid($courseid),
+            'role' => $role,
         ]);
     }
 
@@ -30,7 +33,8 @@ class LtiAgsController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid(26);
+        $courseid =26;
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $ltiAg = new LtiAgs();
         $form = $this->createForm(LtiAgsType::class, $ltiAg);
         $form->handleRequest($request);
@@ -41,7 +45,7 @@ class LtiAgsController extends AbstractController
             $entityManager->persist($ltiAg);
             $entityManager->flush();
 
-            return $this->redirectToRoute('lti_ags_index');
+            return $this->redirectToRoute('lti_ags_index', ['courseid' => $courseid]);
         }
 
         return $this->render('lti_ags/new.html.twig', [
