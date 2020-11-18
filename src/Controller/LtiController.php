@@ -293,11 +293,6 @@ class LtiController extends AbstractController
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
-        
-        $ltiAg = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($ltiAg);
-        $entityManager->flush();
 
         $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
         $registration_name = $this->getParameter('lti_registration');
@@ -312,7 +307,11 @@ class LtiController extends AbstractController
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
 //        dd($data);
-
+        //delete local as well
+        $ltiAg = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($ltiAg);
+        $entityManager->flush();
         return $this->redirectToRoute('lti_ags_index', ['courseid' => $courseid]);
     }
 
