@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LtiAgsController extends AbstractController
 {
     /**
-     * @Route("/", name="lti_ags_index", methods={"GET"})
+     * @Route("/local_index", name="lti_ags_index", methods={"GET"})
      */
     public function index(LtiAgsRepository $ltiAgsRepository): Response
     {
