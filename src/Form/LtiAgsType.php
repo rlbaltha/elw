@@ -15,7 +15,6 @@ class LtiAgsType extends AbstractType
             ->add('label')
             ->add('lti_id')
             ->add('max')
-            ->add('course')
         ;
     }
 

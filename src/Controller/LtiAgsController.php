@@ -32,11 +32,11 @@ class LtiAgsController extends AbstractController
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid(26);
         $ltiAg = new LtiAgs();
-        $ltiAg->setCourse($course);
         $form = $this->createForm(LtiAgsType::class, $ltiAg);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ltiAg->setCourse($course);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ltiAg);
             $entityManager->flush();
