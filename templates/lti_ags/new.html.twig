@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New LtiAgs{% endblock %}
+
+{% block body %}
+    <h1>Create new LtiAgs</h1>
+
+    {{ include('lti_ags/_form.html.twig') }}
+
+    <a href="{{ path('lti_ags_index') }}">back to list</a>
+{% endblock %}

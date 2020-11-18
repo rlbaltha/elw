@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Classlist;
 use App\Entity\Course;
+use App\Entity\LtiAgs;
 use App\Entity\User;
 use App\Form\LtiAgsLineitemType;
 use App\Form\LtiAgsScoreType;
@@ -346,7 +347,16 @@ class LtiController extends AbstractController
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
-//            $data = json_decode($response->getBody()->__toString(), true);
+//          $data = json_decode($response->getBody()->__toString(), true);
+            dd($data);
+
+            //write the new lineitem locally
+            $ags = new LtiAgs();
+            $ags->setLabel($data['label']);
+            $ags->setLtiId($data['lti_id']);
+            $this->getDoctrine()->getManager()->persist($course);
+            $this->getDoctrine()->getManager()->flush();
+
             return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
 
         }
