@@ -353,7 +353,7 @@ class LtiController extends AbstractController
             $this->getDoctrine()->getManager()->persist($ags);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
+            return $this->redirectToRoute('lti_ags_index', ['courseid' => $courseid]);
 
         }
 

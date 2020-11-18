@@ -19,22 +19,20 @@ class LtiAgsRepository extends ServiceEntityRepository
         parent::__construct($registry, LtiAgs::class);
     }
 
-    // /**
-    //  * @return LtiAgs[] Returns an array of LtiAgs objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return LtiAgs[] Returns an array of LtiAgs objects
+      */
+    public function findByCourseid($courseid)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('l.course', 'c')
+            ->andWhere('c.id = :val')
+            ->setParameter('val', $courseid)
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
 
     public function findOneByAgsid($value): ?LtiAgs

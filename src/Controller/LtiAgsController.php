@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class LtiAgsController extends AbstractController
 {
     /**
-     * @Route("/local_index", name="lti_ags_index", methods={"GET"})
+     * @Route("/{courseid}/local_index", name="lti_ags_index", methods={"GET"})
      */
-    public function index(LtiAgsRepository $ltiAgsRepository): Response
+    public function index(LtiAgsRepository $ltiAgsRepository, string $courseid): Response
     {
         return $this->render('lti_ags/index.html.twig', [
-            'lti_ags' => $ltiAgsRepository->findAll(),
+            'lti_ags' => $ltiAgsRepository->findByCourseid($courseid),
         ]);
     }
 
