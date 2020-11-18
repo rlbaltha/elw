@@ -14,6 +14,8 @@ class LtiAgsType extends AbstractType
         $builder
             ->add('label')
             ->add('lti_id')
+            ->add('max')
+            ->add('course')
         ;
     }
 

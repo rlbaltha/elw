@@ -30,7 +30,9 @@ class LtiAgsController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid(26);
         $ltiAg = new LtiAgs();
+        $ltiAg->setCourse($course);
         $form = $this->createForm(LtiAgsType::class, $ltiAg);
         $form->handleRequest($request);
 
