@@ -28,15 +28,15 @@ class LtiAgs
     private $lti_id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $max_score;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Course::class, inversedBy="ltiAgs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $course;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $max;
 
     public function getId(): ?int
     {
@@ -67,18 +67,6 @@ class LtiAgs
         return $this;
     }
 
-    public function getMaxScore(): ?string
-    {
-        return $this->max_score;
-    }
-
-    public function setMaxScore(string $max_score): self
-    {
-        $this->max_score = $max_score;
-
-        return $this;
-    }
-
     public function getCourse(): ?Course
     {
         return $this->course;
@@ -87,6 +75,18 @@ class LtiAgs
     public function setCourse(?Course $course): self
     {
         $this->course = $course;
+
+        return $this;
+    }
+
+    public function getMax(): ?int
+    {
+        return $this->max;
+    }
+
+    public function setMax(int $max): self
+    {
+        $this->max = $max;
 
         return $this;
     }
