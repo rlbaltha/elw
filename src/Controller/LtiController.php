@@ -353,7 +353,7 @@ class LtiController extends AbstractController
             $ags = new LtiAgs();
             $ags->setLabel($data['label']);
             $ags->setLtiId($data['id']);
-            $ags->setMax($data['scoreMaximum']);
+            $ags->setMax(intval($data['scoreMaximum']));
             $ags->setCourse($course);
             $this->getDoctrine()->getManager()->persist($course);
             $this->getDoctrine()->getManager()->flush();
