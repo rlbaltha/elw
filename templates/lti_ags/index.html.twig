@@ -8,18 +8,20 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Label</th>
                 <th>Lti_id</th>
+                <th>Max Score</th>
+                <th>Course</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for lti_ag in lti_ags %}
             <tr>
-                <td>{{ lti_ag.id }}</td>
                 <td>{{ lti_ag.label }}</td>
                 <td>{{ lti_ag.ltiId }}</td>
+                <td>{{ lti_ag.maxScore }}</td>
+                <td>{{ lti_ag.course.name}}</td>
                 <td>
                     <a href="{{ path('lti_ags_show', {'id': lti_ag.id}) }}">show</a>
                     <a href="{{ path('lti_ags_edit', {'id': lti_ag.id}) }}">edit</a>

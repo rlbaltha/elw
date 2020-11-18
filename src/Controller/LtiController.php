@@ -348,12 +348,13 @@ class LtiController extends AbstractController
             ];
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
-            dd($data);
 
             //write the new lineitem locally
             $ags = new LtiAgs();
             $ags->setLabel($data['label']);
-            $ags->setLtiId($data['lti_id']);
+            $ags->setLtiId($data['id']);
+            $ags->setMaxScore($data['scoreMaximum']);
+            $ags->setCourse($course);
             $this->getDoctrine()->getManager()->persist($course);
             $this->getDoctrine()->getManager()->flush();
 

@@ -63,6 +63,11 @@ class Course
      */
     private $lti_id;
 
+    /**
+     * @ORM\OneToMany(targetEntity=LtiAgs::class, mappedBy="course", orphanRemoval=true)
+     */
+    private $ltiAgs;
+
 
     public function __construct()
     {
@@ -70,6 +75,7 @@ class Course
         $this->docs = new ArrayCollection();
         $this->labelsets = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
+        $this->ltiAgs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +253,36 @@ class Course
     public function setLtiId(?string $lti_id): self
     {
         $this->lti_id = $lti_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LtiAgs[]
+     */
+    public function getLtiAgs(): Collection
+    {
+        return $this->ltiAgs;
+    }
+
+    public function addLtiAg(LtiAgs $ltiAg): self
+    {
+        if (!$this->ltiAgs->contains($ltiAg)) {
+            $this->ltiAgs[] = $ltiAg;
+            $ltiAg->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLtiAg(LtiAgs $ltiAg): self
+    {
+        if ($this->ltiAgs->removeElement($ltiAg)) {
+            // set the owning side to null (unless already changed)
+            if ($ltiAg->getCourse() === $this) {
+                $ltiAg->setCourse(null);
+            }
+        }
 
         return $this;
     }
