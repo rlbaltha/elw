@@ -43,20 +43,11 @@ class LtiAgsScoreType extends AbstractType
                 'choice_value' => 'lti_id',
                 'label'  => 'User',
             ])
-            ->add('userId', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'lastname',
-                'choice_value' => 'lti_id',
-                'label'  => 'User',
-            ])
-            ->add('userId', TextType::class, [
-                'label'  => 'Userid'
-            ])
             ->add('scoreGiven', NumberType::class, [
                 'label'  => 'Score'
             ])
             ->add('scoreMaximum', NumberType::class, [
-                'label'  => 'Score'
+                'label'  => 'Maximum Score'
             ])
             ->add('comment', CKEditorType::class, [
                 'config_name' => 'simple_config',
