@@ -16,11 +16,10 @@ class LtiAgsScoreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $lineitems = $options['lineitems'];
+        $ltiAgs = $options['ltiAgs'];
         $builder
             ->add('uri', ChoiceType::class, [
                 'label'  => 'URI',
-                'choices' => $lineitems,
                 'choice_value' => function (?LtiAgs $lineitems) {
                     return $lineitems ? $lineitems->getLtiId() : '';
                 },
