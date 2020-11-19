@@ -384,7 +384,7 @@ class LtiController extends AbstractController
             $data = $form->getData();
             $agsid = $data['uri'];
             $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-            $uri = $local_ags->getLtiId();
+            $uri = $local_ags->getLtiId().'/scores';
             $userid = $data['userId'];
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
             $userId = $user->getLtiId();
