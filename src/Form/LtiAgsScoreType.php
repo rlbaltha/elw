@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\LtiAgs;
+use App\Repository\LtiAgsRepository;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,18 +13,28 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 
 class LtiAgsScoreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $lineitems = $options['lineitems'];
+        $course = $options['course'];
         $builder
             ->add('uri', EntityType::class, [
                 'class' => LtiAgs::class,
+                'query_builder' => function(LtiAgsRepository $repo) use ($course) {
+                    return $repo->findByCourseid($course->getId());
+                },
                 'choice_label' => 'label',
                 'choice_value' => 'lti_id',
-                'label'  => 'URI',
+                'label'  => 'Grade Lineitem',
+            ])
+            ->add('userId', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'lastname',
+                'choice_value' => 'lti_id',
+                'label'  => 'User',
             ])
             ->add('userId', TextType::class, [
                 'label'  => 'Userid'
@@ -45,7 +56,7 @@ class LtiAgsScoreType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-            'lineitems',
+            'course',
         ]);
     }
 }
