@@ -75,5 +75,24 @@
         </tbody>
     </table>
 
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Label</th>
+            <th scope="col">Max Score</th>
+            <th scope="col">Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lineitem in course.ltiAgs %}
+            <tr>
+                <td>{{ lineitem.label }}</td>
+                <td>{{ lineitem.scoreMaximum }}</td>
+                <td>{{ lineitem.id }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 

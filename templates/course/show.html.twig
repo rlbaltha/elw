@@ -16,55 +16,7 @@
 
 
 {% block toolnav %}
-    {% if role=='Instructor' %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ course_path('course_edit', {'id': course.id}) }}">Edit
-                                Course</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
-                                Announcement</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All
-                                Pending</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="delete-trigger" class="nav-link" href="#">Delete Course</a>
-                            {{ include('course/_delete_form.html.twig') }}
-                        </li>
-                        {% if course.ltiId > 0 %}
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
-                                    Classlist</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="{{ path('lti_ags_index', {'courseid': course.id}) }}">eLC Gradebook </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="{{ path('ags_new', {'courseid': course.id}) }}">Create eLC Gradebook
-                                    Items</a>
-                            </li>
-                        {% endif %}
-                        {# <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a> #}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    {% endif %}
+    {{ include('course/_coursenav.html.twig') }}
 {% endblock %}
 
 {% block body %}
