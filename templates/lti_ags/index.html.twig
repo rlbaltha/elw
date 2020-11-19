@@ -10,10 +10,9 @@
     <h1>eLW/eLC Gradebook</h1>
 
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-light">
             <tr>
                 <th>Label</th>
-                <th>Lti_id</th>
                 <th>Max Score</th>
                 <th>actions</th>
             </tr>
@@ -22,7 +21,6 @@
         {% for lti_ag in lti_ags %}
             <tr>
                 <td>{{ lti_ag.label }}</td>
-                <td>{{ lti_ag.ltiId }}</td>
                 <td>{{ lti_ag.max }}</td>
                 <td>
                     <a class="btn btn-danger" href="{{ path('ags_delete', {'agsid': lti_ag.id, 'courseid': lti_ag.course.id}) }}">Delete</a>

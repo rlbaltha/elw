@@ -416,7 +416,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET"})
+     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
      */
     public function ags_results(Request $request, Permissions $permissions, String $courseid)
     {
