@@ -373,26 +373,19 @@ class LtiController extends AbstractController
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course]);
-
+        $role = $permissions->getCourseRole($courseid);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            dd($request);
-            $role = $permissions->getCourseRole($courseid);
-
             $registration_name = $this->getParameter('lti_registration');
-            $deployment_id = $this->getParameter('lti_deployment_id');
             $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
-            $lineitem = $data['uri'];
-            $uri = $lineitem->getLtiId().'/scores';
+            $uri = $data['uri'].'/scores';
+            dd($uri);
             $timestamp = date(\DateTime::ISO8601);
-
             $registration = $this->repository->find($registration_name);
-            $uri =
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
