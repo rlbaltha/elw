@@ -36,7 +36,8 @@ class LtiAgsScoreType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($course) {
                     return $er->createQueryBuilder('u')
                         ->join('u.classlists', 'c')
-                        ->andWhere('c.id = :val')
+                        ->join('c.course', 'co')
+                        ->andWhere('co.id = :val')
                         ->setParameter('val', $course->getId());
                 },
                 'choice_label' => 'lastname',
