@@ -18,11 +18,11 @@ class LtiAgsScoreType extends AbstractType
     {
         $lineitems = $options['lineitems'];
         $builder
-            ->add('uri', ChoiceType::class, [
+            ->add('uri', EntityType::class, [
+                'class' => LtiAgs::class,
+                'choice_label' => 'label',
+                'choice_value' => 'lti_id',
                 'label'  => 'URI',
-                'choice_value' => function ($value, $key, $lineitems) {
-                    return $value;
-                }
             ])
             ->add('userId', TextType::class, [
                 'label'  => 'Userid'
