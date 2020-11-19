@@ -371,11 +371,13 @@ class LtiController extends AbstractController
      */
     public function ags_score_new(Request $request, Permissions $permissions, string $courseid)
     {
-        $form = $this->createForm(LtiAgsScoreType::class);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $lineitems = $course->getLtiAgs();
+        $form = $this->createForm(LtiAgsScoreType::class, ['lineitems' => $lineitems]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+
             $role = $permissions->getCourseRole($courseid);
 
             $registration_name = $this->getParameter('lti_registration');

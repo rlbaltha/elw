@@ -15,9 +15,11 @@ class LtiAgsScoreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $lineitems = $options['lineitems'];
         $builder
-            ->add('uri', TextType::class, [
-                'label'  => 'URI'
+            ->add('uri', ChoiceType::class, [
+                'label'  => 'URI',
+                'choices' => $lineitems
             ])
             ->add('userId', TextType::class, [
                 'label'  => 'Userid'
@@ -38,8 +40,8 @@ class LtiAgsScoreType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            // Configure your form options here
+        $resolver->setRequired([
+            'lineitems',
         ]);
     }
 }
