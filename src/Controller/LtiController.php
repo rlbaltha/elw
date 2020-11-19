@@ -387,7 +387,7 @@ class LtiController extends AbstractController
             $uri = $local_ags->getLtiId().'/scores';
             $userid = $data['userId'];
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
-            $userId = $user->getLtiId();
+            $userId = $user->getUsername();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration_name);
             $access_token = $this->getAccessToken($registration, $scope);
