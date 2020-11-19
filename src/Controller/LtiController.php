@@ -382,7 +382,7 @@ class LtiController extends AbstractController
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
-            $uri = $data['uri'].'/scores';
+            $uri = $data['uri']->__toString().'/scores';
             dd($uri);
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration_name);
