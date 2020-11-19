@@ -373,7 +373,7 @@ class LtiController extends AbstractController
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $lineitems = $course->getLtiAgs();
-        $form = $this->createForm(LtiAgsScoreType::class, ['lineitems' => $lineitems]);
+        $form = $this->createForm(LtiAgsScoreType::class, null, ['lineitems' => $lineitems]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
