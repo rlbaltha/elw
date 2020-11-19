@@ -20,6 +20,7 @@ class LtiAgsScoreType extends AbstractType
         $builder
             ->add('uri', ChoiceType::class, [
                 'label'  => 'URI',
+                'choices' => $ltiAgs,
                 'choice_value' => function (?LtiAgs $ltiAgs) {
                     return $ltiAgs ? $ltiAgs->getLtiId() : '';
                 },
