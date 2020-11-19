@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\LtiAgs;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,9 +21,9 @@ class LtiAgsScoreType extends AbstractType
             ->add('uri', ChoiceType::class, [
                 'label'  => 'URI',
                 'choices' => $lineitems,
-                'choice_value' => function ($value, $key, $index) {
-                    return $value;
-                }
+                'choice_value' => function (?LtiAgs $lineitems) {
+                    return $lineitems ? $lineitems->getLtiId() : '';
+                },
             ])
             ->add('userId', TextType::class, [
                 'label'  => 'Userid'
