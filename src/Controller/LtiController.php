@@ -377,6 +377,7 @@ class LtiController extends AbstractController
         foreach($ltiAgs as $lineitem) {
             $lineitems[] = $lineitem->getLtiId();
         }
+        dd($lineitems);
         $form = $this->createForm(LtiAgsScoreType::class, null, ['lineitems' => $lineitems]);
 
         $form->handleRequest($request);
