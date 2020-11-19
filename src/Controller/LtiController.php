@@ -10,6 +10,7 @@ use App\Entity\LtiAgs;
 use App\Entity\User;
 use App\Form\LtiAgsLineitemType;
 use App\Form\LtiAgsScoreType;
+Use App\Form\LtiAgsResultsType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Permissions;
@@ -387,7 +388,7 @@ class LtiController extends AbstractController
             $uri = $local_ags->getLtiId().'/scores';
             $userid = $data['userId'];
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
-            $userId = $user->getUsername();
+            $userId = $user->getLtiId();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration_name);
             $access_token = $this->getAccessToken($registration, $scope);
@@ -417,33 +418,32 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET"})
      */
-    public function ags_results(Permissions $permissions, String $courseid)
+    public function ags_results(Request $request, Permissions $permissions, String $courseid)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $role = $permissions->getCourseRole($courseid);
+        $form = $this->createForm(LtiAgsResultsType::class, null, ['course' => $course]);
 
-        $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
-        $method = 'GET';
-        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
-        $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $registration_name = $this->getParameter('lti_registration');
+            $method = 'GET';
+            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
+            $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
+            $data = $form->getData();
+            $agsid = $data['uri'];
+            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
+            $uri = $local_ags->getLtiId().'/results';
 
-        $registration = $this->repository->find($registration_name);
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4/results';
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
-        $response = $this->guzzle->request($method, $uri, $options);
-        $data = json_decode($response->getBody()->__toString(), true);
+            $registration = $this->repository->find($registration_name);
+            $access_token = $this->getAccessToken($registration, $scope);
+            $options = $this->getHeaderOptions($access_token, $accept_header);
+            $response = $this->guzzle->request($method, $uri, $options);
+            $data = json_decode($response->getBody()->__toString(), true);
+            dd($data);
+        }
 
-        dd($data);
-
-
-        return $this->render('lti/ags_index.html.twig', [
-            'lineitems' => $data,
-            'classlists' => $classlists,
-            'course' => $course,
-            'role' => $role,
+        return $this->render('lti/new_ags_results.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
