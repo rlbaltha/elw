@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\LtiAgs;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +20,7 @@ class LtiAgsScoreType extends AbstractType
     {
         $course = $options['course'];
         $builder
-            ->add('uri', EntityType::class, [
+            ->add('uri', ChoiceType::class, [
                 'class' => LtiAgs::class,
                 'query_builder' => function (EntityRepository $er) use ($course) {
                     return $er->createQueryBuilder('l')
@@ -31,7 +32,7 @@ class LtiAgsScoreType extends AbstractType
                 'choice_value' => 'lti_id',
                 'label'  => 'Grade Lineitem',
             ])
-            ->add('userId', EntityType::class, [
+            ->add('userId', ChoiceType::class, [
                 'class' => User::class,
                 'query_builder' => function (EntityRepository $er) use ($course) {
                     return $er->createQueryBuilder('u')
