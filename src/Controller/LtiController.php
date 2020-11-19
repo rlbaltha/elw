@@ -378,6 +378,7 @@ class LtiController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
+            dd($request);
             $role = $permissions->getCourseRole($courseid);
 
             $registration_name = $this->getParameter('lti_registration');
@@ -386,10 +387,12 @@ class LtiController extends AbstractController
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
+            $lineitem = $data['uri'];
+            $uri = $lineitem->getLtiId().'/scores';
             $timestamp = date(\DateTime::ISO8601);
 
             $registration = $this->repository->find($registration_name);
-            $uri = $data['uri'].'/scores';
+            $uri =
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
