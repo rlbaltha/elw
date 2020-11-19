@@ -20,6 +20,7 @@ class LtiAgsScoreType extends AbstractType
             ->add('uri', ChoiceType::class, [
                 'label'  => 'URI',
                 'choices' => $lineitems,
+                'multiple' => true
             ])
             ->add('userId', TextType::class, [
                 'label'  => 'Userid'
