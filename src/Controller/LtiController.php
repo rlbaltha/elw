@@ -382,15 +382,19 @@ class LtiController extends AbstractController
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
-            $uri = $data['uri'].'/scores';
-            dd($uri);
+            $agsid = $data['uri'];
+            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
+            $uri = $local_ags->getLtiId();
+            $userid = $data['userId'];
+            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
+            $userId = $user->getLtiId();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration_name);
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
-                    "userId" => $data['userId'],
+                    "userId" => $userId,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
