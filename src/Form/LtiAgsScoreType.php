@@ -23,8 +23,11 @@ class LtiAgsScoreType extends AbstractType
         $builder
             ->add('uri', EntityType::class, [
                 'class' => LtiAgs::class,
-                'query_builder' => function(LtiAgsRepository $repo) use ($course) {
-                    return $repo->findByCourseid($course->getId());
+                'query_builder' => function (EntityRepository $er) use ($course) {
+                    return $er->createQueryBuilder('l')
+                        ->join('l.course', 'c')
+                        ->andWhere('c.id = :val')
+                        ->setParameter('val', $course->getId());
                 },
                 'choice_label' => 'label',
                 'choice_value' => 'lti_id',
