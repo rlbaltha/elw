@@ -44,7 +44,7 @@ class LtiAgsScoreType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-            'lineitems',
+            'ltiAgs',
         ]);
     }
 }
