@@ -2,6 +2,18 @@
 
 {% block title %}LtiAgs index{% endblock %}
 
+{% block subnav %}
+    <a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>
+    {% if status !='Pending' %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
+        </li>
+    {% endif %}
+{% endblock %}
+
 {% block toolnav %}
     {{ include('course/_coursenav.html.twig') }}
 {% endblock %}

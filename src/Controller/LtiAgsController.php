@@ -56,15 +56,6 @@ class LtiAgsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="lti_ags_show", methods={"GET"})
-     */
-    public function show(LtiAgs $ltiAg): Response
-    {
-        return $this->render('lti_ags/show.html.twig', [
-            'lti_ag' => $ltiAg,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="lti_ags_edit", methods={"GET","POST"})
