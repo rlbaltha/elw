@@ -3,15 +3,7 @@
 {% block title %}LtiAgs index{% endblock %}
 
 {% block subnav %}
-    <a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>
-    {% if status !='Pending' %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
-        </li>
-    {% endif %}
+    {{ include('course/_subnav.html.twig') }}
 {% endblock %}
 
 {% block toolnav %}
@@ -21,7 +13,7 @@
 {% block body %}
     <h1>Gradebook</h1>
         <a class="btn btn-primary"
-           href="{{ path('ags_new', {'courseid': course.id}) }}">Create eLC Gradebook
+           href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
             Items</a>
         <a class="btn btn-primary"
            href="{{ path('ags_score_new', {'courseid': course.id}) }}">Enter Score in Gradebook</a>
