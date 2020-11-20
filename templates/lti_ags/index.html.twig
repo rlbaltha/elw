@@ -19,7 +19,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>eLW/eLC Gradebook</h1>
+    <h1>Gradebook</h1>
+        <a class="btn btn-primary"
+           href="{{ path('ags_new', {'courseid': course.id}) }}">Create eLC Gradebook
+            Items</a>
+        <a class="btn btn-primary"
+           href="{{ path('ags_score_new', {'courseid': course.id}) }}">Enter Score in Gradebook</a>
+        <a class="btn btn-primary"
+           href="{{ path('ags_results', {'courseid': course.id}) }}">Gradebook Results</a>
 
     <table class="table table-bordered">
         <thead class="thead-light">
