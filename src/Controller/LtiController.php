@@ -387,15 +387,15 @@ class LtiController extends AbstractController
             $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
             $uri = $local_ags->getLtiId().'/scores';
             $userid = $data['userId'];
-            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
-            $userId = $user->getLtiId();
+//            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
+//            $userId = $user->getLtiId();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration_name);
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
-                    "userId" => $userId,
+                    "userId" => $userid,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],
