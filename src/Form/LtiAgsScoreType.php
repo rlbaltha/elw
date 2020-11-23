@@ -44,7 +44,7 @@ class LtiAgsScoreType extends AbstractType
 //                'choice_value' => 'id',
 //                'label'  => 'User',
 //            ])
-            ->add('userId', NumberType::class, [
+            ->add('userId', TextType::class, [
                 'label'  => 'Userid'
             ])
             ->add('scoreGiven', NumberType::class, [
