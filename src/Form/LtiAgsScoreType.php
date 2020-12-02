@@ -28,7 +28,7 @@ class LtiAgsScoreType extends AbstractType
                         ->setParameter('val', $course->getId());
                 },
                 'choice_label' => 'label',
-                'choice_value' => 'lti_id',
+                'choice_value' => 'id',
                 'label'  => 'Grade Lineitem',
             ])
             ->add('userId', EntityType::class, [
