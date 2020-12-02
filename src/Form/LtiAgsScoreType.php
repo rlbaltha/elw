@@ -28,25 +28,25 @@ class LtiAgsScoreType extends AbstractType
                         ->setParameter('val', $course->getId());
                 },
                 'choice_label' => 'label',
-                'choice_value' => 'id',
+                'choice_value' => 'lti_id',
                 'label'  => 'Grade Lineitem',
             ])
-//            ->add('userId', EntityType::class, [
-//                'class' => User::class,
-//                'query_builder' => function (EntityRepository $er) use ($course) {
-//                    return $er->createQueryBuilder('u')
-//                        ->join('u.classlists', 'c')
-//                        ->join('c.course', 'co')
-//                        ->andWhere('co.id = :val')
-//                        ->setParameter('val', $course->getId());
-//                },
-//                'choice_label' => 'lastname',
-//                'choice_value' => 'id',
-//                'label'  => 'User',
-//            ])
-            ->add('userId', TextType::class, [
-                'label'  => 'Userid'
+            ->add('userId', EntityType::class, [
+                'class' => User::class,
+                'query_builder' => function (EntityRepository $er) use ($course) {
+                    return $er->createQueryBuilder('u')
+                        ->join('u.classlists', 'c')
+                        ->join('c.course', 'co')
+                        ->andWhere('co.id = :val')
+                        ->setParameter('val', $course->getId());
+                },
+                'choice_label' => 'lastname',
+                'choice_value' => 'lti_id',
+                'label'  => 'User',
             ])
+//            ->add('userId', TextType::class, [
+//                'label'  => 'Userid'
+//            ])
             ->add('scoreGiven', NumberType::class, [
                 'label'  => 'Score'
             ])
