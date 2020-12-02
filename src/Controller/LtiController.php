@@ -344,6 +344,7 @@ class LtiController extends AbstractController
                 'json' => [
                     "scoreMaximum" => $data['scoreMaximum'],
                     "label" => $data['label'],
+                    ""
                 ]
             ];
             $response = $this->guzzle->request($method, $uri, $options);
@@ -404,7 +405,6 @@ class LtiController extends AbstractController
                     "gradingProgress"=> 'FullyGraded'
                 ]
             ];
-            dd($options);
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
             dd($data);
