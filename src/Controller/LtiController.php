@@ -404,6 +404,7 @@ class LtiController extends AbstractController
                     "gradingProgress"=> 'FullyGraded'
                 ]
             ];
+            dd($options);
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
             dd($data);
