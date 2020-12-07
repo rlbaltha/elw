@@ -19,9 +19,9 @@ lti1p3:
     tools:
         localTool:
             name: "elw"
-            audience: "https://ugatest2.view.usg.edu/"
-            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/login-initiation"
-            launch_url: "https://elw.uga.edu/lti1p3/tool/launch"
+            audience: "https://api.brightspace.com/auth/token"
+            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/initiation"
+            launch_url: "https://elw.uga.edu/lti_test"
             deep_linking_url: null
     registrations:
         ugatest2:
@@ -44,5 +44,3 @@ lti1p3:
             platform_jwks_url: "https://uga.view.usg.edu/d2l/.well-known/jwks"
             tool_key_chain: "toolKey"
             tool_jwks_url: "https://elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
-
-
