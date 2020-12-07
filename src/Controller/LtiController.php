@@ -246,13 +246,14 @@ class LtiController extends AbstractController
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
-        $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
+        $registration = $this->session->get('lti_registration');
+        $deployment_id = $this->session->get('deployment_id');
+
         $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
-        $registration = $this->repository->find($registration_name);
+        $registration = $this->repository->find($registration);
         $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
@@ -267,36 +268,36 @@ class LtiController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
-     */
-    public function ags_show(Permissions $permissions, String $courseid)
-    {
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $role = $permissions->getCourseRole($courseid);
-
-        $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
-        $method = 'get';
-        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
-        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
-
-        $registration = $this->repository->find($registration_name);
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
-        $response = $this->guzzle->request($method, $uri, $options);
-        $data = json_decode($response->getBody()->__toString(), true);
-        dd($data);
-
-        return $this->render('lti/ags_index.html.twig', [
-            'lineitems' => $data,
-            'classlists' => $classlists,
-            'course' => $course,
-            'role' => $role,
-        ]);
-    }
+//    /**
+//     * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
+//     */
+//    public function ags_show(Permissions $permissions, String $courseid)
+//    {
+//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+//        $role = $permissions->getCourseRole($courseid);
+//
+//        $registration_name = $this->getParameter('lti_registration');
+//        $deployment_id = $this->getParameter('lti_deployment_id');
+//        $method = 'get';
+//        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
+//        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
+//
+//        $registration = $this->repository->find($registration_name);
+//        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
+//        $access_token = $this->getAccessToken($registration, $scope);
+//        $options = $this->getHeaderOptions($access_token, $accept_header);
+//        $response = $this->guzzle->request($method, $uri, $options);
+//        $data = json_decode($response->getBody()->__toString(), true);
+//        dd($data);
+//
+//        return $this->render('lti/ags_index.html.twig', [
+//            'lineitems' => $data,
+//            'classlists' => $classlists,
+//            'course' => $course,
+//            'role' => $role,
+//        ]);
+//    }
 
 
     /**
@@ -309,12 +310,12 @@ class LtiController extends AbstractController
         $role = $permissions->getCourseRole($courseid);
 
         $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-        $registration_name = $this->getParameter('lti_registration');
+        $registration = $this->session->get('lti_registration');
         $method = 'DELETE';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
-        $registration = $this->repository->find($registration_name);
+        $registration = $this->repository->find($registration);
         $uri = $local_ags->getLtiId();
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
@@ -342,14 +343,15 @@ class LtiController extends AbstractController
             $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
             $role = $permissions->getCourseRole($courseid);
 
-            $registration_name = $this->getParameter('lti_registration');
-            $deployment_id = $this->getParameter('lti_deployment_id');
+            $registration = $this->session->get('lti_registration');
+            $deployment_id = $this->session->get('deployment_id');
+
             $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
             $accept_header = 'application/vnd.ims.lis.v2.lineitem+json';
             $data = $form->getData();
 
-            $registration = $this->repository->find($registration_name);
+            $registration = $this->repository->find($registration);
             $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
@@ -392,7 +394,7 @@ class LtiController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $registration_name = $this->getParameter('lti_registration');
+            $registration = $this->session->get('lti_registration');
             $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
@@ -404,7 +406,7 @@ class LtiController extends AbstractController
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
             $userLtiId = $user->getLtiId();
             $timestamp = date(\DateTime::ISO8601);
-            $registration = $this->repository->find($registration_name);
+            $registration = $this->repository->find($registration);
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
@@ -439,7 +441,7 @@ class LtiController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $registration_name = $this->getParameter('lti_registration');
+            $registration = $this->session->get('lti_registration');
             $method = 'GET';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
             $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
@@ -448,7 +450,7 @@ class LtiController extends AbstractController
             $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
             $uri = $local_ags->getLtiId().'/results';
 
-            $registration = $this->repository->find($registration_name);
+            $registration = $this->repository->find($registration);
             $access_token = $this->getAccessToken($registration, $scope);
             $options = $this->getHeaderOptions($access_token, $accept_header);
             $response = $this->guzzle->request($method, $uri, $options);
