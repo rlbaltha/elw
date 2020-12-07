@@ -77,7 +77,7 @@ class LtiController extends AbstractController
 
 
     /**
-     * @Route("/lti_test", name="lti_test")
+     * @Route("/lti_launch", name="lti_launch")
      */
     public function lti_launch(CourseRepository $courseRepository, GuardAuthenticatorHandler $guardAuthenticatorHandler, LtiAuthenticator $ltiAuthenticator, Request $request)
     {
