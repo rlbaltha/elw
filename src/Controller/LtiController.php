@@ -34,6 +34,7 @@ use GuzzleHttp\ClientInterface;
 use Throwable;
 use RuntimeException;
 use DateTime;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class LtiController extends AbstractController
 {
@@ -52,13 +53,18 @@ class LtiController extends AbstractController
     /** @var Signer */
     private $signer;
 
+    /** @var Session */
+    private $session;
+
 
     public function __construct(
         Security $security,
         RegistrationRepositoryInterface $repository,
         ClientInterface $guzzle,
         Builder $builder,
-        Signer $signer
+        Signer $signer,
+        SessionInterface $session
+
     )
     {
         $this->security = $security;
@@ -66,6 +72,7 @@ class LtiController extends AbstractController
         $this->guzzle = $guzzle;
         $this->builder = $builder;
         $this->signer = $signer;
+        $this->session = $session;
     }
 
 
@@ -85,10 +92,16 @@ class LtiController extends AbstractController
         // You can even access validation results
         $validationResults = $token->getValidationResult();
 
+
         // Related LTI message
         //all the payload from ELC; payload depend on how Deployment is created on platform;
         // be sure to include all user and course info in Security Settings
         $ltiMessage = $token->getPayload();
+
+
+        $this->session->set('lti_registration', $registration->getIdentifier());
+        $this->session->set('deployment_id', $ltiMessage->getDeploymentId());
+
 
         $userIdentity = $ltiMessage->getUserIdentity();
         $firstname = $userIdentity->getGivenName();
@@ -202,13 +215,13 @@ class LtiController extends AbstractController
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
-        $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
+        $registration = $this->session->get('lti_registration');
+        $deployment_id = $this->session->get('deployment_id');
         $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
 
-        $registration = $this->repository->find($registration_name);
+        $registration = $this->repository->find($registration);
         $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/memberships';
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
