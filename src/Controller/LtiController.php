@@ -168,7 +168,7 @@ class LtiController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($classlist);
                 $this->getDoctrine()->getManager()->persist($course);
                 $this->getDoctrine()->getManager()->flush();
-                return $this->redirectToRoute('course_edit', ['courseid' => $course->getId()]);
+                return $this->redirectToRoute('course_show', ['courseid' => $course->getId()]);
             } else {
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
