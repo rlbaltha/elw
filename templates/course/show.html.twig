@@ -18,9 +18,12 @@
         <div class="alert alert-primary">{{ course.announcement|raw }}</div>
     {% endif %}
 
+    {% if course.ltiId > 0 and role=='Instructor' %}
         <a class="btn btn-primary"
            href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
             Classlist</a>
+    {% endif %}
+    {% if role=='Instructor' %}
     <table id="classlist" class="table table-bordered">
         <thead class="thead-light">
         <tr>
@@ -47,6 +50,7 @@
         {% endfor %}
         </tbody>
     </table>
+    {% endif %}
 
     {% if status=='Pending' %}
         <div class="alert alert-primary">Your entry to this course is pending. Please check back soon.

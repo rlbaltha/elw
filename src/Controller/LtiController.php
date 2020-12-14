@@ -192,7 +192,7 @@ class LtiController extends AbstractController
             }
             $courseid = $course->getId();
 
-            return $this->redirectToRoute('course_show', ['courseid' => $courseid]); 
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
     }
 
