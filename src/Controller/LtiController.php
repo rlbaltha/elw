@@ -138,6 +138,9 @@ class LtiController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
         }
 
+        // Actual passing of auth to Symfony firewall and sessioning
+        $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
+
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
         $context_key_id = 'id';
         $context_key_name = 'title';
@@ -168,40 +171,29 @@ class LtiController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($classlist);
                 $this->getDoctrine()->getManager()->persist($course);
                 $this->getDoctrine()->getManager()->flush();
-                return $this->redirectToRoute('course_show', ['courseid' => $course->getId()]);
+                return $this->redirectToRoute('course_edit', ['courseid' => $course->getId()]);
             } else {
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
 
         }
+        else {
+            //Check if on Roll (Classlist)
+            $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
+            if (!$classuser) {
+                $classlist = new Classlist();
+                $classlist->setUser($user);
+                $classlist->setCourse($course);
+                $classlist->setRole('Student');
+                $classlist->setStatus('Approved');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($classlist);
+                $entityManager->flush();
+            }
+            $courseid = $course->getId();
 
-        //Check if on Roll (Classlist)
-        $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
-        if (!$classuser) {
-            $classlist = new Classlist();
-            $classlist->setUser($user);
-            $classlist->setCourse($course);
-            $classlist->setRole('Student');
-            $classlist->setStatus('Approved');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($classlist);
-            $entityManager->flush();
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]); 
         }
-        $courseid = $course->getId();
-
-        // Actual passing of auth to Symfony firewall and sessioning
-        $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
-
-//        LTI token info
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-//            return $this->render('lti/ltiLaunch.html.twig', [
-//                'course' => $course,
-//                'token' => $token,
-//            ]);
-//        } else {
-//            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
-//        }
-        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 
 
