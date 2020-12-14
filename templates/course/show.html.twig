@@ -2,8 +2,11 @@
 
 {% block title %}Course{% endblock %}
 
+
 {% block subnav %}
+    {% if status !='Pending' %}
     {{ include('course/_subnav.html.twig') }}
+    {% endif %}
 {% endblock %}
 
 

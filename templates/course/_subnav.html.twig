@@ -1,5 +1,4 @@
-<a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>
-{% if status !='Pending' %}
+<a class="navbar-brand" href="{{ course_path('course_show') }}">{{ course.name }}</a>
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
     </li>
@@ -12,4 +11,3 @@
                href="{{ path('lti_ags_index', {'courseid': course.id}) }}">Gradebook </a>
         </li>
     {% endif %}
-{% endif %}
