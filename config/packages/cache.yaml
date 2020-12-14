@@ -15,7 +15,5 @@ framework:
         #app: cache.adapter.apcu
 
         # Namespaced pools use the above "app" backend by default
-        pools:
-            # creates a cache.noop service that doesn't actually cache
-            cache.noop:
-                adapter: cache.adapter.array
+        #pools:
+            #my.dedicated.cache: null
