@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/markupset")
@@ -90,6 +91,10 @@ class MarkupsetController extends AbstractController
      */
     public function edit(Request $request, Markupset $markupset, AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        if (!($this->getUser() == $markupset->getUser() or $this->isGranted('ROLE_ADMIN'))) {
+            throw new AccessDeniedException('You do not have permissions to do this!');
+        }
+
         $form = $this->createForm(MarkupsetType::class, $markupset);
         $form->handleRequest($request);
 

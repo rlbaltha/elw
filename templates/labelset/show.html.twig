@@ -9,8 +9,8 @@
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-12">
             {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}
-            {{ include('labelset/_delete_form.html.twig') }}
-            <a class="btn btn-primary float-right" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
+                {{ include('labelset/_delete_form.html.twig') }}
+                <a class="btn btn-primary float-right" href="{{ path('labelset_edit', {'id': labelset.id}) }}">Edit</a>
             {% endif %}
         </div>
     </div>
@@ -18,8 +18,8 @@
         <div class="col-lg-4 col-md-6 col-sm-12">
             <h2>Projects</h2>
             {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}
-            <a class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add
-                Project</a>
+                <a class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add
+                    Project</a>
             {% endif %}
             <table class="table">
                 <thead>
@@ -30,8 +30,11 @@
                 <tbody>
                 {% for project in labelset.projects %}
                     <tr>
-                        <td><a class="badge badge-primary p-2" style="background:{{ project.color }}"
-                               href="{{ path('project_edit', {'id': project.id}) }}">{{ project.name }}</a></td>
+                        <td>
+                            <a class="badge badge-primary p-2" style="background:{{ project.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                {{ project.name }}</a>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
@@ -44,8 +47,8 @@
 
             <h2>Stages</h2>
             {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}
-            <a class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add
-                Stage</a>
+                <a class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add
+                    Stage</a>
             {% endif %}
             <table class="table">
                 <thead>
@@ -56,8 +59,11 @@
                 <tbody>
                 {% for stage in labelset.stages %}
                     <tr>
-                        <td><a class="badge badge-primary p-2" style="background:{{ stage.color }}"
-                               href="{{ path('stage_edit', {'id': stage.id}) }}">{{ stage.name }}</a></td>
+                        <td>
+                            <a class="badge badge-primary p-2" style="background:{{ stage.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
+                                {{ stage.name }}</a>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
