@@ -25,7 +25,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessageSecurityToken;
-use OAT\Library\Lti1p3Nrps\Service\Client\MembershipServiceClient;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -53,7 +52,7 @@ class LtiController extends AbstractController
     /** @var Signer */
     private $signer;
 
-    /** @var Session */
+    /** @var SessionInterface */
     private $session;
 
 
@@ -106,6 +105,7 @@ class LtiController extends AbstractController
         $userIdentity = $ltiMessage->getUserIdentity();
         $firstname = $userIdentity->getGivenName();
         $lastname = $userIdentity->getFamilyName();
+        $d2l_id = $userIdentity->getIdentifier();
 
         $roles = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/roles");
 
@@ -129,11 +129,17 @@ class LtiController extends AbstractController
             $user->setLastname($lastname);
             $user->setFirstname($firstname);
             $user->setLtiId($lti_id);
+            $user->setD2lId($d2l_id);
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
         }
         if (is_null($user->getLtiId())) {
             $user->setLtiId($lti_id);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+        }
+        if (is_null($user->getD2lId())) {
+            $user->setD2lId($d2l_id);
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
         }
@@ -396,14 +402,14 @@ class LtiController extends AbstractController
             $uri = $local_ags->getLtiId().'/scores';
             $userid = $data['userId'];
             $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
-            $userLtiId = $user->getLtiId();
+            $userD2lId = $user->getD2lId();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
             $access_token = $this->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
-                    "userId" => $userLtiId,
+                    "userId" => $userD2lId,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $data['scoreMaximum'],
                     "comment" => $data['comment'],

@@ -93,6 +93,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $lti_id;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $d2l_id;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -406,6 +411,18 @@ class User implements UserInterface, EquatableInterface
     public function setLtiId(?int $lti_id): self
     {
         $this->lti_id = $lti_id;
+
+        return $this;
+    }
+
+    public function getD2lId(): ?string
+    {
+        return $this->d2l_id;
+    }
+
+    public function setD2lId(?string $d2l_id): self
+    {
+        $this->d2l_id = $d2l_id;
 
         return $this;
     }
