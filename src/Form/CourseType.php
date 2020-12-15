@@ -11,6 +11,7 @@ use App\Repository\LabelsetRepository;
 use App\Repository\MarkupsetRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\StageRepository;
+use App\Repository\TermRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,10 +22,12 @@ class CourseType extends AbstractType
 {
     private $labelsetRepository;
     private $markupsetRepository;
-    public function __construct(LabelsetRepository $labelsetRepository, MarkupsetRepository $markupsetRepository)
+    private $termRepository;
+    public function __construct(LabelsetRepository $labelsetRepository, MarkupsetRepository $markupsetRepository, TermRepository $termRepository)
     {
         $this->labelsetRepository = $labelsetRepository;
         $this->markupsetRepository = $markupsetRepository;
+        $this->termRepository = $termRepository;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -39,6 +42,7 @@ class CourseType extends AbstractType
             ])
             ->add('term', EntityType::class, [
                 'class' => Term::class,
+                'choices' => $this->termRepository->orderLasttoFirst(),
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => false
