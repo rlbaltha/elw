@@ -1,0 +1,33 @@
+security:
+  providers:
+    cas:
+      id: App\Service\ElwUserProvider
+  encoders:
+    App\Entity\User:
+      algorithm: auto
+  firewalls:
+    main:
+      logout:
+        path: app_logout
+        target: index
+        success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+      anonymous: ~
+      lti1p3_message_tool: true
+      guard:
+        entry_point: prayno.cas_authenticator
+        authenticators:
+          - prayno.cas_authenticator
+          - App\Security\LtiAuthenticator
+      switch_user: true
+
+  access_control:
+    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/course, roles: ROLE_USER, requires_channel: https}
+    - { path: ^/classlist, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/doc, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }
+    - { path: ^/labelset, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/label, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/markupset, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/markup, roles: ROLE_INSTRUCTOR, requires_channel: https }
