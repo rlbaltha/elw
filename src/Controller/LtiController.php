@@ -458,7 +458,7 @@ class LtiController extends AbstractController
             $data = json_decode($response->getBody()->__toString(), true);
 
 
-            return $this->render('lti/ags_index.html.twig', [
+            return $this->render('lti/ags_results.html.twig', [
                 'scores' => $data,
                 'classlists' => $classlists,
                 'course' => $course,
@@ -466,7 +466,7 @@ class LtiController extends AbstractController
             ]);
         }
 
-        return $this->render('lti/ags_results.html.twig', [
+        return $this->render('lti/new_ags_results.html.twig', [
             'form' => $form->createView(),
         ]);
     }
