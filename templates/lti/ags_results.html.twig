@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LTI Grades{% endblock %}
+
+{% block subnav %}
+    <a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>
+    {% if status !='Pending' %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block toolnav %}
+    {{ include('course/_coursenav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">userId</th>
+            <th scope="col">resultScore</th>
+            <th scope="col">resultMaximum</th>
+            <th scope="col">comment</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for score in scores %}
+            <tr>
+                <td>{{ score.id }}</td>
+                <td>{{ score.userId }}</td>
+                <td>{{ score.resultScore }}</td>
+                <td>{{ score.resultMaximum }}</td>
+                <td>{{ score.comment|raw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
