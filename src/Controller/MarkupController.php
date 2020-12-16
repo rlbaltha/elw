@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/markup")
@@ -69,6 +70,9 @@ class MarkupController extends AbstractController
      */
     public function edit(Request $request, Markup $markup): Response
     {
+        if (!($this->getUser() == $markup->getUser() or $this->isGranted('ROLE_ADMIN'))) {
+            throw new AccessDeniedException('You do not have permissions to do this!');
+        }
         $markupset = $markup->getMarkupset();
         $form = $this->createForm(MarkupType::class, $markup);
         $form->handleRequest($request);

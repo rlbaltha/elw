@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/labelset")
@@ -91,7 +92,11 @@ class LabelsetController extends AbstractController
      * @Route("/{id}/edit", name="labelset_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Labelset $labelset, AuthorizationCheckerInterface $authorizationChecker): Response
-    {
+        {
+            if (!($this->getUser() == $labelset->getUser() or $this->isGranted('ROLE_ADMIN'))) {
+                throw new AccessDeniedException('You do not have permissions to do this!');
+            }
+
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
         $form = $this->createForm(LabelsetType::class, $labelset);

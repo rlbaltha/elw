@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/stage")
@@ -70,6 +71,9 @@ class StageController extends AbstractController
      */
     public function edit(Request $request, Stage $stage): Response
     {
+        if (!($this->getUser() == $stage->getUser() or $this->isGranted('ROLE_ADMIN'))) {
+            throw new AccessDeniedException('You do not have permissions to do this!');
+        }
         $labelset = $stage->getLabelset();
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
