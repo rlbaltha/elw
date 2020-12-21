@@ -8,6 +8,7 @@ use App\Entity\Stage;
 use App\Repository\ProjectRepository;
 use App\Repository\StageRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -27,6 +28,7 @@ class DocType extends AbstractType
     {
         $this->options = $options['options'];
         $courseid = $this->options['courseid'] ;
+        $choices = $this->options['choices'] ;
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
@@ -49,6 +51,14 @@ class DocType extends AbstractType
                 'expanded' => true,
                 'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Stage',
+                'required' => 'true'
+            ])
+            ->add('access', ChoiceType::class, [
+                'choices' => $choices,
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => ['class' => 'form-check-inline'],
+                'label' => 'Access',
                 'required' => 'true'
             ])
             ->add('body', CKEditorType::class, [
