@@ -5,9 +5,9 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
     </li>
-    {% if course.ltiId > 0 and role=='Instructor' %}
-        <li class="nav-item">
-            <a class="nav-link"
-               href="{{ path('lti_ags_index', {'courseid': course.id}) }}">Gradebook </a>
-        </li>
-    {% endif %}
+{#    {% if course.ltiId > 0 and role=='Instructor' %}#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link"#}
+{#               href="{{ path('lti_ags_index', {'courseid': course.id}) }}">Gradebook </a>#}
+{#        </li>#}
+{#    {% endif %}#}
