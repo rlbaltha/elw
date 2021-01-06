@@ -251,8 +251,8 @@ class DocController extends AbstractController
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
         $role = $permissions->getCourseRole($courseid);
-        if ($role == 'Instructor' and ($doc->getAccess()=='Hidden' or $doc->getAccess()=='Review')){
-            $choices = ['Hidden' => 'Hidden', 'Review' => 'Review'];
+        if ($role == 'Instructor' and $doc->getOrigin()){
+            $choices = ['Hidden' => 'Hidden', 'Private' => 'Private'];
         }
         elseif ($role == 'Student' and $doc->getAccess()=='Review'){
             $choices = ['Review' => 'Review'];
