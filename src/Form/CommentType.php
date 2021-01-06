@@ -35,8 +35,7 @@ class CommentType extends AbstractType
             ->add('access', ChoiceType::class, [
                 'choices'  => [
                     'Hidden' => 'Hidden',
-                    'Private' => 'Private',
-                    'Shared' => 'Shared'
+                    'Private' => 'Private'
                 ],
                 'expanded' => true,
                 'attr' => ['class' => 'form-check-inline'],
