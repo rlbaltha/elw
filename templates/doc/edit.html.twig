@@ -10,7 +10,7 @@
 {% block subnav %}
     <li class="nav-item">
         <a id="doc-title-toggle" class="nav-link" href="#">Edit Settings <i class="material-icons"
-                                                                            style="font-size: medium;">expand_more</i></a>
+                                                                            style="font-size: medium;">expand_less</i></a>
     </li>
     <li class="nav-item">
         <a href="#" id="submit-doc-form" class="nav-link">Save</a>
@@ -113,6 +113,16 @@
         }
 
         $(document).ready(function () {
+            {% if doc.origin is not null %}
+                $("label").toggle();
+                $("fieldset").toggle();
+                $("#doc_title").toggle();
+                $("#doc_project").toggle();
+                $("#doc_stage").toggle();
+                $("#doc_access").toggle();
+                var text = $('.material-icons').text();
+                $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
+            {% endif %}
             $("#doc-title-toggle").click(function () {
                 $("label").toggle();
                 $("fieldset").toggle();

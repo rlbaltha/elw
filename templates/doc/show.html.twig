@@ -64,17 +64,17 @@
     <li class="nav-item">
         <a id="toggle-inline" class="nav-link" href="#">Notes <span id="toggle">Popover</span></a>
     </li>
-    <li class="nav-item">
-    {% if role == 'Instructor' and doc.origin %}
-        <a class="nav-link"
-           href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %}
-            Review</a>
-    {% elseif app.user == doc.user and doc.origin|length == 0 %}
-        <a class="nav-link"
-           href="{{ course_path('doc_access', {'id': doc.id}) }}">Make
-            {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>
-    {% endif %}
-    </li>
+{#    <li class="nav-item">#}
+{#    {% if role == 'Instructor' and doc.origin %}#}
+{#        <a class="nav-link"#}
+{#           href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %}#}
+{#            Review</a>#}
+{#    {% elseif app.user == doc.user and doc.origin|length == 0 %}#}
+{#        <a class="nav-link"#}
+{#           href="{{ course_path('doc_access', {'id': doc.id}) }}">Make#}
+{#            {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>#}
+{#    {% endif %}#}
+{#    </li>#}
 
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">PDF</a>

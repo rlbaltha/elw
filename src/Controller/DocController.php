@@ -250,9 +250,18 @@ class DocController extends AbstractController
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
-
+        $role = $permissions->getCourseRole($courseid);
+        if ($role == 'Instructor' and $doc->getOrigin()){
+            $choices = ['Hidden' => 'Hidden', 'Private' => 'Private'];
+        }
+        elseif ($role == 'Student' and $doc->getAccess()=='Review'){
+            $choices = ['Review' => 'Review'];
+        }
+        else {
+            $choices = ['Shared' => 'Shared', 'Private' => 'Private'];
+        }
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $options = ['courseid' => $courseid];
+        $options = ['courseid' => $courseid, 'choices' => $choices];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
         $markupsets = $course->getMarkupsets();
