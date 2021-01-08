@@ -20,7 +20,7 @@ class MarkupsetType extends AbstractType
                 'label'  => 'Title'
             ])
             ->add('level', ChoiceType::class, [
-                'choices' => ['Default' => '0', 'Instructor Created' => '1'],
+                'choices' => ['Default' => '0', 'Instructor Created' => '1', 'Shared' => '2'],
                 'multiple' => false,
                 'expanded' => true,
             ])

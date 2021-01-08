@@ -57,8 +57,10 @@ class MarkupsetRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->andWhere('m.user = :val1')
             ->orWhere('m.level = :val2')
+            ->orWhere('m.level = :val3')
             ->setParameter('val1', $user)
             ->setParameter('val2', 0)
+            ->setParameter('val3', 2)
             ->getQuery()
             ->getResult()
             ;
