@@ -61,6 +61,7 @@ class MarkupsetRepository extends ServiceEntityRepository
             ->setParameter('val1', $user)
             ->setParameter('val2', 0)
             ->setParameter('val3', 2)
+            ->orderBy('m.level')
             ->getQuery()
             ->getResult()
             ;
