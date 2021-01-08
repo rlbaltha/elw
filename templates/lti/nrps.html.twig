@@ -22,7 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for member in membership.members %}
+        {% for member in membership.members|sort((a, b) => a.family_name <=> b.family_name) %}
             <tr>
                 <td style="width: 3%"
                     class="table-{{ member.status == 'Active' ? 'success' : 'danger' }}">{{ member.status }}</td>
