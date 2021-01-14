@@ -32,6 +32,9 @@ class CommentController extends AbstractController
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
         }
+        if ($source=='journal') {
+            $comment->setAccess('Private');
+        }
         $comment->setUser($user);
         $comment->setDoc($doc);
         $comment->setType('Holistic Feedback');
