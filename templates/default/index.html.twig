@@ -8,8 +8,10 @@
         <h1 class="display-4" style='color:#ba0c2f; font-family: "serif"; '>eLearning for Writers</h1>
         <p class="lead"><span id="motto1" style="opacity: 0">Learn together. </span><span id="motto2" style="opacity: 0">Write better.</span>  </p>
         <hr class="my-4">
-        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') and login_access!='no' %}
             <a class="btn btn-primary" href="{{ path('course_index') }}">UGA MyID Login</a>
+        {% else %}
+            <span class="alert alert-info">{{ login_note }}</span>
         {% endif %}
     </div>
 {% endblock %}
@@ -17,15 +19,15 @@
 
 {% block javascripts %}
     {{ parent() }}
-<script>
-    $(document).ready(function () {
-        $("#motto1").delay( 800 ).animate({
-            opacity: '1'
-        }, "slow");
-        $("#motto2").delay( 2000 ).animate({
-            opacity: '1'
-        }, "slow");
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#motto1").delay( 800 ).animate({
+                opacity: '1'
+            }, "slow");
+            $("#motto2").delay( 2000 ).animate({
+                opacity: '1'
+            }, "slow");
+        });
+    </script>
 
 {% endblock %}
