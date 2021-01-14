@@ -22,6 +22,10 @@
 
 {% block title %}Edit Comment{% endblock %}
 
+{% block subnav %}
+    {{ include('course/_subnav.html.twig') }}
+{% endblock %}
+
 {% block body %}
     <div class="row doc-container">
         <div class="col-lg-8 col-sm-12">
@@ -30,10 +34,13 @@
                     {{ doc.body|raw }}
                 </div>
             {% else %}
-                <h2>{{ doc.title }}</h2>
-                <hr/>
-                <div>
-                    {{ doc.body|raw }}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="d-inline">{{ doc.title }}</h2>
+                    </div>
+                    <div class="card-body">
+                        {{ doc.body|raw }}
+                    </div>
                 </div>
             {% endif %}
         </div>

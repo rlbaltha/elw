@@ -27,6 +27,7 @@ class CommentController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
@@ -55,6 +56,7 @@ class CommentController extends AbstractController
         return $this->render('comment/new.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'course' => $course,
             'role' => $role,
             'form' => $form->createView(),
         ]);
@@ -67,6 +69,7 @@ class CommentController extends AbstractController
     public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -83,6 +86,7 @@ class CommentController extends AbstractController
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'course' => $course,
             'role' => $role,
             'source' => $source,
             'form' => $form->createView(),
@@ -122,12 +126,16 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment, $docid, $courseid, $source): Response
     {
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($comment);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid]);
+        if ($source!='doc') {
+            return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
+        }
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
 }
