@@ -36,7 +36,7 @@
             {% else %}
                 <div class="card mt-3">
                     <div class="card-header">
-                        <h2 class="d-inline">{{ doc.title }}</h2>
+                        <h2 class="d-inline">{{ doc.title }} </h2> by {{ doc.user.firstname }} {{ doc.user.lastname }}
                     </div>
                     <div class="card-body">
                         {{ doc.body|raw }}
