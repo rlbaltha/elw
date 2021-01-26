@@ -119,10 +119,10 @@
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
                                 <span class="badge badge-primary" style="background:black">Hidden</span>
-                            {% elseif comment.access=='Private' %}
-                                <span class="badge badge-primary" style="background:darkred">Private</span>
-                            {% elseif comment.access=='Shared' %}
-                                <span class="badge badge-primary" style="background:darkgreen">Shared</span>
+{#                            {% elseif comment.access=='Private' %}#}
+{#                                <span class="badge badge-primary" style="background:darkred">Private</span>#}
+{#                            {% elseif comment.access=='Shared' %}#}
+{#                                <span class="badge badge-primary" style="background:darkgreen">Shared</span>#}
                             {% endif %}
                             {% if app.user == comment.user %}
                                 <a class="btn btn-primary btn-sm float-right"
