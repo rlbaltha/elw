@@ -63,7 +63,7 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $access='Shared';
+    private $access='Private';
 
     public function getId(): ?int
     {
