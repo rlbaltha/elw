@@ -113,7 +113,7 @@
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
             {% for comment in doc.comments %}
-                {% if comment.access == 'Shared' or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
+                {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
                     <div class="card mt-3">
                         <div class="card-header">
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
