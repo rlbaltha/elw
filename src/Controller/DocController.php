@@ -196,17 +196,17 @@ class DocController extends AbstractController
         $permissions->isAllowedToView($courseid, $doc);
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $score = 'na';
+        $scores = [];
         if ($doc->getAgsResultId() != null)
         {
-            $score = $lti->getLtiResult($doc->getAgsResultId());
+            $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
 
         $role = $permissions->getCourseRole($courseid);
         $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
-            'score' => $score,
+            'scores' => $scores,
             'markupsets' => $markupsets,
             'role' => $role,
             'target' => $target

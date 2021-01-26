@@ -64,17 +64,17 @@
     <li class="nav-item">
         <a id="toggle-inline" class="nav-link" href="#">Notes <span id="toggle">Popover</span></a>
     </li>
-{#    <li class="nav-item">#}
-{#    {% if role == 'Instructor' and doc.origin %}#}
-{#        <a class="nav-link"#}
-{#           href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %}#}
-{#            Review</a>#}
-{#    {% elseif app.user == doc.user and doc.origin|length == 0 %}#}
-{#        <a class="nav-link"#}
-{#           href="{{ course_path('doc_access', {'id': doc.id}) }}">Make#}
-{#            {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a>#}
-{#    {% endif %}#}
-{#    </li>#}
+    {# <li class="nav-item"> #}
+    {# {% if role == 'Instructor' and doc.origin %} #}
+    {# <a class="nav-link" #}
+    {# href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %} #}
+    {# Review</a> #}
+    {# {% elseif app.user == doc.user and doc.origin|length == 0 %} #}
+    {# <a class="nav-link" #}
+    {# href="{{ course_path('doc_access', {'id': doc.id}) }}">Make #}
+    {# {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a> #}
+    {# {% endif %} #}
+    {# </li> #}
 
     <li class="nav-item">
         <a class="nav-link" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">PDF</a>
@@ -119,10 +119,10 @@
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
                                 <span class="badge badge-primary" style="background:black">Hidden</span>
-{#                            {% elseif comment.access=='Private' %}#}
-{#                                <span class="badge badge-primary" style="background:darkred">Private</span>#}
-{#                            {% elseif comment.access=='Shared' %}#}
-{#                                <span class="badge badge-primary" style="background:darkgreen">Shared</span>#}
+                                {# {% elseif comment.access=='Private' %} #}
+                                {# <span class="badge badge-primary" style="background:darkred">Private</span> #}
+                                {# {% elseif comment.access=='Shared' %} #}
+                                {# <span class="badge badge-primary" style="background:darkgreen">Shared</span> #}
                             {% endif %}
                             {% if app.user == comment.user %}
                                 <a class="btn btn-primary btn-sm float-right"
@@ -134,15 +134,30 @@
                             {{ comment.body|raw }}
                         </div>
 
-                            <div class="card-footer">
-                                {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
-                            </div>
-
+                        <div class="card-footer">
+                            {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
+                            <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}
 
+            <div class="card mt-3">
+                <div class="card-header">
+                </div>
+                {% for score in scores %}
+                    <div class="card-body">
+                        {{ score.comment|raw }}
+                    </div>
+                    <div class="card-footer">
+                        Grade: {{ score.resultScore }}
+                    </div>
+                {% else %}
+                    <div class="card-footer">
+                        No Grade Has Been Posted
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="row" class="d-none">
@@ -196,10 +211,10 @@
                                     <div class="card-body">
                                         {{ comment.body|raw }}
                                     </div>
-                                        <div class="card-footer">
-                                            {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                            <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
-                                        </div>
+                                    <div class="card-footer">
+                                        {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
+                                        <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                    </div>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -219,7 +234,7 @@
                     $('.note, .super').toggle();
                     $('.popover').hide();
                 });
-                    {# Note pops for this/these documents#}
+                    {# Note pops for this/these documents #}
                 $('.note').each(function (index) {
                     var p = $(this).position();
                     var top = p.top;
@@ -268,7 +283,7 @@
                     $(this).hide();
                 });
 
-                    {# Document/Reviews#}
+                    {# Document/Reviews #}
                 $('.doc-click').click(function () {
                     var id = '#' + $(this).attr('data-id');
                     $('.doc-container').hide();
