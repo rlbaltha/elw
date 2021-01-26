@@ -13,14 +13,10 @@ use App\Form\LtiAgsScoreType;
 Use App\Form\LtiAgsResultsType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
+use App\Service\Lti;
 use App\Service\Permissions;
-use Carbon\Carbon;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
-use OAT\Library\Lti1p3Core\Exception\LtiException;
-use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
-use OAT\Library\Lti1p3Core\Message\Payload\MessagePayloadInterface;
-use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,11 +24,7 @@ use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessage
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use OAT\Library\Lti1p3Core\Service\Client\ServiceClientInterface;
 use GuzzleHttp\ClientInterface;
-use Throwable;
-use RuntimeException;
-use DateTime;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class LtiController extends AbstractController
@@ -207,7 +199,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Permissions $permissions, String $courseid)
+    public function nrps(Permissions $permissions, String $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -221,8 +213,8 @@ class LtiController extends AbstractController
 
         $registration = $this->repository->find($registration);
         $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/memberships';
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
+        $access_token = $lti->getAccessToken($registration, $scope);
+        $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
 
@@ -238,7 +230,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_index", name="ags_index", methods={"GET"})
      */
-    public function ags(Permissions $permissions, String $courseid)
+    public function ags(Permissions $permissions, String $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -253,8 +245,8 @@ class LtiController extends AbstractController
 
         $registration = $this->repository->find($registration);
         $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
+        $access_token = $lti->getAccessToken($registration, $scope);
+        $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
 
@@ -269,7 +261,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
      */
-    public function ags_show(Permissions $permissions, String $courseid)
+    public function ags_show(Permissions $permissions, String $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -283,8 +275,8 @@ class LtiController extends AbstractController
 
         $registration = $this->repository->find($registration_name);
         $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
+        $access_token = $lti->getAccessToken($registration, $scope);
+        $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
 
@@ -300,7 +292,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/{agsid}/ags_delete", name="ags_delete", methods={"GET"})
      */
-    public function ags_delete(Permissions $permissions, String $courseid, String $agsid)
+    public function ags_delete(Permissions $permissions, String $courseid, String $agsid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -314,8 +306,8 @@ class LtiController extends AbstractController
 
         $registration = $this->repository->find($registration);
         $uri = $local_ags->getLtiId();
-        $access_token = $this->getAccessToken($registration, $scope);
-        $options = $this->getHeaderOptions($access_token, $accept_header);
+        $access_token = $lti->getAccessToken($registration, $scope);
+        $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
 //        dd($data);
@@ -331,7 +323,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_new", name="ags_new", methods={"GET","POST"})
      */
-    public function ags_new(Request $request, Permissions $permissions, string $courseid)
+    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti)
     {
         $form = $this->createForm(LtiAgsLineitemType::class);
 
@@ -350,7 +342,7 @@ class LtiController extends AbstractController
 
             $registration = $this->repository->find($registration);
             $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
-            $access_token = $this->getAccessToken($registration, $scope);
+            $access_token = $lti->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
@@ -383,7 +375,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_score", name="ags_score_new", methods={"GET","POST"})
      */
-    public function ags_score_new(Request $request, Permissions $permissions, string $courseid)
+    public function ags_score_new(Request $request, Permissions $permissions, string $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course]);
@@ -404,7 +396,7 @@ class LtiController extends AbstractController
             $userD2lId = $user->getD2lId();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
-            $access_token = $this->getAccessToken($registration, $scope);
+            $access_token = $lti->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
@@ -431,7 +423,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
      */
-    public function ags_results(Request $request, Permissions $permissions, String $courseid)
+    public function ags_results(Request $request, Permissions $permissions, String $courseid, Lti $lti)
     {
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -452,8 +444,8 @@ class LtiController extends AbstractController
             $uri = $local_ags->getLtiId().'/results';
 
             $registration = $this->repository->find($registration);
-            $access_token = $this->getAccessToken($registration, $scope);
-            $options = $this->getHeaderOptions($access_token, $accept_header);
+            $access_token = $lti->getAccessToken($registration, $scope);
+            $options = $lti->getHeaderOptions($access_token, $accept_header);
             $response = $this->guzzle->request($method, $uri, $options);
             $data = json_decode($response->getBody()->__toString(), true);
 
@@ -471,77 +463,4 @@ class LtiController extends AbstractController
         ]);
     }
 
-
-    private function getHeaderOptions($access_token, $accept_header) {
-        $options = [
-            'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header]
-        ];
-        return $options;
-    }
-
-    /**
-     * @throws LtiExceptionInterface
-     */
-    private function getAccessToken(RegistrationInterface $registration, $scope): string
-    {
-            $response = $this->guzzle->request('POST', $registration->getPlatform()->getOAuth2AccessTokenUrl(), [
-                'form_params' => [
-                    'grant_type' => 'client_credentials',
-                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                    'client_assertion' => $this->generateCredentials($registration),
-                    'scope' => $scope
-                ]
-            ]);
-
-            if ($response->getStatusCode() !== 200) {
-                throw new RuntimeException('invalid response http status code');
-            }
-
-            $responseData = json_decode($response->getBody()->__toString(), true);
-
-            if (JSON_ERROR_NONE !== json_last_error()) {
-                throw new RuntimeException(sprintf('json_decode error: %s', json_last_error_msg()));
-            }
-
-            $accessToken = $responseData['access_token'] ?? '';
-            $expiresIn = $responseData['expires_in'] ?? '';
-
-            if (empty($accessToken) || empty($expiresIn)) {
-                throw new RuntimeException('invalid response body');
-            }
-
-            return $accessToken;
-    }
-
-    /**
-     * @throws LtiExceptionInterface
-     */
-    public function generateCredentials(RegistrationInterface $registration): string
-    {
-        try {
-            if (null === $registration->getToolKeyChain()) {
-                throw new LtiException('Tool key chain is not configured');
-            }
-
-            $now = Carbon::now();
-            return $this->builder
-                ->withHeader(MessagePayloadInterface::HEADER_KID, $registration->getToolKeyChain()->getIdentifier())
-                ->identifiedBy(sprintf('%s-%s', $registration->getIdentifier(), $now->getTimestamp()))
-                ->issuedBy($registration->getClientId())
-                ->relatedTo($registration->getClientId())
-                ->permittedFor($registration->getTool()->getAudience())
-                ->issuedAt($now->getTimestamp())
-                ->expiresAt($now->addSeconds(MessagePayloadInterface::TTL)->getTimestamp())
-                ->getToken($this->signer, $registration->getToolKeyChain()->getPrivateKey())
-                ->__toString();
-
-        } catch (Throwable $exception) {
-            throw new LtiException(
-                sprintf('Cannot generate credentials: %s', $exception->getMessage()),
-                $exception->getCode(),
-                $exception
-            );
-        }
-
-    }
 }

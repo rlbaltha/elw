@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Doc;
 use App\Form\DocType;
 use App\Repository\DocRepository;
+use App\Service\Lti;
 use App\Service\Permissions;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -190,15 +191,22 @@ class DocController extends AbstractController
     /**
      * @Route("/{id}/{courseid}/{target}/show", name="doc_show", methods={"GET"}, defaults={"target" = "0" })
      */
-    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request, string $target): Response
+    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request, Lti $lti, string $target): Response
     {
         $permissions->isAllowedToView($courseid, $doc);
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $score = 'na';
+        if ($doc->getAgsResultId() != null)
+        {
+            $score = $lti->getLtiResult($doc->getAgsResultId());
+        }
+
         $role = $permissions->getCourseRole($courseid);
         $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
+            'score' => $score,
             'markupsets' => $markupsets,
             'role' => $role,
             'target' => $target

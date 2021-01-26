@@ -91,6 +91,11 @@ class Doc
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ags_result_id;
+
 
     public function __construct()
     {
@@ -271,6 +276,18 @@ class Doc
                 $comment->setDoc(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAgsResultId(): ?string
+    {
+        return $this->ags_result_id;
+    }
+
+    public function setAgsResultId(?string $ags_result_id): self
+    {
+        $this->ags_result_id = $ags_result_id;
 
         return $this;
     }
