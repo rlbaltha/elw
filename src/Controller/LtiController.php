@@ -373,14 +373,23 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/lti/{courseid}/ags_score", name="ags_score_new", methods={"GET","POST"})
+     * @Route("/lti/{courseid}/{docid}/ags_score", name="ags_score_new", methods={"GET","POST"})
      */
-    public function ags_score_new(Request $request, Permissions $permissions, string $courseid, Lti $lti)
+    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, string $courseid, string $docid)
     {
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course]);
-        $role = $permissions->getCourseRole($courseid);
+        $allowed = ['Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
 
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $role = $permissions->getCourseRole($courseid);
+        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course]);
+        if ($doc->getOrigin() != null) {
+            $d2l_user = $doc->getOrigin()->getUser()->getD2lId();
+        }
+        else {
+            $d2l_user = $doc->getUser()->getD2lId();
+        }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $registration = $this->session->get('lti_registration');
@@ -391,30 +400,35 @@ class LtiController extends AbstractController
             $agsid = $data['uri'];
             $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
             $uri = $local_ags->getLtiId().'/scores';
-            $userid = $data['userId'];
-            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->find($userid);
-            $userD2lId = $user->getD2lId();
+            $scoreMaximum = $local_ags->getMax();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
             $access_token = $lti->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
-                    "userId" => $userD2lId,
+                    "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
-                    "scoreMaximum" => $data['scoreMaximum'],
+                    "scoreMaximum" => $scoreMaximum,
                     "comment" => $data['comment'],
                     "timestamp" => $timestamp,
                     "activityProgress"=> 'Completed',
                     "gradingProgress"=> 'FullyGraded'
                 ]
             ];
+            $agsResultId = $local_ags->getLtiId().'/results?user_id='.$d2l_user;
+            $doc->setAgsResultId($agsResultId);
+            $this->getDoctrine()->getManager()->persist($doc);
+            $this->getDoctrine()->getManager()->flush();
             $response = $this->guzzle->request($method, $uri, $options);
-            $data = json_decode($response->getBody()->__toString(), true);
-            dd($data);
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+
         }
 
-        return $this->render('lti/new_ags_score.html.twig', [
+        return $this->render('comment/new.html.twig', [
+            'doc' => $doc,
+            'course' => $course,
+            'role' => $role,
             'form' => $form->createView(),
         ]);
     }

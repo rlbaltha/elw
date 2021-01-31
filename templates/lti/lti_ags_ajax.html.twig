@@ -1,0 +1,13 @@
+{% for score in scores %}
+    <div class="card mt-3">
+        <div class="card-header">
+            Final Grade
+        </div>
+        <div class="card-body">
+            {{ score.comment|raw }}
+        </div>
+        <div class="card-footer">
+            Grade: {{ score.resultScore }}
+        </div>
+    </div>
+{% endfor %}
