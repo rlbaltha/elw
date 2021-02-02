@@ -198,7 +198,7 @@
                                href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Post to Gradebook</a>
                         {% endif %}
 
-                        {% if review.agsResultId is not null and (app.user == doc.origin.user or role == 'Instructor') %}
+                        {% if review.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
                             <a class="btn btn-primary btn-sm ltiresult"
                                data-id = "lti{{ review.id }}"
                                href="#"
