@@ -28,10 +28,10 @@ class CommentType extends AbstractType
                 'config_name' => 'simple_config',
                 'label' => ''
             ])
-            ->add('grade', TextType::class, [
-                'label'  => 'Grade (optional, must be a number)',
-                'required' => false
-            ])
+//            ->add('grade', TextType::class, [
+//                'label'  => 'Grade (optional, must be a number)',
+//                'required' => false
+//            ])
             ->add('access', ChoiceType::class, [
                 'choices'  => [
                     'Hidden' => 'Hidden',
