@@ -1,16 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Gradebook Lineitem{% endblock %}
+{% block title %}eLW Gradebook Column{% endblock %}
 
 {% block subnav %}
-    <a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>
     {% if status !='Pending' %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('doc_index') }}">Documents</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('journal_index') }}">Journal</a>
-        </li>
+        {{ include('course/_subnav.html.twig') }}
     {% endif %}
 {% endblock %}
 
@@ -19,9 +13,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create new Gradebook Lineitem</h1>
+    <h1>Create New Gradebook Column</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary">{{ button_label|default('Submit') }}</button>
     {{ form_end(form) }}
 {% endblock %}

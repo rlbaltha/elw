@@ -20,16 +20,10 @@
                         <a class="nav-link"
                            href="{{ course_path('ags_index', {'courseid': course.id}) }}">eLC Gradebook Setup</a>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link"#}
-{#                           href="{{ course_path('approve_all_pending', {'courseid': course.id}) }}">Approve All#}
-{#                            Pending</a>#}
-{#                    </li>#}
                     <li class="nav-item">
                         <a id="delete-trigger" class="nav-link" href="#">Delete Course</a>
                         {{ include('course/_delete_form.html.twig') }}
                     </li>
-                    {# <a class="btn btn-primary" href="{{ path('classlist_new', {'courseid': course.id}) }}">Add Students</a> #}
                 </ul>
             </div>
         </div>

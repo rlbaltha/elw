@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block body %}
-    <span class="alert alert-info">N.B.:  You must create/edit the eLC Gradebook columns here to post or access grades from eLC in eLW.</span>
+    <div class="alert alert-info">N.B.:  You must create/edit the eLC Gradebook columns here to post or access grades from eLC in eLW.</div>
 
     <a class="btn btn-primary"
        href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
@@ -31,7 +31,7 @@
         <tr>
             <th scope="col">Label</th>
             <th scope="col">Max Score</th>
-            <th scope="col">Id</th>
+{#            <th scope="col">Id</th>#}
         </tr>
         </thead>
         <tbody>
