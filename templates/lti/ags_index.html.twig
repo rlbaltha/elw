@@ -19,29 +19,13 @@
 {% endblock %}
 
 {% block body %}
+    <span class="alert alert-info">N.B.:  You must create/edit the eLC Gradebook columns here to post or access grades from eLC in eLW.</span>
 
-    <table class="table table-bordered">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">Label</th>
-            <th scope="col">Max Score</th>
-            <th scope="col">Tag</th>
-            <th scope="col">Id</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for lineitem in lineitems %}
-            <tr>
-                <td>{{ lineitem.label }}</td>
-                <td>{{ lineitem.scoreMaximum }}</td>
-                <td>{{ lineitem.tag }}</td>
-                <td>{{ lineitem.id }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <a class="btn btn-primary"
+       href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
+        Column</a>
 
-
+    <h2>eLW Columns</h2>
     <table class="table table-bordered">
         <thead class="thead-light">
         <tr>
@@ -54,11 +38,36 @@
         {% for lineitem in course.ltiAgs %}
             <tr>
                 <td>{{ lineitem.label }}</td>
-                <td>{{ lineitem.scoreMaximum }}</td>
-                <td>{{ lineitem.id }}</td>
+                <td>{{ lineitem.max }}</td>
+                {#                <td>{{ lineitem.id }}</td>#}
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <h2>eLC Columns</h2>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Label</th>
+            <th scope="col">Max Score</th>
+{#            <th scope="col">Tag</th>#}
+{#            <th scope="col">Id</th>#}
+        </tr>
+        </thead>
+        <tbody>
+        {% for lineitem in lineitems %}
+            <tr>
+                <td>{{ lineitem.label }}</td>
+                <td>{{ lineitem.scoreMaximum }}</td>
+{#                <td>{{ lineitem.tag }}</td>#}
+{#                <td>{{ lineitem.id }}</td>#}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
 {% endblock %}
 
