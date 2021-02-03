@@ -228,6 +228,27 @@ class LtiController extends AbstractController
 
 
     /**
+     * @Route("/lti/{test}/guzzle", name="guzzle_test", methods={"GET"})
+     */
+    public function guzzle(String $test)
+    {
+        if ($test == 1) {
+           $uri = 'https://sso.uga.edu/cas/serviceValidate';
+        }
+        else {
+            $uri = 'https://www.nytimes.com/';
+        }
+        $method = 'get';
+        $options = '';
+        $uri = '';
+
+        $response = $this->guzzle->request($method, $uri, $options);
+        $data = json_decode($response->getBody()->__toString(), true);
+        dd($data);
+
+    }
+
+    /**
      * @Route("/lti/{courseid}/ags_index", name="ags_index", methods={"GET"})
      */
     public function ags(Permissions $permissions, String $courseid, Lti $lti)
