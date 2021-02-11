@@ -1,7 +1,7 @@
 {% for score in scores %}
     <div class="card mt-3">
         <div class="card-header">
-            Final Grade
+            Final Grade {% if column %}for {{ column }}{% endif %}
         </div>
         <div class="card-body">
             {{ score.comment|raw }}

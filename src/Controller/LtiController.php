@@ -233,14 +233,17 @@ class LtiController extends AbstractController
     public function guzzle(String $test)
     {
         if ($test == 1) {
-           $uri = 'https://sso.uga.edu/cas/serviceValidate';
+            $uri = 'https://sso.uga.edu/cas/login?service=https%3A%2F%2Felw.english.uga.edu%2Fcourse';
+
+        }
+        elseif ($test == 2) {
+            $uri = 'https://sso.uga.edu/cas/serviceValidate?ticket=ST-33357-D85QATI0vpmmMT8SS4l8kuVRrcQ-sso.uga.edu&service=https%3A%2F%2Felw.english.uga.edu%2Fcourse';
         }
         else {
             $uri = 'https://www.nytimes.com/';
         }
         $method = 'get';
-        $options = '';
-        $uri = '';
+        $options = [];
 
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
@@ -279,35 +282,35 @@ class LtiController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
-     */
-    public function ags_show(Permissions $permissions, String $courseid, Lti $lti)
-    {
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $role = $permissions->getCourseRole($courseid);
-
-        $registration_name = $this->getParameter('lti_registration');
-        $deployment_id = $this->getParameter('lti_deployment_id');
-        $method = 'get';
-        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
-        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
-
-        $registration = $this->repository->find($registration_name);
-        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
-        $access_token = $lti->getAccessToken($registration, $scope);
-        $options = $lti->getHeaderOptions($access_token, $accept_header);
-        $response = $this->guzzle->request($method, $uri, $options);
-        $data = json_decode($response->getBody()->__toString(), true);
-
-        return $this->render('lti/ags_index.html.twig', [
-            'lineitems' => $data,
-            'classlists' => $classlists,
-            'course' => $course,
-            'role' => $role,
-        ]);
-    }
+//    /**
+//     * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
+//     */
+//    public function ags_show(Permissions $permissions, String $courseid, Lti $lti)
+//    {
+//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+//        $role = $permissions->getCourseRole($courseid);
+//
+//        $registration_name = $this->getParameter('lti_registration');
+//        $deployment_id = $this->getParameter('lti_deployment_id');
+//        $method = 'get';
+//        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
+//        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
+//
+//        $registration = $this->repository->find($registration_name);
+//        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
+//        $access_token = $lti->getAccessToken($registration, $scope);
+//        $options = $lti->getHeaderOptions($access_token, $accept_header);
+//        $response = $this->guzzle->request($method, $uri, $options);
+//        $data = json_decode($response->getBody()->__toString(), true);
+//
+//        return $this->render('lti/ags_index.html.twig', [
+//            'lineitems' => $data,
+//            'classlists' => $classlists,
+//            'course' => $course,
+//            'role' => $role,
+//        ]);
+//    }
 
 
     /**
@@ -455,47 +458,48 @@ class LtiController extends AbstractController
     }
 
 
-    /**
-     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
-     */
-    public function ags_results(Request $request, Permissions $permissions, String $courseid, Lti $lti)
-    {
-
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $role = $permissions->getCourseRole($courseid);
-
-        $form = $this->createForm(LtiAgsResultsType::class, null, ['course' => $course]);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $registration = $this->session->get('lti_registration');
-            $method = 'GET';
-            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
-            $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
-            $data = $form->getData();
-            $agsid = $data['uri'];
-            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-            $uri = $local_ags->getLtiId().'/results';
-
-            $registration = $this->repository->find($registration);
-            $access_token = $lti->getAccessToken($registration, $scope);
-            $options = $lti->getHeaderOptions($access_token, $accept_header);
-            $response = $this->guzzle->request($method, $uri, $options);
-            $data = json_decode($response->getBody()->__toString(), true);
-
-
-            return $this->render('lti/ags_results.html.twig', [
-                'scores' => $data,
-                'classlists' => $classlists,
-                'course' => $course,
-                'role' => $role,
-            ]);
-        }
-
-        return $this->render('lti/new_ags_results.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
+//    /**
+//     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
+//     */
+//    public function ags_results(Request $request, Permissions $permissions, String $courseid, Lti $lti)
+//    {
+//
+//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+//        $role = $permissions->getCourseRole($courseid);
+//
+//        $form = $this->createForm(LtiAgsResultsType::class, null, ['course' => $course]);
+//
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $registration = $this->session->get('lti_registration');
+//            $method = 'GET';
+//            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
+//            $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
+//            $data = $form->getData();
+//            $agsid = $data['uri'];
+//            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
+//            $uri = $local_ags->getLtiId().'/results';
+//
+//            $registration = $this->repository->find($registration);
+//            $access_token = $lti->getAccessToken($registration, $scope);
+//            $options = $lti->getHeaderOptions($access_token, $accept_header);
+//            $response = $this->guzzle->request($method, $uri, $options);
+//            $data = json_decode($response->getBody()->__toString(), true);
+//
+//
+//            return $this->render('lti/ags_results.html.twig', [
+//                'scores' => $data,
+//                'column' => $local_ags->getLabel(),
+//                'classlists' => $classlists,
+//                'course' => $course,
+//                'role' => $role,
+//            ]);
+//        }
+//
+//        return $this->render('lti/new_ags_results.html.twig', [
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
 }

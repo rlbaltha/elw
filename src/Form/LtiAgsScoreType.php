@@ -30,9 +30,10 @@ class LtiAgsScoreType extends AbstractType
                 'choice_label' => 'label',
                 'choice_value' => 'id',
                 'label'  => 'eLC Grade Column',
+                'expanded' => true
             ])
             ->add('scoreGiven', NumberType::class, [
-                'label'  => 'Score'
+                'label'  => 'Grade (must be a number)'
             ])
             ->add('comment', CKEditorType::class, [
                 'config_name' => 'simple_config',

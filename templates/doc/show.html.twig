@@ -112,11 +112,6 @@
             <a class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
-            {# LTI Grade display #}
-            {% if role == 'Instructor' and scores|length ==0 %}
-                <a class="btn btn-primary btn-sm"
-                   href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Post to Gradebook</a>
-            {% endif %}
             {% for comment in doc.comments %}
                 {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
                     <div class="card mt-3">
@@ -156,6 +151,15 @@
                 <div id="lti{{ doc.id }}">
 
                 </div>
+                {% if role == 'Instructor' %}
+                    <a class="btn btn-primary btn-sm ltisubmit"
+                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Update Grade in eLC</a>
+                {% endif %}
+                {% else %}
+                    {% if role == 'Instructor' %}
+                        <a class="btn btn-primary btn-sm ltisubmit"
+                           href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Submit Grade to eLC</a>
+                    {% endif %}
             {% endif %}
 
 
@@ -192,12 +196,7 @@
                         <p> by {{ review.user.firstname }} {{ review.user.lastname }}
                             for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
 
-                        {# LTI Grade display #}
-                        {% if role == 'Instructor' and scores|length ==0 %}
-                            <a class="btn btn-primary btn-sm"
-                               href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Post to Gradebook</a>
-                        {% endif %}
-
+                        {# LTI Grade submit and display #}
                         {% if review.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
                             <a class="btn btn-primary btn-sm ltiresult"
                                data-id = "lti{{ review.id }}"
@@ -207,19 +206,15 @@
                             <div id="lti{{ review.id }}">
 
                             </div>
-                            {# {% for score in scores %} #}
-                            {# <div class="card mt-3"> #}
-                            {# <div class="card-header"> #}
-                            {# Final Grade #}
-                            {# </div> #}
-                            {# <div class="card-body"> #}
-                            {# {{ score.comment|raw }} #}
-                            {# </div> #}
-                            {# <div class="card-footer"> #}
-                            {# Grade: {{ score.resultScore }} #}
-                            {# </div> #}
-                            {# </div> #}
-                            {# {% endfor %} #}
+                            {% if role == 'Instructor' %}
+                                <a class="btn btn-primary btn-sm ltisubmit"
+                                   href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Update Grade to eLC</a>
+                            {% endif %}
+                            {% else %}
+                            {% if role == 'Instructor' %}
+                                <a class="btn btn-primary btn-sm ltisubmit"
+                                   href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Submit Grade to eLC</a>
+                            {% endif %}
                         {% endif %}
 
                         {% for comment in review.comments %}

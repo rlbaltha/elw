@@ -220,11 +220,15 @@ class DocController extends AbstractController
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
         $scores = [];
+        $column = '';
         if ($doc->getAgsResultId() != null)
         {
+            $ltiid = strstr($doc->getAgsResultId(),"/results",true);
+            $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid)->getLabel();
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
         return $this->render('lti/lti_ags_ajax.html.twig', [
+            'column' => $column,
             'scores' => $scores,
         ]);
     }

@@ -45,4 +45,13 @@ class LtiAgsRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOneByLtiid($value): ?LtiAgs
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.lti_id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

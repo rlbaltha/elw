@@ -505,6 +505,9 @@
     "symfony/property-info": {
         "version": "v4.4.11"
     },
+    "symfony/proxy-manager-bridge": {
+        "version": "v4.4.19"
+    },
     "symfony/psr-http-message-bridge": {
         "version": "v2.0.1"
     },
