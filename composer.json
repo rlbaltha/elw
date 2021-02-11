@@ -12,6 +12,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "alexandret/phpcas-guard-bundle": "~1",
         "antishov/doctrine-extensions-bundle": "^1.4",
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",

@@ -1,7 +1,11 @@
 security:
   providers:
-    cas:
-      id: App\Service\ElwUserProvider
+    users:
+      entity:
+        # the class of the entity that represents users
+        class: 'App\Entity\User'
+        # the property to query by - e.g. username, email, etc
+        property: 'username'
   encoders:
     App\Entity\User:
       algorithm: auto
@@ -9,20 +13,21 @@ security:
     main:
       logout:
         path: app_logout
-        target: index
-        success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+        target: /
+        success_handler: phpcasguard.cas_authenticator
       anonymous: ~
       lti1p3_message_tool: true
       guard:
-        entry_point: prayno.cas_authenticator
+        entry_point: phpcasguard.cas_authenticator
         authenticators:
-          - prayno.cas_authenticator
+          - phpcasguard.cas_authenticator
           - App\Security\LtiAuthenticator
       switch_user: true
 
   access_control:
     - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/course, roles: ROLE_USER, requires_channel: https}
     - { path: ^/classlist, roles: ROLE_USER, requires_channel: https }
     - { path: ^/doc, roles: ROLE_USER, requires_channel: https }
