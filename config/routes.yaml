@@ -6,7 +6,7 @@ app_logout:
     path: /logout
     methods: GET
 
-platform_service:
-    path: /tool/launch
-    controller: App\Action\Tool\LtiLaunchAction
+#platform_service:
+#    path: /tool/launch
+#    controller: App\Action\Tool\LtiLaunchAction
 

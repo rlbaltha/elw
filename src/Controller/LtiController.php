@@ -406,8 +406,20 @@ class LtiController extends AbstractController
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $comment = '';
+        $score = null;
+        $column = '';
+        if ($doc->getAgsResultId() != null)
+        {
+            $ltiid = strstr($doc->getAgsResultId(),"/results",true);
+            $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
+            $results = $lti->getLtiResult($doc->getAgsResultId());
+            $comment = $results[0]['comment'];
+            $score = $results[0]['resultScore'];
+        }
+        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course, 'comment' => $comment, 'score' => $score, 'column' => $column]);
         $role = $permissions->getCourseRole($courseid);
-        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course]);
+
         if ($doc->getOrigin() != null) {
             $d2l_user = $doc->getOrigin()->getUser()->getD2lId();
         }

@@ -18,6 +18,9 @@ class LtiAgsScoreType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $course = $options['course'];
+        $comment = $options['comment'];
+        $score = $options['score'];
+        $column = $options['column'];
         $builder
             ->add('uri', EntityType::class, [
                 'class' => LtiAgs::class,
@@ -30,15 +33,18 @@ class LtiAgsScoreType extends AbstractType
                 'choice_label' => 'label',
                 'choice_value' => 'id',
                 'label'  => 'eLC Grade Column',
-                'expanded' => true
+                'expanded' => true,
+                'data' => $column
             ])
             ->add('scoreGiven', NumberType::class, [
-                'label'  => 'Grade (must be a number)'
+                'label'  => 'Grade (must be a number)',
+                'data' => $score
             ])
             ->add('comment', CKEditorType::class, [
                 'config_name' => 'simple_config',
                 'label' => '',
-                'required' => false
+                'required' => false,
+                'data' => $comment
             ])
         ;
     }
@@ -47,6 +53,9 @@ class LtiAgsScoreType extends AbstractType
     {
         $resolver->setRequired([
             'course',
+            'comment',
+            'score',
+            'column'
         ]);
     }
 }
