@@ -13,14 +13,11 @@ security:
     main:
       logout:
         path: app_logout
-        target: /
-        success_handler: phpcasguard.cas_authenticator
+        target: home
       anonymous: ~
       lti1p3_message_tool: true
       guard:
-        entry_point: phpcasguard.cas_authenticator
         authenticators:
-          - phpcasguard.cas_authenticator
           - App\Security\LtiAuthenticator
       switch_user: true
 
@@ -28,6 +25,7 @@ security:
     - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/lti_launch, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/course, roles: ROLE_USER, requires_channel: https}
     - { path: ^/classlist, roles: ROLE_USER, requires_channel: https }
     - { path: ^/doc, roles: ROLE_USER, requires_channel: https }

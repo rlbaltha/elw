@@ -20,13 +20,13 @@ lti1p3:
         localTool:
             name: "elw"
             audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/initiation"
+            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://elw.uga.edu/lti_test"
             deep_linking_url: null
         awsTool:
             name: "elw_aws"
             audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/initiation"
+            oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://elw.english.uga.edu/lti_launch"
             deep_linking_url: null
     registrations:

@@ -4,57 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "084647482b5ba507a01c3027ba8379a2",
+    "content-hash": "237b428e5d65ca9643c067b8022f5567",
     "packages": [
-        {
-            "name": "alexandret/phpcas-guard-bundle",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Alexandre-T/casguard.git",
-                "reference": "8c9cfad82bdbbcf97399d75f7c6737fcf7314fe4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Alexandre-T/casguard/zipball/8c9cfad82bdbbcf97399d75f7c6737fcf7314fe4",
-                "reference": "8c9cfad82bdbbcf97399d75f7c6737fcf7314fe4",
-                "shasum": ""
-            },
-            "require": {
-                "jasig/phpcas": "~1.3",
-                "php": "^7.1.3",
-                "symfony/config": "~3.4|4.*|~5.0",
-                "symfony/dependency-injection": "~3.4|4.*|~5.0",
-                "symfony/routing": "~3.4|4.*|~5.0",
-                "symfony/security-guard": "~3.4|4.*|~5.0",
-                "symfony/yaml": "~3.4|4.*|~5.0"
-            },
-            "require-dev": {
-                "codeception/aspect-mock": "*",
-                "phpunit/phpunit": "~7.5",
-                "symfony/debug": "~3.4|4.*|~5.0",
-                "symfony/phpunit-bridge": "~3.4|4.*|~5.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "AlexandreT\\Bundle\\CasGuardBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexandre Tranchant",
-                    "email": "alexandre.tranchant@gmail.com"
-                }
-            ],
-            "description": "PhpCAS Bundle using guard for Symfony3.4 and above",
-            "homepage": "https://github.com/Alexandre-T/casguard",
-            "time": "2020-05-14T09:24:16+00:00"
-        },
         {
             "name": "antishov/doctrine-extensions-bundle",
             "version": "v1.4.3",
@@ -2179,63 +2130,6 @@
             "time": "2020-09-30T07:37:11+00:00"
         },
         {
-            "name": "jasig/phpcas",
-            "version": "1.3.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "7325865c4cfb5005ed4e4c5cf01823be1726a2a0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/7325865c4cfb5005ed4e4c5cf01823be1726a2a0",
-                "reference": "7325865c4cfb5005ed4e4c5cf01823be1726a2a0",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.4.0",
-                "psr/log": "^1.0.0"
-            },
-            "require-dev": {
-                "monolog/monolog": "^1.0.0",
-                "phpunit/phpunit": ">=4.8.35 <8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "source/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Joachim Fritschi",
-                    "homepage": "https://wiki.jasig.org/display/~fritschi"
-                },
-                {
-                    "name": "Adam Franco",
-                    "homepage": "https://wiki.jasig.org/display/~adamfranco"
-                }
-            ],
-            "description": "Provides a simple API for authenticating users against a CAS server",
-            "homepage": "https://wiki.jasig.org/display/CASC/phpCAS",
-            "keywords": [
-                "apereo",
-                "cas",
-                "jasig"
-            ],
-            "time": "2021-01-31T21:13:59+00:00"
-        },
-        {
             "name": "knplabs/knp-components",
             "version": "v2.5.1",
             "source": {
@@ -3469,57 +3363,6 @@
                 }
             ],
             "time": "2020-12-17T05:42:04+00:00"
-        },
-        {
-            "name": "prayno/casauth-bundle",
-            "version": "1.4",
-            "target-dir": "PRayno/CasAuthBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PRayno/CasAuthBundle.git",
-                "reference": "afc7e55f6d97a892bd3d4d105b129739b53df2f2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PRayno/CasAuthBundle/zipball/afc7e55f6d97a892bd3d4d105b129739b53df2f2",
-                "reference": "afc7e55f6d97a892bd3d4d105b129739b53df2f2",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.2",
-                "symfony/config": "^3.0|^4.0|^5.0",
-                "symfony/dependency-injection": "^3.0|^4.0|^5.0",
-                "symfony/http-foundation": "^3.0|^4.0|^5.0",
-                "symfony/http-kernel": "^3.0|^4.0|^5.0",
-                "symfony/security-bundle": "^3.0|^4.0|^5.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "PRayno\\CasAuthBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Pierre Raynaud",
-                    "email": "pierre.raynaud@uca.fr"
-                }
-            ],
-            "description": "Basic CAS (SSO) authenticator for Symfony 3, 4 and 5",
-            "keywords": [
-                "PRayno",
-                "SSO",
-                "Symfony 3",
-                "Symfony 4",
-                "cas",
-                "guard",
-                "symfony 5"
-            ],
-            "time": "2019-12-17T17:19:19+00:00"
         },
         {
             "name": "psr/cache",
@@ -6547,16 +6390,16 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44"
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/2d63434d922daf7da8dd863e7907e67ee3031483",
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483",
                 "shasum": ""
             },
             "require": {
@@ -6627,20 +6470,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba"
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/6e971c891537eb617a00bb07a43d182a6915faba",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/43a0283138253ed1d48d352ab6d0bdb3f809f248",
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248",
                 "shasum": ""
             },
             "require": {
@@ -6708,20 +6551,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T17:09:11+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/5232de97ee3b75b0360528dae24e73db49566ab1",
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1",
                 "shasum": ""
             },
             "require": {
@@ -6785,11 +6628,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
@@ -6862,7 +6705,7 @@
         },
         {
             "name": "symfony/polyfill-php73",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php73.git",
@@ -6938,7 +6781,7 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
