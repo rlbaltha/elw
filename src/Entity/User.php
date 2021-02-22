@@ -98,6 +98,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $d2l_id;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -156,7 +161,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getPassword()
     {
-        // not needed for apps that do not check user passwords
+        return $this->password;
     }
 
     /**
@@ -423,6 +428,13 @@ class User implements UserInterface, EquatableInterface
     public function setD2lId(?string $d2l_id): self
     {
         $this->d2l_id = $d2l_id;
+
+        return $this;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }

@@ -20,9 +20,11 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class ElwAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
+
+    public const LOGIN_ROUTE = 'app_login';
 
     private $entityManager;
     private $urlGenerator;
@@ -39,7 +41,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function supports(Request $request)
     {
-        return 'app_login' === $request->attributes->get('_route')
+        return self::LOGIN_ROUTE === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
@@ -77,8 +79,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-//        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
-        return true;
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
@@ -94,12 +95,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
         return new RedirectResponse($this->urlGenerator->generate('course_index'));
+
     }
 
     protected function getLoginUrl()
     {
-        return $this->urlGenerator->generate('app_login');
+        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }
