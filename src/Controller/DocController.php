@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Extension\AbstractExtension;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Nucleos\DompdfBundle\Factory\DompdfFactoryInterface;
+use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
 
 
 /**
@@ -23,6 +25,14 @@ use Dompdf\Options;
  */
 class DocController extends AbstractController
 {
+
+    /** @var DompdfWrapperInterface */
+    private $wrapper;
+
+    public function __construct(DompdfWrapperInterface $wrapper)
+    {
+        $this->wrapper = $wrapper;
+    }
 
     /**
      * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyDocs"})
@@ -241,33 +251,14 @@ class DocController extends AbstractController
     {
         $permissions->isAllowedToView($courseid, $doc);
 
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'sans-serif');
-
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-
         // Retrieve the HTML generated in our twig file
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc' => $doc,
         ]);
 
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream($doc->getTitle(), [
-            "Attachment" => true
-        ]);
-        // Send some text response
-        return new Response("The PDF file has been succesfully generated !");
+        $filename = $doc->getTitle().'.pdf';
+        $response = $this->wrapper->getStreamResponse($html, $filename);
+        $response->send();
     }
 
     /**

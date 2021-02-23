@@ -18,9 +18,9 @@ security:
       anonymous: ~
       lti1p3_message_tool: true
       guard:
-        entry_point: phpcasguard.cas_authenticator
+#        entry_point: phpcasguard.cas_authenticator
         authenticators:
-          - phpcasguard.cas_authenticator
+#          - phpcasguard.cas_authenticator
           - App\Security\LtiAuthenticator
       switch_user: true
 

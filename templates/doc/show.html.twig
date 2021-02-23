@@ -76,9 +76,7 @@
     {# {% endif %} #}
     {# </li> #}
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">PDF</a>
-    </li>
+
 {% endblock %}
 
 {% block subnavright %}
@@ -96,17 +94,22 @@
             </div>
         </div>
 
+        {# Info column #}
         <div class="col">
             <h1>{% if doc.origin %}<span class="badge badge-primary"
                                          style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
             </h1>
             <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+            <p>Created:  {{ doc.created | date("M j, Y g:ia") }}</p>
+            <p>Modified: {{ doc.updated | date("M j, Y g:ia") }} </p>
             <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
             <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+
             <span class="badge badge-primary"
                   style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
             <hr/>
 
+            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
 
             {# Comment Panel #}
             <a class="btn btn-primary btn-sm"
@@ -190,11 +193,16 @@
                             {{ review.body|raw }}
                         </div>
                     </div>
+
+                    {# Info column #}
                     <div class="col">
                         <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
                                     class="font-italic">{{ doc.title }}</h2>
                         <p> by {{ review.user.firstname }} {{ review.user.lastname }}
                             for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                        <p>Created:  {{ review.created | date("M j, Y g:ia") }}</p>
+                        <p>Modified: {{ review.updated | date("M j, Y g:ia") }} </p>
+                        <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': review.id}) }}">Create PDF</a>
 
                         {# LTI Grade submit and display #}
                         {% if review.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}

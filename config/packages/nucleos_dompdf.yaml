@@ -1,0 +1,3 @@
+nucleos_dompdf:
+  defaults:
+    defaultFont: 'arial'
