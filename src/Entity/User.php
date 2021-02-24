@@ -27,6 +27,12 @@ class User implements UserInterface, EquatableInterface
     private $username;
 
     /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -149,14 +155,19 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-
-
     /**
      * @see UserInterface
      */
-    public function getPassword()
+    public function getPassword(): string
     {
-        // not needed for apps that do not check user passwords
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     /**

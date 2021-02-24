@@ -10,45 +10,38 @@
 {% block body %}
     <div class="jumbotron">
         <h1 class="display-4" style='color:#ba0c2f; font-family: "serif"; '>eLearning for Writers</h1>
-        <p class="lead"><span id="motto1" style="opacity: 0">Learn together. </span><span id="motto2" style="opacity: 0">Write better.</span>  </p>
+        <p class="lead"><span id="motto1" style="opacity: 0">Learn together. </span><span id="motto2"
+                                                                                          style="opacity: 0">Write better.</span>
+        </p>
         <hr class="my-4">
         <span class="alert alert-info">{{ login_note|raw }}</span>
     </div>
 
-{#<form method="post">#}
-{#    {% if error %}#}
-{#        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-{#    {% endif %}#}
+    <h1 class="h3 mb-3 font-weight-normal">Admin Access</h1>
+    <form method="post" class="form-inline">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-{#    {% if app.user %}#}
-{#        <div class="mb-3">#}
-{#            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>#}
-{#        </div>#}
-{#    {% endif %}#}
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
 
-{#    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>#}
-{#    <label for="inputUsername">Username</label>#}
-{#    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>#}
-{#    <label for="inputPassword">Password</label>#}
-{#    <input type="password" name="password" id="inputPassword" class="form-control" required>#}
 
-{#    <input type="hidden" name="_csrf_token"#}
-{#           value="{{ csrf_token('authenticate') }}"#}
-{#    >#}
+        <label for="inputUsername">Username</label>
+        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required
+               autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" required>
 
-{#    #}{##}
-{#        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.#}
-{#        See https://symfony.com/doc/current/security/remember_me.html#}
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
 
-{#        <div class="checkbox mb-3">#}
-{#            <label>#}
-{#                <input type="checkbox" name="_remember_me"> Remember me#}
-{#            </label>#}
-{#        </div>#}
-{#    #}
-
-{#    <button class="btn btn-lg btn-primary" type="submit">#}
-{#        Sign in#}
-{#    </button>#}
-{#</form>#}
+        <button class="btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    </form>
 {% endblock %}

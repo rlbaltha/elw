@@ -22,13 +22,13 @@ cas_guard:
   route:
 
     # Name of your home route.
-    homepage:
+    homepage: home
 
     # Name of your login route.
-    login:
+    login: app_login
 
     # Name of the route where user is redirected after successful logout.
-    logout:
+    logout: home
 
   # If true phpcas trace will be more explicit.
   verbose:              false # Example: true
@@ -49,4 +49,4 @@ cas_guard:
     allowed_clients:      [] # Example: ["server1.example.org", "server2.example.org"]
 
     # true if you want to provide the url to the user to go back to your application after logout.
-    redirect_url:         false # Example: true
+    redirect_url:         true # Example: true

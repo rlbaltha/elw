@@ -226,9 +226,6 @@
     "phpseclib/phpseclib": {
         "version": "2.0.28"
     },
-    "prayno/casauth-bundle": {
-        "version": "1.4"
-    },
     "psr/cache": {
         "version": "1.0.1"
     },

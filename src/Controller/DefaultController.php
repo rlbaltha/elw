@@ -9,9 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/home", name="default")
+     * @Route("/home", name="home")
      */
-    public function index()
+    public function home()
     {
         $login_access = $_ENV['LOGIN_ACCESS'];
         $login_note = $_ENV['LOGIN_NOTE'];
