@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Entity\Stage;
 use App\Repository\ProjectRepository;
 use App\Repository\StageRepository;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -60,6 +61,9 @@ class DocType extends AbstractType
                 'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Access',
                 'required' => 'true'
+            ])
+            ->add('wordcount', NumberType::class, [
+                'label'  => 'Word Count',
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',

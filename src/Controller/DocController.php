@@ -307,14 +307,16 @@ class DocController extends AbstractController
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
-
+        $count=0;
         $update = $request->request->get('docBody');
+        $count = $request->request->get('count');
 
         if (!$doc) {
             throw $this->createNotFoundException('Unable to find Doc entity.');
         }
 
         $doc->setBody($update);
+        $doc->setWordcount($count);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();

@@ -1,3 +1,5 @@
 nucleos_dompdf:
   defaults:
     defaultFont: 'arial'
+    chroot: '%kernel.project_dir%/public'
+    isRemoteEnabled: true

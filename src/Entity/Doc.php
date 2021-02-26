@@ -96,6 +96,11 @@ class Doc
      */
     private $ags_result_id;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $wordcount;
+
 
     public function __construct()
     {
@@ -288,6 +293,18 @@ class Doc
     public function setAgsResultId(?string $ags_result_id): self
     {
         $this->ags_result_id = $ags_result_id;
+
+        return $this;
+    }
+
+    public function getWordcount(): ?int
+    {
+        return $this->wordcount;
+    }
+
+    public function setWordcount(?int $wordcount): self
+    {
+        $this->wordcount = $wordcount;
 
         return $this;
     }

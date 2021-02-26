@@ -113,6 +113,7 @@
         }
 
         $(document).ready(function () {
+            CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
                 $("label").toggle();
                 $("fieldset").toggle();
@@ -120,6 +121,7 @@
                 $("#doc_project").toggle();
                 $("#doc_stage").toggle();
                 $("#doc_access").toggle();
+                $("#doc_wordcount").toggle();
                 var text = $('.material-icons').text();
                 $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
             {% endif %}
@@ -130,10 +132,14 @@
                 $("#doc_project").toggle();
                 $("#doc_stage").toggle();
                 $("#doc_access").toggle();
+                $("#doc_wordcount").toggle();
                 var text = $('.material-icons').text();
                 $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
             });
             $("#submit-doc-form").click(function () {
+                var editor = CKEDITOR.instances.doc_body;
+                var count = editor.wordCount.wordCount;
+                $('#doc_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
             $(function () {
@@ -152,13 +158,16 @@
             var editor = CKEDITOR.instances.doc_body;
             var autoSave = setInterval(function () {
                 var buffer = editor.checkDirty();
+                var count = editor.wordCount.wordCount;
                 if (buffer == 1) {
+                    $('#doc_wordcount').val(count);
                     editor.resetDirty();
                     var body = editor.getData();
-                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body}, function (data) {
+                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body, count: count}, function (data) {
                     });
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
+
                 }
             }, 15000);
         });

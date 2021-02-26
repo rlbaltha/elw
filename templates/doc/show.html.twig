@@ -96,25 +96,51 @@
 
         {# Info column #}
         <div class="col">
-            <h1>{% if doc.origin %}<span class="badge badge-primary"
-                                         style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
-            </h1>
-            <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
-            <p>Created:  {{ doc.created | date("M j, Y g:ia") }}</p>
-            <p>Modified: {{ doc.updated | date("M j, Y g:ia") }} </p>
-            <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
-            <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+            <div class="card bg-light mt-3 mb-3">
+                <div class="card-header">
+                    <h1>{% if doc.origin %}<span class="badge badge-primary"
+                                                 style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                    <p>Created:  {{ doc.created | date("M j, Y g:ia") }}</p>
+                    <p>Modified: {{ doc.updated | date("M j, Y g:ia") }} </p>
+                    <p>Word Count: {{ doc.wordcount }} </p>
+                    <span class="badge badge-primary" style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                    <span class="badge badge-primary" style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
 
-            <span class="badge badge-primary"
-                  style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
-            <hr/>
+                    <span class="badge badge-primary"
+                          style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+                </div>
+            </div>
 
             <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
-
             {# Comment Panel #}
             <a class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
+
+            {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
+                <a class="btn btn-primary btn-sm ltiresult"
+                   data-id = "lti{{ doc.id }}"
+                   href="#"
+                   data-request="{{ course_path('ags_score_view', {'docid': doc.id}) }}"
+                >View Score</a>
+                <div id="lti{{ doc.id }}">
+
+                </div>
+                {% if role == 'Instructor' %}
+                    <a class="btn btn-primary btn-sm ltisubmit"
+                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Update Grade in eLC</a>
+                {% endif %}
+            {% else %}
+                {% if role == 'Instructor' %}
+                    <a class="btn btn-primary btn-sm ltisubmit"
+                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Submit Grade to eLC</a>
+                {% endif %}
+            {% endif %}
+
             {% for comment in doc.comments %}
                 {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
                     <div class="card mt-3">
@@ -144,28 +170,6 @@
                     </div>
                 {% endif %}
             {% endfor %}
-
-            {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
-                <a class="btn btn-primary btn-sm ltiresult"
-                   data-id = "lti{{ doc.id }}"
-                   href="#"
-                   data-request="{{ course_path('ags_score_view', {'docid': doc.id}) }}"
-                >View Score</a>
-                <div id="lti{{ doc.id }}">
-
-                </div>
-                {% if role == 'Instructor' %}
-                    <a class="btn btn-primary btn-sm ltisubmit"
-                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Update Grade in eLC</a>
-                {% endif %}
-                {% else %}
-                    {% if role == 'Instructor' %}
-                        <a class="btn btn-primary btn-sm ltisubmit"
-                           href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Submit Grade to eLC</a>
-                    {% endif %}
-            {% endif %}
-
-
         </div>
     </div>
     <div class="row" class="d-none">
@@ -196,12 +200,21 @@
 
                     {# Info column #}
                     <div class="col">
-                        <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
-                                    class="font-italic">{{ doc.title }}</h2>
-                        <p> by {{ review.user.firstname }} {{ review.user.lastname }}
-                            for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
-                        <p>Created:  {{ review.created | date("M j, Y g:ia") }}</p>
-                        <p>Modified: {{ review.updated | date("M j, Y g:ia") }} </p>
+                        <div class="card bg-light mt-3 mb-3">
+                            <div class="card-header">
+                                <h2><span class="badge badge-primary" style="background-color: darkblue">Review</span> of <span
+                                            class="font-italic">{{ doc.title }}</h2>
+                            </div>
+                            <div class="card-body">
+                                <p> by {{ review.user.firstname }} {{ review.user.lastname }}
+                                    for {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                                <p>Created:  {{ review.created | date("M j, Y g:ia") }}</p>
+                                <p>Modified: {{ review.updated | date("M j, Y g:ia") }} </p>
+                                <p>Word Count: {{ review.wordcount }} </p>
+
+                            </div>
+                        </div>
+
                         <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': review.id}) }}">Create PDF</a>
 
                         {# LTI Grade submit and display #}
@@ -341,7 +354,6 @@
                 $('.doc-container, .popover-markup').removeClass('d-none');
                 $('.doc-container').hide();
                 $('#doc{{ target }}').show()
-
             }
         );
     </script>

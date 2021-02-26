@@ -14,13 +14,12 @@ security:
       logout:
         path: app_logout
         target: /
-        success_handler: phpcasguard.cas_authenticator
       anonymous: ~
       lti1p3_message_tool: true
       guard:
-#        entry_point: phpcasguard.cas_authenticator
+        entry_point: App\Security\LoginFormAuthenticator
         authenticators:
-#          - phpcasguard.cas_authenticator
+          - App\Security\LoginFormAuthenticator
           - App\Security\LtiAuthenticator
       switch_user: true
 

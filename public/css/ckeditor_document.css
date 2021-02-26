@@ -1,27 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,400,400i,600,600i,700,700i');
 
 html  {
-    background-color: rgb(232, 232, 232);
+    background-color: white;
 }
 
 div.document-editor {
-    min-width: 900px;
-}
-.document-editor {
-    width: 15.8cm;
-    min-width: 750px;
-    min-height: 28cm;
-    padding: 1cm 2cm 2cm;
-    margin: 0.5cm auto;
+    width: 8.5in;
+    min-width: 8.5in;
+    min-height: 11in;
+    padding: 1in;
     border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    margin-bottom: 30px;
-    font-size: 16px;
-    line-height: 24px;
-    font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+    font-size: 12pt;
+    font-family: Arial, Verdana, sans-serif;
 }
 
 .document-editor td, body.document-editor th {
@@ -103,4 +96,27 @@ span.markup {
     overflow: auto;
 }
 
+.document-editor .doc_hanging_indent {
+    text-indent:-0.5in;
+    margin-left:0.5in;
+    line-height: 200%;
+}
+.document-editor .doc_header {text-align:left; line-height: 200%;}
+
+.document-editor .doc_wc {text-align:center; line-height: 200%;}
+
+.document-editor .doc_block_quote {margin-left:0.5in; line-height: 200%;}
+
+.document-editor .doc_paragraph_indent {
+    text-indent:0.5in;
+    line-height: 200%;
+}
+
+.document-editor .doc_single_space {
+    line-height: 100%;
+}
+
+.document-editor .doc_double_space {
+    line-height: 200%;
+}
 
