@@ -14,10 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Extension\AbstractExtension;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Nucleos\DompdfBundle\Factory\DompdfFactoryInterface;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
+use Caxy\HtmlDiff\HtmlDiff;
 
 
 /**
@@ -220,6 +218,29 @@ class DocController extends AbstractController
             'markupsets' => $markupsets,
             'role' => $role,
             'target' => $target
+        ]);
+    }
+
+    /**
+     * @Route("/{id1}/{id2}/{courseid}/diff", name="doc_diff", methods={"GET"}, defaults={})
+     */
+    public function diff(string $id1, string $id2, string $courseid, Permissions $permissions): Response
+    {
+        $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
+        $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
+        $permissions->isAllowedToView($courseid, $doc1);
+        $permissions->isAllowedToView($courseid, $doc2);
+        $doc1str = $doc1->getBody();
+        $doc2str = $doc2->getBody();
+        $htmlDiff = new HtmlDiff($doc1str, $doc2str);
+        $diff = $htmlDiff->build();
+
+        $role = $permissions->getCourseRole($courseid);
+        return $this->render('doc/diff.html.twig', [
+            'diff' => $diff,
+            'doc1' => $doc1,
+            'doc2' => $doc2,
+            'role' => $role,
         ]);
     }
 

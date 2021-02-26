@@ -14,6 +14,9 @@
     "behat/transliterator": {
         "version": "v1.3.0"
     },
+    "caxy/php-htmldiff": {
+        "version": "v0.1.9"
+    },
     "codercat/jwk-to-pem": {
         "version": "0.0.3"
     },
@@ -108,6 +111,9 @@
     "egulias/email-validator": {
         "version": "2.1.18"
     },
+    "ezyang/htmlpurifier": {
+        "version": "v4.13.0"
+    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
         "recipe": {
@@ -137,6 +143,9 @@
     },
     "knplabs/knp-paginator-bundle": {
         "version": "v5.3.0"
+    },
+    "kub-at/php-simple-html-dom-parser": {
+        "version": "1.9.1"
     },
     "lcobucci/jwt": {
         "version": "3.3.3"

@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doc{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <style>
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) {
+
+            div.document-editor {
+                min-width: 100%;
+            }
+
+            .document-editor {
+                width: 100%;
+                margin: 0;
+                font-size: 16px;
+                font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block subnav %}
+
+{% endblock %}
+
+{% block subnavright %}
+    <li class="nav-item">
+        <a id='close-trigger' class="nav-link" href="#">Close</a>
+    </li>
+{% endblock %}
+
+
+{% block body %}
+    <div class="row doc-container">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="document-editor">
+                {{ diff|raw }}
+            </div>
+        </div>
+
+        {# Info column #}
+        <div class="col">
+            <div class="card bg-light mt-3 mb-3">
+                <div class="card-header">
+                    <h2>{{ doc1.title }}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p>{{ doc1.user.firstname }} {{ doc1.user.lastname }}</p>
+                    <p>Created:  {{ doc1.created | date("M j, Y g:ia") }}</p>
+                    <p>Modified: {{ doc1.updated | date("M j, Y g:ia") }} </p>
+                    <p>Word Count: {{ doc1.wordcount }} </p>
+                    <span class="badge badge-primary" style="background:{{ doc1.project.color }}">{{ doc1.project.name }}</span>
+                    <span class="badge badge-primary" style="background:{{ doc1.stage.color }}">{{ doc1.stage.name }}</span>
+
+                    <span class="badge badge-primary"
+                          style="background:{% if doc1.access=='Private'%}darkred{% elseif doc1.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc1.access }}</span>
+                </div>
+            </div>
+            <div class="card bg-light mt-3 mb-3">
+                <div class="card-header">
+                    <h2>{{ doc2.title }}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p>{{ doc2.user.firstname }} {{ doc2.user.lastname }}</p>
+                    <p>Created:  {{ doc2.created | date("M j, Y g:ia") }}</p>
+                    <p>Modified: {{ doc2.updated | date("M j, Y g:ia") }} </p>
+                    <p>Word Count: {{ doc2.wordcount }} </p>
+                    <span class="badge badge-primary" style="background:{{ doc2.project.color }}">{{ doc2.project.name }}</span>
+                    <span class="badge badge-primary" style="background:{{ doc2.stage.color }}">{{ doc2.stage.name }}</span>
+
+                    <span class="badge badge-primary"
+                          style="background:{% if doc2.access=='Private'%}darkred{% elseif doc2.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc2.access }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            }
+        );
+    </script>
+{% endblock %}

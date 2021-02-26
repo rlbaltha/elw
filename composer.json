@@ -13,6 +13,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "antishov/doctrine-extensions-bundle": "^1.4",
+        "caxy/php-htmldiff": "^0.1.9",
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
