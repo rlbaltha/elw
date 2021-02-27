@@ -4,17 +4,47 @@ html  {
     background-color: white;
 }
 
-div.document-editor {
-    width: 8.5in;
-    min-width: 8.5in;
-    min-height: 11in;
-    padding: 1in;
-    border: 1px #D3D3D3 solid;
-    border-radius: 5px;
-    background: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    font-size: 12pt;
-    font-family: Arial, Verdana, sans-serif;
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    div.document-editor {
+        min-width: 100%;
+        padding: 2%;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: none;
+        font-size: 12pt;
+        font-family: Arial, Verdana, sans-serif;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    div.document-editor {
+        min-width: 100%;
+        padding: 5%;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: none;
+        font-size: 12pt;
+        font-family: Arial, Verdana, sans-serif;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    div.document-editor {
+        min-width: 8.5in;
+        min-height: 11in;
+        padding: 10%;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        font-size: 12pt;
+        font-family: Arial, Verdana, sans-serif;
+    }
 }
 
 .document-editor td, body.document-editor th {
