@@ -50,6 +50,9 @@
                     <li class="nav-item">
                         <a target="_blank" class="nav-link" href="{{ course_path('doc_new') }}">New Doc</a>
                     </li>
+                    <li class="nav-item">
+                        <a id="compare_click" class="nav-link" href="#">Compare</a>
+                    </li>
                     {% if role=='Instructor' %}
                         {% if hidden_reviews > 0 %}
                             <li class="nav-item">
@@ -113,6 +116,7 @@
         {% for doc in docs %}
             <tr class="body">
                 <td>
+                    <label class="sr-only sr-only-focusable" for="{{ doc.id }}">Select</label><input type="checkbox" id="{{ doc.id }}" name="scales">
                     {% if doc.origin %}
                         <span class="badge badge-primary">Review</span>
                     {% endif %}
@@ -196,7 +200,20 @@
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 }
-
+            });
+            $("#compare_click").click(function () {
+                var doc1;
+                var doc2;
+                var url;
+                var location ='_blank'
+                if ($('input:checked').length != 2) {
+                    alert('Please select only two documents to compare');
+                } else {
+                    var doc1 = $('input:checked:eq( 0 )').attr('id');
+                    var doc2 = $('input:checked:eq( 1 )').attr('id');
+                    var url = '/doc/'+doc1+'/'+doc2+'/'+'{{ course.id }}'+'/diff';
+                    window.open(url, location);
+                }
             });
         });
     </script>

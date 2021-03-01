@@ -19,6 +19,8 @@
                 font-size: 16px;
                 font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
             }
+            ins.diffins {color: green}
+            del.diffdel {color:red}
         }
     </style>
 {% endblock %}
@@ -37,6 +39,9 @@
 {% block body %}
     <div class="row doc-container">
         <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="alert alert-info">
+                Additions to the first document are underlined and green.  Subtractions are formatted red with strikethrough.
+            </div>
             <div class="document-editor">
                 {{ diff|raw }}
             </div>
@@ -86,6 +91,9 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $('#close-trigger').click(function () {
+                window.close();
+            });
             }
         );
     </script>
