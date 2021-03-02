@@ -35,6 +35,9 @@
     <script>
         $(document).ready(function () {
             $("#submit-doc-form").click(function () {
+                var editor = CKEDITOR.instances.journal_body;
+                var count = editor.wordCount.wordCount;
+                $('#journal_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
             {# Delete doc trigger#}
@@ -46,8 +49,10 @@
             $('#saving_alert').hide();
             var editor = CKEDITOR.instances.journal_body;
             var autoSave = setInterval(function () {
+                var count = editor.wordCount.wordCount;
                 var buffer = editor.checkDirty();
                 if (buffer == 1) {
+                    $('#journal_wordcount').val(count);
                     editor.resetDirty();
                     var body = editor.getData();
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body}, function (data) {

@@ -26,7 +26,10 @@ class JournalType extends AbstractType
                 'required'=>false
             ])
             ->add('stage', HiddenType::class, [
-                'required'=>false
+                'required'=>false,
+            ])
+            ->add('wordcount', HiddenType::class, [
+                'label'  => '',
             ])
         ;
     }

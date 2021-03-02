@@ -230,6 +230,7 @@ class DocController extends AbstractController
         $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
         $permissions->isAllowedToView($courseid, $doc1);
         $permissions->isAllowedToView($courseid, $doc2);
+//        order by creation date
         $doc1str = $doc1->getBody();
         $doc2str = $doc2->getBody();
         $htmlDiff = new HtmlDiff($doc1str, $doc2str);

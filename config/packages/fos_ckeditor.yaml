@@ -19,6 +19,7 @@ fos_ck_editor:
         simple_config:
             toolbar: [ [ 'Undo', 'Redo' ], [ 'Format', 'Font', 'FontSize' ] [ 'Bold', 'Italic'],  [ 'TextColor', 'BGColor' ], [ 'Link', 'Unlink' ], [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ]]
             allowedContent: 'p h2 h3 h4 img{text-align,margin-left}(*); a[!href,target]{*}(*); table th tr td strong s em; ol ul li span(*){font-size,font-family,color,background-color}[data-id]; img[*]{*}; '
+            extraPlugins: ['wordcount', 'notification']
     plugins:
         wordcount:
             path:     "/plugins/wordcount/" # with trailing slash

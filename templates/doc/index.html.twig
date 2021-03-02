@@ -116,7 +116,7 @@
         {% for doc in docs %}
             <tr class="body">
                 <td>
-                    <label class="sr-only sr-only-focusable" for="{{ doc.id }}">Select</label><input type="checkbox" id="{{ doc.id }}" name="scales">
+                    <label class="sr-only sr-only-focusable" for="{{ doc.id }}">Select for comparison</label><input type="checkbox" id="{{ doc.id }}" name="scales">
                     {% if doc.origin %}
                         <span class="badge badge-primary">Review</span>
                     {% endif %}

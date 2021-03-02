@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class LtiController extends AbstractController
 {
@@ -47,6 +48,9 @@ class LtiController extends AbstractController
     /** @var SessionInterface */
     private $session;
 
+    /** @var UserPasswordEncoderInterface */
+    private $passwordEncoder;
+
 
     public function __construct(
         Security $security,
@@ -54,8 +58,8 @@ class LtiController extends AbstractController
         ClientInterface $guzzle,
         Builder $builder,
         Signer $signer,
-        SessionInterface $session
-
+        SessionInterface $session,
+        UserPasswordEncoderInterface $passwordEncoder
     )
     {
         $this->security = $security;
@@ -64,6 +68,7 @@ class LtiController extends AbstractController
         $this->builder = $builder;
         $this->signer = $signer;
         $this->session = $session;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
 
@@ -122,6 +127,11 @@ class LtiController extends AbstractController
             $user->setFirstname($firstname);
             $user->setLtiId($lti_id);
             $user->setD2lId($d2l_id);
+            $password = random_bytes(18);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $password
+            ));
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
         }
