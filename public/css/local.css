@@ -32,19 +32,6 @@ h2 {
 }
 
 
-/********** Doc display **********/
-.note {
-    font-size:85%;
-    margin-left: .5em;
-    margin-right: .5em;
-}
-.badge {
-    font-size: 90%;
-}
-
-.alert-ul {
-    list-style-type:none
-}
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
 {

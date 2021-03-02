@@ -5,25 +5,6 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
-    <style>
-        /* Small devices (landscape phones, 576px and up) */
-        @media (min-width: 576px) {
-
-            div.document-editor {
-                min-width: 100%;
-            }
-
-            .document-editor {
-                width: 100%;
-                margin: 0;
-                font-size: 16px;
-                font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
-            }
-            ins.diffins {color: green}
-            del.diffdel {color:red}
-            .diffmod {color:blue}
-        }
-    </style>
 {% endblock %}
 
 {% block subnav %}
@@ -50,9 +31,11 @@
 
         {# Info column #}
         <div class="col">
+            <a id="compare_click" class="btn btn-primary btn-sm" href="#">Swap Order</a>
+            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_diff_pdf', {'id1': doc1.id, 'id2': doc2.id}) }}">Create PDF</a>
             <div class="card bg-light mt-3 mb-3">
                 <div class="card-header">
-                    <h2>{{ doc1.title }}
+                    <h2>First Document:  {{ doc1.title }}
                     </h2>
                 </div>
                 <div class="card-body">
@@ -69,7 +52,7 @@
             </div>
             <div class="card bg-light mt-3 mb-3">
                 <div class="card-header">
-                    <h2>{{ doc2.title }}
+                    <h2>Second Document:{{ doc2.title }}
                     </h2>
                 </div>
                 <div class="card-body">
@@ -92,6 +75,13 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $("#compare_click").click(function () {
+                var doc1 = {{ doc2.id }};
+                var doc2= {{ doc1.id }};
+                var location ='_self'
+                var url = '/doc/'+doc1+'/'+doc2+'/'+'{{ course.id }}'+'/diff';
+                window.open(url, location);
+            });
             $('#close-trigger').click(function () {
                 window.close();
             });

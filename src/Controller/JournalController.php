@@ -37,13 +37,12 @@ class JournalController extends AbstractController
         }
         $docs = $docRepository->findJournal($course, $user);
         $doc = $docRepository->findOneById($docid);
+        $scores = [];
         if (count($docs)>0 and !$doc) {
             $doc = $docs[0];
-        }
-        $scores = [];
-        if ($doc->getAgsResultId() != null)
-        {
-            $scores = $lti->getLtiResult($doc->getAgsResultId());
+            if ($doc->getAgsResultId() != null){
+                $scores = $lti->getLtiResult($doc->getAgsResultId());
+            }
         }
         return $this->render('journal/index.html.twig', [
             'docs' => $docs,

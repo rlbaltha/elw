@@ -47,38 +47,52 @@ html  {
     }
 }
 
-.document-editor td, body.document-editor th {
+
+.note {
+    font-size:85%;
+    margin-left: .5em;
+    margin-right: .5em;
+}
+.badge {
+    font-size: 90%;
+}
+
+.alert-ul {
+    list-style-type:none
+}
+
+td, body.document-editor th {
     font-size: 0.9em;
 }
 
-.document-editor h1 {
+h1 {
     margin-bottom:1cm;
 }
 
-.document-editor table {
+table {
     margin-top:0.5cm;
     margin-bottom:0.5cm;
 }
 
-.document-editor table td {
+table td {
     border-right: 1px solid #d0d0d0;
     border-bottom: 1px solid #d0d0d0;
 }
 
-.document-editor table td:first-of-type {
+table td:first-of-type {
     border-left: 1px solid #d0d0d0;
 }
 
-.document-editor table tr:first-of-type td {
+table tr:first-of-type td {
     border-top: 1px solid #d0d0d0;
 }
 
-.document-editor table thead th {
+table thead th {
     border-top: 1px solid #d0d0d0;
     border-right: 1px solid #d0d0d0;
 }
 
-.document-editor table thead th:first-of-type {
+table thead th:first-of-type {
     border-left: 1px solid #d0d0d0;
 }
 
@@ -101,11 +115,11 @@ span.markup {
     padding:2px 2px 2px 2px;
 }
 .popover-title {
-    padding: 2em;
+    padding: 2px;
 }
 
 .popover-content {
-    padding: 2em;
+    padding: 2px;
 }
 
 .notefocus {
@@ -126,27 +140,30 @@ span.markup {
     overflow: auto;
 }
 
-.document-editor .doc_hanging_indent {
+.doc_hanging_indent {
     text-indent:-0.5in;
     margin-left:0.5in;
     line-height: 200%;
 }
-.document-editor .doc_header {text-align:left; line-height: 200%;}
+.doc_header {text-align:left; line-height: 200%;}
 
-.document-editor .doc_wc {text-align:center; line-height: 200%;}
+.doc_wc {text-align:center; line-height: 200%;}
 
-.document-editor .doc_block_quote {margin-left:0.5in; line-height: 200%;}
+.doc_block_quote {margin-left:0.5in; line-height: 200%;}
 
-.document-editor .doc_paragraph_indent {
+.doc_paragraph_indent {
     text-indent:0.5in;
     line-height: 200%;
 }
 
-.document-editor .doc_single_space {
+.doc_single_space {
     line-height: 100%;
 }
 
-.document-editor .doc_double_space {
+.doc_double_space {
     line-height: 200%;
 }
-
+/* diff display */
+ins.diffins {color: green}
+del.diffdel {color:red}
+.diffmod {color:blue}

@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Extension\AbstractExtension;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
 use Caxy\HtmlDiff\HtmlDiff;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 /**
@@ -226,6 +227,7 @@ class DocController extends AbstractController
      */
     public function diff(string $id1, string $id2, string $courseid, Permissions $permissions): Response
     {
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
         $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
         $permissions->isAllowedToView($courseid, $doc1);
@@ -242,7 +244,33 @@ class DocController extends AbstractController
             'doc1' => $doc1,
             'doc2' => $doc2,
             'role' => $role,
+            'course' => $course,
         ]);
+    }
+
+    /**
+     * @Route("/{id1}/{id2}/{courseid}/diff_pdf", name="doc_diff_pdf", methods={"GET"}, defaults={})
+     */
+    public function diff_pdf(string $id1, string $id2, string $courseid, Permissions $permissions)
+    {
+        $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
+        $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
+        $permissions->isAllowedToView($courseid, $doc1);
+        $permissions->isAllowedToView($courseid, $doc2);
+        $doc1str = $doc1->getBody();
+        $doc2str = $doc2->getBody();
+        $htmlDiff = new HtmlDiff($doc1str, $doc2str);
+        $diff = $htmlDiff->build();
+        $doc = new Doc();
+        $doc->setBody($diff);
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('doc/pdf.html.twig', [
+            'doc' => $doc,
+        ]);
+
+        $filename = 'compare.pdf';
+        $response = $this->wrapper->getStreamResponse($html, $filename);
+        $response->send();
     }
 
     /**
@@ -269,7 +297,7 @@ class DocController extends AbstractController
     /**
      * @Route("/{id}/{courseid}/pdf", name="doc_pdf", methods={"GET"})
      */
-    public function pdf(Doc $doc, string $courseid, Permissions $permissions, Request $request): Response
+    public function pdf(Doc $doc, string $courseid, Permissions $permissions, Request $request)
     {
         $permissions->isAllowedToView($courseid, $doc);
 
@@ -279,6 +307,7 @@ class DocController extends AbstractController
         ]);
 
         $filename = $doc->getTitle().'.pdf';
+
         $response = $this->wrapper->getStreamResponse($html, $filename);
         $response->send();
     }

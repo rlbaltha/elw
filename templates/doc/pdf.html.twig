@@ -7,27 +7,46 @@
           crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
     <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/ckeditor_document.css')) }}">
-    <style>
-        div.document-editor {
-            width: 6.5in;
-            min-width: 6.5in;
-            min-height: 11in;
-            margin: -.5in;
-            margin-bottom: -1.2in;
-            padding: 1in;
-            border: 0;
-            border-radius: 0;
-            background: white;
-            box-shadow: 0;
-            font-size: 12pt;
-            font-family: Arial, Verdana, sans-serif;
-        }
-    </style>
+
 </head>
 <body>
-<div class="document-editor">
+<div style="margin: .5in;"
     {{ doc.body|raw }}
-</div>
 </body>
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+                {# Note pops for this/these documents #}
+            // $('.note').each(function (index) {
+            //     var p = $(this).position();
+            //     var top = p.top;
+            //     var note_index = index + 1;
+            //     var note_number = '<span class="blue">' + note_index + '</span>';
+            //     var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
+            //     $(this).prev().append(note);
+            // });
+            //
+            // $('.highlight').each(function (index) {
+            //     var span_number = index + 1;
+            //     $(this).attr('id', 'h' + span_number);
+            //     var span_append = '<span class="super">' + span_number + '</span>';
+            //     $(this).append(span_append);
+            //     $('.super').hide();
+            // });
+            //
+            // $('.markup').each(function () {
+            //     var id = "div[data-id='" + $(this).attr('data-id') + "']";
+            //     var markupbody = $(id).children(".popover-title").text();
+            //     var span_append = '<span class="note markupbody">' + markupbody + '</span>';
+            //     $(this).after(span_append);
+            // });
+
+            $('.popover').hide();
+
+            $('.popover-markup').removeClass('d-none');
+        }
+    );
+</script>
 </html>
