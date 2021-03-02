@@ -10,7 +10,7 @@ use App\Entity\LtiAgs;
 use App\Entity\User;
 use App\Form\LtiAgsLineitemType;
 use App\Form\LtiAgsScoreType;
-Use App\Form\LtiAgsResultsType;
+use App\Form\LtiAgsResultsType;
 use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Lti;
@@ -184,8 +184,7 @@ class LtiController extends AbstractController
                 throw $this->createAccessDeniedException("This course is not yet available in ELW");
             }
 
-        }
-        else {
+        } else {
             //Check if on Roll (Classlist)
             $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
             if (!$classuser) {
@@ -205,11 +204,10 @@ class LtiController extends AbstractController
     }
 
 
-
     /**
      * @Route("/lti/{courseid}/nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Permissions $permissions, String $courseid, Lti $lti)
+    public function nrps(Permissions $permissions, string $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -222,7 +220,7 @@ class LtiController extends AbstractController
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
 
         $registration = $this->repository->find($registration);
-        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/nrps/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/memberships';
+        $uri = $registration->getPlatform()->getAudience() . '/d2l/api/lti/nrps/2.0/deployment/' . $deployment_id . '/orgunit/' . $course->getLtiId() . '/memberships';
         $access_token = $lti->getAccessToken($registration, $scope);
         $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
@@ -240,16 +238,14 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{test}/guzzle", name="guzzle_test", methods={"GET"})
      */
-    public function guzzle(String $test)
+    public function guzzle(string $test)
     {
         if ($test == 1) {
             $uri = 'https://sso.uga.edu/cas/login?service=https%3A%2F%2Felw.english.uga.edu%2Fcourse';
 
-        }
-        elseif ($test == 2) {
+        } elseif ($test == 2) {
             $uri = 'https://sso.uga.edu/cas/serviceValidate?ticket=ST-33357-D85QATI0vpmmMT8SS4l8kuVRrcQ-sso.uga.edu&service=https%3A%2F%2Felw.english.uga.edu%2Fcourse';
-        }
-        else {
+        } else {
             $uri = 'https://www.nytimes.com/';
         }
         $method = 'get';
@@ -264,7 +260,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_index", name="ags_index", methods={"GET"})
      */
-    public function ags(Permissions $permissions, String $courseid, Lti $lti)
+    public function ags(Permissions $permissions, string $courseid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -278,7 +274,7 @@ class LtiController extends AbstractController
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration);
-        $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
+        $uri = $registration->getPlatform()->getAudience() . '/d2l/api/lti/ags/2.0/deployment/' . $deployment_id . '/orgunit/' . $course->getLtiId() . '/lineitems';
         $access_token = $lti->getAccessToken($registration, $scope);
         $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
@@ -292,41 +288,11 @@ class LtiController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/lti/{courseid}/ags_show", name="ags_show", methods={"GET"})
-//     */
-//    public function ags_show(Permissions $permissions, String $courseid, Lti $lti)
-//    {
-//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-//        $role = $permissions->getCourseRole($courseid);
-//
-//        $registration_name = $this->getParameter('lti_registration');
-//        $deployment_id = $this->getParameter('lti_deployment_id');
-//        $method = 'get';
-//        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
-//        $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
-//
-//        $registration = $this->repository->find($registration_name);
-//        $uri = 'https://ugatest2.view.usg.edu/d2l/api/lti/ags/2.0/deployment/ce0f6d44-e598-4400-a2bd-ce6884eb416d/orgunit/2000652/lineitems/7566cb31-ce09-4437-b0a0-955cacefbef4';
-//        $access_token = $lti->getAccessToken($registration, $scope);
-//        $options = $lti->getHeaderOptions($access_token, $accept_header);
-//        $response = $this->guzzle->request($method, $uri, $options);
-//        $data = json_decode($response->getBody()->__toString(), true);
-//
-//        return $this->render('lti/ags_index.html.twig', [
-//            'lineitems' => $data,
-//            'classlists' => $classlists,
-//            'course' => $course,
-//            'role' => $role,
-//        ]);
-//    }
-
 
     /**
      * @Route("/lti/{courseid}/{agsid}/ags_delete", name="ags_delete", methods={"GET"})
      */
-    public function ags_delete(Permissions $permissions, String $courseid, String $agsid, Lti $lti)
+    public function ags_delete(Permissions $permissions, string $courseid, string $agsid, Lti $lti)
     {
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
@@ -375,7 +341,7 @@ class LtiController extends AbstractController
             $data = $form->getData();
 
             $registration = $this->repository->find($registration);
-            $uri = $registration->getPlatform()->getAudience().'/d2l/api/lti/ags/2.0/deployment/'.$deployment_id.'/orgunit/'.$course->getLtiId().'/lineitems';
+            $uri = $registration->getPlatform()->getAudience() . '/d2l/api/lti/ags/2.0/deployment/' . $deployment_id . '/orgunit/' . $course->getLtiId() . '/lineitems';
             $access_token = $lti->getAccessToken($registration, $scope);
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
@@ -407,9 +373,9 @@ class LtiController extends AbstractController
     }
 
     /**
-     * @Route("/lti/{courseid}/{docid}/ags_score", name="ags_score_new", methods={"GET","POST"})
+     * @Route("/lti/{courseid}/{docid}/{source}/ags_score", name="ags_score_new", methods={"GET","POST"})
      */
-    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, string $courseid, string $docid)
+    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, string $courseid, string $docid, string $source)
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -419,9 +385,8 @@ class LtiController extends AbstractController
         $comment = '';
         $score = null;
         $column = '';
-        if ($doc->getAgsResultId() != null)
-        {
-            $ltiid = strstr($doc->getAgsResultId(),"/results",true);
+        if ($doc->getAgsResultId() != null) {
+            $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
             $results = $lti->getLtiResult($doc->getAgsResultId());
             $comment = $results[0]['comment'];
@@ -432,8 +397,7 @@ class LtiController extends AbstractController
 
         if ($doc->getOrigin() != null) {
             $d2l_user = $doc->getOrigin()->getUser()->getD2lId();
-        }
-        else {
+        } else {
             $d2l_user = $doc->getUser()->getD2lId();
         }
         $form->handleRequest($request);
@@ -445,7 +409,7 @@ class LtiController extends AbstractController
             $data = $form->getData();
             $agsid = $data['uri'];
             $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-            $uri = $local_ags->getLtiId().'/scores';
+            $uri = $local_ags->getLtiId() . '/scores';
             $scoreMaximum = $local_ags->getMax();
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
@@ -458,16 +422,21 @@ class LtiController extends AbstractController
                     "scoreMaximum" => $scoreMaximum,
                     "comment" => $data['comment'],
                     "timestamp" => $timestamp,
-                    "activityProgress"=> 'Completed',
-                    "gradingProgress"=> 'FullyGraded'
+                    "activityProgress" => 'Completed',
+                    "gradingProgress" => 'FullyGraded'
                 ]
             ];
-            $agsResultId = $local_ags->getLtiId().'/results?user_id='.$d2l_user;
+            $agsResultId = $local_ags->getLtiId() . '/results?user_id=' . $d2l_user;
             $doc->setAgsResultId($agsResultId);
             $this->getDoctrine()->getManager()->persist($doc);
             $this->getDoctrine()->getManager()->flush();
             $response = $this->guzzle->request($method, $uri, $options);
+
+            if ($source != 'doc') {
+                return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
+            }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+
 
         }
 

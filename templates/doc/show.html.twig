@@ -132,12 +132,12 @@
                 </div>
                 {% if role == 'Instructor' %}
                     <a class="btn btn-primary btn-sm ltisubmit"
-                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Update Grade in eLC</a>
+                       href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Update Grade in eLC</a>
                 {% endif %}
             {% else %}
                 {% if role == 'Instructor' %}
                     <a class="btn btn-primary btn-sm ltisubmit"
-                       href="{{ course_path('ags_score_new', {'docid': doc.id}) }}">Submit Grade to eLC</a>
+                       href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Submit Grade to eLC</a>
                 {% endif %}
             {% endif %}
 
@@ -229,12 +229,12 @@
                             </div>
                             {% if role == 'Instructor' %}
                                 <a class="btn btn-primary btn-sm ltisubmit"
-                                   href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Update Grade to eLC</a>
+                                   href="{{ course_path('ags_score_new', {'docid': review.id, 'source': 'doc'}) }}">Update Grade to eLC</a>
                             {% endif %}
                             {% else %}
                             {% if role == 'Instructor' %}
                                 <a class="btn btn-primary btn-sm ltisubmit"
-                                   href="{{ course_path('ags_score_new', {'docid': review.id}) }}">Submit Grade to eLC</a>
+                                   href="{{ course_path('ags_score_new', {'docid': review.id, 'source': 'doc'}) }}">Submit Grade to eLC</a>
                             {% endif %}
                         {% endif %}
 

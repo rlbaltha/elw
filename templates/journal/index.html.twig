@@ -95,10 +95,27 @@
         {% if doc %}
             {# Comment Panel #}
             <div class="col-lg-3 col-sm-12">
-                {# show only if there are comments #}
-                {% if doc.comments|length > 0 %}
-                    <h2>Feedback</h2>
-                    <hr/>
+                <h2>Feedback</h2>
+                <hr/>
+
+                {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
+                    <a class="btn btn-primary btn-sm ltiresult"
+                       data-id = "lti{{ doc.id }}"
+                       href="#"
+                       data-request="{{ course_path('ags_score_view', {'docid': doc.id}) }}"
+                    >View Score</a>
+                    <div id="lti{{ doc.id }}">
+
+                    </div>
+                    {% if role == 'Instructor' %}
+                        <a class="btn btn-primary btn-sm ltisubmit"
+                           href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Update Grade in eLC</a>
+                    {% endif %}
+                {% else %}
+                    {% if role == 'Instructor' %}
+                        <a class="btn btn-primary btn-sm ltisubmit"
+                           href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Submit Grade to eLC</a>
+                    {% endif %}
                 {% endif %}
 
                 {% for comment in doc.comments %}
@@ -143,6 +160,16 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $(".ltiresult").each(function () {
+                var request = $(this).attr('data-request')
+                var target = '#' + $(this).attr('data-id');
+                $.ajax({
+                    url: request, success: function (result) {
+                        $(target).html(result);
+                    }
+                });
+                $(this).hide();
+            });
         });
     </script>
 {% endblock %}

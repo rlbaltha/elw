@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Doc;
 use App\Form\JournalType;
 use App\Repository\DocRepository;
+use App\Service\Lti;
 use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class JournalController extends AbstractController
     /**
      * @Route("/{courseid}/{docid}/{userid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0"})
      */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $docid, $userid): Response
+    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, $courseid, $docid, $userid): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -39,9 +40,15 @@ class JournalController extends AbstractController
         if (count($docs)>0 and !$doc) {
             $doc = $docs[0];
         }
+        $scores = [];
+        if ($doc->getAgsResultId() != null)
+        {
+            $scores = $lti->getLtiResult($doc->getAgsResultId());
+        }
         return $this->render('journal/index.html.twig', [
             'docs' => $docs,
             'doc' => $doc,
+            'scores' => $scores,
             'course' => $course,
             'classlists' => $classlists,
             'role' => $role
