@@ -164,6 +164,10 @@ span.markup {
     line-height: 200%;
 }
 /* diff display */
-ins.diffins {color: green}
-del.diffdel {color:red}
-.diffmod {color:blue}
+del.diffdel {color:maroon}
+del.diffmod {color:purple }
+ins.diffmod {color:darkcyan}
+ins.diffins {color:darkgreen}
+ins.mod {text-decoration: none}
+
+

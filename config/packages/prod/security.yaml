@@ -28,6 +28,7 @@ security:
     - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
     - { path: ^/course, roles: ROLE_USER, requires_channel: https}
+    - { path: ^/journal, roles: ROLE_USER, requires_channel: https}
     - { path: ^/classlist, roles: ROLE_USER, requires_channel: https }
     - { path: ^/doc, roles: ROLE_USER, requires_channel: https }
     - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }

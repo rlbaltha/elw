@@ -215,6 +215,7 @@ class DocController extends AbstractController
         $markupsets = $course->getMarkupsets();
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
+            'course' => $course,
             'scores' => $scores,
             'markupsets' => $markupsets,
             'role' => $role,

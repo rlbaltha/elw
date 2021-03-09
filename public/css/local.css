@@ -31,6 +31,10 @@ h2 {
     font-size: 1.5em;
 }
 
+.navbar-brand {
+    color: black;
+    font-family: Arial;
+}
 
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
