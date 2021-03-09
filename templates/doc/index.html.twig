@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Documents{% endblock %}
+{% block title %}{{ header }} - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
