@@ -1,0 +1,38 @@
+/********** Local Styles **********/
+body {
+  background-color: whitesmoke;
+}
+.navbar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #dcdcdc;
+  z-index: 1000;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #343a40;
+}
+
+div.checkbox > label {
+  margin-right:2em;
+}
+
+div.radio > label {
+  margin-right:2em;
+}
+
+label.required {
+  margin-right:1em;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+h2 {
+  font-size: 1.5em;
+}
+
+.navbar-brand {
+  color: black;
+  font-family: Arial;
+}

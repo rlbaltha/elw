@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Journal{% endblock %}
+{% block title %}Journal - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     {{ include('course/_subnav.html.twig') }}
