@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ProjectController extends AbstractController
 {
-    /**
-     * @Route("/", name="project_index", methods={"GET"})
-     */
-    public function index(ProjectRepository $projectRepository): Response
-    {
-        return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/{labelsetid}/new", name="project_new", methods={"GET","POST"})
@@ -52,16 +43,6 @@ class ProjectController extends AbstractController
         return $this->render('project/new.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="project_show", methods={"GET"})
-     */
-    public function show(Project $project): Response
-    {
-        return $this->render('project/show.html.twig', [
-            'project' => $project,
         ]);
     }
 

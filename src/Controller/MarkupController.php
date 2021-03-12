@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class MarkupController extends AbstractController
 {
-    /**
-     * @Route("/", name="markup_index", methods={"GET"})
-     */
-    public function index(MarkupRepository $markupRepository): Response
-    {
-        return $this->render('markup/index.html.twig', [
-            'markups' => $markupRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/{markupsetid}/new", name="markup_new", methods={"GET","POST"})
@@ -55,15 +46,6 @@ class MarkupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="markup_show", methods={"GET"})
-     */
-    public function show(Markup $markup): Response
-    {
-        return $this->render('markup/show.html.twig', [
-            'markup' => $markup,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="markup_edit", methods={"GET","POST"})

@@ -16,15 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClasslistController extends AbstractController
 {
-    /**
-     * @Route("/", name="classlist_index", methods={"GET"})
-     */
-    public function index(ClasslistRepository $classlistRepository): Response
-    {
-        return $this->render('classlist/index.html.twig', [
-            'classlists' => $classlistRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
@@ -49,15 +40,6 @@ class ClasslistController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="classlist_show", methods={"GET"})
-     */
-    public function show(Classlist $classlist): Response
-    {
-        return $this->render('classlist/show.html.twig', [
-            'classlist' => $classlist,
-        ]);
-    }
 
 
     /**
