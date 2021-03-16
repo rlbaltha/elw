@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}LTI Grades{% endblock %}
+{% block title %}Gradebook List - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     <a class="navbar-brand" href="{{ course_path('course_show', {'id': course.id}) }}">{{ course.name }}</a>

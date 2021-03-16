@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Markup{% endblock %}
+{% block title %}Markup New - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -20,12 +20,7 @@
             {{ include('markup/_form.html.twig') }}
         </div>
     </div>
-
-
 {% endblock %}
-
-
-
 
 {% block javascripts %}
     {{ parent() }}

@@ -43,29 +43,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
+//    /**
+//     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
+//     */
+//    public function new(Request $request): Response
+//    {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//        $user = new User();
+//        $form = $this->createForm(UserType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('user_index');
+//        }
+//
+//        return $this->render('user/new.html.twig', [
+//            'user' => $user,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     /**
      * @Route("/admin/{id}", name="user_show", methods={"GET"})
