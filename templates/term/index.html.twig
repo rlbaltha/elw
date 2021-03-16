@@ -14,11 +14,11 @@
                 <th>Semester</th>
                 <th>Status</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             {% for term in terms %}
                 <tr>
-                    <td><a aria-label="Edit Term {{ term.year }} {{ term.semester }}" href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
+                    <td><a aria-label="Edit Term {{ term.name }}" href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
                     <td>{{ term.semester }}</td>
                     <td>{{ term.status }}</td>
                 </tr>
