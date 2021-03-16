@@ -26,7 +26,11 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+        <div class="col">
+            <h1 class="mr-5">Edit {{ doc.title }}
+            </h1>
+            {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
     </div>
 {% endblock %}
 
