@@ -316,6 +316,7 @@ class LtiController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($ltiAg);
         $entityManager->flush();
+        $this->addFlash('notice', 'The grade columns was deleted.');
         return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
     }
 
@@ -362,7 +363,7 @@ class LtiController extends AbstractController
             $ags->setCourse($course);
             $this->getDoctrine()->getManager()->persist($ags);
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'The grade columns was added.');
             return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
 
         }
@@ -430,6 +431,7 @@ class LtiController extends AbstractController
             $doc->setAgsResultId($agsResultId);
             $this->getDoctrine()->getManager()->persist($doc);
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('notice', 'The grade was submitted.');
             $response = $this->guzzle->request($method, $uri, $options);
 
             if ($source != 'doc') {
