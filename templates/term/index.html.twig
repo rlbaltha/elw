@@ -22,7 +22,7 @@
                 <td>{{ term.semester }}</td>
                 <td>{{ term.status }}</td>
                 <td>
-                    <a href="{{ path('term_edit', {'id': term.id}) }}">edit</a>
+                    <a aria-label="Edit term {{ term.name }}" href="{{ path('term_edit', {'id': term.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

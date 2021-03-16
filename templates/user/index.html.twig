@@ -26,11 +26,11 @@
             <tr>
                 <td>
                     {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
-                        <a class='' href="{{ path('course_index') }}?_switch_user={{ user.username }}">Login As</a>
+                        <a aria-label="Login As {{ user.firstname }} {{ user.lastname }}" class='' href="{{ path('course_index') }}?_switch_user={{ user.username }}">Login As</a>
                     {% endif %}
                     {{ user.username }}
                 </td>
-                <td><a href="{{ path('user_edit', {'id': user.id}) }}">{{ user.firstname }} {{ user.lastname }}</a></td>
+                <td><a aria-label="Edit User {{ user.firstname }} {{ user.lastname }}" href="{{ path('user_edit', {'id': user.id}) }}">{{ user.firstname }} {{ user.lastname }}</a></td>
                 <td>{% for role in user.roles %}{{ role }} {% endfor %}</td>
                 <td>{{ user.created | date("m/d/y g:ia") }}</td>
             </tr>
