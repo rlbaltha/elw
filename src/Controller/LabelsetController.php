@@ -63,7 +63,7 @@ class LabelsetController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($labelset);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Label Set has been created.');
             if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('labelset_index');
             }
@@ -104,7 +104,7 @@ class LabelsetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Label Set has been updated.');
             if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('labelset_index');
             }
@@ -129,7 +129,7 @@ class LabelsetController extends AbstractController
             $entityManager->remove($labelset);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Label Set has been deleted.');
         return $this->redirectToRoute('labelset_byuser');
     }
 }

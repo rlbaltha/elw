@@ -37,7 +37,7 @@ class StageController extends AbstractController
 
             $entityManager->persist($stage);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Stage has been created.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
@@ -62,7 +62,7 @@ class StageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Project has been updated.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
@@ -84,7 +84,7 @@ class StageController extends AbstractController
             $entityManager->remove($stage);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Project has been deleted.');
         return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
     }
 }

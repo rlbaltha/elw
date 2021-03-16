@@ -36,7 +36,7 @@ class MarkupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($markup);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Markup has been created.');
             return $this->redirectToRoute('markupset_show', ['id'=> $markupsetid]);
         }
 
@@ -61,7 +61,7 @@ class MarkupController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Markup has been edited.');
             return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
         }
 
@@ -84,7 +84,7 @@ class MarkupController extends AbstractController
             $entityManager->remove($markup);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Markup Set has been deleted.');
         return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
     }
 }

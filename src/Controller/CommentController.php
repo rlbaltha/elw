@@ -46,7 +46,7 @@ class CommentController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your feedback has been added.');
             if ($source!='doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
@@ -76,7 +76,7 @@ class CommentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your feedback has been updated.');
             if ($source!='doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
@@ -116,6 +116,7 @@ class CommentController extends AbstractController
                 }
             }
         }
+        $this->addFlash('notice', 'Your feedback has been released.');
         $entityManager->flush();
         return $this->redirectToRoute('doc_index', ['courseid' => $courseid, 'findtype' => $findtype]);
 
@@ -132,7 +133,7 @@ class CommentController extends AbstractController
             $entityManager->remove($comment);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your feedback has been deleted.');
         if ($source!='doc') {
             return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
         }

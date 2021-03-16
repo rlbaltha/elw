@@ -101,6 +101,7 @@ class DocController extends AbstractController
                 $entityManager->persist($doc);
             }
         $entityManager->flush();
+        $this->addFlash('notice', 'All documents have been released.');
 
         return $this->redirectToRoute('doc_index', ['courseid' => $courseid, 'findtype' => $findtype]);
 
@@ -341,9 +342,10 @@ class DocController extends AbstractController
         $form->handleRequest($request);
         $markupsets = $course->getMarkupsets();
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your  document has been saved.');
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
 
@@ -398,22 +400,23 @@ class DocController extends AbstractController
         return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/hidden", name="doc_hidden", methods={"GET","POST"})
-     */
-    public function hidden(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
-    {
-        $allowed = ['Instructor'];
-        $permissions->restrictAccessTo($courseid, $allowed);
-        $permissions->isOwner($doc);
-        $access = $doc->getAccess();
-        ($access==='Hidden' ? $doc->setAccess('Private') : $doc->setAccess('Hidden'));
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($doc);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
-    }
+//    /**
+//     * @Route("/{id}/{courseid}/hidden", name="doc_hidden", methods={"GET","POST"})
+//     */
+//    public function hidden(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+//    {
+//        $allowed = ['Instructor'];
+//        $permissions->restrictAccessTo($courseid, $allowed);
+//        $permissions->isOwner($doc);
+//        $access = $doc->getAccess();
+//        ($access==='Hidden' ? $doc->setAccess('Private') : $doc->setAccess('Hidden'));
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $entityManager->persist($doc);
+//        $entityManager->flush();
+//        $this->addFlash('notice', 'Document access has been updated.');
+//
+//        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+//    }
 
     /**
      * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})

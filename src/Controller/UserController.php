@@ -137,7 +137,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('user_index');
         }
 
@@ -159,7 +159,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('course_show', [
                 'courseid' => $courseid,
             ]);
@@ -177,7 +177,7 @@ class UserController extends AbstractController
     public function promote(User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
+        $this->addFlash('notice', 'This profile has been promoted.');
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -195,7 +195,7 @@ class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'This profile has been deleted.');
         return $this->redirectToRoute('user_index');
     }
 }

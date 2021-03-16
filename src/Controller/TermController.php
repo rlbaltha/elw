@@ -38,7 +38,7 @@ class TermController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($term);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'The term has been created.');
             return $this->redirectToRoute('term_index');
         }
 
@@ -59,7 +59,7 @@ class TermController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'The term has been updated.');
             return $this->redirectToRoute('term_index');
         }
 
@@ -79,7 +79,7 @@ class TermController extends AbstractController
             $entityManager->remove($term);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'The term has been deleted.');
         return $this->redirectToRoute('term_index');
     }
 }
