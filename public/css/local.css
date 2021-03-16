@@ -71,6 +71,13 @@ h2 {
     border-color: #ba0c2f;
 }
 
+.btn-sm {
+    padding: .5rem .6rem;
+    font-size: .875rem;
+    line-height: .85;
+    border-radius: .2rem;
+}
+
 .badge-primary {
     background-color: #20399D;
     border-color: #20399D;
