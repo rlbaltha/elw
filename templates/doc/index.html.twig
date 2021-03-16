@@ -48,9 +48,6 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a target="_blank" class="nav-link" href="{{ course_path('doc_new') }}">New Doc</a>
-                    </li>
-                    <li class="nav-item">
                         <a id="compare_click" class="nav-link" href="#">Compare</a>
                     </li>
                     {% if role=='Instructor' %}
@@ -69,6 +66,9 @@
                             </li>
                         {% endif %}
                     {% endif %}
+                    <li class="nav-item">
+                        <a target="_blank" class="btn btn-primary" href="{{ course_path('doc_new') }}">New Doc</a>
+                    </li>
                 </ul>
             </div>
         </div>
