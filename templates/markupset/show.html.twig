@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Markupset{% endblock %}
+{% block title %}Markupset - {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>{{ markupset.name }}</h1>
