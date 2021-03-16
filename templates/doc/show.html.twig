@@ -44,11 +44,11 @@
     {# if owner #}
     {% if app.user == doc.user %}
         <li class="nav-item">
-            <a class="btn btn-primary" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
+            <a aria-label="Edit Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
         </li>
     {% elseif doc.access!='Review' %}
         <li class="nav-item">
-            <a class="btn btn-primary" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
+            <a aria-label="Create Review of Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
         </li>
     {% endif %}
 
@@ -57,7 +57,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a id='close-trigger' class="nav-link" href="#">Close</a>
+        <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a>
     </li>
 {% endblock %}
 
@@ -107,9 +107,9 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
+            <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
             {# Comment Panel #}
-            <a class="btn btn-primary btn-sm"
+            <a aria-label="Give Feedback on {{ doc.title }}" class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
 
@@ -123,13 +123,15 @@
 
                 </div>
                 {% if role == 'Instructor' %}
-                    <a class="btn btn-primary btn-sm ltisubmit"
+                    <a aria-label="Update Grade in
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit"
                        href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Update Grade in
                         eLC</a>
                 {% endif %}
             {% else %}
                 {% if role == 'Instructor' %}
-                    <a class="btn btn-primary btn-sm ltisubmit"
+                    <a aria-label="Submit Grade to
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit"
                        href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Submit Grade to
                         eLC</a>
                 {% endif %}
@@ -141,14 +143,9 @@
                         <div class="card-header">
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
-                                <span class="badge badge-primary" style="background:black">Hidden</span>
-                                {# {% elseif comment.access=='Private' %} #}
-                                {# <span class="badge badge-primary" style="background:darkred">Private</span> #}
-                                {# {% elseif comment.access=='Shared' %} #}
-                                {# <span class="badge badge-primary" style="background:darkgreen">Shared</span> #}
                             {% endif %}
                             {% if app.user == comment.user %}
-                                <a class="btn btn-primary btn-sm float-right"
+                                <a aria-label="Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}" class="btn btn-primary btn-sm float-right"
                                    href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
                                     Feedback</a>
                             {% endif %}
