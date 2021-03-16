@@ -76,26 +76,19 @@
 {% endblock %}
 
 {% block body %}
-{#    <div class="p-1">#}
-{#        <label for="filter" class="required">Search Docs</label>#}
-{#        <input class="form-control d-inline" style="width:25%" id="filter" type="text">#}
-{#    </div>#}
     <div class="d-inline p-2">
         Filter:
         {% for labelset in course.labelsets %}
             {% for label in labelset.projects %}
-                <span class="badge badge-primary"
-                      style="cursor: pointer; background:{{ label.color }}">{{ label.name }}</span>
+                <button class="btn btn-primary btn-sm filter"
+                      style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
             {% endfor %}
             {% for label in labelset.stages %}
-                <span class="badge badge-primary"
-                      style="cursor: pointer; background:{{ label.color }}">{{ label.name }}</span>
+                <button class="btn btn-primary btn-sm filter"
+                      style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
             {% endfor %}
         {% endfor %}
-        <span class="badge badge-primary"
-              style="cursor: pointer; background: green">Review</span>
-        <span class="badge badge-primary"
-              style="cursor: pointer; background: #3e3e3e">Show All</span>
+        <button class="btn btn-primary btn-sm filter">Show All</button>
     </div>
     <div class="float-right">Docs
         found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
@@ -191,7 +184,7 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            $("span.badge").click(function () {
+            $(".filter").click(function () {
                 if ($(this).text() == 'Show All') {
                     $("table tr.body").show();
                 } else {
