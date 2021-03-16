@@ -12,6 +12,10 @@ body {
     color: #343a40;
 }
 
+.navbar-light .navbar-text {
+    color: #343a40;
+}
+
 div.checkbox > label {
     margin-right:2em;
 }
