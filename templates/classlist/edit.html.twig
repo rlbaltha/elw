@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Classlist{% endblock %}
+{% block title %}Classlist Edit - {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>{{classlist.user.firstname}} {{classlist.user.lastname}} in {{ classlist.course.name }}</h1>

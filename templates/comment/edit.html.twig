@@ -3,24 +3,9 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
-    <style>
-        /* Small devices (landscape phones, 576px and up) */
-        @media (min-width: 576px) {
-
-            div.document-editor {
-                min-width: 100%;
-            }
-            .document-editor {
-                width: 100%;
-                margin: 0;
-                font-size: 16px;
-                font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
-            }
-        }
-    </style>
 {% endblock %}
 
-{% block title %}eLW Feedback{% endblock %}
+{% block title %}Feedback Edit - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     {{ include('course/_subnav.html.twig') }}

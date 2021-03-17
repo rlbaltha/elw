@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Journal - {{ parent() }}{% endblock %}
+{% block title %}Journal Index - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
 
 {% block subnav %}
     {{ include('course/_subnav.html.twig') }}
@@ -24,9 +29,6 @@
                     <li class="nav-item skip-link">
                         <a class="nav-link" href="#main-content">Skip to content</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal Entry</a>
-                    </li>
                     {% if role=='Instructor' %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -37,11 +39,15 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% for classlist in classlists %}
                                     <a class="dropdown-item"
-                                       href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
+                                       href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}
+                                        , {{ classlist.user.firstname }}</a>
                                 {% endfor %}
                             </div>
                         </li>
                     {% endif %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{{ course_path('journal_new') }}">New Journal</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -63,7 +69,7 @@
                     <tr class="body">
                         <td>
                             <a href="{{ course_path('journal_index', {'docid': doc.id, 'userid': doc.user.id}) }}">{{ doc.title }}</a><br/>
-                            Word Count:  {{ doc.wordcount }}
+                            Word Count: {{ doc.wordcount }}
                         </td>
                         <td>{{ doc.updated | date("M j, Y g:ia") }}</td>
                     </tr>
@@ -81,7 +87,8 @@
                     <div class="card-header">
                         <h2 class="d-inline">{{ doc.title }}</h2>
                         {% if app.user==doc.user %}
-                        <a class="btn btn-primary btn-sm float-right" href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
+                            <a aria-label="Edit Journal entry {{ doc.title }}" class="btn btn-primary btn-sm float-right"
+                               href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
                         {% endif %}
                     </div>
                     <div class="card-body">
@@ -91,66 +98,81 @@
             {% endif %}
         </div>
 
-        {# only show if there is a journal present #}
-        {% if doc %}
-            {# Comment Panel #}
-            <div class="col-lg-3 col-sm-12">
-                <h2>Feedback</h2>
-                <hr/>
+        {# Comment Panel #}
+        <div class="col-lg-3 col-sm-12">
+            {# Help Card #}
+            {% if role == 'Instructor' %}
+            <div class="card bg-light mt-3 mb-3">
+                <div class="card-header">
+                    <a id='help-toggle' class="" href="#"><h2>Journal Help <i id="expand_arrows" class="material-icons">expand_more</i>
+                        </h2></a>
+                </div>
+                <div id="help_card" class="card-body">
+                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment.</p>
+                    <p class="card-text"><strong>Submit Grade to eLC</strong> will send a grade and a comment to eLC's
+                        gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home page to
+                        create the eLC grade column. </p>
+                </div>
+            </div>
+            {% endif %}
 
-                {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
-                    <a class="btn btn-primary btn-sm ltiresult"
-                       data-id = "lti{{ doc.id }}"
-                       href="#"
-                       data-request="{{ course_path('ags_score_view', {'docid': doc.id}) }}"
-                    >View Score</a>
-                    <div id="lti{{ doc.id }}">
+        <h2>Feedback</h2>
+        <hr/>
 
-                    </div>
-                    {% if role == 'Instructor' %}
-                        <a class="btn btn-primary btn-sm ltisubmit"
-                           href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Update Grade in eLC</a>
+        {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
+            <a class="btn btn-primary btn-sm ltiresult"
+               data-id="lti{{ doc.id }}"
+               href="#"
+               data-request="{{ course_path('ags_score_view', {'docid': doc.id}) }}"
+            >View Score</a>
+            <div id="lti{{ doc.id }}">
+
+            </div>
+            {% if role == 'Instructor' %}
+                <a class="btn btn-primary btn-sm ltisubmit"
+                   href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Update Grade in
+                    eLC</a>
+            {% endif %}
+        {% else %}
+            {% if role == 'Instructor' %}
+                <a class="btn btn-primary btn-sm ltisubmit"
+                   href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Submit Grade to
+                    eLC</a>
+            {% endif %}
+        {% endif %}
+
+        {% for comment in doc.comments %}
+            {# {% if comment.access == 'Private' or role == 'Instructor' %} #}
+            <div class="card mt-3">
+                <div class="card-header">
+                    {% if comment.access=='Hidden' %}
+                        <span class="badge badge-primary" style="background:black">Hidden</span>
                     {% endif %}
-                {% else %}
-                    {% if role == 'Instructor' %}
-                        <a class="btn btn-primary btn-sm ltisubmit"
-                           href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Submit Grade to eLC</a>
-                    {% endif %}
-                {% endif %}
-
-                {% for comment in doc.comments %}
-{#                    {% if comment.access == 'Private' or role == 'Instructor' %}#}
-                        <div class="card mt-3">
-                            <div class="card-header">
-                                {% if comment.access=='Hidden' %}
-                                    <span class="badge badge-primary" style="background:black">Hidden</span>
-                                {% endif %}
-                                {% if app.user == comment.user %}
-                                    <a class="btn btn-primary btn-sm float-right"
-                                       href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}">Edit
-                                        Feedback</a>
-                                {% endif %}
-                            </div>
-                            <div class="card-body">
-                                {{ comment.body|raw }}
-                            </div>
-                            {% if comment.grade %}
-                                <div class="card-footer">
-                                    Grade: {{ comment.grade }}
-                                </div>
-                            {% endif %}
-                        </div>
-{#                    {% endif %}#}
-                {% else %}
-                    {# only Instructors can offer feedback on Journal #}
-                    {% if role == "Instructor" %}
-                        <a class="btn btn-primary btn-sm"
-                           href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'journal'}) }}">Give
+                    {% if app.user == comment.user %}
+                        <a class="btn btn-primary btn-sm float-right"
+                           href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}">Edit
                             Feedback</a>
                     {% endif %}
-                {% endfor %}
+                </div>
+                <div class="card-body">
+                    {{ comment.body|raw }}
+                </div>
+                {% if comment.grade %}
+                    <div class="card-footer">
+                        Grade: {{ comment.grade }}
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+            {# {% endif %} #}
+        {% else %}
+            {# only Instructors can offer feedback on Journal #}
+            {% if role == "Instructor" %}
+                <a class="btn btn-primary btn-sm"
+                   href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'journal'}) }}">Give
+                    Feedback</a>
+            {% endif %}
+        {% endfor %}
+    </div>
     </div>
 
 
@@ -169,6 +191,13 @@
                     }
                 });
                 $(this).hide();
+            });
+            {# toggle help on this page #}
+            $("#help_card").toggle();
+            $("#help-toggle").click(function () {
+                $("#help_card").toggle();
+                var text = $('#expand_arrows').text();
+                $('#expand_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
             });
         });
     </script>

@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class StageController extends AbstractController
 {
-    /**
-     * @Route("/", name="stage_index", methods={"GET"})
-     */
-    public function index(StageRepository $stageRepository): Response
-    {
-        return $this->render('stage/index.html.twig', [
-            'stages' => $stageRepository->findAll(),
-        ]);
-    }
 
 
     /**
@@ -46,7 +37,7 @@ class StageController extends AbstractController
 
             $entityManager->persist($stage);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Stage has been created.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
@@ -56,15 +47,6 @@ class StageController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="stage_show", methods={"GET"})
-     */
-    public function show(Stage $stage): Response
-    {
-        return $this->render('stage/show.html.twig', [
-            'stage' => $stage,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="stage_edit", methods={"GET","POST"})
@@ -80,7 +62,7 @@ class StageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Project has been updated.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
@@ -102,7 +84,7 @@ class StageController extends AbstractController
             $entityManager->remove($stage);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Project has been deleted.');
         return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
     }
 }

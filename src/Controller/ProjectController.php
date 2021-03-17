@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ProjectController extends AbstractController
 {
-    /**
-     * @Route("/", name="project_index", methods={"GET"})
-     */
-    public function index(ProjectRepository $projectRepository): Response
-    {
-        return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/{labelsetid}/new", name="project_new", methods={"GET","POST"})
@@ -45,23 +36,13 @@ class ProjectController extends AbstractController
 
             $entityManager->persist($project);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Project has been created.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
         }
 
         return $this->render('project/new.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="project_show", methods={"GET"})
-     */
-    public function show(Project $project): Response
-    {
-        return $this->render('project/show.html.twig', [
-            'project' => $project,
         ]);
     }
 
@@ -79,7 +60,7 @@ class ProjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Project has been updated.');
             return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
         }
 
@@ -101,7 +82,7 @@ class ProjectController extends AbstractController
             $entityManager->remove($project);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Project has been deleted.');
         return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
     }
 }

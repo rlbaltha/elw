@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Markupset{% endblock %}
+{% block title %}Markupset - {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>{{ markupset.name }}</h1>
@@ -8,8 +8,9 @@
 
     {% if (is_granted('ROLE_ADMIN')) or (markupset.user == app.user) %}
     {{ include('markupset/_delete_form.html.twig') }}
-    <a class="btn btn-primary float-right" href="{{ path('markupset_edit', {'id': markupset.id}) }}">Edit</a>
-    <a class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>
+    <a aria-label="Edit Markup Set {{ markupset.name }}" class="btn btn-primary float-right" href="{{ path('markupset_edit', {'id': markupset.id}) }}">Edit</a>
+
+    <a aria-label="Add Markup to {{ markupset.name }}" class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>
     {% endif %}
 
     <table class="table">
@@ -24,10 +25,11 @@
         {% for markup in markupset.markups %}
             <tr>
                 <td>
-                    <a class="badge badge-primary p-2" style="background:{{ markup.color }}"
+                    <a aria-label="Edit Markup {{ markup.name }}" class="badge badge-primary p-2" style="background:{{ markup.color }}"
                        href="{% if (is_granted('ROLE_ADMIN')) or (markupset.user == app.user) %}{{ path('markup_edit', {'id': markup.id}) }}{% else %}#{% endif %}">
                         {{ markup.name }}
                     </a>
+
                 </td>
                 <td>{{ markup.description|raw }}</td>
                 <td>{{ markup.sort }}</td>

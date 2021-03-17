@@ -63,7 +63,7 @@ class MarkupsetController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($markupset);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Markup Set has been created.');
             if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('markupset_index');
             }
@@ -100,7 +100,7 @@ class MarkupsetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Markup Set has been updated.');
             if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('markupset_index');
             }
@@ -123,7 +123,7 @@ class MarkupsetController extends AbstractController
             $entityManager->remove($markupset);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Markup Set has been deleted.');
         return $this->redirectToRoute('markupset_byuser');
     }
 }

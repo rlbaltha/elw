@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Doc{% endblock %}
+{% block title %}Journal Edit - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     <li class="navbar-brand">{{ doc.title }}</li>
     <li class="nav-item">
-        <a href="#" id="submit-doc-form" class="nav-link">Save</a>
+        <a href="#" id="submit-doc-form" class="btn btn-primary">Save</a>
     </li>
 {% endblock %}
 
@@ -26,7 +26,11 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+        <div class="col">
+            <h1 class="mr-5">Edit {{ doc.title }}
+            </h1>
+            {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
     </div>
 {% endblock %}
 

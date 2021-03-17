@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Labelset index{% endblock %}
+{% block title %}Labelset Index - {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>Label Sets</h1>
@@ -15,7 +15,7 @@
         <tbody>
         {% for labelset in labelsets %}
             <tr>
-                <td><a href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
+                <td><a a aria-label="Edit Label Set {{ labelset.name }}" href="{{ path('labelset_show', {'id': labelset.id}) }}">{{ labelset.name }}</a></td>
                 <td>
                     {% if labelset.level == 0 %}Default{% else %}Created by {{ labelset.user.firstname }} {{ labelset.user.lastname }}{% endif %}
                 </td>

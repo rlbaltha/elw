@@ -43,29 +43,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
+//    /**
+//     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
+//     */
+//    public function new(Request $request): Response
+//    {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//        $user = new User();
+//        $form = $this->createForm(UserType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('user_index');
+//        }
+//
+//        return $this->render('user/new.html.twig', [
+//            'user' => $user,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     /**
      * @Route("/admin/{id}", name="user_show", methods={"GET"})
@@ -137,7 +137,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('user_index');
         }
 
@@ -159,7 +159,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('course_show', [
                 'courseid' => $courseid,
             ]);
@@ -177,7 +177,7 @@ class UserController extends AbstractController
     public function promote(User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
+        $this->addFlash('notice', 'This profile has been promoted.');
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -195,7 +195,7 @@ class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'This profile has been deleted.');
         return $this->redirectToRoute('user_index');
     }
 }

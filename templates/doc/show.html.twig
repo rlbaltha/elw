@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Doc{% endblock %}
+{% block title %}Document Show - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
 {% endblock %}
 
@@ -23,9 +24,6 @@
 
                             <a data-id='doc{{ review.id }}' class="dropdown-item doc-click"
                                href="#">
-{#                                Compare Reviews to be completed#}
-{#                                <label class="sr-only sr-only-focusable" for="{{ review.id }}">Select for comparison</label>#}
-{#                                <input type="checkbox" id="{{ review.id }}" name="scales">#}
                                 Review By {{ review.user.firstname }} {{ review.user.lastname }}
                                 {% if review.comments|length > 0 %}
                                     <span class="badge badge-primary"
@@ -36,42 +34,30 @@
                         {% endif %}
                     {% endif %}
                 {% endfor %}
-{#                <a id="compare_click" class="dropdown-item doc-click" href="#">Compare</a>#}
             </div>
         </li>
     {% endif %}
 
-    {# if owner #}
-    {% if app.user == doc.user %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
-        </li>
-    {% elseif doc.access!='Review' %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
-        </li>
-    {% endif %}
     <li class="nav-item">
         <a id="toggle-inline" class="nav-link" href="#">Notes <span id="toggle">Popover</span></a>
     </li>
-    {# <li class="nav-item"> #}
-    {# {% if role == 'Instructor' and doc.origin %} #}
-    {# <a class="nav-link" #}
-    {# href="{{ course_path('doc_hidden', {'id': doc.id}) }}">{% if doc.access=='Hidden' %}Release{% else %}Hide{% endif %} #}
-    {# Review</a> #}
-    {# {% elseif app.user == doc.user and doc.origin|length == 0 %} #}
-    {# <a class="nav-link" #}
-    {# href="{{ course_path('doc_access', {'id': doc.id}) }}">Make #}
-    {# {% if doc.access=='Shared' %}Private{% else %}Shared{% endif %}</a> #}
-    {# {% endif %} #}
-    {# </li> #}
+    {# if owner #}
+    {% if app.user == doc.user %}
+        <li class="nav-item">
+            <a aria-label="Edit Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
+        </li>
+    {% elseif doc.access!='Review' %}
+        <li class="nav-item">
+            <a aria-label="Create Review of Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
+        </li>
+    {% endif %}
 
 
 {% endblock %}
 
 {% block subnavright %}
     <li class="nav-item">
-        <a id='close-trigger' class="nav-link" href="#">Close</a>
+        <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a>
     </li>
 {% endblock %}
 
@@ -86,6 +72,20 @@
 
         {# Info column #}
         <div class="col">
+            {# Help Card #}
+            <div class="card bg-light mt-3 mb-3" style="margin-top: 0 !important;">
+                <div class="card-header">
+                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows" class="material-icons expand_arrows">expand_more</i></h2></a>
+                </div>
+                <div id="help_card" class="card-body">
+                    {% if app.user != doc.user and doc.access!='Review' %}
+                    <p class="card-text"><strong>Create Review</strong> will create a copy of the document so you can make inline comments and add markup.</p>
+                    {% endif %}
+                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment.  If you're also creating a review, you should give feedback on the review you've created instead of on the original document.</p>
+                    <p class="card-text"><strong>Submit Grade to eLC</strong> is an instructor button that will send a grade and a comment to eLC's gradebook.  Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home page to create the eLC grade column.  </p>
+                </div>
+            </div>
+            {# Document Info #}
             <div class="card bg-light mt-3 mb-3">
                 <div class="card-header">
                     <h1>{% if doc.origin %}<span class="badge badge-primary"
@@ -107,9 +107,9 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
+            <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
             {# Comment Panel #}
-            <a class="btn btn-primary btn-sm"
+            <a aria-label="Give Feedback on {{ doc.title }}" class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
                 Feedback</a>
 
@@ -123,13 +123,15 @@
 
                 </div>
                 {% if role == 'Instructor' %}
-                    <a class="btn btn-primary btn-sm ltisubmit"
+                    <a aria-label="Update Grade in
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit"
                        href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Update Grade in
                         eLC</a>
                 {% endif %}
             {% else %}
                 {% if role == 'Instructor' %}
-                    <a class="btn btn-primary btn-sm ltisubmit"
+                    <a aria-label="Submit Grade to
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit"
                        href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Submit Grade to
                         eLC</a>
                 {% endif %}
@@ -141,14 +143,9 @@
                         <div class="card-header">
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
-                                <span class="badge badge-primary" style="background:black">Hidden</span>
-                                {# {% elseif comment.access=='Private' %} #}
-                                {# <span class="badge badge-primary" style="background:darkred">Private</span> #}
-                                {# {% elseif comment.access=='Shared' %} #}
-                                {# <span class="badge badge-primary" style="background:darkgreen">Shared</span> #}
                             {% endif %}
                             {% if app.user == comment.user %}
-                                <a class="btn btn-primary btn-sm float-right"
+                                <a aria-label="Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}" class="btn btn-primary btn-sm float-right"
                                    href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
                                     Feedback</a>
                             {% endif %}
@@ -290,6 +287,13 @@
                     $('.note, .super').toggle();
                     $('.popover').hide();
                 });
+            {# toggle help on this page #}
+            $( "#help_card" ).toggle();
+            $("#help-toggle").click(function () {
+                $( "#help_card" ).toggle();
+                var text = $('#help_arrows').text();
+                $('#help_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
+            });
                     {# Note pops for this/these documents #}
                 $('.note').each(function (index) {
                     var p = $(this).position();

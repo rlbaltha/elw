@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class MarkupController extends AbstractController
 {
-    /**
-     * @Route("/", name="markup_index", methods={"GET"})
-     */
-    public function index(MarkupRepository $markupRepository): Response
-    {
-        return $this->render('markup/index.html.twig', [
-            'markups' => $markupRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/{markupsetid}/new", name="markup_new", methods={"GET","POST"})
@@ -45,7 +36,7 @@ class MarkupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($markup);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Your Markup has been created.');
             return $this->redirectToRoute('markupset_show', ['id'=> $markupsetid]);
         }
 
@@ -55,15 +46,6 @@ class MarkupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="markup_show", methods={"GET"})
-     */
-    public function show(Markup $markup): Response
-    {
-        return $this->render('markup/show.html.twig', [
-            'markup' => $markup,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="markup_edit", methods={"GET","POST"})
@@ -79,7 +61,7 @@ class MarkupController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your Markup has been edited.');
             return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
         }
 
@@ -102,7 +84,7 @@ class MarkupController extends AbstractController
             $entityManager->remove($markup);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'Your Markup Set has been deleted.');
         return $this->redirectToRoute('markupset_show', ['id'=> $markupset->getId()]);
     }
 }

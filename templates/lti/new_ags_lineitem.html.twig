@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}eLW Gradebook Column{% endblock %}
+{% block title %}Gradebook Column - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     {% if status !='Pending' %}

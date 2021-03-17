@@ -1,36 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Term index{% endblock %}
+{% block title %}Term Index - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Term index</h1>
+<div class="row justify-content-md-center">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <h1>Term index</h1>
 
-    <table class="table">
-        <thead>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Year</th>
                 <th>Semester</th>
                 <th>Status</th>
-                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
-        {% for term in terms %}
-            <tr>
-                <td>{{ term.year }}</td>
-                <td>{{ term.semester }}</td>
-                <td>{{ term.status }}</td>
-                <td>
-                    <a href="{{ path('term_edit', {'id': term.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% for term in terms %}
+                <tr>
+                    <td><a aria-label="Edit Term {{ term.name }}" href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
+                    <td>{{ term.semester }}</td>
+                    <td>{{ term.status }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a class="btn btn-primary" href="{{ path('term_new') }}">Create new</a>
-{% endblock %}
+        <a class="btn btn-primary" href="{{ path('term_new') }}">Create new</a>
+    </div>
+    {% endblock %}

@@ -149,7 +149,7 @@ class CourseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your course has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
 
@@ -173,7 +173,7 @@ class CourseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'Your announcement has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
 
@@ -219,7 +219,7 @@ class CourseController extends AbstractController
             $entityManager->remove($course);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'This course has been deleted.');
         return $this->redirectToRoute('course_index');
     }
 }

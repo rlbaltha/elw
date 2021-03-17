@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Doc{% endblock %}
+{% block title %}Document Edit - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -9,11 +9,11 @@
 
 {% block subnav %}
     <li class="nav-item">
-        <a id="doc-title-toggle" class="nav-link" href="#">Edit Settings <i class="material-icons"
+        <a id="doc-title-toggle" class="nav-link" href="#">Edit Settings <i id="settings_arrows" class="material-icons"
                                                                             style="font-size: medium;">expand_less</i></a>
     </li>
     <li class="nav-item">
-        <a href="#" id="submit-doc-form" class="nav-link">Save</a>
+        <a href="#" id="submit-doc-form" class="btn btn-primary">Save</a>
     </li>
 {% endblock %}
 
@@ -34,14 +34,20 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-lg-9 col-md-12">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+        <div class="col-lg-9 col-md-11">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
 
 
         <div class="col">
-            <h1 style="font-size: large">{% if doc.origin %}<span class="badge badge-primary"
-                                                                  style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
-            </h1>
-            <hr/>
+            {# Help Card #}
+            <div class="card bg-light mt-3 mb-3" style="margin-top: 0 !important;">
+                <div class="card-header">
+                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows" class="material-icons expand_arrows">expand_more</i></h2></a>
+                </div>
+                <div id="help_card" class="card-body">
+                    <p class="card-text"><strong>Insert Note</strong> allows you to embed an inline comment in a document.  Place the cursor or highlight a section of text, then type your note and insert.</p>
+                    <p class="card-text"><strong>Markup tags </strong>are collected in expandable markup menus.  To tag a word or passage, select the text, then click the tag name.</p>
+                </div>
+            </div>
             {# Note Insert#}
             <div class="card">
                 <div class="card-body">
@@ -90,6 +96,13 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        {# toggle help on this page #}
+        $( "#help_card" ).toggle();
+        $("#help-toggle").click(function () {
+            $( "#help_card" ).toggle();
+            var text = $('#help_arrows').text();
+            $('#help_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
+        });
         {# Markup insert and tracking #}
         function insert_markup(id, name, color) {
             var nEditor = CKEDITOR.instances.doc_body;
@@ -113,28 +126,26 @@
         }
 
         $(document).ready(function () {
+            $("label[for=doc_title]").toggle();
+            $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
-                $("label").toggle();
                 $("fieldset").toggle();
-                $("#doc_title").toggle();
                 $("#doc_project").toggle();
                 $("#doc_stage").toggle();
                 $("#doc_access").toggle();
                 $("#doc_wordcount").toggle();
-                var text = $('.material-icons').text();
-                $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
+                var text = $('#settings_arrows').text();
+                $('#settings_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
             {% endif %}
             $("#doc-title-toggle").click(function () {
-                $("label").toggle();
                 $("fieldset").toggle();
-                $("#doc_title").toggle();
                 $("#doc_project").toggle();
                 $("#doc_stage").toggle();
                 $("#doc_access").toggle();
                 $("#doc_wordcount").toggle();
-                var text = $('.material-icons').text();
-                $('.material-icons').text(text == "expand_less" ? "expand_more" : "expand_less");
+                var text = $('#settings_arrows').text();
+                $('#settings_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
             });
             $("#submit-doc-form").click(function () {
                 var editor = CKEDITOR.instances.doc_body;

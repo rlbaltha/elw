@@ -16,48 +16,30 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClasslistController extends AbstractController
 {
-    /**
-     * @Route("/", name="classlist_index", methods={"GET"})
-     */
-    public function index(ClasslistRepository $classlistRepository): Response
-    {
-        return $this->render('classlist/index.html.twig', [
-            'classlists' => $classlistRepository->findAll(),
-        ]);
-    }
 
-    /**
-     * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
-     */
-    public function new(Request $request, $courseid): Response
-    {
-        $classlist = new Classlist();
-        $form = $this->createForm(ClasslistType::class, $classlist);
-        $form->handleRequest($request);
+//    /**
+//     * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
+//     */
+//    public function new(Request $request, $courseid): Response
+//    {
+//        $classlist = new Classlist();
+//        $form = $this->createForm(ClasslistType::class, $classlist);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($classlist);
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
+//        }
+//
+//        return $this->render('classlist/new.html.twig', [
+//            'classlist' => $classlist,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($classlist);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
-        }
-
-        return $this->render('classlist/new.html.twig', [
-            'classlist' => $classlist,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="classlist_show", methods={"GET"})
-     */
-    public function show(Classlist $classlist): Response
-    {
-        return $this->render('classlist/show.html.twig', [
-            'classlist' => $classlist,
-        ]);
-    }
 
 
     /**
@@ -70,7 +52,7 @@ class ClasslistController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('notice', 'This student has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
         }
 
@@ -91,7 +73,7 @@ class ClasslistController extends AbstractController
             $entityManager->remove($classlist);
             $entityManager->flush();
         }
-
+        $this->addFlash('notice', 'The student has been removed.');
         return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 }

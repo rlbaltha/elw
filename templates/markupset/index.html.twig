@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Markupset index{% endblock %}
+{% block title %}Markupset Index - {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>Markup Sets</h1>
@@ -15,7 +15,7 @@
         <tbody>
         {% for markupset in markupsets %}
             <tr>
-                <td><a href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
+                <td><a aria-label="Edit Markup Set {{ markupset.name }}" href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
                 <td>{% if markupset.level == 0 %}Default{% elseif markupset.level == 2 %}Shared{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
             </tr>
         {% else %}
