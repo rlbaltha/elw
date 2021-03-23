@@ -12,8 +12,8 @@
     {% endblock %}
     <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
 </head>
-<body>
 
+<body class="{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.theme != 'dark' %}light{% else %}dark{% endif %}{% endif %}">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -86,7 +86,7 @@
 </nav>
 
 {% block toolnav %}{% endblock %}
-<div id="main-content" class="container-fluid mt-3">
+<div id="main-content" class="container-fluid pt-3 bg-light">
     {% for message in app.flashes('notice') %}
         <div class="alert alert-info">
             {{ message }}
@@ -101,6 +101,15 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     {{ encore_entry_script_tags('app') }}
+    <script>
+        $(document).ready(function () {
+            if ($("body").hasClass("dark")) {
+                    $('.bg-light').toggleClass('bg-light bg-dark')
+                    $('.text-light').toggleClass('text-light text-dark')
+                    $('.navbar-light').toggleClass('navbar-light navbar-dark')
+            }
+        });
+    </script>
 {% endblock %}
 
 

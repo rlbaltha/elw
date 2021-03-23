@@ -43,29 +43,6 @@ class UserController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
-//     */
-//    public function new(Request $request): Response
-//    {
-//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-//        $user = new User();
-//        $form = $this->createForm(UserType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('user_index');
-//        }
-//
-//        return $this->render('user/new.html.twig', [
-//            'user' => $user,
-//            'form' => $form->createView(),
-//        ]);
-//    }
 
     /**
      * @Route("/admin/{id}", name="user_show", methods={"GET"})
@@ -181,6 +158,26 @@ class UserController extends AbstractController
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    /**
+     * @Route("/{courseid}/theme", name="user_theme", methods={"GET"})
+     */
+    public function theme(string $courseid): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        if ($user->getTheme() != 'dark') {
+            $user->setTheme('dark');
+        }
+        else {
+            $user->setTheme('light');
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 
     /**

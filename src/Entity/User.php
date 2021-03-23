@@ -104,6 +104,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $d2l_id;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $theme = 'light';
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -434,6 +439,18 @@ class User implements UserInterface, EquatableInterface
     public function setD2lId(?string $d2l_id): self
     {
         $this->d2l_id = $d2l_id;
+
+        return $this;
+    }
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?string $theme): self
+    {
+        $this->theme = $theme;
 
         return $this;
     }

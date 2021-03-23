@@ -1,7 +1,12 @@
 /********** Local Styles **********/
-body {
-  background-color: whitesmoke;
+html, body {
+  height: 100%;
 }
+.container-fluid {
+  height: 100%;
+  overflow-y: hidden; /* don't show content that exceeds my height */
+}
+
 .navbar {
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -39,4 +44,10 @@ h2 {
 .navbar-brand {
   color: black;
   font-family: Arial;
+}
+
+.table {
+  border-collapse: separate;
+  border-radius: .5rem;
+  margin-top: .5rem;
 }
