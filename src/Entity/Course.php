@@ -69,6 +69,7 @@ class Course
     private $ltiAgs;
 
 
+
     public function __construct()
     {
         $this->classlists = new ArrayCollection();

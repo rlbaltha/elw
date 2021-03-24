@@ -46,4 +46,22 @@ class StageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @return Stage[] Returns an array of Stage objects
+     */
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.user = :val1')
+            ->orWhere('s.level = :val2')
+            ->orWhere('s.level = :val3')
+            ->setParameter('val1', $user)
+            ->setParameter('val2', 0)
+            ->setParameter('val3', 2)
+            ->orderBy('s.level')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

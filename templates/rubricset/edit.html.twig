@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rubricset Set Edit - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <h1>Edit Rubric Set</h1>
+
+    {{ include('rubricset/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {{ include('rubricset/_delete_form.html.twig') }}
+{% endblock %}

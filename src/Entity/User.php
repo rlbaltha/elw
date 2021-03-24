@@ -104,6 +104,16 @@ class User implements UserInterface, EquatableInterface
      */
     private $d2l_id;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rubricset::class, mappedBy="user")
+     */
+    private $rubricsets;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rubric::class, mappedBy="user")
+     */
+    private $rubrics;
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -112,6 +122,8 @@ class User implements UserInterface, EquatableInterface
         $this->markups = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->rubricsets = new ArrayCollection();
+        $this->rubrics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -434,6 +446,66 @@ class User implements UserInterface, EquatableInterface
     public function setD2lId(?string $d2l_id): self
     {
         $this->d2l_id = $d2l_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rubricset[]
+     */
+    public function getRubricsets(): Collection
+    {
+        return $this->rubricsets;
+    }
+
+    public function addRubricset(Rubricset $rubricset): self
+    {
+        if (!$this->rubricsets->contains($rubricset)) {
+            $this->rubricsets[] = $rubricset;
+            $rubricset->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRubricset(Rubricset $rubricset): self
+    {
+        if ($this->rubricsets->removeElement($rubricset)) {
+            // set the owning side to null (unless already changed)
+            if ($rubricset->getUser() === $this) {
+                $rubricset->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rubric[]
+     */
+    public function getRubrics(): Collection
+    {
+        return $this->rubrics;
+    }
+
+    public function addRubric(Rubric $rubric): self
+    {
+        if (!$this->rubrics->contains($rubric)) {
+            $this->rubrics[] = $rubric;
+            $rubric->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRubric(Rubric $rubric): self
+    {
+        if ($this->rubrics->removeElement($rubric)) {
+            // set the owning side to null (unless already changed)
+            if ($rubric->getUser() === $this) {
+                $rubric->setUser(null);
+            }
+        }
 
         return $this;
     }

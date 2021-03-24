@@ -44,11 +44,13 @@
     {# if owner #}
     {% if app.user == doc.user %}
         <li class="nav-item">
-            <a aria-label="Edit Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
+            <a aria-label="Edit Document {{ doc.title }}" class="btn btn-primary"
+               href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
         </li>
     {% elseif doc.access!='Review' %}
         <li class="nav-item">
-            <a aria-label="Create Review of Document {{ doc.title }}" class="btn btn-primary" href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
+            <a aria-label="Create Review of Document {{ doc.title }}" class="btn btn-primary"
+               href="{{ course_path('doc_review', {'docid': doc.id}) }}">Create Review</a>
         </li>
     {% endif %}
 
@@ -75,14 +77,21 @@
             {# Help Card #}
             <div class="card bg-light mt-3 mb-3" style="margin-top: 0 !important;">
                 <div class="card-header">
-                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows" class="material-icons expand_arrows">expand_more</i></h2></a>
+                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows"
+                                                                               class="material-icons expand_arrows">expand_more</i>
+                        </h2></a>
                 </div>
                 <div id="help_card" class="card-body">
                     {% if app.user != doc.user and doc.access!='Review' %}
-                    <p class="card-text"><strong>Create Review</strong> will create a copy of the document so you can make inline comments and add markup.</p>
+                        <p class="card-text"><strong>Create Review</strong> will create a copy of the document so you
+                            can make inline comments and add markup.</p>
                     {% endif %}
-                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment.  If you're also creating a review, you should give feedback on the review you've created instead of on the original document.</p>
-                    <p class="card-text"><strong>Submit Grade to eLC</strong> is an instructor button that will send a grade and a comment to eLC's gradebook.  Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home page to create the eLC grade column.  </p>
+                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment. If
+                        you're also creating a review, you should give feedback on the review you've created instead of
+                        on the original document.</p>
+                    <p class="card-text"><strong>Submit Grade to eLC</strong> is an instructor button that will send a
+                        grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
+                        on the eLW course home page to create the eLC grade column. </p>
                 </div>
             </div>
             {# Document Info #}
@@ -107,7 +116,8 @@
                 </div>
             </div>
 
-            <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
+            <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm"
+               href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
             {# Comment Panel #}
             <a aria-label="Give Feedback on {{ doc.title }}" class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
@@ -137,6 +147,32 @@
                 {% endif %}
             {% endif %}
 
+            {# rubric sets #}
+            {% if doc.project.rubricset %}
+                <div class="accordion mt-3" id="accordionRubric">
+                    {% for rubric in doc.project.rubricset.rubrics %}
+                        <div class="card">
+                            <div class="card-header" id="heading{{ loop.index }}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapse{{ loop.index }}" aria-expanded="true"
+                                            aria-controls="collapse{{ loop.index }}">
+                                        {{ rubric.name }}
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapse{{ loop.index }}" class="collapse {% if loop.index==1 %}show{% endif %}"
+                                 aria-labelledby="heading{{ loop.index }}" data-parent="#accordionRubric">
+                                <div class="card-body">
+                                    {{ rubric.body|raw }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {% for comment in doc.comments %}
                 {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
                     <div class="card mt-3">
@@ -145,7 +181,8 @@
                             {% if comment.access=='Hidden' %}
                             {% endif %}
                             {% if app.user == comment.user %}
-                                <a aria-label="Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}" class="btn btn-primary btn-sm float-right"
+                                <a aria-label="Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}"
+                                   class="btn btn-primary btn-sm float-right"
                                    href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
                                     Feedback</a>
                             {% endif %}
@@ -287,13 +324,13 @@
                     $('.note, .super').toggle();
                     $('.popover').hide();
                 });
-            {# toggle help on this page #}
-            $( "#help_card" ).toggle();
-            $("#help-toggle").click(function () {
-                $( "#help_card" ).toggle();
-                var text = $('#help_arrows').text();
-                $('#help_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
-            });
+                    {# toggle help on this page #}
+                $("#help_card").toggle();
+                $("#help-toggle").click(function () {
+                    $("#help_card").toggle();
+                    var text = $('#help_arrows').text();
+                    $('#help_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
+                });
                     {# Note pops for this/these documents #}
                 $('.note').each(function (index) {
                     var p = $(this).position();

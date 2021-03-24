@@ -52,15 +52,17 @@ class CourseType extends AbstractType
                 'choices' => $this->labelsetRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'label' => 'Project Sets'
             ])
-            ->add('markupsets', EntityType::class, [
-                'class' => Markupset::class,
-                'choices' => $this->markupsetRepository->findByUser($user),
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true
-            ])
+//            ->add('markupsets', EntityType::class, [
+//                'class' => Markupset::class,
+//                'choices' => $this->markupsetRepository->findByUser($user),
+//                'choice_label' => 'name',
+//                'multiple' => true,
+//                'expanded' => true,
+//                'label' => 'Project Sets'
+//            ])
         ;
     }
 
