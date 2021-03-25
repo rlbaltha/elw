@@ -108,6 +108,7 @@
             </div>
 
             <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
+
             {# Comment Panel #}
             <a aria-label="Give Feedback on {{ doc.title }}" class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give

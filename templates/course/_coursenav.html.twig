@@ -5,6 +5,7 @@
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <h1 class="mr-5">Course Home</h1>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -17,15 +18,23 @@
                             Announcement</a>
                     </li>
                     {% if course.ltiId != '' %}
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ course_path('ags_index', {'courseid': course.id}) }}">eLC Gradebook Setup</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ course_path('ags_index', {'courseid': course.id}) }}">eLC Gradebook Setup</a>
+                        </li>
                     {% endif %}
                     <li class="nav-item">
                         <a id="delete-trigger" class="nav-link" href="#">Delete Course</a>
                         {{ include('course/_delete_form.html.twig') }}
                     </li>
+                    {% if course.ltiId > 0 and role=='Instructor' %}
+                        <li class="nav-item">
+                            <a class="nav-link nrps"
+                               href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
+                                Classlist</a>
+                        </li>
+                    {% endif %}
+
                 </ul>
             </div>
         </div>
