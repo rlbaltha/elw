@@ -1,41 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rubric index{% endblock %}
+{% block title %}Rubrics  - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Rubric index</h1>
+    <h1>Rubrics</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Color</th>
-                <th>Body</th>
-                <th>Sort</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <a class="btn btn-primary float-right" href="{{ path('rubric_new') }}">New Rubric</a>
+    <div class="accordion" id="accordionMarkup">
         {% for rubric in rubrics %}
-            <tr>
-                <td>{{ rubric.id }}</td>
-                <td>{{ rubric.name }}</td>
-                <td>{{ rubric.color }}</td>
-                <td>{{ rubric.body }}</td>
-                <td>{{ rubric.sort }}</td>
-                <td>
-                    <a href="{{ path('rubric_show', {'id': rubric.id}) }}">show</a>
-                    <a href="{{ path('rubric_edit', {'id': rubric.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="card">
+                <div class="card-header" id="heading{{ loop.index }}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                data-target="#collapse{{ loop.index }}" aria-expanded="true"
+                                aria-controls="collapse{{ loop.index }}">
+                            {{ rubric.name }}
+                        </button>
+                    </h2>
+                </div>
 
-    <a href="{{ path('rubric_new') }}">Create new</a>
+                <div id="collapse{{ loop.index }}" class="collapse {% if loop.index==1 %}show{% endif %}"
+                     aria-labelledby="heading{{ loop.index }}" data-parent="#accordionMarkup">
+                    <div class="card-body">
+                        {{ rubric.body|raw }}
+                        <a class="btn btn-primary btn-sm" href="{{ path('rubric_edit', {'id': rubric.id}) }}">Edit</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+
 {% endblock %}

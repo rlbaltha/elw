@@ -146,9 +146,9 @@ class DocController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/new", name="doc_new", methods={"GET","POST"})
+     * @Route("/{courseid}/{projectid}/new", name="doc_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Permissions $permissions, $courseid): Response
+    public function new(Request $request, Permissions $permissions, string $courseid, string $projectid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -157,12 +157,13 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $stages = $this->getDoctrine()->getManager()->getRepository('App:Stage')->findStagesByCourse($courseid);
-        $projects = $this->getDoctrine()->getManager()->getRepository('App:Project')->findProjectsByCourse($courseid);
+        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $stages = $project->getStages();
         $doc->setUser($user);
         $doc->setCourse($course);
-        $doc->setProject($projects[0]);
+        $doc->setProject($project);
         $doc->setStage($stages[0]);
+        $doc->setTitle('Essay for '.$project->getName());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
@@ -336,19 +337,17 @@ class DocController extends AbstractController
         else {
             $choices = ['Shared' => 'Shared', 'Private' => 'Private'];
         }
+        $stages = $doc->getProject()->getStages();
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $options = ['courseid' => $courseid, 'choices' => $choices];
+        $options = ['courseid' => $courseid, 'choices' => $choices, 'stages' => $stages];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
-        $markupsets = $course->getMarkupsets();
-
-
+        $markupsets = $doc->getProject()->getMarkupsets();
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('notice', 'Your  document has been saved.');
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
-
         return $this->render('doc/edit.html.twig', [
             'doc' => $doc,
             'markupsets' => $markupsets,

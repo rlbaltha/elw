@@ -16,7 +16,12 @@ html  {
         font-size: 12pt;
         font-family: Arial, Verdana, sans-serif;
     }
+    #cke_doc_body {
+        width: 100vw !important;
+    }
+
 }
+
 
 @media only screen and (min-width: 600px) {
     /* For tablets: */

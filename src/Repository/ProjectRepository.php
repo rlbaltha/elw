@@ -21,6 +21,7 @@ class ProjectRepository extends ServiceEntityRepository
 
     /**
     * @return Project[] Returns an array of Project objects
+     * deprecated replaced by below
     */
     public function findProjectsByCourse($courseid)
     {
@@ -35,6 +36,21 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Project[] Returns an array of Project objects
+     * for new course > project data structure
+     */
+    public function findByCourse($courseid)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.course','c')
+            ->andWhere('c.id = :val  ')
+            ->setParameter('val', $courseid)
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     /**
      * @return Project Returns a Project objects

@@ -35,6 +35,7 @@ class StageRepository extends ServiceEntityRepository
             ;
     }
 
+
     /**
      * @return Stage Returns a Stage objects
      */

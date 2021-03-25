@@ -46,13 +46,20 @@ class Rubric
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Rubricset::class, inversedBy="rubrics")
+     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="rubrics")
      */
-    private $rubricset;
+    private $projects;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $level = 0;
+
 
     public function __construct()
     {
         $this->rubricset = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,26 +128,42 @@ class Rubric
     }
 
     /**
-     * @return Collection|Rubricset[]
+     * @return Collection|Project[]
      */
-    public function getRubricset(): Collection
+    public function getProjects(): Collection
     {
-        return $this->rubricset;
+        return $this->projects;
     }
 
-    public function addRubricset(Rubricset $rubricset): self
+    public function addProject(Project $project): self
     {
-        if (!$this->rubricset->contains($rubricset)) {
-            $this->rubricset[] = $rubricset;
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addRubric($this);
         }
 
         return $this;
     }
 
-    public function removeRubricset(Rubricset $rubricset): self
+    public function removeProject(Project $project): self
     {
-        $this->rubricset->removeElement($rubricset);
+        if ($this->projects->removeElement($project)) {
+            $project->removeRubric($this);
+        }
 
         return $this;
     }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
 }

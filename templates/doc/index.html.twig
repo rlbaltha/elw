@@ -65,8 +65,17 @@
                             </li>
                         {% endif %}
                     {% endif %}
-                    <li class="nav-item">
-                        <a target="_blank" class="btn btn-primary" href="{{ course_path('doc_new') }}">New Doc</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            New Doc
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for project in course.projects %}
+                                <a target="_blank" class="dropdown-item" href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
+                            {% endfor %}
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -82,10 +91,10 @@
                 <button class="btn btn-primary btn-sm filter"
                         style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
             {% endfor %}
-            {% for label in labelset.stages %}
-                <button class="btn btn-primary btn-sm filter"
-                        style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
-            {% endfor %}
+        {% endfor %}
+        {% for project in course.projects %}
+            <button class="btn btn-primary btn-sm filter"
+                    style="background:{{ project.color }}; border-color:{{ project.color }}">{{ project.name }}</button>
         {% endfor %}
         <button class="btn btn-primary btn-sm filter">Show All</button>
     </div>
@@ -124,26 +133,26 @@
                     </td>
                     <td>
                         {% if doc.reviews|length > 0 %}
-                        <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
-                           id="dropdownMenuLink1"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Reviews
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            {% for review in doc.reviews %}
-                                {% if review.access !='Hidden' %}
-                                    {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
-                                        <a target="_blank" class="dropdown-item"
-                                           href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
-                                            {% if review.comments|length > 0 %}
-                                                <span class="badge badge-primary"
-                                                      style="background:darkblue">Feedback ({{ review.comments|length }})</span>
-                                            {% endif %}
-                                        </a>
+                            <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
+                               id="dropdownMenuLink1"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reviews
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for review in doc.reviews %}
+                                    {% if review.access !='Hidden' %}
+                                        {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
+                                            <a target="_blank" class="dropdown-item"
+                                               href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
+                                                {% if review.comments|length > 0 %}
+                                                    <span class="badge badge-primary"
+                                                          style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+                                                {% endif %}
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </td>
                     <td>

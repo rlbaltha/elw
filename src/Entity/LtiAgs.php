@@ -38,6 +38,11 @@ class LtiAgs
      */
     private $max;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="lti_grades")
+     */
+    private $project;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class LtiAgs
     public function setMax(int $max): self
     {
         $this->max = $max;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

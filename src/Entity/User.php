@@ -109,10 +109,6 @@ class User implements UserInterface, EquatableInterface
      */
     private $theme = 'light';
 
-    /**
-     * @ORM\OneToMany(targetEntity=Rubricset::class, mappedBy="user")
-     */
-    private $rubricsets;
 
     /**
      * @ORM\OneToMany(targetEntity=Rubric::class, mappedBy="user")
@@ -469,35 +465,6 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Rubricset[]
-     */
-    public function getRubricsets(): Collection
-    {
-        return $this->rubricsets;
-    }
-
-    public function addRubricset(Rubricset $rubricset): self
-    {
-        if (!$this->rubricsets->contains($rubricset)) {
-            $this->rubricsets[] = $rubricset;
-            $rubricset->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRubricset(Rubricset $rubricset): self
-    {
-        if ($this->rubricsets->removeElement($rubricset)) {
-            // set the owning side to null (unless already changed)
-            if ($rubricset->getUser() === $this) {
-                $rubricset->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Rubric[]

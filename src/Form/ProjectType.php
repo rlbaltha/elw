@@ -3,10 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Markupset;
-use App\Entity\Rubricset;
+use App\Entity\Rubric;
 use App\Entity\Stage;
+use App\Entity\LtiAgs;
+use App\Repository\LtiAgsRepository;
 use App\Repository\MarkupsetRepository;
-use App\Repository\RubricsetRepository;
+use App\Repository\RubricRepository;
 use App\Repository\StageRepository;
 use App\Entity\Project;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,20 +19,23 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ProjectType extends AbstractType
 {
-    private $rubricsetRepository;
+    private $ltiAgsRepository;
+    private $rubricRepository;
     private $stageRepository;
     private $markupsetRepository;
 
-    public function __construct(RubricsetRepository $rubricsetRepository, StageRepository $stageRepository, MarkupsetRepository $markupsetRepository)
+    public function __construct(RubricRepository $rubricRepository, StageRepository $stageRepository, MarkupsetRepository $markupsetRepository, LtiAgsRepository $ltiAgsRepository)
     {
         $this->stageRepository = $stageRepository;
-        $this->rubricsetRepository = $rubricsetRepository;
+        $this->rubricRepository = $rubricRepository;
         $this->markupsetRepository = $markupsetRepository;
+        $this->ltiAgsRepository = $ltiAgsRepository;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->options = $options['options'];
         $user = $this->options['user'] ;
+        $courseid = $this->options['courseid'] ;
         $builder
             ->add('name', TextType::class, [
                 'label'  => 'Name'
@@ -45,17 +50,24 @@ class ProjectType extends AbstractType
                 'multiple' => true,
                 'expanded' => true
             ])
-            ->add('rubricset', EntityType::class, [
-                'class' => Rubricset::class,
-                'choices' => $this->rubricsetRepository->findByUser($user),
+            ->add('rubrics', EntityType::class, [
+                'class' => Rubric::class,
+                'choices' => $this->rubricRepository->findByUser($user),
                 'choice_label' => 'name',
-                'multiple' => false,
+                'multiple' => true,
                 'expanded' => true
             ])
             ->add('markupsets', EntityType::class, [
                 'class' => Markupset::class,
                 'choices' => $this->markupsetRepository->findByUser($user),
                 'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true
+            ])
+            ->add('lti_grades', EntityType::class, [
+                'class' => LtiAgs::class,
+                'choices' => $this->ltiAgsRepository->findByCourseid($courseid),
+                'choice_label' => 'label',
                 'multiple' => true,
                 'expanded' => true
             ])

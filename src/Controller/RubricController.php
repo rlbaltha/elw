@@ -26,26 +26,23 @@ class RubricController extends AbstractController
     }
 
     /**
-     * @Route("/{rubricsetid}/new", name="rubric_new", methods={"GET","POST"})
+     * @Route("/new", name="rubric_new", methods={"GET","POST"})
      */
-    public function new(Request $request, string $rubricsetid): Response
+    public function new(Request $request): Response
     {
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $rubric = new Rubric();
         $form = $this->createForm(RubricType::class, $rubric);
         $form->handleRequest($request);
-        $entityManager = $this->getDoctrine()->getManager();
-        $rubricset = $this->getDoctrine()->getManager()->getRepository('App:Rubricset')->findOneById($rubricsetid);
         $rubric->setUser($user);
-        $rubric->addRubricset($rubricset);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rubric);
             $entityManager->flush();
             $this->addFlash('notice', 'Your Rubric has been created.');
-            return $this->redirectToRoute('rubricset_show', ['id'=> $rubricsetid]);
+            return $this->redirectToRoute('rubric_index');
         }
 
         return $this->render('rubric/new.html.twig', [
@@ -54,18 +51,9 @@ class RubricController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="rubric_show", methods={"GET"})
-     */
-    public function show(Rubric $rubric): Response
-    {
-        return $this->render('rubric/show.html.twig', [
-            'rubric' => $rubric,
-        ]);
-    }
 
     /**
-     * @Route("/{rubricsetid}/{id}/edit", name="rubric_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="rubric_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Rubric $rubric, string $rubricsetid): Response
     {
@@ -75,7 +63,7 @@ class RubricController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('rubricset_show', ['id'=> $rubricsetid]);
+            return $this->redirectToRoute('rubric_index');
         }
 
         return $this->render('rubric/edit.html.twig', [

@@ -36,14 +36,10 @@ class Project
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Labelset", inversedBy="projects")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $labelset;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Rubricset::class, inversedBy="projects")
-     */
-    private $rubricset;
 
     /**
      * @ORM\ManyToMany(targetEntity=Stage::class, inversedBy="projects")
@@ -55,10 +51,27 @@ class Project
      */
     private $markupsets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Rubric::class, inversedBy="projects")
+     */
+    private $rubrics;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LtiAgs::class, mappedBy="project")
+     */
+    private $lti_grades;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Course::class, inversedBy="projects")
+     */
+    private $course;
+
     public function __construct()
     {
         $this->stages = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
+        $this->rubrics = new ArrayCollection();
+        $this->lti_grades = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,17 +127,6 @@ class Project
         return $this;
     }
 
-    public function getRubricset(): ?Rubricset
-    {
-        return $this->rubricset;
-    }
-
-    public function setRubricset(?Rubricset $rubricset): self
-    {
-        $this->rubricset = $rubricset;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Stage[]
@@ -170,6 +172,72 @@ class Project
     public function removeMarkupset(Markupset $markupset): self
     {
         $this->markupsets->removeElement($markupset);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rubric[]
+     */
+    public function getRubrics(): Collection
+    {
+        return $this->rubrics;
+    }
+
+    public function addRubric(Rubric $rubric): self
+    {
+        if (!$this->rubrics->contains($rubric)) {
+            $this->rubrics[] = $rubric;
+        }
+
+        return $this;
+    }
+
+    public function removeRubric(Rubric $rubric): self
+    {
+        $this->rubrics->removeElement($rubric);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LtiAgs[]
+     */
+    public function getLtiGrades(): Collection
+    {
+        return $this->lti_grades;
+    }
+
+    public function addLtiGrade(LtiAgs $ltiGrade): self
+    {
+        if (!$this->lti_grades->contains($ltiGrade)) {
+            $this->lti_grades[] = $ltiGrade;
+            $ltiGrade->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLtiGrade(LtiAgs $ltiGrade): self
+    {
+        if ($this->lti_grades->removeElement($ltiGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($ltiGrade->getProject() === $this) {
+                $ltiGrade->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): self
+    {
+        $this->course = $course;
 
         return $this;
     }

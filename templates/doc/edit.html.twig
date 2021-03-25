@@ -24,57 +24,60 @@
             <p class="navbar-text">Files that have reviews or feedback cannot be deleted.</p>
         {% endif %}
     </li>
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+    </li>
 {% endblock %}
 
 
 {% block body %}
     <div class="row">
-        <div class="col-lg-9 col-md-11">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
-
+        <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
 
         <div class="col">
-            {# Help Card #}
-            <div class="card mt-3 mb-3" style="margin-top: 0 !important;">
-                <div class="card-header">
-                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows"
-                                                                               class="fa fa-chevron-down"></i></h2></a>
-                </div>
-                <div id="help_card" class="card-body">
-                    <p class="card-text"><strong>Insert Note</strong> allows you to embed an inline comment in a
-                        document. Place the cursor or highlight a section of text, then type your note and insert.</p>
-                    <p class="card-text"><strong>Markup tags </strong>are collected in expandable markup menus. To tag a
-                        word or passage, select the text, then click the tag name.</p>
-                </div>
-            </div>
             {# Note Insert #}
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Insert Note</h4>
-                    <form id='note_insert_form' name='note_insert_form'>
-                        <label for="insert_value">Insert Note</label>
-                        <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
-                        <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary"
-                           title="Insert Note">Insert</a>
-                    </form>
-                </div>
-            </div>
-
-            {# Markup Insert #}
-            <div class="accordion" id="accordionMarkup">
-                {% for markupset in markupsets %}
+            <div class="accordion" id="accordionInsert">
                     <div class="card">
-                        <div class="card-header" id="heading{{ loop.index }}">
+                        <div class="card-header" id="i_heading">
                             <h2 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#collapse{{ loop.index }}" aria-expanded="true"
-                                        aria-controls="collapse{{ loop.index }}">
-                                    {{ markupset.name }}
+                                        data-target="#i_collapse" aria-expanded="true"
+                                        aria-controls="i_collapsei">
+                                    Insert Note
                                 </button>
                             </h2>
                         </div>
 
-                        <div id="collapse{{ loop.index }}" class="collapse {% if loop.index==1 %}show{% endif %}"
-                             aria-labelledby="heading{{ loop.index }}" data-parent="#accordionMarkup">
+                        <div id="i_collapse" class="collapse"
+                             aria-labelledby="i_heading" data-parent="#accordionInsert">
+                            <div class="card-body">
+                    <form id='note_insert_form' name='note_insert_form'>
+                        <label class="sr-only" for="insert_value">Insert Note</label>
+                        <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
+                        <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary btn-sm"
+                           title="Insert Note">Insert</a>
+                    </form>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            {# Markup Insert #}
+            <div class="accordion mt-3" id="accordionMarkup">
+                {% for markupset in markupsets %}
+                    <div class="card">
+                        <div class="card-header" id="m_heading{{ loop.index }}">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#m_collapse{{ loop.index }}" aria-expanded="true"
+                                        aria-controls="m_collapse{{ loop.index }}">
+                                    Markup {{ loop.index }}: {{ markupset.name }}
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="m_collapse{{ loop.index }}" class="collapse"
+                             aria-labelledby="m_heading{{ loop.index }}" data-parent="#accordionMarkup">
                             <div class="card-body">
                                 {% for markup in markupset.markups %}
                                     <a class="badge badge-primary" style="background-color:{{ markup.color }}"
@@ -86,21 +89,60 @@
                     </div>
                 {% endfor %}
             </div>
+            {# rubrics #}
+            {% if doc.project.rubrics %}
+                <div class="accordion mt-3" id="accordionRubric">
+                    {% for rubric in doc.project.rubrics %}
+                        <div class="card">
+                            <div class="card-header" id="r_heading{{ loop.index }}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#r_collapse{{ loop.index }}" aria-expanded="true"
+                                            aria-controls="r_collapse{{ loop.index }}">
+                                       Rubric {{ loop.index }}: {{ rubric.name }}
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="r_collapse{{ loop.index }}" class="collapse"
+                                 aria-labelledby="r_heading{{ loop.index }}" data-parent="#accordionRubric">
+                                <div class="card-body">
+                                    {{ rubric.body|raw }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Document Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="card-text"><strong>Insert Note</strong> allows you to embed an inline comment in a
+                        document. Place the cursor or highlight a section of text, then type your note and insert.</p>
+                    <p class="card-text"><strong>Markup tags </strong>are collected in expandable markup menus. To tag a
+                        word or passage, select the text, then click the tag name.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        {# toggle help on this page #}
-        $("#help_card").toggle();
-        $("#help-toggle").click(function () {
-            $("#help_card").toggle();
-            $('#help_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
-            ;
-        });
         {# Markup insert and tracking #}
         function insert_markup(id, name, color) {
             var nEditor = CKEDITOR.instances.doc_body;

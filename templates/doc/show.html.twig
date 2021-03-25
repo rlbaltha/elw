@@ -59,7 +59,10 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a>
+{#        <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a>#}
+    </li>
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
 {% endblock %}
 
@@ -74,32 +77,10 @@
 
         {# Info column #}
         <div class="col">
-            {# Help Card #}
-            <div class="card mt-3 mb-3" style="margin-top: 0 !important;">
-                <div class="card-header">
-                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows"
-                                                                               class="material-icons expand_arrows">expand_more</i>
-                        </h2></a>
-                </div>
-                <div id="help_card" class="card-body">
-                    {% if app.user != doc.user and doc.access!='Review' %}
-                        <p class="card-text"><strong>Create Review</strong> will create a copy of the document so you
-                            can make inline comments and add markup.</p>
-                    {% endif %}
-                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment. If
-                        you're also creating a review, you should give feedback on the review you've created instead of
-                        on the original document.</p>
-                    <p class="card-text"><strong>Submit Grade to eLC</strong> is an instructor button that will send a
-                        grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
-                        on the eLW course home page to create the eLC grade column. </p>
-                </div>
-            </div>
             {# Document Info #}
-            <div class="card mt-3 mb-3">
+            <div class="card mb-3">
                 <div class="card-header">
-                    <h1>{% if doc.origin %}<span class="badge badge-primary"
-                                                 style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
-                    </h1>
+                    <h1 style="margin-bottom:0;">{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }} </h1>
                 </div>
                 <div class="card-body">
                     <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
@@ -148,23 +129,23 @@
                 {% endif %}
             {% endif %}
 
-            {# rubric sets #}
-            {% if doc.project.rubricset %}
+            {# rubrics #}
+            {% if doc.project.rubrics %}
                 <div class="accordion mt-3" id="accordionRubric">
-                    {% for rubric in doc.project.rubricset.rubrics %}
+                    {% for rubric in doc.project.rubrics %}
                         <div class="card">
-                            <div class="card-header" id="heading{{ loop.index }}">
+                            <div class="card-header" id="r_heading{{ loop.index }}">
                                 <h2 class="mb-0">
                                     <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapse{{ loop.index }}" aria-expanded="true"
-                                            aria-controls="collapse{{ loop.index }}">
-                                        {{ rubric.name }}
+                                            data-target="#r_collapse{{ loop.index }}" aria-expanded="true"
+                                            aria-controls="r_collapse{{ loop.index }}">
+                                        Rubric {{ loop.index }}: {{ rubric.name }}
                                     </button>
                                 </h2>
                             </div>
 
-                            <div id="collapse{{ loop.index }}" class="collapse {% if loop.index==1 %}show{% endif %}"
-                                 aria-labelledby="heading{{ loop.index }}" data-parent="#accordionRubric">
+                            <div id="r_collapse{{ loop.index }}" class="collapse"
+                                 aria-labelledby="r_heading{{ loop.index }}" data-parent="#accordionRubric">
                                 <div class="card-body">
                                     {{ rubric.body|raw }}
                                 </div>
@@ -304,6 +285,35 @@
             {% endif %}
         {% endif %}
     {% endfor %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Document Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if app.user != doc.user and doc.access!='Review' %}
+                        <p class="card-text"><strong>Create Review</strong> will create a copy of the document so you
+                            can make inline comments and add markup.</p>
+                    {% endif %}
+                    <p class="card-text"><strong>Give Feedback</strong> allows you to attach a holistic comment. If
+                        you're also creating a review, you should give feedback on the review you've created instead of
+                        on the original document.</p>
+                    <p class="card-text"><strong>Submit Grade to eLC</strong> is an instructor button that will send a
+                        grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
+                        on the eLW course home page to create the eLC grade column. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

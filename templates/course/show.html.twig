@@ -18,10 +18,53 @@
         <h2 class="">Hello, {{ user.firstname }}!</h2>
         {{ course.announcement|raw }}
     </div>
-
+    <div class="col">
     {% if role=='Instructor' %}
+        <h2 class="d-inline">Projects</h2>
+        <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm" href="{{ path('project_new', {'courseid': course.id}) }}">Add
+            Project</a>
         <div class="row">
-            <div class="col-lg-6 col-sm-12">
+            {% if course.projects %}
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Stages</th>
+                    <th>Rubric</th>
+                    <th>Markup Sets</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for project in course.projects %}
+                    <tr>
+                        <td>
+                            <a aria-label="Edit Project {{ project.name }}" class="btn btn-primary btn-sm"
+                               style="background:{{ project.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                {{ project.name }}</a>
+                        </td>
+                        <td>
+                            {% if project.stages %}{% for stage in project.stages %}
+                                <button class="btn btn-primary btn-sm"
+                                        style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
+                        </td>
+                        <td>
+                            {% if project.rubrics %}{% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}
+                        </td>
+                        <td>
+                            {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Records Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+
                 <h2>eLW Classlist</h2>
                 <table id="classlist" class="table table-bordered">
                     <thead class="thead-light">
