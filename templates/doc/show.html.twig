@@ -311,8 +311,8 @@
     <script>
         $(document).ready(function () {
                 $(".ltiresult").each(function () {
-                    var request = $(this).attr('data-request')
-                    var target = '#' + $(this).attr('data-id');
+                    let request = $(this).attr('data-request')
+                    let target = '#' + $(this).attr('data-id');
                     $.ajax({
                         url: request, success: function (result) {
                             $(target).html(result);
@@ -329,31 +329,30 @@
                 $("#help_card").toggle();
                 $("#help-toggle").click(function () {
                     $("#help_card").toggle();
-                    var text = $('#help_arrows').text();
+                    let text = $('#help_arrows').text();
                     $('#help_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
                 });
                     {# Note pops for this/these documents #}
                 $('.note').each(function (index) {
-                    var p = $(this).position();
-                    var top = p.top;
-                    var note_index = index + 1;
-                    var note_number = '<span class="blue">' + note_index + '</span>';
-                    var note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
+                    let p = $(this).position();
+                    let note_index = index + 1;
+                    let note_number = '<span class="blue">' + note_index + '</span>';
+                    let note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
                     $(this).prev().append(note);
                 });
 
                 $('.highlight').each(function (index) {
-                    var span_number = index + 1;
+                    let span_number = index + 1;
                     $(this).attr('id', 'h' + span_number);
-                    var span_append = '<span class="super">' + span_number + '</span>';
+                    let span_append = '<span class="super">' + span_number + '</span>';
                     $(this).append(span_append);
                     $('.super').hide();
                 });
 
                 $('.markup').each(function () {
-                    var id = "div[data-id='" + $(this).attr('data-id') + "']";
-                    var markupbody = $(id).children(".popover-title").text();
-                    var span_append = '<span class="note markupbody">' + markupbody + '</span>';
+                    let id = "div[data-id='" + $(this).attr('data-id') + "']";
+                    let markupbody = $(id).children(".popover-title").text();
+                    let span_append = '<span class="note markupbody">' + markupbody + '</span>';
                     $(this).after(span_append);
                 });
 
@@ -362,17 +361,17 @@
                 $('.markup').mouseover(function () {
                     if ($('#toggle').text() != 'Popover') {
                         $('.popover').hide();
-                        var id = "div[data-id='" + $(this).attr('data-id') + "']";
-                        var offset = $(this).offset();
+                        let id = "div[data-id='" + $(this).attr('data-id') + "']";
+                        let offset = $(this).offset();
                         $(id).show().offset({top: offset.top - 50, left: offset.left + 100});
                     }
                 });
                 $('.highlight').mouseover(function () {
                     if ($('#toggle').text() != 'Popover') {
                         $('.popover').hide();
-                        var id = "div[data-id='" + $(this).attr('id') + "']";
-                        var offset = $(this).position();
-                        var right = $(this).position().left + $(this).width();
+                        let id = "div[data-id='" + $(this).attr('id') + "']";
+                        let offset = $(this).position();
+                        let right = $(this).position().left + $(this).width();
                         $(id).show().offset({top: offset.top - 0, left: right});
                     }
 
@@ -383,7 +382,7 @@
 
                     {# Document/Reviews #}
                 $('.doc-click').click(function () {
-                    var id = '#' + $(this).attr('data-id');
+                    let id = '#' + $(this).attr('data-id');
                     $('.doc-container').hide();
                     $(id).show();
                 });
@@ -396,16 +395,16 @@
                 $('#doc{{ target }}').show()
 
                 $("#compare_click").click(function () {
-                    var doc1;
-                    var doc2;
-                    var url;
-                    var location = '_blank'
+                    let doc1;
+                    let doc2;
+                    let url;
+                    let location = '_blank'
                     if ($('input:checked').length != 2) {
                         alert('Please select only two documents to compare');
                     } else {
-                        var doc1 = $('input:checked:eq( 0 )').attr('id');
-                        var doc2 = $('input:checked:eq( 1 )').attr('id');
-                        var url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}' + '/diff';
+                        let doc1 = $('input:checked:eq( 0 )').attr('id');
+                        let doc2 = $('input:checked:eq( 1 )').attr('id');
+                        let url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}' + '/diff';
                         window.open(url, location);
                     }
                 });

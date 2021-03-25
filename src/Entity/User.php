@@ -465,6 +465,8 @@ class User implements UserInterface, EquatableInterface
     public function setTheme(?string $theme): self
     {
         $this->theme = $theme;
+
+        return $this;
     }
 
     /**
@@ -523,7 +525,7 @@ class User implements UserInterface, EquatableInterface
                 $rubric->setUser(null);
             }
         }
-        
+
         return $this;
     }
 

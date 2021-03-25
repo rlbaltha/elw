@@ -34,8 +34,12 @@
                                 Classlist</a>
                         </li>
                     {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ course_path('user_theme', {'courseid': course.id}) }}">Light/Dark</a>
+                    </li>
                 </ul>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+{% endif %}
