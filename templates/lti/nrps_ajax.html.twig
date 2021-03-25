@@ -1,0 +1,25 @@
+<div class="col">
+    <h2>eLC Classlist</h2>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for member in membership.members|sort((a, b) => a.family_name <=> b.family_name) %}
+            <tr>
+                <td>{{ member.family_name }}, {{ member.given_name }} </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    {{ member.roles|join(', ')|replace({'http://purl.imsglobal.org/vocab/lis/v2/membership#': ' ' }) }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+

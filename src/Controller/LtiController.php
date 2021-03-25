@@ -225,12 +225,8 @@ class LtiController extends AbstractController
         $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
-
-        return $this->render('lti/nrps.html.twig', [
+        return $this->render('lti/nrps_ajax.html.twig', [
             'membership' => $data,
-            'classlists' => $classlists,
-            'course' => $course,
-            'role' => $role,
         ]);
     }
 

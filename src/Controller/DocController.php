@@ -312,7 +312,7 @@ class DocController extends AbstractController
             'doc' => $doc,
         ]);
 
-        $filename = $doc->getTitle().'.pdf';
+        $filename = 'PDF_of_'.$doc->getTitle().'.pdf';
 
         $response = $this->wrapper->getStreamResponse($html, $filename);
         $response->send();

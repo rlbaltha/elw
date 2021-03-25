@@ -36,14 +36,17 @@
             {# Help Card #}
             <div class="card mt-3 mb-3" style="margin-top: 0 !important;">
                 <div class="card-header">
-                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows" class="fa fa-chevron-down"></i></h2></a>
+                    <a id='help-toggle' class="" href="#"><h2>Document Help <i id="help_arrows"
+                                                                               class="fa fa-chevron-down"></i></h2></a>
                 </div>
                 <div id="help_card" class="card-body">
-                    <p class="card-text"><strong>Insert Note</strong> allows you to embed an inline comment in a document.  Place the cursor or highlight a section of text, then type your note and insert.</p>
-                    <p class="card-text"><strong>Markup tags </strong>are collected in expandable markup menus.  To tag a word or passage, select the text, then click the tag name.</p>
+                    <p class="card-text"><strong>Insert Note</strong> allows you to embed an inline comment in a
+                        document. Place the cursor or highlight a section of text, then type your note and insert.</p>
+                    <p class="card-text"><strong>Markup tags </strong>are collected in expandable markup menus. To tag a
+                        word or passage, select the text, then click the tag name.</p>
                 </div>
             </div>
-            {# Note Insert#}
+            {# Note Insert #}
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Insert Note</h4>
@@ -56,7 +59,7 @@
                 </div>
             </div>
 
-            {# Markup Insert#}
+            {# Markup Insert #}
             <div class="accordion" id="accordionMarkup">
                 {% for markupset in markupsets %}
                     <div class="card">
@@ -92,10 +95,11 @@
     {{ parent() }}
     <script>
         {# toggle help on this page #}
-        $( "#help_card" ).toggle();
+        $("#help_card").toggle();
         $("#help-toggle").click(function () {
-            $( "#help_card" ).toggle();
-            $('#help_arrows').toggleClass( 'fa-chevron-down').toggleClass( 'fa-chevron-up' );;
+            $("#help_card").toggle();
+            $('#help_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+            ;
         });
         {# Markup insert and tracking #}
         function insert_markup(id, name, color) {
@@ -124,12 +128,12 @@
             $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
-                $("fieldset").toggle();
-                $("#doc_project").toggle();
-                $("#doc_stage").toggle();
-                $("#doc_access").toggle();
-                $("#doc_wordcount").toggle();
-                $('#settings_arrows').toggleClass( 'fa-chevron-down' ).toggleClass( 'fa-chevron-up' );
+            $("fieldset").toggle();
+            $("#doc_project").toggle();
+            $("#doc_stage").toggle();
+            $("#doc_access").toggle();
+            $("#doc_wordcount").toggle();
+            $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             {% endif %}
             $("#doc-title-toggle").click(function () {
                 $("fieldset").toggle();
@@ -137,7 +141,7 @@
                 $("#doc_stage").toggle();
                 $("#doc_access").toggle();
                 $("#doc_wordcount").toggle();
-                $('#settings_arrows').toggleClass( 'fa-chevron-down' ).toggleClass( 'fa-chevron-up' );
+                $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             });
             $("#submit-doc-form").click(function () {
                 var editor = CKEDITOR.instances.doc_body;
@@ -151,12 +155,12 @@
                 });
             });
 
-            {# Delete doc trigger#}
+            {# Delete doc trigger #}
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
             });
 
-            {# Doc autosave#}
+            {# Doc autosave #}
             $('#saving_alert').hide();
             var editor = CKEDITOR.instances.doc_body;
             var autoSave = setInterval(function () {
@@ -166,7 +170,10 @@
                     $('#doc_wordcount').val(count);
                     editor.resetDirty();
                     var body = editor.getData();
-                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body, count: count}, function (data) {
+                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {
+                        docBody: body,
+                        count: count
+                    }, function (data) {
                     });
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();

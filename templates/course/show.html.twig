@@ -4,7 +4,7 @@
 
 {% block subnav %}
     {% if status !='Pending' %}
-    {{ include('course/_subnav.html.twig') }}
+        {{ include('course/_subnav.html.twig') }}
     {% endif %}
 {% endblock %}
 
@@ -14,44 +14,42 @@
 {% endblock %}
 
 {% block body %}
+    <div class="jumbotron">
+        <h2 class="">Hello, {{ user.firstname }}!</h2>
+        {{ course.announcement|raw }}
+    </div>
 
-    <h2>Hi {{ user.firstname }}</h2>
-    {% if course.announcement != '' %}
-        <div class="alert alert-primary">{{ course.announcement|raw }}</div>
-    {% endif %}
-
-    {% if course.ltiId > 0 and role=='Instructor' %}
-        <a class="btn btn-primary"
-           href="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
-            Classlist</a>
-    {% endif %}
     {% if role=='Instructor' %}
-    <table id="classlist" class="table">
-        <thead class="thead-light">
-        <tr>
-            <th>Status</th>
-            <th>Students</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-        <thead>
-        <tbody>
-        {% for classlist in classlists %}
-            <tr>
-                <td style="width: 3%"
-                    class="table-{{ classlist.status == 'Approved' ? 'success' : 'danger' }}">{{ classlist.status }}
-                </td>
-                <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
-                <td>{{ classlist.role }}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm"
-                       href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
-                    {{ include('classlist/_delete_form.html.twig') }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <h2>eLW Classlist</h2>
+                <table id="classlist" class="table table-bordered">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Students</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    <thead>
+                    <tbody>
+                    {% for classlist in classlists %}
+                        <tr>
+                            <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
+                            <td>{{ classlist.role }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                   href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                                {{ include('classlist/_delete_form.html.twig') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div id="nrps"></div>
+            </div>
+        </div>
     {% endif %}
 
     {% if status=='Pending' %}
@@ -69,6 +67,16 @@
             {# Delete course trigger #}
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
+            });
+            $(".nrps").click(function () {
+                var request = $(this).attr('data-request')
+                var target = '#nrps'
+                $.ajax({
+                    url: request, success: function (result) {
+                        $(target).html(result);
+                    }
+                });
+                $(this).hide();
             });
         });
     </script>
