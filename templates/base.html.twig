@@ -42,8 +42,9 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
                                 <a class="dropdown-item" href="{{ path('course_admin') }}">Courses</a>
-                                <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
+                                <a class="dropdown-item" href="{{ path('labelset_index') }}">Project Sets</a>
                                 <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
+                                <a class="dropdown-item" href="{{ path('rubricset_index') }}">Rubric Sets</a>
                                 <a class="dropdown-item" href="{{ path('term_index') }}">Term</a>
                             </div>
                         </li>
@@ -64,11 +65,11 @@
                             <a class="nav-link" href="{{ path('course_new') }}">Create Course</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('labelset_byuser') }}">Labels</a>
+                            <a class="nav-link" href="{{ path('labelset_byuser') }}">Project Sets</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>
-                        </li>
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>#}
+{#                        </li>#}
                     {% endif %}
                 {% endblock %}
             </ul>

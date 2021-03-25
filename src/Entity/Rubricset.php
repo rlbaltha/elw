@@ -2,18 +2,19 @@
 
 namespace App\Entity;
 
+use App\Repository\RubricsetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\StageRepository")
+ * @ORM\Entity(repositoryClass=RubricsetRepository::class)
  */
-class Stage
+class Rubricset
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -24,34 +25,28 @@ class Stage
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
-    private $color;
+    private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rubricsets")
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Labelset", inversedBy="stages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=Rubric::class, mappedBy="rubricset")
      */
-    private $labelset;
+    private $rubrics;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="stages")
+     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="rubricset")
      */
     private $projects;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $level=1;
-
     public function __construct()
     {
+        $this->rubrics = new ArrayCollection();
         $this->projects = new ArrayCollection();
     }
 
@@ -72,14 +67,14 @@ class Stage
         return $this;
     }
 
-    public function getColor(): ?string
+    public function getLevel(): ?int
     {
-        return $this->color;
+        return $this->level;
     }
 
-    public function setColor(string $color): self
+    public function setLevel(int $level): self
     {
-        $this->color = $color;
+        $this->level = $level;
 
         return $this;
     }
@@ -96,14 +91,30 @@ class Stage
         return $this;
     }
 
-    public function getLabelset(): ?Labelset
+
+    /**
+     * @return Collection|Rubric[]
+     */
+    public function getRubrics(): Collection
     {
-        return $this->labelset;
+        return $this->rubrics;
     }
 
-    public function setLabelset(?Labelset $labelset): self
+    public function addRubric(Rubric $rubric): self
     {
-        $this->labelset = $labelset;
+        if (!$this->rubrics->contains($rubric)) {
+            $this->rubrics[] = $rubric;
+            $rubric->addRubricset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRubric(Rubric $rubric): self
+    {
+        if ($this->rubrics->removeElement($rubric)) {
+            $rubric->removeRubricset($this);
+        }
 
         return $this;
     }
@@ -120,7 +131,7 @@ class Stage
     {
         if (!$this->projects->contains($project)) {
             $this->projects[] = $project;
-            $project->addStage($this);
+            $project->setRubricset($this);
         }
 
         return $this;
@@ -129,20 +140,11 @@ class Stage
     public function removeProject(Project $project): self
     {
         if ($this->projects->removeElement($project)) {
-            $project->removeStage($this);
+            // set the owning side to null (unless already changed)
+            if ($project->getRubricset() === $this) {
+                $project->setRubricset(null);
+            }
         }
-
-        return $this;
-    }
-
-    public function getLevel(): ?int
-    {
-        return $this->level;
-    }
-
-    public function setLevel(?int $level): self
-    {
-        $this->level = $level;
 
         return $this;
     }

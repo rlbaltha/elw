@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rubricset index - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <h1>Rubric Sets</h1>
+
+    <a class="btn btn-primary float-right" href="{{ path('rubricset_new') }}">New Rubric Set</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rubricset in rubricsets %}
+            <tr>
+                <td><a href="{{ path('rubricset_show', {'id': rubricset.id}) }}">{{ rubricset.name }}</a></td>
+                <td>{{ rubricset.level }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

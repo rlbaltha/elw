@@ -24,8 +24,9 @@ class ProjectController extends AbstractController
     {
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $options = ['user' => $user];
         $project = new Project();
-        $form = $this->createForm(ProjectType::class, $project);
+        $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
         $entityManager = $this->getDoctrine()->getManager();
         $labelset = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findOneById($labelsetid);
@@ -54,8 +55,11 @@ class ProjectController extends AbstractController
         if (!($this->getUser() == $project->getUser() or $this->isGranted('ROLE_ADMIN'))) {
             throw new AccessDeniedException('You do not have permissions to do this!');
         }
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $labelset = $project->getLabelset();
-        $form = $this->createForm(ProjectType::class, $project);
+        $options = ['user' => $user];
+        $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
