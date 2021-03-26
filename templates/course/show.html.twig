@@ -38,14 +38,14 @@
                 {% for project in course.projects %}
                     <tr>
                         <td>
-                            <a aria-label="Edit Project {{ project.name }}" class="btn btn-primary btn-sm"
+                            <a aria-label="Edit Project {{ project.name }}" class="btn btn-secondary btn-sm"
                                style="background:{{ project.color }}"
                                href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
                                 {{ project.name }}</a>
                         </td>
                         <td>
                             {% if project.stages %}{% for stage in project.stages %}
-                                <button class="btn btn-primary btn-sm"
+                                <button class="btn btn-secondary btn-sm"
                                         style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
                         </td>
                         <td>

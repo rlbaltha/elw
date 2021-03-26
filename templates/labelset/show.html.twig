@@ -17,10 +17,10 @@
     <div class="row">
         <div class="col">
             <h2>Projects</h2>
-            {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}
-                <a aria-label="Add project to {{ labelset.name }}" class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add
-                    Project</a>
-            {% endif %}
+{#            {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}#}
+{#                <a aria-label="Add project to {{ labelset.name }}" class="btn btn-primary float-right" href="{{ path('project_new', {'labelsetid': labelset.id}) }}">Add#}
+{#                    Project</a>#}
+{#            {% endif %}#}
             <table class="table">
                 <thead>
                 <tr>

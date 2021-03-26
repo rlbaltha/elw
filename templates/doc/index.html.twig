@@ -96,7 +96,7 @@
             <button class="btn btn-primary btn-sm filter"
                     style="background:{{ project.color }}; border-color:{{ project.color }}">{{ project.name }}</button>
         {% endfor %}
-        <button class="btn btn-primary btn-sm filter">Show All</button>
+        <button class="btn btn-secondary btn-sm filter">Show All</button>
     </div>
     <div class="float-right">Docs
         found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
@@ -134,11 +134,11 @@
                     <td>
                         {% if doc.reviews|length > 0 %}
                             <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
-                               id="dropdownMenuLink1"
+                               id="dropdownMenuLink{{ doc.id }}"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Reviews
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ doc.id }}">
                                 {% for review in doc.reviews %}
                                     {% if review.access !='Hidden' %}
                                         {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
