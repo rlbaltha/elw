@@ -3,6 +3,10 @@
 {% block title %}Course Edit - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>{{ course.name }}</h1>
-    {{ include('course/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ course.name }}</h1>
+            {{ include('course/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+    </div>
 {% endblock %}

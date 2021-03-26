@@ -3,10 +3,11 @@
 {% block title %}Rubrics  - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Rubrics</h1>
+    <h1 class="d-inline">Rubrics</h1>
 
     <a class="btn btn-primary float-right" href="{{ path('rubric_new') }}">New Rubric</a>
-    <div class="accordion" id="accordionMarkup">
+
+    <div class="accordion mt-3" id="accordionMarkup">
         {% for rubric in rubrics %}
             <div class="card">
                 <div class="card-header" id="heading{{ loop.index }}">

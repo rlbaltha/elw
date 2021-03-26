@@ -3,12 +3,13 @@
 {% block title %}Term Index - {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="row justify-content-md-center">
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <h1>Term index</h1>
+<div class="row">
+    <div class="col">
+        <h1 class="d-inline">Term index</h1>
+        <a class="btn btn-primary float-right" href="{{ path('term_new') }}">New Term</a>
 
         <table class="table">
-            <thead>
+            <thead class="thead-light">
             <tr>
                 <th>Year</th>
                 <th>Semester</th>
@@ -24,12 +25,12 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4">no records found</td>
+                    <td colspan="3">no records found</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <a class="btn btn-primary" href="{{ path('term_new') }}">Create new</a>
+
     </div>
     {% endblock %}

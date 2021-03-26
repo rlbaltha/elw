@@ -3,8 +3,10 @@
 {% block title %}Rubric New - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Create New Rubric</h1>
-
-    {{ include('rubric/_form.html.twig') }}
-
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">New Rubric</h1>
+            {{ include('rubric/_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

@@ -73,7 +73,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for project in course.projects %}
-                                <a target="_blank" class="dropdown-item" href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
+                                <a target="_blank" class="dropdown-item"
+                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
                             {% endfor %}
                         </div>
                     </li>
@@ -84,7 +85,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-inline p-2">
+    <div class="d-inline p-2 text-dark">
         Filter:
         {% for labelset in course.labelsets %}
             {% for label in labelset.projects %}
@@ -98,7 +99,7 @@
         {% endfor %}
         <button class="btn btn-secondary btn-sm filter">Show All</button>
     </div>
-    <div class="float-right">Docs
+    <div class="float-right text-dark">Docs
         found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
 
 

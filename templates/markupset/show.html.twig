@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>{{ markupset.name }}</h1>
-    (Level: {% if markupset.level == 0 %}Default{% else %}Instructor Created{% endif %})
+    <p>(Level: {% if markupset.level == 0 %}Default{% else %}Instructor Created{% endif %})</p>
 
     {% if (is_granted('ROLE_ADMIN')) or (markupset.user == app.user) %}
     {{ include('markupset/_delete_form.html.twig') }}
@@ -13,8 +13,8 @@
     <a aria-label="Add Markup to {{ markupset.name }}" class="btn btn-primary float-right" href="{{ path('markup_new', {'markupsetid': markupset.id}) }}">Add Markup</a>
     {% endif %}
 
-    <table class="table">
-        <thead>
+    <table class="table mt-2">
+        <thead class="thead-light">
         <tr>
             <th>Name</th>
             <th>Description</th>

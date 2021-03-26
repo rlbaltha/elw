@@ -8,65 +8,115 @@
     {% endif %}
 {% endblock %}
 
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Course Help</a>
+    </li>
+{% endblock %}
 
 {% block toolnav %}
     {{ include('course/_coursenav.html.twig') }}
 {% endblock %}
 
+
+
 {% block body %}
-    <div class="jumbotron">
-        <h2 class="">Hello, {{ user.firstname }}!</h2>
-        {{ course.announcement|raw }}
+    <div class="row">
+        <div class="col">
+            <div class="jumbotron">
+                <h2 class="">Hello, {{ user.firstname }}!</h2>
+                {{ course.announcement|raw }}
+                {% if role=='Instructor' %}
+                <a class="btn btn-primary btn-sm float-right"
+                   href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
+                    Announcement</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="col">
+
     {% if role=='Instructor' %}
-        <h2 class="d-inline">Projects</h2>
-        <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm" href="{{ path('project_new', {'courseid': course.id}) }}">Add
-            Project</a>
         <div class="row">
-            {% if course.projects %}
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Stages</th>
-                    <th>Rubric</th>
-                    <th>Markup Sets</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for project in course.projects %}
-                    <tr>
-                        <td>
-                            <a aria-label="Edit Project {{ project.name }}" class="btn btn-secondary btn-sm"
-                               style="background:{{ project.color }}"
-                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
-                                {{ project.name }}</a>
-                        </td>
-                        <td>
-                            {% if project.stages %}{% for stage in project.stages %}
-                                <button class="btn btn-secondary btn-sm"
-                                        style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
-                        </td>
-                        <td>
-                            {% if project.rubrics %}{% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}
-                        </td>
-                        <td>
-                            {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="1">No Records Found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
+            <div class="col">
+                <h2 class="d-inline">Projects</h2>
+                <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm float-right"
+                   href="{{ path('project_new', {'courseid': course.id}) }}">Add
+                    Project</a>
+                {% if course.projects %}
+                    <table class="table table-bordered mt-3">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Stages</th>
+                            <th>Rubric</th>
+                            <th>Markup Sets</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for project in course.projects %}
+                            <tr>
+                                <td>
+                                    <a aria-label="Edit Project {{ project.name }}" class="btn btn-secondary btn-sm"
+                                       style="background:{{ project.color }}"
+                                       href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                        {{ project.name }}</a>
+                                </td>
+                                <td>
+                                    {% if project.stages %}{% for stage in project.stages %}
+                                        <button class="btn btn-secondary btn-sm"
+                                                style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
+                                </td>
+                                <td>
+                                    {% if project.rubrics %}{% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}
+                                </td>
+                                <td>
+                                    {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="1">No Records Found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col">
+                <h2 class="d-inline">Gradebook Columns</h2>
+                <a class="btn btn-primary btn-sm float-right"
+                   href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
+                    Column</a>
 
-                <h2>eLW Classlist</h2>
-                <table id="classlist" class="table table-bordered">
+                <table class="table table-bordered mt-3">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Label</th>
+                        <th scope="col">Max Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for lineitem in course.ltiAgs %}
+                        <tr>
+                            <td>{{ lineitem.label }}</td>
+                            <td>{{ lineitem.max }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h2 class="d-inline">Classlist</h2>
+                <a class="btn btn-primary btn-sm float-right nrps"
+                   href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
+                    Classlist</a>
+                <table id="classlist" class="table table-bordered mt-3">
                     <thead class="thead-light">
                     <tr>
                         <th>Students</th>
@@ -89,17 +139,38 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-6 col-sm-12">
-                <div id="nrps"></div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="col" id="nrps"></div>
             </div>
         </div>
     {% endif %}
 
-    {% if status=='Pending' %}
-        <div class="alert alert-primary">Your entry to this course is pending. Please check back soon.
-            <a class="btn btn-primary" href="{{ course_path('course_show', {'id': course.id}) }}">Check Now</a>
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Course Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Projects</strong> </p>
+
+                    <p><strong>Gradebook</strong>  </p>
+
+                    <p><strong>Classlist</strong>  </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-    {% endif %}
+    </div>
 
 {% endblock %}
 

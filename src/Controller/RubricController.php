@@ -55,7 +55,7 @@ class RubricController extends AbstractController
     /**
      * @Route("/{id}/edit", name="rubric_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Rubric $rubric, string $rubricsetid): Response
+    public function edit(Request $request, Rubric $rubric): Response
     {
         $form = $this->createForm(RubricType::class, $rubric);
         $form->handleRequest($request);
