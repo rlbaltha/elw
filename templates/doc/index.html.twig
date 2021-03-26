@@ -125,11 +125,11 @@
                     <td>
                         {% if doc.reviews|length > 0 %}
                         <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
-                           id="dropdownMenuLink1"
+                           id="dropdownMenuLink{{ doc.id }}"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Reviews
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ doc.id }}">
                             {% for review in doc.reviews %}
                                 {% if review.access !='Hidden' %}
                                     {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
