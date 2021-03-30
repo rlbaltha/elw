@@ -17,11 +17,23 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class StageController extends AbstractController
 {
 
+    /**
+     * @Route("/index", name="stage_index", methods={"GET"})
+     */
+    public function index(StageRepository $stageRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        return $this->render('stage/index.html.twig', [
+            'stages' => $stageRepository->findByUser($user),
+        ]);
+    }
 
     /**
-     * @Route("/{labelsetid}/new", name="stage_new", methods={"GET","POST"})
+     * @Route("/new", name="stage_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $labelsetid): Response
+    public function new(Request $request): Response
     {
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -29,8 +41,6 @@ class StageController extends AbstractController
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
         $entityManager = $this->getDoctrine()->getManager();
-        $labelset = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findOneById($labelsetid);
-        $stage->setLabelset( $labelset);
         $stage->setUser($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -38,7 +48,7 @@ class StageController extends AbstractController
             $entityManager->persist($stage);
             $entityManager->flush();
             $this->addFlash('notice', 'Your Stage has been created.');
-            return $this->redirectToRoute('labelset_show', ['id'=> $labelsetid]);
+            return $this->redirectToRoute('stage_index');
         }
 
         return $this->render('stage/new.html.twig', [
@@ -56,14 +66,13 @@ class StageController extends AbstractController
         if (!($this->getUser() == $stage->getUser() or $this->isGranted('ROLE_ADMIN'))) {
             throw new AccessDeniedException('You do not have permissions to do this!');
         }
-        $labelset = $stage->getLabelset();
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your Project has been updated.');
-            return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
+            $this->addFlash('notice', 'Your Stage has been updated.');
+            return $this->redirectToRoute('stage_index');
         }
 
         return $this->render('stage/edit.html.twig', [
@@ -77,14 +86,13 @@ class StageController extends AbstractController
      */
     public function delete(Request $request, Stage $stage): Response
     {
-        $labelset = $stage->getLabelset();
 
         if ($this->isCsrfTokenValid('delete'.$stage->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($stage);
             $entityManager->flush();
         }
-        $this->addFlash('notice', 'Your Project has been deleted.');
-        return $this->redirectToRoute('labelset_show', ['id'=> $labelset->getId()]);
+        $this->addFlash('notice', 'Your Stage has been deleted.');
+        return $this->redirectToRoute('stage_index');
     }
 }

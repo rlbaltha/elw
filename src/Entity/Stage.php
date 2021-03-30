@@ -36,7 +36,7 @@ class Stage
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Labelset", inversedBy="stages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $labelset;
 

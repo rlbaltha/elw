@@ -27,9 +27,9 @@
                 <h2 class="">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
                 {% if role=='Instructor' %}
-                <a class="btn btn-primary btn-sm float-right"
-                   href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
-                    Announcement</a>
+                    <a class="btn btn-primary btn-sm float-right"
+                       href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
+                        Announcement</a>
                 {% endif %}
             </div>
         </div>
@@ -39,9 +39,14 @@
         <div class="row">
             <div class="col">
                 <h2 class="d-inline">Projects</h2>
-                <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm float-right"
+
+                <a aria-label="View and edit Stages" class="mr-2 btn btn-primary btn-sm float-right" href="{{ path('stage_index') }}">Stages</a>
+                <a aria-label="View and edit Markup" class="mr-2 btn btn-primary btn-sm float-right" href="{{ path('markupset_byuser') }}">Markup</a>
+                <a aria-label="View and edit Rubrics" class="mr-2 btn btn-primary btn-sm float-right" href="{{ path('rubric_index') }}">Rubrics</a>
+                <a aria-label="Add project to {{ course.name }}" class="mr-2 btn btn-primary btn-sm float-right"
                    href="{{ path('project_new', {'courseid': course.id}) }}">Add
                     Project</a>
+
                 {% if course.projects %}
                     <table class="table table-bordered mt-3">
                         <thead class="thead-light">
@@ -53,6 +58,31 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {# deprecated project config #}
+                        {% for labelset in course.labelsets %}
+                            {% for project in labelset.projects %}
+                            <tr>
+                                <td>
+                                    <a aria-label="Edit Project {{ project.name }}" class="btn btn-secondary btn-sm"
+                                       style="background:{{ project.color }}"
+                                       href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                        {{ project.name }}</a>
+                                </td>
+                                <td>
+                                    {% if project.stages %}{% for stage in project.stages %}
+                                        <button class="btn btn-secondary btn-sm"
+                                                style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
+                                </td>
+                                <td>
+                                    {% if project.rubrics %}{% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}
+                                </td>
+                                <td>
+                                    {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% endfor %}
+                        {# new project config #}
                         {% for project in course.projects %}
                             <tr>
                                 <td>
@@ -75,7 +105,12 @@
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="1">No Records Found</td>
+                                <td colspan="4">
+                                    <p>Your course needs some Projects.  Each project will include Stages, Markup, and Rubrics.  You may use the defaults for
+                                        each of these, or you may create your own by clicking the buttons above.  You may edit Projects after they have been created, but it is
+                                        best if you have them in place prior to having student create documents.</p>
+                                    <p>To get started, click <strong>Add Project</strong>.</p>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -113,9 +148,11 @@
         <div class="row">
             <div class="col">
                 <h2 class="d-inline">Classlist</h2>
-                <a class="btn btn-primary btn-sm float-right nrps"
-                   href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
-                    Classlist</a>
+                {% if role=='Instructor' %}
+                    <a class="btn btn-primary btn-sm float-right nrps"
+                       href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
+                        Classlist</a>
+                {% endif %}
                 <table id="classlist" class="table table-bordered mt-3">
                     <thead class="thead-light">
                     <tr>
@@ -149,7 +186,8 @@
     {% endif %}
 
     <!-- Modal -->
-    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -159,11 +197,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Projects</strong> </p>
+                    <p><strong>Projects</strong></p>
 
-                    <p><strong>Gradebook</strong>  </p>
+                    <p><strong>Stages</strong></p>
 
-                    <p><strong>Classlist</strong>  </p>
+                    <p><strong>Markup</strong></p>
+
+                    <p><strong>Rubrics</strong></p>
+
+                    <p><strong>Gradebook</strong></p>
+
+                    <p><strong>Classlist</strong></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

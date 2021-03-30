@@ -2,6 +2,12 @@
 
 {% block title %}Rubrics  - {{ parent() }}{% endblock %}
 
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Rubrics Help</a>
+    </li>
+{% endblock %}
+
 {% block body %}
     <h1 class="d-inline">Rubrics</h1>
 
@@ -31,7 +37,25 @@
         {% endfor %}
     </div>
 
-
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Rubrics Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Rubrics</strong> actual text needed here. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

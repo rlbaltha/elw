@@ -5,18 +5,12 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/colorPick.css') }}">
-    <style>
-        button{
-            margin-top: 2em;
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
-    <h1>Edit Stage</h1>
-
-    <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Edit Stage</h1>
             {{ include('stage/_form.html.twig', {'button_label': 'Update'}) }}
 
             {{ include('stage/_delete_form.html.twig') }}

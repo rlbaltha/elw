@@ -57,33 +57,33 @@
             </table>
 
 
-{#            <h2>Stages</h2>#}
-{#            {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}#}
-{#                <a aria-label="Add stage to {{ labelset.name }}" class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add#}
-{#                    Stage</a>#}
-{#            {% endif %}#}
-{#            <table class="table">#}
-{#                <thead>#}
-{#                <tr>#}
-{#                    <th>Name</th>#}
-{#                </tr>#}
-{#                </thead>#}
-{#                <tbody>#}
-{#                {% for stage in labelset.stages %}#}
-{#                    <tr>#}
-{#                        <td>#}
-{#                            <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2" style="background:{{ stage.color }}"#}
-{#                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">#}
-{#                                {{ stage.name }}</a>#}
-{#                        </td>#}
-{#                    </tr>#}
-{#                {% else %}#}
-{#                    <tr>#}
-{#                        <td colspan="1">No Records Found</td>#}
-{#                    </tr>#}
-{#                {% endfor %}#}
-{#                </tbody>#}
-{#            </table>#}
+            <h2>Stages</h2>
+            {% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}
+                <a aria-label="Add stage to {{ labelset.name }}" class="btn btn-primary float-right" href="{{ path('stage_new', {'labelsetid': labelset.id}) }}">Add
+                    Stage</a>
+            {% endif %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for stage in labelset.stages %}
+                    <tr>
+                        <td>
+                            <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2" style="background:{{ stage.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
+                                {{ stage.name }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Records Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

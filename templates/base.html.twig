@@ -45,6 +45,7 @@
                                 <a class="dropdown-item" href="{{ path('course_admin') }}">Courses</a>
                                 <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
                                 <a class="dropdown-item" href="{{ path('rubric_index') }}">Rubrics</a>
+                                <a class="dropdown-item" href="{{ path('stage_index') }}">Stages</a>
                                 <a class="dropdown-item" href="{{ path('term_index') }}">Term</a>
                             </div>
                         </li>
@@ -62,10 +63,13 @@
                     {% endif %}
                     {% if is_granted('ROLE_INSTRUCTOR') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_new') }}">Create Course</a>
+                            <a class="nav-link" href="{{ path('stage_index') }}">Stages</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('rubric_index') }}">Rubrics</a>
                         </li>
                     {% endif %}
                 {% endblock %}
