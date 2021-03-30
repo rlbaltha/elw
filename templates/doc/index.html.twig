@@ -159,8 +159,10 @@
                     <td>
                     <span class="badge badge-primary"
                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                        {% if doc.stage %}
                         <span class="badge badge-primary"
                               style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                        {% endif %}
                         <span class="badge badge-primary"
                               style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
 
