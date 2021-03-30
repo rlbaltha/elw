@@ -111,7 +111,7 @@
         <div class="col-lg-3 col-sm-12">
             <h2>Feedback</h2>
             <hr/>
-
+            {% if doc %}
             {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
                 <a class="btn btn-primary btn-sm ltiresult"
                    data-id="lti{{ doc.id }}"
@@ -135,7 +135,6 @@
             {% endif %}
 
             {% for comment in doc.comments %}
-                {# {% if comment.access == 'Private' or role == 'Instructor' %} #}
                 <div class="card mt-3">
                     <div class="card-header">
                         {% if comment.access=='Hidden' %}
@@ -156,7 +155,6 @@
                         </div>
                     {% endif %}
                 </div>
-                {# {% endif %} #}
             {% else %}
                 {# only Instructors can offer feedback on Journal #}
                 {% if role == "Instructor" %}
@@ -165,6 +163,7 @@
                         Feedback</a>
                 {% endif %}
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 
