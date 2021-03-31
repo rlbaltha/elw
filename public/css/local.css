@@ -1,0 +1,104 @@
+body {
+    background-color: #fcfcfc;
+}
+.navbar {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #dcdcdc;
+    z-index: 1000;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #343a40;
+}
+
+.navbar-light .navbar-text {
+    color: #343a40; font-style: italic;
+}
+
+div.checkbox > label {
+    margin-right:2em;
+}
+
+div.radio > label {
+    margin-right:2em;
+}
+
+label.required {
+    margin-right:1em;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+h2 {
+    font-size: 1.5em;
+}
+
+.navbar-brand {
+    color: black;
+    font-family: Arial;
+}
+
+/********** Accessibility **********/
+.skip-link a, .skip-link a:hover, .skip-link a:visited
+{
+    position:absolute;
+    left:0;
+    top:-500px;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
+.skip-link a:active, .skip-link a:focus
+{
+    position:static;
+    display: inline-block;
+    width:auto;
+    height:auto;
+    margin-bottom: -10px;
+}
+
+/********** Increase Contrast **********/
+.btn-primary {
+    background-color: #434747;
+    border-color: #434747;
+}
+
+.btn-primary:hover {
+    background-color: #ba0c2f;
+    border-color: #ba0c2f;
+}
+
+.btn-sm {
+    padding: .5rem .6rem;
+    font-size: .875rem;
+    line-height: .85;
+    border-radius: .2rem;
+}
+
+.badge-primary {
+    background-color: #20399D;
+    border-color: #20399D;
+    font-weight: bolder;
+}
+
+.btn-danger {
+    background-color: darkred;
+    border-color: darkred;
+}
+
+a, .page-link {
+    color: #20399D;
+}
+
+.page-item.active .page-link {
+    background-color: #20399D;
+    border-color: #20399D;
+}
+
+/********** Pagination **********/
+.pagination > span {
+    padding: 1em;
+}
