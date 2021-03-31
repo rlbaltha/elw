@@ -34,6 +34,10 @@
                     this.element.val(selectedColor);
                 }
             });
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#stage_level').hide();
+            $('#stage_level').prev().hide();
+            {% endif %}
         });
     </script>
 {% endblock %}

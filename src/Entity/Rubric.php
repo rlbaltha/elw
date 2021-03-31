@@ -37,7 +37,7 @@ class Rubric
     /**
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 1;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rubrics")
@@ -53,7 +53,7 @@ class Rubric
     /**
      * @ORM\Column(type="integer")
      */
-    private $level = 0;
+    private $level = 1;
 
 
     public function __construct()

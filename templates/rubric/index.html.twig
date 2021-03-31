@@ -21,7 +21,7 @@
                         <button class="btn btn-link" type="button" data-toggle="collapse"
                                 data-target="#collapse{{ loop.index }}" aria-expanded="true"
                                 aria-controls="collapse{{ loop.index }}">
-                            {{ rubric.name }}
+                            {{ rubric.name }}  ({% if rubric.level == 0 %}Default{% elseif rubric.level == 2 %}Shared{% else %}Created by {{ rubric.user.firstname }} {{ rubric.user.lastname }}{% endif %})
                         </button>
                     </h2>
                 </div>
@@ -30,7 +30,9 @@
                      aria-labelledby="heading{{ loop.index }}" data-parent="#accordionMarkup">
                     <div class="card-body">
                         {{ rubric.body|raw }}
+                        {% if (is_granted('ROLE_ADMIN')) or (rubric.user == app.user) %}
                         <a class="btn btn-primary btn-sm" href="{{ path('rubric_edit', {'id': rubric.id}) }}">Edit</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

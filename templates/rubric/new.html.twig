@@ -10,3 +10,15 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#rubric_level').hide();
+            $('#rubric_level').prev().hide();
+            {% endif %}
+        });
+    </script>
+{% endblock %}
