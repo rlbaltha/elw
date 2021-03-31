@@ -186,18 +186,7 @@
     <div class="row" class="d-none">
         {# Markup pops for this document #}
         <div class="markup-container">
-            {# deprecated with new project organization #}
             {% for markupset in markupsets %}
-                {% for markup in markupset.markups %}
-                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
-                         style="min-width: 10rem">
-                        <div class="popover-title"
-                             style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                        <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-            {% for markupset in doc.project.markupsets %}
                 {% for markup in markupset.markups %}
                     <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
                          style="min-width: 10rem">

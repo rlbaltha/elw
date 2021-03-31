@@ -214,7 +214,13 @@ class DocController extends AbstractController
         }
 
         $role = $permissions->getCourseRole($courseid);
-        $markupsets = $course->getMarkupsets();
+        if ($doc->getProject()->getMarkupsets()) {
+            $markupsets = $doc->getProject()->getMarkupsets();
+        }
+        else {
+            $markupsets = $course->getMarkupsets();
+        }
+
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
             'course' => $course,
