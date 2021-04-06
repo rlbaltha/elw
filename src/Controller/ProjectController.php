@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Form\ProjectType;
+use App\Repository\DocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,7 +69,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/{id}/edit", name="project_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Project $project): Response
+    public function edit(Request $request, Project $project, Permissions $permissions, DocRepository $docRepository): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -83,7 +84,11 @@ class ProjectController extends AbstractController
         else {
             $courseid = $project->getCourse()->getId();
         }
+        $role = $permissions->getCourseRole($courseid);
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
 
+        $docs[] = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findByProject($course, $role, $project);
+        $countDocs = count($docs);
         $options = ['user' => $user, 'courseid' => $courseid];
         $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
@@ -97,6 +102,7 @@ class ProjectController extends AbstractController
         return $this->render('project/edit.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
+            'countDocs'=> $countDocs
         ]);
     }
 
@@ -107,7 +113,14 @@ class ProjectController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
-        $courseid = $project->getCourse()->getId();
+        if ($project->getLabelset()) {
+            $courses = $project->getLabelset()->getCourses();
+            $courseid = $courses[0]->getId();
+        }
+        else {
+            $courseid = $project->getCourse()->getId();
+        }
+
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($project);

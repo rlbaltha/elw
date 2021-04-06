@@ -48,28 +48,32 @@ class ProjectType extends AbstractType
                 'choices' => $this->stageRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'label' => 'Stages',
             ])
             ->add('rubrics', EntityType::class, [
                 'class' => Rubric::class,
                 'choices' => $this->rubricRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'label' => 'Rubrics',
             ])
             ->add('markupsets', EntityType::class, [
                 'class' => Markupset::class,
                 'choices' => $this->markupsetRepository->findByUser($user),
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'label' => 'Markup',
             ])
             ->add('lti_grades', EntityType::class, [
                 'class' => LtiAgs::class,
                 'choices' => $this->ltiAgsRepository->findByCourseid($courseid),
                 'choice_label' => 'label',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'label' => 'Gradebook Column(s)',
             ])
         ;
     }

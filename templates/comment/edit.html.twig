@@ -5,7 +5,7 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
 {% endblock %}
 
-{% block title %}Feedback Edit - {{ parent() }}{% endblock %}
+{% block title %}{{ header }} - {{ parent() }}{% endblock %}
 
 {% block subnav %}
     {{ include('course/_subnav.html.twig') }}
@@ -30,7 +30,7 @@
             {% endif %}
         </div>
         <div class="col-lg-4 col-sm-12">
-            <h1 style="font-size: large">Feedback</h1>
+            <h1 style="font-size: large">{{ header }}</h1>
             <hr/>
             {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 

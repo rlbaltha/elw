@@ -24,6 +24,7 @@ class CommentController extends AbstractController
     public function new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
     {
 
+        $header = 'Feedback New';
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
@@ -58,6 +59,7 @@ class CommentController extends AbstractController
             'doc' => $doc,
             'course' => $course,
             'role' => $role,
+            'header' => $header,
             'form' => $form->createView(),
         ]);
     }
@@ -68,6 +70,7 @@ class CommentController extends AbstractController
      */
     public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
     {
+        $header = 'Feedback Edit';
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
@@ -85,6 +88,7 @@ class CommentController extends AbstractController
 
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
+            'header' => $header,
             'doc' => $doc,
             'course' => $course,
             'role' => $role,

@@ -50,6 +50,7 @@ class CourseRepository extends ServiceEntityRepository
             ;
     }
 
+//    deprecated, replaced by default find
     public function findOneByCourseid($courseid): ?Course
     {
         return $this->createQueryBuilder('c')

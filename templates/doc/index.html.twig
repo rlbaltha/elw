@@ -46,6 +46,19 @@
                             {% endfor %}
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Select Project
+                        </a>
+                        <div id="projects" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for project in course.projects %}
+                                <a class="dropdown-item"
+                                   href="{{ course_path('doc_byproject', {'projectid':project.id}) }}">{{ project.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a id="compare_click" class="nav-link" href="#">Compare</a>
                     </li>
@@ -79,29 +92,17 @@
                         </div>
                     </li>
                 </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="navbar-text float-right text-dark">
+                        Docs found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 {% endblock %}
 
 {% block body %}
-    <div class="d-inline p-2 text-dark">
-        Filter:
-        {% for labelset in course.labelsets %}
-            {% for label in labelset.projects %}
-                <button class="btn btn-primary btn-sm filter"
-                        style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
-            {% endfor %}
-        {% endfor %}
-        {% for project in course.projects %}
-            <button class="btn btn-primary btn-sm filter"
-                    style="background:{{ project.color }}; border-color:{{ project.color }}">{{ project.name }}</button>
-        {% endfor %}
-        <button class="btn btn-secondary btn-sm filter">Show All</button>
-    </div>
-    <div class="float-right text-dark">Docs
-        found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
-
 
     {# table of documents #}
     <fieldset>

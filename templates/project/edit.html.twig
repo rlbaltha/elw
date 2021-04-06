@@ -18,7 +18,11 @@
             <h1 class="card-title">Edit Project</h1>
             {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
 
+            {% if countDocs > 0 %}
+            <div class="float-right">This Project can not be deleted because it has associated Documents.</div>
+            {% else %}
             {{ include('project/_delete_form.html.twig') }}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

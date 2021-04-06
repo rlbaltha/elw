@@ -144,6 +144,41 @@ class DocController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/{courseid}/{findtype}/{projectid}/byproject", name="doc_byproject", methods={"GET"}, defaults={"findtype":"byproject"})
+     */
+    public function byProject(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, string $courseid, string $projectid): Response
+    {
+        $findtype = 'byproject';
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $role = $permissions->getCourseRole($courseid);
+        $page_limit = 25;
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
+        $hidden_reviews = $docRepository->countHiddenReviews($course);
+        $hidden_comments = $docRepository->countHiddenComments($course);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $querybuilder = $docRepository->findByProject($course, $role, $project);
+        $docs = $paginator->paginate(
+            $querybuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            $page_limit /*limit per page*/
+        );
+        $header = 'Docs for Project '. $project->getName();
+        return $this->render('doc/index.html.twig', [
+            'header' => $header,
+            'page_limit' => $page_limit,
+            'docs' => $docs,
+            'course' => $course,
+            'role' => $role,
+            'findtype' => $findtype,
+            'classlists' => $classlists,
+            'hidden_comments' => $hidden_comments,
+            'hidden_reviews' => $hidden_reviews
+        ]);
+    }
+
 
     /**
      * @Route("/{courseid}/{projectid}/new", name="doc_new", methods={"GET","POST"})

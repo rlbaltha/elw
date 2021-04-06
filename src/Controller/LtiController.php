@@ -376,12 +376,20 @@ class LtiController extends AbstractController
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-
+        $header = 'Grade Submit';
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+
+        if ($doc->getProject() != null) {
+            $uris = $doc->getProject()->getLtiGrades();
+        } else {
+            $uris = $course->getLtiAgs();
+        }
+
         $comment = '';
         $score = null;
         $column = '';
+
         if ($doc->getAgsResultId() != null) {
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
@@ -389,7 +397,7 @@ class LtiController extends AbstractController
             $comment = $results[0]['comment'];
             $score = $results[0]['resultScore'];
         }
-        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course, 'comment' => $comment, 'score' => $score, 'column' => $column]);
+        $form = $this->createForm(LtiAgsScoreType::class, null, ['comment' => $comment, 'score' => $score, 'column' => $column, 'uris' => $uris]);
         $role = $permissions->getCourseRole($courseid);
 
         if ($doc->getOrigin() != null) {
@@ -442,6 +450,7 @@ class LtiController extends AbstractController
             'doc' => $doc,
             'course' => $course,
             'role' => $role,
+            'header' => $header,
             'form' => $form->createView(),
         ]);
     }

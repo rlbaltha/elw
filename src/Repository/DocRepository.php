@@ -22,6 +22,7 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Doc[] Returns an array of Doc objects
      */
     public function findMyDocs($course, $user): QueryBuilder
     {
@@ -53,6 +54,7 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Doc[] Returns an array of Doc objects
      */
     public function findSharedDocs($course, $role): QueryBuilder
     {
@@ -71,10 +73,36 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val2', 'Shared')
                 ->orderBy('d.updated', 'DESC');
         }
-
     }
 
     /**
+     * @return Doc[] Returns an array of Doc objects
+     */
+    public function findByProject($course, $role, $project): QueryBuilder
+    {
+        if ($role === 'Instructor') {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.project = :val4')
+                ->andWhere('d.access != :val3')
+                ->setParameter('val1', $course)
+                ->setParameter('val4', $project)
+                ->setParameter('val3', 'Journal')
+                ->orderBy('d.updated', 'DESC');
+        } else {
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.course = :val1')
+                ->andWhere('d.project = :val4')
+                ->andWhere('d.access = :val2')
+                ->setParameter('val1', $course)
+                ->setParameter('val4', $project)
+                ->setParameter('val2', 'Shared')
+                ->orderBy('d.updated', 'DESC');
+        }
+    }
+
+    /**
+     * @return Doc[] Returns an array of Doc objects
      */
     public function findByUser($course, $role, $user): QueryBuilder
     {
@@ -97,7 +125,6 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val3', $user)
                 ->orderBy('d.updated', 'DESC');
         }
-
     }
 
     /**
