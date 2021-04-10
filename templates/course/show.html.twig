@@ -27,7 +27,7 @@
                 <h2 class="pointer">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
                 {% if role=='Instructor' %}
-                    <a class="btn btn-primary btn-sm float-right"
+                    <a class="btn btn-primary btn-sm"
                        href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
                         Announcement</a>
                 {% endif %}
@@ -36,100 +36,105 @@
     </div>
 
     {% if role=='Instructor' %}
-        <div class="row mb-3">
-            <div class="col">
-                <h2 id="classlist-toggle" class="d-inline pointer">Classlist <i id='classlist-arrows' class="fa fa-chevron-up"></i></h2>
+        {# Classlist #}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 id="classlist-toggle" class="card-title pointer">Classlist <i id='classlist-arrows'
+                                                                                  class="fa fa-chevron-up small"></i></h2>
+                <a class="btn btn-primary btn-sm nrps"
+                   href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
+                    Classlist</a>
             </div>
-        </div>
-
-        <div class="row mb-3" id="classlist-row">
-            <div class="col">
-                {% if role=='Instructor' %}
-                    <a class="btn btn-primary btn-sm float-right nrps"
-                       href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
-                        Classlist</a>
-                {% endif %}
-                <table id="classlist" class="table table-bordered mt-3">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>Students</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                    <thead>
-                    <tbody>
-                    {% for classlist in classlists %}
+            <div class="card-body">
+                <div class="row" id="classlist-row">
+                    <table id="classlist" class="table">
+                        <thead class="">
                         <tr>
-                            <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
-                            <td>{{ classlist.role }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm"
-                                   href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
-                                {{ include('classlist/_delete_form.html.twig') }}
-                            </td>
+                            <th>Students</th>
+                            <th>Role</th>
+                            <th>Actions</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="col">
-                <div class="col" id="nrps"></div>
+                        <thead>
+                        <tbody>
+                        {% for classlist in classlists %}
+                            <tr>
+                                <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
+                                <td>{{ classlist.role }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                       href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                                    {{ include('classlist/_delete_form.html.twig') }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="col" id="nrps"></div>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col">
-                <h2 id="projects-toggle" class="d-inline pointer">Projects <i id='projects-arrows' class="fa fa-chevron-up"></i></h2>
-                <a aria-label="View and edit Stages" class="mr-2 btn btn-primary btn-sm float-right"
+        {# Projects #}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 id="projects-toggle" class="card-title pointer">Projects <i id='projects-arrows'
+                                                                                class="fa fa-chevron-up small"></i></h2>
+                <a aria-label="View and edit Stages" class="btn btn-primary btn-sm"
                    href="{{ path('stage_index') }}">Stages</a>
-                <a aria-label="View and edit Markup" class="mr-2 btn btn-primary btn-sm float-right"
+                <a aria-label="View and edit Markup" class="btn btn-primary btn-sm"
                    href="{{ path('markupset_byuser') }}">Markup</a>
-                <a aria-label="View and edit Rubrics" class="mr-2 btn btn-primary btn-sm float-right"
+                <a aria-label="View and edit Rubrics" class="btn btn-primary btn-sm"
                    href="{{ path('rubric_index') }}">Rubrics</a>
-                <a aria-label="Add project to {{ course.name }}" class="mr-2 btn btn-primary btn-sm float-right"
+                <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm"
                    href="{{ path('project_new', {'courseid': course.id}) }}">Add
                     Project</a>
             </div>
-        </div>
+            <div class="card-body">
                 {% if course.projects %}
                     <div class="row" id="projects-row">
                         {# deprecated projects #}
-                    {% for labelset in course.labelsets %}
-                        {% for project in labelset.projects %}
-                            <div class="col-sm-3">
-                                <div class="card mb-3 mr-1">
-                                    <div class="card-header text-white" style="background-color: {{ project.color }}">
-                                        <h5 class="card-title d-inline">{{ project.name }}</h5>
-                                        <a aria-label="Edit Project {{ project.name }}" class="btn btn-primary btn-sm float-right"
-                                           href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
-                                            Edit</a>
+                        {% if course.labelsets %}
+                            {% for labelset in course.labelsets %}
+                                {% for project in labelset.projects %}
+                                    <div class="col-sm-3">
+                                        <div class="card mb-3 mr-1">
+                                            <div class="card-header text-white"
+                                                 style="background-color: {{ project.color }}">
+                                                <h5 class="card-title d-inline">{{ project.name }}</h5>
+                                                <a aria-label="Edit Project {{ project.name }}"
+                                                   class="btn btn-primary btn-sm float-right"
+                                                   href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                                    Edit</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
+                                                    <button class="btn btn-secondary btn-sm"
+                                                            style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
+                                                </p>
+                                                <p>
+                                                    Rubrics: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
+                                                <p>
+                                                    Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                                </p>
+                                                <p>
+                                                    Gradebook
+                                                    Column(s): {% if project.ltigrades %}{% for grade in project.ltigrades %}{{ grade.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
-                                            <button class="btn btn-secondary btn-sm"
-                                                    style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
-                                        </p>
-                                        <p>
-                                            Rubrics: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
-                                        <p>
-                                            Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                        </p>
-                                        <p>
-                                            Gradebook Column(s): {% if project.ltiGrades %}{% for grade in project.ltiGrades %}{{ grade.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
-                    {# new project config #}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {# new project config #}
                         {% for project in course.projects %}
                             <div class="col-sm-3">
                                 <div class="card mb-3">
                                     <div class="card-header text-white" style="background-color: {{ project.color }}">
                                         <h5 class="card-title d-inline">{{ project.name }}</h5>
-                                        <a aria-label="Edit Project {{ project.name }}" class="btn btn-primary btn-sm float-right"
-                                           href="{% if (is_granted('ROLE_ADMIN')) or (labelset.user == app.user) %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                        <a aria-label="Edit Project {{ project.name }}"
+                                           class="btn btn-primary btn-sm float-right"
+                                           href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
                                             Edit</a>
                                     </div>
                                     <div class="card-body">
@@ -143,7 +148,8 @@
                                             Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
                                         </p>
                                         <p>
-                                            Gradebook Column(s): {% if project.ltiGrades %}{% for grade in project.ltiGrades %}{{ grade.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                            Gradebook
+                                            Column(s): {% if project.ltigrades %}{% for grade in project.ltigrades %}{{ grade.label }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
                                         </p>
                                     </div>
                                 </div>
@@ -151,41 +157,42 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-
-        <div class="row mb-3">
-            <div class="col">
-                <h2 id="gradebook-toggle" class="d-inline pointer">Gradebook Columns <i id='gradebook-arrows' class="fa fa-chevron-up"></i></h2>
             </div>
         </div>
 
-        <div class="row" id="gradebook-row">
-            <div class="col">
-                <a class="btn btn-primary btn-sm float-right"
+        <div class="card">
+            <div class="card-header">
+                <h2 id="gradebook-toggle" class="card-title pointer">Gradebook Columns <i id='gradebook-arrows'
+                                                                                          class="fa fa-chevron-up small"></i>
+                </h2>
+                <a class="btn btn-primary btn-sm"
                    href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
                     Column</a>
-
-                <table class="table table-bordered mt-3">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Label</th>
-                        <th scope="col">Max Score</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for lineitem in course.ltiAgs %}
+            </div>
+            <div class="card-body">
+                <div class="row" id="gradebook-row">
+                    <table class="table">
+                        <thead class="">
                         <tr>
-                            <td>{{ lineitem.label }}</td>
-                            <td>{{ lineitem.max }}</td>
+                            <th scope="col">Label</th>
+                            <th scope="col">Max Score</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for lineitem in course.ltiAgs %}
+                            <tr>
+                                <td>{{ lineitem.label }}</td>
+                                <td>{{ lineitem.max }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     {% endif %}
 
-    <!-- Modal -->
+    {# Help Modal #}
     <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">

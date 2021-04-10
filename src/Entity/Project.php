@@ -57,21 +57,21 @@ class Project
     private $rubrics;
 
     /**
-     * @ORM\OneToMany(targetEntity=LtiAgs::class, mappedBy="project")
-     */
-    private $lti_grades;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Course::class, inversedBy="projects")
      */
     private $course;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=LtiAgs::class, inversedBy="projects")
+     */
+    private $ltigrades;
 
     public function __construct()
     {
         $this->stages = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
         $this->rubrics = new ArrayCollection();
-        $this->lti_grades = new ArrayCollection();
+        $this->ltigrades = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,35 +200,6 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection|LtiAgs[]
-     */
-    public function getLtiGrades(): Collection
-    {
-        return $this->lti_grades;
-    }
-
-    public function addLtiGrade(LtiAgs $ltiGrade): self
-    {
-        if (!$this->lti_grades->contains($ltiGrade)) {
-            $this->lti_grades[] = $ltiGrade;
-            $ltiGrade->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLtiGrade(LtiAgs $ltiGrade): self
-    {
-        if ($this->lti_grades->removeElement($ltiGrade)) {
-            // set the owning side to null (unless already changed)
-            if ($ltiGrade->getProject() === $this) {
-                $ltiGrade->setProject(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getCourse(): ?Course
     {
@@ -241,4 +212,29 @@ class Project
 
         return $this;
     }
+
+    /**
+     * @return Collection|LtiAgs[]
+     */
+    public function getLtigrades(): Collection
+    {
+        return $this->ltigrades;
+    }
+
+    public function addLtigrade(LtiAgs $ltigrade): self
+    {
+        if (!$this->ltigrades->contains($ltigrade)) {
+            $this->ltigrades[] = $ltigrade;
+        }
+
+        return $this;
+    }
+
+    public function removeLtigrade(LtiAgs $ltigrade): self
+    {
+        $this->ltigrades->removeElement($ltigrade);
+
+        return $this;
+    }
+
 }

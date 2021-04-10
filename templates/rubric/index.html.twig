@@ -9,9 +9,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="d-inline">Rubrics</h1>
-
-    <a class="btn btn-primary float-right" href="{{ path('rubric_new') }}">New Rubric</a>
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Rubrics</h1>
+            <a class="btn btn-primary" href="{{ path('rubric_new') }}">New Rubric</a>
+        </div>
+    </div>
 
     <div class="accordion mt-3" id="accordionMarkup">
         {% for rubric in rubrics %}

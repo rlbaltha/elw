@@ -67,7 +67,7 @@ class ProjectType extends AbstractType
                 'expanded' => true,
                 'label' => 'Markup',
             ])
-            ->add('lti_grades', EntityType::class, [
+            ->add('ltigrades', EntityType::class, [
                 'class' => LtiAgs::class,
                 'choices' => $this->ltiAgsRepository->findByCourseid($courseid),
                 'choice_label' => 'label',

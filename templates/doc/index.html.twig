@@ -108,13 +108,13 @@
     <fieldset>
         <legend class="sr-only">Select two checkboxes to compare.</legend>
         <table class="table">
-            <thead class="thead-light">
+            <thead class="">
             <tr>
                 <th>Title<i class="fa fa-fw fa-sort"></i></th>
                 <th>Owner</th>
                 <th>Reviews</th>
-                <th>Labels</th>
-                <th>Updated<i class="fa fa-fw fa-sort"></i></th>
+                <th class="d-none d-sm-table-cell">Labels</th>
+                <th class="d-none d-sm-table-cell">Updated<i class="fa fa-fw fa-sort"></i></th>
             </tr>
             </thead>
             <tbody>
@@ -157,7 +157,7 @@
                             </div>
                         {% endif %}
                     </td>
-                    <td>
+                    <td class="d-none d-sm-table-cell">
                     <span class="badge badge-primary"
                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                         {% if doc.stage %}
@@ -175,7 +175,7 @@
                         {% endif %}
 
                     </td>
-                    <td>{{ doc.updated | date("M j, Y g:ia") }}</td>
+                    <td class="d-none d-sm-table-cell">{{ doc.updated | date("M j, Y g:ia") }}</td>
                 </tr>
             {% else %}
                 <tr>

@@ -9,31 +9,39 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Markup Sets</h1>
-    <a class="btn btn-primary float-right" href="{{ path('markupset_new') }}">New Markup Set</a>
-    <table class="table">
-        <thead class="thead-light">
-            <tr>
-                <th>Name</th>
-                <th>Level</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for markupset in markupsets %}
-            <tr>
-                <td><a aria-label="Edit Markup Set {{ markupset.name }}" href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
-                <td>{% if markupset.level == 0 %}Default{% elseif markupset.level == 2 %}Shared{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-header"><h1 class="card-title">Markup Sets</h1>
+            <a class="btn btn-primary" href="{{ path('markupset_new') }}">New Markup Set</a>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for markupset in markupsets %}
+                    <tr>
+                        <td><a aria-label="Edit Markup Set {{ markupset.name }}"
+                               href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
+                        <td>{% if markupset.level == 0 %}Default{% elseif markupset.level == 2 %}Shared{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     <!-- Modal -->
-    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

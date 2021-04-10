@@ -9,40 +9,43 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col">
-        <h2>Stages</h2>
-        {% if (is_granted('ROLE_INSTRUCTOR'))  %}
-            <a aria-label="Add stage" class="btn btn-primary float-right" href="{{ path('stage_new') }}">Add
-                Stage</a>
-        {% endif %}
-        <table class="table">
-            <thead class="thead-light">
-            <tr>
-                <th>Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for stage in stages %}
+    <div class="card">
+        <div class="card-header"><h1 class="card-title">Stages</h1>
+            {% if (is_granted('ROLE_INSTRUCTOR')) %}
+                <a aria-label="Add stage" class="btn btn-primary" href="{{ path('stage_new') }}">Add
+                    Stage</a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
                 <tr>
-                    <td>
-                        <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2" style="background:{{ stage.color }}"
-                           href="{% if (is_granted('ROLE_ADMIN')) or (stage.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
-                            {{ stage.name }}</a>
-                    </td>
+                    <th>Name</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="1">No Stages Found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for stage in stages %}
+                    <tr>
+                        <td>
+                            <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2"
+                               style="background:{{ stage.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (stage.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
+                                {{ stage.name }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Stages Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
     <!-- Modal -->
-    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
