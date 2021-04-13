@@ -43,7 +43,6 @@
         "symfony/yaml": "4.4.*"
     },
     "require-dev": {
-        "sensiolabs/security-checker": "^6.0",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",

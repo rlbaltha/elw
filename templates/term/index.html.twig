@@ -3,34 +3,34 @@
 {% block title %}Term Index - {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col">
-        <h1 class="d-inline">Term index</h1>
-        <a class="btn btn-primary float-right" href="{{ path('term_new') }}">New Term</a>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Year</th>
-                <th>Semester</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for term in terms %}
+    <div class="card">
+        <div class="card-header"><h1 class="card-title">Term index</h1>
+            <a class="btn btn-primary" href="{{ path('term_new') }}">New Term</a>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
                 <tr>
-                    <td><a aria-label="Edit Term {{ term.name }}" href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
-                    <td>{{ term.semester }}</td>
-                    <td>{{ term.status }}</td>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Status</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="3">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-
+                </thead>
+                <tbody>
+                {% for term in terms %}
+                    <tr>
+                        <td><a aria-label="Edit Term {{ term.name }}"
+                               href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
+                        <td>{{ term.semester }}</td>
+                        <td>{{ term.status }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    {% endblock %}
+{% endblock %}
