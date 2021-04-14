@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UsernameType;
+use App\Form\IrbType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -178,6 +179,40 @@ class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+    }
+
+    /**
+     * @Route("/{courseid}/irb", name="user_irb", methods={"GET","POST"})
+     */
+    public function irb(Request $request, string $courseid): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $irb = $this->getDoctrine()->getManager()->getRepository('App:Card')->findOneByType('irb');
+        if ($user->getIrb() == null) {
+            $user->setIrb(1);
+        }
+        $form = $this->createForm(IrbType::class, $user, [
+            'action' => $this->generateUrl('user_irb', ['courseid'=>$courseid]),
+            'method' => 'POST',
+        ]);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('notice', 'Your Research Permission has been updated.');
+            return $this->redirectToRoute('course_show', [
+                'courseid' => $courseid,
+            ]);
+        }
+
+        return $this->render('user/_irb_form.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            'irb' => $irb
+        ]);
     }
 
     /**

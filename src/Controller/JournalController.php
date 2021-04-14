@@ -19,9 +19,9 @@ class JournalController extends AbstractController
 {
 
     /**
-     * @Route("/{courseid}/{docid}/{userid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0"})
+     * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"0"})
      */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, $courseid, $docid, $userid): Response
+    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -50,7 +50,8 @@ class JournalController extends AbstractController
             'scores' => $scores,
             'course' => $course,
             'classlists' => $classlists,
-            'role' => $role
+            'role' => $role,
+            'index' => $index
         ]);
     }
 

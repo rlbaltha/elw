@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Classlist;
 use App\Entity\Course;
 use App\Form\AnnouncementType;
+use App\Form\IrbType;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
 use App\Service\Permissions;
@@ -33,15 +34,22 @@ class CourseController extends AbstractController
 
 
     /**
-     * @Route("/", name="course_index", methods={"GET"})
+     * @Route("/{status}/", name="course_index", methods={"GET"}, defaults={"status" = "default"})
      */
-    public function index(CourseRepository $courseRepository): Response
+    public function index(CourseRepository $courseRepository, string $status): Response
     {
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-
+        $courses = $this->getDoctrine()->getManager()->getRepository('App:Course')->findByUserAndTerm($user, $status);
+        if($status == 'default') {
+            $header = 'My Current Courses';
+        }
+        else{
+            $header = 'My Course Archive';
+        }
         return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findByUser($user),
+            'courses' => $courses,
+            'header' => $header
         ]);
     }
 
@@ -104,12 +112,21 @@ class CourseController extends AbstractController
         $status = $classuser->getStatus();
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+
+        $irb = $this->getDoctrine()->getManager()->getRepository('App:Card')->findOneByType('irb');
+
+        $form = $this->createForm(IrbType::class, $user, [
+            'action' => $this->generateUrl('user_irb', ['courseid' => $courseid]),
+            'method' => 'POST',
+        ]);
         return $this->render('course/show.html.twig', [
             'course' => $course,
             'classlists' => $classlists,
             'role' => $role,
             'user' => $user,
-            'status' => $status
+            'status' => $status,
+            'irb' => $irb,
+            'form' => $form->createView()
         ]);
     }
 

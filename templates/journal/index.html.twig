@@ -39,7 +39,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% for classlist in classlists %}
                                     <a class="dropdown-item"
-                                       href="{{ course_path('journal_index', {'userid': classlist.user.id}) }}">{{ classlist.user.lastname }}
+                                       href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index': loop.index}) }}">{{ classlist.user.lastname }}
                                         , {{ classlist.user.firstname }}</a>
                                 {% endfor %}
                             </div>
@@ -48,6 +48,26 @@
                     <li class="nav-item">
                         <a class="btn btn-primary" href="{{ course_path('journal_new') }}">New Journal</a>
                     </li>
+
+
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% for classlist in classlists %}
+                        <li class="nav-item classlist_prev" id="prev{{ loop.index }}">
+                            <a class="mr-2"
+                               href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i> {{ classlist.user.lastname }}
+                                , {{ classlist.user.firstname }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% for classlist in classlists %}
+                        <li class="nav-item classlist_next" id="next{{ loop.index }}">
+                            <a class=""
+                               href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">{{ classlist.user.lastname }}
+                                , {{ classlist.user.firstname }} <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -55,6 +75,7 @@
 {% endblock %}
 
 {% block subnavright %}
+
     {% if role=='Instructor' %}
         <li class="nav-item">
             <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
@@ -206,6 +227,12 @@
                 });
                 $(this).hide();
             });
+            $('.classlist_next').hide();
+            let next = '#next' + ({{ index  }} + 1);
+            $(next).show();
+            $('.classlist_prev').hide();
+            let prev = '#prev' + ({{ index  }} - 1);
+            $(prev).show();
             {# toggle help on this page #}
             $("#help_card").toggle();
             $("#help-toggle").click(function () {

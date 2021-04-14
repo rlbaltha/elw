@@ -115,6 +115,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $rubrics;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $irb;
+
 
     public function __construct()
     {
@@ -492,6 +497,18 @@ class User implements UserInterface, EquatableInterface
                 $rubric->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIrb(): ?int
+    {
+        return $this->irb;
+    }
+
+    public function setIrb(?int $irb): self
+    {
+        $this->irb = $irb;
 
         return $this;
     }

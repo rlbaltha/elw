@@ -35,12 +35,24 @@
         </div>
     </div>
 
+    {% if user.irb is null %}
+        <div class="card mb-3">
+            <div class="card-body" id="irb_card">
+                <a class="btn btn-primary btn-sm irb"
+                   href="#"
+                   data-request="{{ course_path('user_irb', {'courseid': course.id}) }}"
+                >Research Permission</a>
+            </div>
+        </div>
+    {% endif %}
+
     {% if role=='Instructor' %}
         {# Classlist #}
         <div class="card mb-3">
             <div class="card-header">
                 <h2 id="classlist-toggle" class="card-title pointer">Classlist <i id='classlist-arrows'
-                                                                                  class="fa fa-chevron-up small"></i></h2>
+                                                                                  class="fa fa-chevron-up small"></i>
+                </h2>
                 <a class="btn btn-primary btn-sm nrps"
                    href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
                     Classlist</a>
@@ -101,10 +113,10 @@
                                             <div class="card-header text-white"
                                                  style="background-color: {{ project.color }}">
                                                 <h5 class="card-title d-inline">{{ project.name }}</h5>
-                                                <a aria-label="Edit Project {{ project.name }}"
-                                                   class="btn btn-primary btn-sm float-right"
-                                                   href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
-                                                    Edit</a>
+                                                {# <a aria-label="Edit Project {{ project.name }}" #}
+                                                {# class="btn btn-primary btn-sm float-right" #}
+                                                {# href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}"> #}
+                                                {# Edit</a> #}
                                             </div>
                                             <div class="card-body">
                                                 <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
@@ -229,6 +241,16 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $(".irb").each(function () {
+                let request = $(this).attr('data-request')
+                let target = '#irb_card';
+                $.ajax({
+                    url: request, success: function (result) {
+                        $(target).html(result);
+                    }
+                });
+                $(this).hide();
+            });
             $("#projects-toggle").click(function () {
                 $("#projects-row").toggle();
                 $('#projects-arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');

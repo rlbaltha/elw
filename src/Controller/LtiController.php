@@ -165,12 +165,13 @@ class LtiController extends AbstractController
                 $course = new Course();
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
-                foreach ($labelsets as $labelset) {
-                    $course->addLabelset($labelset);
-                }
-                foreach ($markupsets as $markupset) {
-                    $course->addMarkupset($markupset);
-                }
+//                deprecated defaults
+//                foreach ($labelsets as $labelset) {
+//                    $course->addLabelset($labelset);
+//                }
+//                foreach ($markupsets as $markupset) {
+//                    $course->addMarkupset($markupset);
+//                }
                 $classlist = new Classlist();
                 $classlist->setUser($user);
                 $classlist->setCourse($course);
