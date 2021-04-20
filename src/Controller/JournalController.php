@@ -19,7 +19,7 @@ class JournalController extends AbstractController
 {
 
     /**
-     * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"0"})
+     * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"1"})
      */
     public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
     {
