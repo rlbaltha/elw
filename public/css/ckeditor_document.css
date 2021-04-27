@@ -127,6 +127,11 @@ span.markup {
     padding: 2px;
 }
 
+.popover {
+    block: inline !important;
+    padding: 1rem;
+}
+
 .notefocus {
     border-color: #0f74a8;
     left: -5em;

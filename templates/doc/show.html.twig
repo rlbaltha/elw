@@ -61,17 +61,23 @@
     <li class="nav-item">
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
-{#    <li class="nav-item">#}
-{#        <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a>#}
-{#    </li>#}
+    {# <li class="nav-item"> #}
+    {# <a aria-label="Close Document {{ doc.title }}" id='close-trigger' class="nav-link" href="#">Close</a> #}
+    {# </li> #}
 {% endblock %}
 
 
 {% block body %}
     <div class="row doc-container d-none" id="doc{{ doc.id }}">
         <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="document-editor">
+            {# This is the Document #}
+            <div id="doc_core{{ doc.id }}" class="document-editor">
                 {{ doc.body|raw }}
+
+                {# This is the Markup for the Document #}
+                <div class="markup_div" id="markup_doc_core{{ doc.id }}">
+                    <p class="text-center">Markup</p>
+                </div>
             </div>
         </div>
 
@@ -80,7 +86,9 @@
             {# Document Info #}
             <div class="card mb-3">
                 <div class="card-header">
-                    <h1 style="margin-bottom:0;">{% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }} </h1>
+                    <h1 style="margin-bottom:0;">{% if doc.origin %}<span class="badge badge-primary"
+                                                                          style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
+                    </h1>
                 </div>
                 <div class="card-body">
                     <p>{{ doc.user.firstname }} {{ doc.user.lastname }}</p>
@@ -90,17 +98,17 @@
                     <span class="badge badge-primary"
                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                     {% if doc.stage %}
-                    <span class="badge badge-primary"
-                          style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                        <span class="badge badge-primary"
+                              style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                     {% endif %}
                     <span class="badge badge-primary"
                           style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
                 </div>
             </div>
 
-
-            <a aria-label="Create PDF of Document {{ doc.title }}" class="btn btn-primary btn-sm"
-               href="{{ course_path('doc_pdf', {'id': doc.id}) }}">Create PDF</a>
+            <a data-id="{{ doc.id }}" aria-label="Create PDF of Document {{ doc.title }}"
+               class="pdf_click btn btn-primary btn-sm"
+               href="#">Create PDF</a>
             {# Comment Panel #}
             <a aria-label="Give Feedback on {{ doc.title }}" class="btn btn-primary btn-sm"
                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Give
@@ -204,8 +212,14 @@
             {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                 <div class="row doc-container" id="doc{{ review.id }}">
                     <div class="col-lg-8 col-md-10 col-sm-12">
-                        <div class="document-editor">
+                        {# This is the the Review(s) #}
+                        <div id="doc_core{{ review.id }}" class="document-editor">
                             {{ review.body|raw }}
+
+                            {# This is the Markup for the Review(s) #}
+                            <div class="markup_div" id="markup_doc_core{{ review.id }}">
+                                <p class="text-center">Markup</p>
+                            </div>
                         </div>
                     </div>
 
@@ -227,8 +241,9 @@
                             </div>
                         </div>
 
-                        <a class="btn btn-primary btn-sm" href="{{ course_path('doc_pdf', {'id': review.id}) }}">Create
-                            PDF</a>
+                        <a data-id="{{ review.id }}" aria-label="Create PDF of Document {{ doc.title }}"
+                           class="pdf_click btn btn-primary btn-sm"
+                           href="#">Create PDF</a>
 
                         {# LTI Grade submit and display #}
                         {% if review.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
@@ -288,7 +303,8 @@
     {% endfor %}
 
     <!-- Modal -->
-    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -316,6 +332,13 @@
             </div>
         </div>
     </div>
+
+    <form id="pdf_form" action="{{ course_path('doc_pdf') }}">
+        <input type="text" name="docid" value="">
+        <input type="text" name="courseid" value="{{ course.id }}">
+        <input type="text" id="html2pdf" name="html2pdf" value="">
+        <input type="text" name="title" value="{{ doc.title }}">
+    </form>
 {% endblock %}
 
 {% block javascripts %}
@@ -332,10 +355,22 @@
                     });
                     $(this).hide();
                 });
+                $("#pdf_form").hide();
+                $(".pdf_click").click(function () {
+                    $("#pdf_form").show();
+                    let docid = $(this).attr('data-id');
+                    let target = '#doc_core' + $(this).attr('data-id');
+                    let doc_html = $(target).html();
+                    $("#html2pdf").val(doc_html);
+                    $("#docid").val(docid);
+                    $("#pdf_form").submit();
+                    $("#pdf_form").hide();
+                });
                 $("#toggle-inline").click(function () {
                     $('#toggle').text(($('#toggle').text() == 'Popover' ? 'Inline' : 'Popover'));
                     $('.note, .super').toggle();
                     $('.popover').hide();
+                    $('.markup_div').toggle();
                 });
                     {# toggle help on this page #}
                 $("#help_card").toggle();
@@ -349,7 +384,7 @@
                     let p = $(this).position();
                     let note_index = index + 1;
                     let note_number = '<span class="blue">' + note_index + '</span>';
-                    let note = '<div id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><div class="popover-content">' + note_number + $(this).html() + '</div></div>';
+                    let note = '<span id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><span class="popover-content">' + note_number + $(this).html() + '</span></span>';
                     $(this).prev().append(note);
                 });
 
@@ -361,11 +396,22 @@
                     $('.super').hide();
                 });
 
-                $('.markup').each(function () {
+                $('.markup_div').hide()
+                $('.markup').each(function (index) {
                     let id = "div[data-id='" + $(this).attr('data-id') + "']";
-                    let markupbody = $(id).children(".popover-title").text();
-                    let span_append = '<span class="note markupbody">' + markupbody + '</span>';
+                    let doc_id = $(this).parent().parent().attr('id');
+                    let markup_index = index + 1;
+                    let markup_inline = $(id).children(".popover-title").text();
+                    let markup_number = '<span class="super" style="color:black" >' + markup_index + '</span>';
+                    let span_append = '<span class="note markupbody">' + markup_inline + markup_number + '</span>';
                     $(this).after(span_append);
+                    let style = $(id).children(".popover-title").css("background-color");
+                    let markuptitle = "<span style='padding:.2em; color:#fff; background-color:" + style + "'>" + $(id).children(".popover-title").text() + "</span>";
+                    let markupbody = $(id).children(".popover-content").html();
+                    let markup_append = '<div class="doc_double_space markupbody">' + markup_index + ': ' + markuptitle + ': ' + markupbody + '</div>';
+                    let markup_doc = '#markup_' + doc_id;
+                    $(markup_doc).append(markup_append);
+                    $(markup_doc).show()
                 });
 
                 $('.popover').hide();
@@ -381,7 +427,7 @@
                 $('.highlight').mouseover(function () {
                     if ($('#toggle').text() != 'Popover') {
                         $('.popover').hide();
-                        let id = "div[data-id='" + $(this).attr('id') + "']";
+                        let id = "span[data-id='" + $(this).attr('id') + "']";
                         let offset = $(this).position();
                         let right = $(this).position().left + $(this).width();
                         $(id).show().offset({top: offset.top - 0, left: right});
@@ -420,6 +466,7 @@
                         window.open(url, location);
                     }
                 });
+
             }
         );
     </script>
