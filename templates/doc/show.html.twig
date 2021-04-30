@@ -324,6 +324,9 @@
                     <p><strong>Submit Grade to eLC</strong> is an instructor button that will send a
                         grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
                         on the eLW course home page to create the eLC grade column. </p>
+                    <p><strong>Create PDF</strong> will create a pdf that mirrors the HTML document. Our PDF download files
+                        do not fully comply with all applicable guidelines for accessible digital documents.
+                        For the most accessible experience, choose the current HTML display of the document.</p>
                     <p>To <strong>Exit</strong> the document, simply close the tab.</p>
                 </div>
                 <div class="modal-footer">
@@ -333,6 +336,7 @@
         </div>
     </div>
 
+    {# form for pdf creation #}
     <form id="pdf_form" action="{{ course_path('doc_pdf') }}">
         <input type="text" name="docid" value="">
         <input type="text" name="courseid" value="{{ course.id }}">
@@ -356,21 +360,31 @@
                     $(this).hide();
                 });
                 $("#pdf_form").hide();
+                //create pdf from current html
                 $(".pdf_click").click(function () {
+                    //force inline notes and markup
+                    if ($('#toggle').text() == 'Inline') {
+                        popover_toggle();
+                    }
+                    //push html to form
                     $("#pdf_form").show();
                     let docid = $(this).attr('data-id');
                     let target = '#doc_core' + $(this).attr('data-id');
                     let doc_html = $(target).html();
                     $("#html2pdf").val(doc_html);
                     $("#docid").val(docid);
+                    //submit form for pdf creation
                     $("#pdf_form").submit();
                     $("#pdf_form").hide();
                 });
-                $("#toggle-inline").click(function () {
+                function popover_toggle() {
                     $('#toggle').text(($('#toggle').text() == 'Popover' ? 'Inline' : 'Popover'));
                     $('.note, .super').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
+                    };
+                $("#toggle-inline").click(function () {
+                    popover_toggle();
                 });
                     {# toggle help on this page #}
                 $("#help_card").toggle();
@@ -408,7 +422,7 @@
                     let style = $(id).children(".popover-title").css("background-color");
                     let markuptitle = "<span style='padding:.2em; color:#fff; background-color:" + style + "'>" + $(id).children(".popover-title").text() + "</span>";
                     let markupbody = $(id).children(".popover-content").html();
-                    let markup_append = '<div class="doc_double_space markupbody">' + markup_index + ': ' + markuptitle + ': ' + markupbody + '</div>';
+                    let markup_append = '<div class="doc_double_space markupbody">' + markup_index + ': ' + markuptitle + markupbody + '</div><hr/>';
                     let markup_doc = '#markup_' + doc_id;
                     $(markup_doc).append(markup_append);
                     $(markup_doc).show()

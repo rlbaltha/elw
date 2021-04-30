@@ -2,9 +2,9 @@ knp_snappy:
     process_timeout: 120
     pdf:
         enabled:    true
-        binary:     '%env(WKHTMLTOPDF_PATH)%'
+        binary:     '%kernel.project_dir%%env(WKHTMLTOPDF_PATH)%'
         options:    []
     image:
         enabled:    true
-        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        binary:     '%kernel.project_dir%%env(WKHTMLTOIMAGE_PATH)%'
         options:    []

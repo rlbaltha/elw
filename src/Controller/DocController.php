@@ -47,7 +47,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $page_limit = 25;
+        $page_limit = 50;
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
@@ -123,7 +123,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $page_limit = 25;
+        $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
@@ -159,7 +159,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $page_limit = 25;
+        $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
@@ -300,30 +300,6 @@ class DocController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id1}/{id2}/{courseid}/diff_pdf", name="doc_diff_pdf", methods={"GET"}, defaults={})
-     */
-    public function diff_pdf(string $id1, string $id2, string $courseid, Permissions $permissions)
-    {
-        $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
-        $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
-        $permissions->isAllowedToView($courseid, $doc1);
-        $permissions->isAllowedToView($courseid, $doc2);
-        $doc1str = $doc1->getBody();
-        $doc2str = $doc2->getBody();
-        $htmlDiff = new HtmlDiff($doc1str, $doc2str);
-        $diff = $htmlDiff->build();
-        $doc = new Doc();
-        $doc->setBody($diff);
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView('doc/pdf.html.twig', [
-            'doc' => $doc,
-        ]);
-
-        $filename = 'compare.pdf';
-        $response = $this->wrapper->getStreamResponse($html, $filename);
-        $response->send();
-    }
 
     /**
      * @Route("/{courseid}/{docid}/ags_score_view", name="ags_score_view", methods={"GET"})
@@ -363,7 +339,6 @@ class DocController extends AbstractController
 
     }
 
-
     /**
      * @Route("/pdf", name="doc_pdf", methods={"GET"})
      */
@@ -383,8 +358,6 @@ class DocController extends AbstractController
             $this->pdf->getOutputFromHtml($html),
             $filename
         );
-
-
     }
 
     /**
@@ -464,24 +437,6 @@ class DocController extends AbstractController
 
         return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
-
-//    /**
-//     * @Route("/{id}/{courseid}/hidden", name="doc_hidden", methods={"GET","POST"})
-//     */
-//    public function hidden(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
-//    {
-//        $allowed = ['Instructor'];
-//        $permissions->restrictAccessTo($courseid, $allowed);
-//        $permissions->isOwner($doc);
-//        $access = $doc->getAccess();
-//        ($access==='Hidden' ? $doc->setAccess('Private') : $doc->setAccess('Hidden'));
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $entityManager->persist($doc);
-//        $entityManager->flush();
-//        $this->addFlash('notice', 'Document access has been updated.');
-//
-//        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
-//    }
 
     /**
      * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})
