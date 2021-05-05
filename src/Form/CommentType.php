@@ -17,21 +17,17 @@ class CommentType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'choices'  => [
-                    'Holistic Feedback' => 'Holistic Feedback',
-                    'Revision Plan' => 'Revision Plan'
+                    'Ask a Question' => 'Question',
+                    'Give Holistic Feedback' => 'Holistic Feedback',
+                    'Post a Revision Plan' => 'Revision Plan',
                 ],
                 'expanded' => true,
-                'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Type of Feedback'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'simple_config',
                 'label' => ''
             ])
-//            ->add('grade', TextType::class, [
-//                'label'  => 'Grade (optional, must be a number)',
-//                'required' => false
-//            ])
             ->add('access', ChoiceType::class, [
                 'choices'  => [
                     'Hidden' => 'Hidden',

@@ -171,7 +171,7 @@ class CourseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your announcement has been updated.');
+            $this->addFlash('notice', 'Your eLW Reminder has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
 

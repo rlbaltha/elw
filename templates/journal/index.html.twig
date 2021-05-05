@@ -104,7 +104,9 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No Entries found.</td>
+                        <td colspan="2">
+                            <p>No Journal entries found.</p>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -125,6 +127,22 @@
                         {{ doc.body|raw }}
                     </div>
                 </div>
+                {% else %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title d-inline">Getting started with the Journal in eLW</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>The eLW Journal is a basic writing space that is only shared between a student and an instructor.</p>
+                            <p><strong>New Journal</strong> creates a new Journal entry.  Entries will list on the left and can be viewed and edited.</p>
+                            <p>Instructors can navigate through student journals via the <strong>Select Author</strong> dropdown or with the next/previous student listed on the right.</p>
+                            <p class="card-text"><strong>Give Feedback</strong> allows instructors to attach a holistic comment.</p>
+                            <p class="card-text"><strong>Submit Grade to eLC</strong> allows instructors to send a grade and a comment to eLC's
+                                gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home page to
+                                create the eLC grade column. </p>
+                            </ul>
+                        </div>
+                    </div>
             {% endif %}
         </div>
 

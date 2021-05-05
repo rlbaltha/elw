@@ -19,7 +19,7 @@ class AnnouncementType extends AbstractType
         $builder
             ->add('announcement', CKEditorType::class, [
                 'config_name' => 'simple_config',
-                'label' => 'Announcement',
+                'label' => 'eLW Reminder',
             ])
         ;
     }
