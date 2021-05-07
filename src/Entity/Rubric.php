@@ -55,11 +55,18 @@ class Rubric
      */
     private $level = 1;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="rubric", orphanRemoval=true)
+     */
+    private $ratings;
+
+
 
     public function __construct()
     {
         $this->rubricset = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +169,36 @@ class Rubric
     public function setLevel(int $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setRubric($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getRubric() === $this) {
+                $rating->setRubric(null);
+            }
+        }
 
         return $this;
     }

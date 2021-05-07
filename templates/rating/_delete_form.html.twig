@@ -1,0 +1,4 @@
+<form class="d-inline float-right" method="post" action="{{ course_path('rating_delete', {'id': rating.id}) }}" onsubmit="return confirm('Are you sure you want to delete this Rating?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rating.id) }}">
+    <button aria-label="Delete this Rating" class="btn btn-danger btn-sm">Delete</button>
+</form>

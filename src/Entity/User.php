@@ -120,6 +120,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $irb;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $ratings;
+
 
     public function __construct()
     {
@@ -131,6 +136,7 @@ class User implements UserInterface, EquatableInterface
         $this->projects = new ArrayCollection();
         $this->rubricsets = new ArrayCollection();
         $this->rubrics = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -509,6 +515,36 @@ class User implements UserInterface, EquatableInterface
     public function setIrb(?int $irb): self
     {
         $this->irb = $irb;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getUser() === $this) {
+                $rating->setUser(null);
+            }
+        }
 
         return $this;
     }

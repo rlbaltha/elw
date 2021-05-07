@@ -100,6 +100,7 @@
                             <p>Created: {{ doc.created | date("M j, Y g:ia") }}</p>
                             <p>Modified: {{ doc.updated | date("M j, Y g:ia") }} </p>
                             <p>Word Count: {{ doc.wordcount }} </p>
+                            <p>Rubric Ratings: <span id="ratings_count"></span> </p>
                             <span class="badge badge-primary"
                                   style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                             {% if doc.stage %}
@@ -149,10 +150,10 @@
             {% if doc.project.rubrics %}
                 <div class="accordion mt-3" id="accordionRubric">
                     {% for rubric in doc.project.rubrics %}
-                        <div class="card">
+                        <div class="card mb-1">
                             <div class="card-header" id="r_heading{{ loop.index }}">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    <button id="rubricheader{{ rubric.id }}" class="btn btn-link" type="button" data-toggle="collapse"
                                             data-target="#r_collapse{{ loop.index }}" aria-expanded="true"
                                             aria-controls="r_collapse{{ loop.index }}">
                                         Rubric {{ loop.index }}: {{ rubric.name }}
@@ -164,6 +165,17 @@
                                  aria-labelledby="r_heading{{ loop.index }}" data-parent="#accordionRubric">
                                 <div class="card-body">
                                     {{ rubric.body|raw }}
+                                    <a aria-label="Submit a Rubric Rating" class="btn btn-primary btn-sm"
+                                       href="{{ course_path('rating_new', {'docid': doc.id, 'courseid': course.id, 'rubricid': rubric.id}) }}">Submit a Rubric Rating</a>
+
+                                </div>
+                                <div class="card-footer" id="rubric{{ doc.id }}_{{ rubric.id }}">
+
+                                    <a class="btn btn-primary btn-sm rubricrating"
+                                       data-id="rubric{{ doc.id }}_{{ rubric.id }}"
+                                       href="#"
+                                       data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
+                                    >View Rating</a>
                                 </div>
                             </div>
                         </div>
@@ -361,6 +373,18 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            //wait for ajax before counting ratings
+            setTimeout(
+                function()
+                {
+                    $(".ratingsajax").each(function () {
+                        let ratings_count = '(Ratings: ' + $(this).html() + ')';
+                        let target = '#' + $(this).attr('data-id');
+                        $(target).append(ratings_count);
+                        $(this).hide()
+                    });
+                }, 500);
+
                 $(".ltiresult").each(function () {
                     let request = $(this).attr('data-request')
                     let target = '#' + $(this).attr('data-id');
@@ -371,6 +395,17 @@
                     });
                     $(this).hide();
                 });
+            $(".rubricrating").each(function () {
+                let request = $(this).attr('data-request')
+                let target = '#' + $(this).attr('data-id');
+                $.ajax({
+                    url: request, success: function (result) {
+                        $(target).html(result);
+                    }
+                });
+                $(this).hide();
+
+            });
                 $("#pdf_form").hide();
                 //create pdf from current html
                 $(".pdf_click").click(function () {
