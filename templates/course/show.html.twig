@@ -104,40 +104,6 @@
             <div class="card-body">
                 {% if course.projects %}
                     <div class="row" id="projects-row">
-                        {# deprecated projects #}
-                        {% if course.labelsets %}
-                            {% for labelset in course.labelsets %}
-                                {% for project in labelset.projects %}
-                                    <div class="col-sm-3">
-                                        <div class="card mb-3 mr-1">
-                                            <div class="card-header text-white"
-                                                 style="background-color: {{ project.color }}">
-                                                <h5 class="card-title d-inline">{{ project.name }}</h5>
-                                                {# <a aria-label="Edit Project {{ project.name }}" #}
-                                                {# class="btn btn-primary btn-sm float-right" #}
-                                                {# href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}"> #}
-                                                {# Edit</a> #}
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
-                                                    <button class="btn btn-secondary btn-sm"
-                                                            style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
-                                                </p>
-                                                <p>
-                                                    Rubrics: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
-                                                <p>
-                                                    Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                                </p>
-                                                <p>
-                                                    Gradebook
-                                                    Column(s): {% if project.ltigrades %}{% for grade in project.ltigrades %}{{ grade.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                        {% endif %}
                         {# new project config #}
                         {% for project in course.projects %}
                             <div class="col-sm-3">

@@ -22,7 +22,7 @@ class CommentType extends AbstractType
                     'Post a Revision Plan' => 'Revision Plan',
                 ],
                 'expanded' => true,
-                'label' => 'Type of Feedback'
+                'label' => 'Type of Comment'
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'simple_config',

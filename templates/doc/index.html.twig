@@ -74,7 +74,7 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ course_path('release_all_comments', {'courseid': course.id, 'findtype': findtype}) }}">Release
-                                    Hidden Feedback</a>
+                                    Hidden End Comments</a>
                             </li>
                         {% endif %}
                     {% endif %}
@@ -148,7 +148,7 @@
                                                href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                                 {% if review.comments|length > 0 %}
                                                     <span class="badge badge-primary"
-                                                          style="background:darkblue">Feedback ({{ review.comments|length }})</span>
+                                                          style="background:darkblue">End Comments ({{ review.comments|length }})</span>
                                                 {% endif %}
                                             </a>
                                         {% endif %}
@@ -170,7 +170,7 @@
 
                         {% if doc.comments|length > 0 %}
                             <span class="badge badge-primary"
-                                  style="background:darkblue">Feedback ({{ doc.comments|length }})</span>
+                                  style="background:darkblue">End Comments ({{ doc.comments|length }})</span>
 
                         {% endif %}
 
@@ -200,8 +200,8 @@
                                         can make inline comments and add markup.
                                     </li>
                                     <li>
-                                        <strong>Give Feedback</strong> allows you to attach a holistic comment. If
-                                        you're also creating a review, you should give feedback on the review you've created instead of
+                                        <strong>Create End Comment</strong> allows you to attach a holistic comment. If
+                                        you're also creating a review, you should create an end comment on the review you've created instead of
                                         on the original document.
                                     </li>
                                     <li>

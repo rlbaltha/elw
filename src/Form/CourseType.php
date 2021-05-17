@@ -20,12 +20,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CourseType extends AbstractType
 {
-    private $labelsetRepository;
     private $markupsetRepository;
     private $termRepository;
-    public function __construct(LabelsetRepository $labelsetRepository, MarkupsetRepository $markupsetRepository, TermRepository $termRepository)
+    public function __construct(MarkupsetRepository $markupsetRepository, TermRepository $termRepository)
     {
-        $this->labelsetRepository = $labelsetRepository;
         $this->markupsetRepository = $markupsetRepository;
         $this->termRepository = $termRepository;
     }

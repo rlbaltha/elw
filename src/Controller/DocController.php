@@ -317,6 +317,7 @@ class DocController extends AbstractController
         return $this->render('lti/lti_ags_ajax.html.twig', [
             'column' => $column,
             'scores' => $scores,
+            'doc' => $doc
         ]);
     }
 

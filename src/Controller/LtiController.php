@@ -456,49 +456,4 @@ class LtiController extends AbstractController
         ]);
     }
 
-
-//    /**
-//     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
-//     */
-//    public function ags_results(Request $request, Permissions $permissions, String $courseid, Lti $lti)
-//    {
-//
-//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-//        $role = $permissions->getCourseRole($courseid);
-//
-//        $form = $this->createForm(LtiAgsResultsType::class, null, ['course' => $course]);
-//
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $registration = $this->session->get('lti_registration');
-//            $method = 'GET';
-//            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
-//            $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
-//            $data = $form->getData();
-//            $agsid = $data['uri'];
-//            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-//            $uri = $local_ags->getLtiId().'/results';
-//
-//            $registration = $this->repository->find($registration);
-//            $access_token = $lti->getAccessToken($registration, $scope);
-//            $options = $lti->getHeaderOptions($access_token, $accept_header);
-//            $response = $this->guzzle->request($method, $uri, $options);
-//            $data = json_decode($response->getBody()->__toString(), true);
-//
-//
-//            return $this->render('lti/ags_results.html.twig', [
-//                'scores' => $data,
-//                'column' => $local_ags->getLabel(),
-//                'classlists' => $classlists,
-//                'course' => $course,
-//                'role' => $role,
-//            ]);
-//        }
-//
-//        return $this->render('lti/new_ags_results.html.twig', [
-//            'form' => $form->createView(),
-//        ]);
-//    }
-
 }

@@ -76,14 +76,7 @@ class ProjectController extends AbstractController
 
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-
-        if ($project->getLabelset()) {
-            $courses = $project->getLabelset()->getCourses();
-            $courseid = $courses[0]->getId();
-        }
-        else {
-            $courseid = $project->getCourse()->getId();
-        }
+        $courseid = $project->getCourse()->getId();
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
 

@@ -75,11 +75,6 @@ class User implements UserInterface, EquatableInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Labelset", mappedBy="user", orphanRemoval=true)
-     */
-    private $user;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Markup", mappedBy="user", orphanRemoval=true)
      */
     private $markups;
@@ -299,37 +294,6 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-
-    /**
-     * @return Collection|Labelset[]
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(Labelset $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(Labelset $user): self
-    {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
-            // set the owning side to null (unless already changed)
-            if ($user->getUser() === $this) {
-                $user->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Markup[]

@@ -35,13 +35,6 @@ class Project
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Labelset", inversedBy="projects")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $labelset;
-
-
-    /**
      * @ORM\ManyToMany(targetEntity=Stage::class, inversedBy="projects")
      */
     private $stages;
@@ -114,19 +107,6 @@ class Project
 
         return $this;
     }
-
-    public function getLabelset(): ?Labelset
-    {
-        return $this->labelset;
-    }
-
-    public function setLabelset(?Labelset $labelset): self
-    {
-        $this->labelset = $labelset;
-
-        return $this;
-    }
-
 
     /**
      * @return Collection|Stage[]
