@@ -31,6 +31,7 @@
                                style="background:{{ stage.color }}"
                                href="{% if (is_granted('ROLE_ADMIN')) or (stage.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
                                 {{ stage.name }}</a>
+                             ({% if stage.level==0 %}Default{% elseif stage.level==1 %}Instructor Created{% else %}Shared{% endif %})
                         </td>
                     </tr>
                 {% else %}

@@ -3,7 +3,12 @@ knp_snappy:
     pdf:
         enabled:    true
         binary:     '%kernel.project_dir%%env(WKHTMLTOPDF_PATH)%'
-        options:    []
+        options:
+            page-size:  Letter
+            margin-top: 20
+            margin-bottom: 20
+            margin-left: 20
+            margin-right: 20
     image:
         enabled:    true
         binary:     '%kernel.project_dir%%env(WKHTMLTOIMAGE_PATH)%'

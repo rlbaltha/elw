@@ -160,18 +160,9 @@ class LtiController extends AbstractController
         if (!$course) {
             //Check if Instructor
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
-                $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
-                $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
                 $course = new Course();
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
-//                deprecated defaults
-//                foreach ($labelsets as $labelset) {
-//                    $course->addLabelset($labelset);
-//                }
-//                foreach ($markupsets as $markupset) {
-//                    $course->addMarkupset($markupset);
-//                }
                 $classlist = new Classlist();
                 $classlist->setUser($user);
                 $classlist->setCourse($course);

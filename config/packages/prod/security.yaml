@@ -33,7 +33,7 @@ security:
     - { path: ^/doc, roles: ROLE_USER, requires_channel: https }
     - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }
     - { path: ^/card, roles: ROLE_ADMIN, requires_channel: https }
-    - { path: ^/labelset, roles: ROLE_INSTRUCTOR, requires_channel: https }
     - { path: ^/label, roles: ROLE_INSTRUCTOR, requires_channel: https }
     - { path: ^/markupset, roles: ROLE_INSTRUCTOR, requires_channel: https }
     - { path: ^/markup, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/rubric, roles: ROLE_INSTRUCTOR, requires_channel: https }

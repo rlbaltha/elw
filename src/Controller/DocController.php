@@ -254,11 +254,15 @@ class DocController extends AbstractController
         }
 
         $role = $permissions->getCourseRole($courseid);
-        if ($doc->getProject()->getMarkupsets()) {
+        if ($doc->getProject()) {
             $markupsets = $doc->getProject()->getMarkupsets();
-        } else {
+        } elseif ($course->getMarkupsets()) {
             $markupsets = $course->getMarkupsets();
         }
+        else {
+            $markupsets = [];
+        }
+
 
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
@@ -307,6 +311,7 @@ class DocController extends AbstractController
     public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        $role = $permissions->getCourseRole($courseid);
         $scores = [];
         $column = '';
         if ($doc->getAgsResultId() != null) {
@@ -317,7 +322,8 @@ class DocController extends AbstractController
         return $this->render('lti/lti_ags_ajax.html.twig', [
             'column' => $column,
             'scores' => $scores,
-            'doc' => $doc
+            'doc' => $doc,
+            'role' => $role
         ]);
     }
 
