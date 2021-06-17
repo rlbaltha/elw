@@ -95,14 +95,15 @@
                    href="{{ path('stage_index') }}">Stages</a>
                 <a aria-label="View and edit Markup" class="btn btn-primary btn-sm"
                    href="{{ path('markupset_byuser') }}">Markup</a>
-                <a aria-label="View and edit Rubrics" class="btn btn-primary btn-sm"
-                   href="{{ path('rubric_index') }}">Rubrics</a>
+                <a aria-label="View and edit Rubric Blocks" class="btn btn-primary btn-sm"
+                   href="{{ path('rubric_index') }}">Rubric Blocks</a>
                 <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm"
                    href="{{ path('project_new', {'courseid': course.id}) }}">Add
                     Project</a>
             </div>
-            <div class="card-body">
-                {% if course.projects %}
+
+            {% if course.projects %}
+                <div class="card-body">
                     <div class="row" id="projects-row">
                         {# new project config #}
                         {% for project in course.projects %}
@@ -121,7 +122,7 @@
                                                     style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
                                         </p>
                                         <p>
-                                            Rubrics: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
+                                            Rubric Blocks: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
                                         <p>
                                             Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
                                         </p>
@@ -134,8 +135,8 @@
                             </div>
                         {% endfor %}
                     </div>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="card">
@@ -188,7 +189,7 @@
 
                     <p><strong>Markup</strong></p>
 
-                    <p><strong>Rubrics</strong></p>
+                    <p><strong>Rubric Blocks</strong></p>
 
                     <p><strong>Gradebook</strong></p>
 

@@ -57,7 +57,7 @@ class ProjectType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'Rubrics',
+                'label' => 'Rubric Blocks',
             ])
             ->add('markupsets', EntityType::class, [
                 'class' => Markupset::class,
