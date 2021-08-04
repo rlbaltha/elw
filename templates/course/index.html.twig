@@ -1,15 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Course List - {{ parent() }}{% endblock %}
+{% block title %}{{ header }} - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>My Courses</h1>
+    <div class="row mb-5">
+        <div class="col">
+            <h1>{{ header }}</h1>
+            {% if header == "My Current Courses" %}
+                {% set status = 'archive' %}{% set display = 'My Course Archive' %}
+            {% else %}
+                {% set status = 'default' %}{% set display = 'My Current Courses' %}
+            {% endif %}
+            <a class="btn btn-primary" href="{{ path('course_index',{'status':status}) }}">{{ display }}</a>
+        </div>
+    </div>
     <div class="row">
         {% for course in courses %}
-            <div class="col-lg-4 col-sm-12  mt-3">
-                <div class="card">
+            <div class="col-lg-3">
+                <div class="card mr-1 mb-3">
                     <div class="card-header">
-                        <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}  </a> {{ course.term.name }}
+                        <a href="{{ path('course_show', {'courseid': course.id}) }}">{{ course.name }}  </a> {% if course.term %} {{ course.term.name }} {% endif %}
                         ({{ course.time }})
                     </div>
                     <div class="card-body">
@@ -25,8 +35,9 @@
                 </div>
             </div>
         {% else %}
-            No Courses Found
+            <div class="col">
+                <p>No Courses Found</p>
+            </div>
         {% endfor %}
     </div>
-
 {% endblock %}

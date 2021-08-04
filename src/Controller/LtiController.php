@@ -160,17 +160,9 @@ class LtiController extends AbstractController
         if (!$course) {
             //Check if Instructor
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
-                $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
-                $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
                 $course = new Course();
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
-                foreach ($labelsets as $labelset) {
-                    $course->addLabelset($labelset);
-                }
-                foreach ($markupsets as $markupset) {
-                    $course->addMarkupset($markupset);
-                }
                 $classlist = new Classlist();
                 $classlist->setUser($user);
                 $classlist->setCourse($course);
@@ -376,12 +368,20 @@ class LtiController extends AbstractController
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-
+        $header = 'Grade Submit';
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+
+        if ($doc->getProject() != null) {
+            $uris = $doc->getProject()->getLtiGrades();
+        } else {
+            $uris = $course->getLtiAgs();
+        }
+
         $comment = '';
         $score = null;
         $column = '';
+
         if ($doc->getAgsResultId() != null) {
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
@@ -389,7 +389,7 @@ class LtiController extends AbstractController
             $comment = $results[0]['comment'];
             $score = $results[0]['resultScore'];
         }
-        $form = $this->createForm(LtiAgsScoreType::class, null, ['course' => $course, 'comment' => $comment, 'score' => $score, 'column' => $column]);
+        $form = $this->createForm(LtiAgsScoreType::class, null, ['comment' => $comment, 'score' => $score, 'column' => $column, 'uris' => $uris]);
         $role = $permissions->getCourseRole($courseid);
 
         if ($doc->getOrigin() != null) {
@@ -442,53 +442,9 @@ class LtiController extends AbstractController
             'doc' => $doc,
             'course' => $course,
             'role' => $role,
+            'header' => $header,
             'form' => $form->createView(),
         ]);
     }
-
-
-//    /**
-//     * @Route("/lti/{courseid}/ags_results", name="ags_results", methods={"GET","POST"})
-//     */
-//    public function ags_results(Request $request, Permissions $permissions, String $courseid, Lti $lti)
-//    {
-//
-//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-//        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-//        $role = $permissions->getCourseRole($courseid);
-//
-//        $form = $this->createForm(LtiAgsResultsType::class, null, ['course' => $course]);
-//
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $registration = $this->session->get('lti_registration');
-//            $method = 'GET';
-//            $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
-//            $accept_header = 'application/vnd.ims.lis.v2.resultcontainer+json';
-//            $data = $form->getData();
-//            $agsid = $data['uri'];
-//            $local_ags = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-//            $uri = $local_ags->getLtiId().'/results';
-//
-//            $registration = $this->repository->find($registration);
-//            $access_token = $lti->getAccessToken($registration, $scope);
-//            $options = $lti->getHeaderOptions($access_token, $accept_header);
-//            $response = $this->guzzle->request($method, $uri, $options);
-//            $data = json_decode($response->getBody()->__toString(), true);
-//
-//
-//            return $this->render('lti/ags_results.html.twig', [
-//                'scores' => $data,
-//                'column' => $local_ags->getLabel(),
-//                'classlists' => $classlists,
-//                'course' => $course,
-//                'role' => $role,
-//            ]);
-//        }
-//
-//        return $this->render('lti/new_ags_results.html.twig', [
-//            'form' => $form->createView(),
-//        ]);
-//    }
 
 }

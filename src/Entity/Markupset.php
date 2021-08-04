@@ -44,10 +44,16 @@ class Markupset
      */
     private $courses;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="markupsets")
+     */
+    private $projects;
+
     public function __construct()
     {
         $this->markups = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +151,33 @@ class Markupset
         if ($this->courses->contains($course)) {
             $this->courses->removeElement($course);
             $course->removeMarkupset($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addMarkupset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeMarkupset($this);
         }
 
         return $this;

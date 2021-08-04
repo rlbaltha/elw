@@ -50,6 +50,38 @@ class CourseRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return Course[] Returns an array of Course objects
+     */
+    public function findByUserAndTerm($user, $status)
+    {
+        if ($status == 'default') {
+            return $this->createQueryBuilder('c')
+                ->join('c.classlists', 'cl')
+                ->join('c.term', 't')
+                ->andWhere('cl.user = :val1')
+                ->andWhere('t.status = :val2')
+                ->setParameter('val1', $user)
+                ->setParameter('val2', 'default')
+                ->getQuery()
+                ->getResult();
+        }
+        else {
+            return $this->createQueryBuilder('c')
+                ->join('c.classlists', 'cl')
+                ->join('c.term', 't')
+                ->andWhere('cl.user = :val1')
+                ->andWhere('t.status != :val2')
+                ->setParameter('val1', $user)
+                ->setParameter('val2', 'default')
+                ->getQuery()
+                ->getResult();
+        }
+
+    }
+
+
+//    deprecated, replaced by default find
     public function findOneByCourseid($courseid): ?Course
     {
         return $this->createQueryBuilder('c')

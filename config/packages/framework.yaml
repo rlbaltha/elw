@@ -18,6 +18,7 @@ framework:
         # improves the security of the cookies used for sessions
         cookie_secure: 'auto'
         cookie_samesite: 'lax'
+        cookie_lifetime: 0
 
     #esi: true
     #fragments: true

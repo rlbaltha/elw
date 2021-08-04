@@ -101,12 +101,19 @@ class Doc
      */
     private $wordcount;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="doc", orphanRemoval=true)
+     */
+    private $ratings;
+
+
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->labels = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
 
@@ -305,6 +312,36 @@ class Doc
     public function setWordcount(?int $wordcount): self
     {
         $this->wordcount = $wordcount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setDoc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getDoc() === $this) {
+                $rating->setDoc(null);
+            }
+        }
 
         return $this;
     }

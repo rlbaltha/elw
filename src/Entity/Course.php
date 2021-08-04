@@ -33,10 +33,6 @@ class Course
      */
     private $docs;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Labelset", inversedBy="courses")
-     */
-    private $labelsets;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Markupset", inversedBy="courses")
@@ -68,14 +64,20 @@ class Course
      */
     private $ltiAgs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="course")
+     */
+    private $projects;
+
+
 
     public function __construct()
     {
         $this->classlists = new ArrayCollection();
         $this->docs = new ArrayCollection();
-        $this->labelsets = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
         $this->ltiAgs = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,31 +159,6 @@ class Course
         return $this;
     }
 
-    /**
-     * @return Collection|Labelset[]
-     */
-    public function getLabelsets(): Collection
-    {
-        return $this->labelsets;
-    }
-
-    public function addLabelset(Labelset $labelset): self
-    {
-        if (!$this->labelsets->contains($labelset)) {
-            $this->labelsets[] = $labelset;
-        }
-
-        return $this;
-    }
-
-    public function removeLabelset(Labelset $labelset): self
-    {
-        if ($this->labelsets->contains($labelset)) {
-            $this->labelsets->removeElement($labelset);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Markupset[]
@@ -281,6 +258,36 @@ class Course
             // set the owning side to null (unless already changed)
             if ($ltiAg->getCourse() === $this) {
                 $ltiAg->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            // set the owning side to null (unless already changed)
+            if ($project->getCourse() === $this) {
+                $project->setCourse(null);
             }
         }
 

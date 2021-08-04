@@ -20,12 +20,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CourseType extends AbstractType
 {
-    private $labelsetRepository;
     private $markupsetRepository;
     private $termRepository;
-    public function __construct(LabelsetRepository $labelsetRepository, MarkupsetRepository $markupsetRepository, TermRepository $termRepository)
+    public function __construct(MarkupsetRepository $markupsetRepository, TermRepository $termRepository)
     {
-        $this->labelsetRepository = $labelsetRepository;
         $this->markupsetRepository = $markupsetRepository;
         $this->termRepository = $termRepository;
     }
@@ -46,20 +44,6 @@ class CourseType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => false
-            ])
-            ->add('labelsets', EntityType::class, [
-                'class' => Labelset::class,
-                'choices' => $this->labelsetRepository->findByUser($user),
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true
-            ])
-            ->add('markupsets', EntityType::class, [
-                'class' => Markupset::class,
-                'choices' => $this->markupsetRepository->findByUser($user),
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true
             ])
         ;
     }

@@ -2,36 +2,34 @@
 
 namespace App\Form;
 
-use App\Entity\Course;
-use App\Entity\Labelset;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LabelsetType extends AbstractType
+class IrbType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
-                'label'  => 'Name'
-            ])
-            ->add('level', ChoiceType::class, [
-                'choices' => ['Default' => '0', 'Instructor Created' => '1'],
-                'multiple' => false,
+
+            ->add('irb', ChoiceType::class, [
+                'choices' => array(
+                    'I Agree' => 1,
+                    'I Do Not Agree' => 0
+                ),
+                'label' => 'Research Permission',
+                'required' => true,
                 'expanded' => true,
-            ])
+                ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Labelset::class,
+            'data_class' => User::class,
         ]);
     }
 }

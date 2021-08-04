@@ -1,0 +1,45 @@
+/********** Accessibility **********/
+.skip-link a, .skip-link a:hover, .skip-link a:visited
+{
+  position:absolute;
+  left:0;
+  top:-500px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
+.skip-link a:active, .skip-link a:focus
+{
+  position:static;
+  display: inline-block;
+  width:auto;
+  height:auto;
+  margin-bottom: -10px;
+}
+
+/********** Increase Contrast **********/
+
+.badge-primary {
+  background-color: #20399D;
+  border-color: #20399D;
+  font-weight: bolder;
+}
+
+
+a, .page-link {
+  color: #20399D;
+}
+
+.btn-link {
+  color:black;
+}
+.page-item.active .page-link {
+  background-color: #20399D;
+  border-color: #20399D;
+}
+
+/********** Pagination **********/
+.pagination > span {
+  padding: 1em;
+}

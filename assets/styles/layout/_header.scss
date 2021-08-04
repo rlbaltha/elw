@@ -1,0 +1,54 @@
+/********** Local Styles **********/
+html, body {
+  height: 100vh;
+
+}
+.container-fluid {
+  height: 100%;
+}
+
+.navbar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #dcdcdc;
+  z-index: 1000;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #343a40;
+}
+
+.navbar-light .navbar-text {
+  color: #343a40; font-style: italic;
+}
+
+div.checkbox > label {
+  margin-right:2em;
+}
+
+div.radio > label {
+  margin-right:2em;
+}
+
+label.required {
+  margin-right:1em;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+h2 {
+  font-size: 1.5em;
+}
+
+.navbar-brand {
+  color: black;
+  font-family: Arial;
+}
+
+.table {
+  border-collapse: separate;
+  border-radius: .5rem;
+  margin-top: .5rem;
+}
+

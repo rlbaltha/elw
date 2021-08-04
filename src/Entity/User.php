@@ -75,11 +75,6 @@ class User implements UserInterface, EquatableInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Labelset", mappedBy="user", orphanRemoval=true)
-     */
-    private $user;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Markup", mappedBy="user", orphanRemoval=true)
      */
     private $markups;
@@ -104,6 +99,28 @@ class User implements UserInterface, EquatableInterface
      */
     private $d2l_id;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $theme = 'light';
+
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rubric::class, mappedBy="user")
+     */
+    private $rubrics;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $irb;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $ratings;
+
+
     public function __construct()
     {
         $this->docs = new ArrayCollection();
@@ -112,6 +129,9 @@ class User implements UserInterface, EquatableInterface
         $this->markups = new ArrayCollection();
         $this->markupsets = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->rubricsets = new ArrayCollection();
+        $this->rubrics = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -276,37 +296,6 @@ class User implements UserInterface, EquatableInterface
 
 
     /**
-     * @return Collection|Labelset[]
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(Labelset $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(Labelset $user): self
-    {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
-            // set the owning side to null (unless already changed)
-            if ($user->getUser() === $this) {
-                $user->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Markup[]
      */
     public function getMarkups(): Collection
@@ -434,6 +423,92 @@ class User implements UserInterface, EquatableInterface
     public function setD2lId(?string $d2l_id): self
     {
         $this->d2l_id = $d2l_id;
+
+        return $this;
+    }
+
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?string $theme): self
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|Rubric[]
+     */
+    public function getRubrics(): Collection
+    {
+        return $this->rubrics;
+    }
+
+    public function addRubric(Rubric $rubric): self
+    {
+        if (!$this->rubrics->contains($rubric)) {
+            $this->rubrics[] = $rubric;
+            $rubric->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRubric(Rubric $rubric): self
+    {
+        if ($this->rubrics->removeElement($rubric)) {
+            // set the owning side to null (unless already changed)
+            if ($rubric->getUser() === $this) {
+                $rubric->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIrb(): ?int
+    {
+        return $this->irb;
+    }
+
+    public function setIrb(?int $irb): self
+    {
+        $this->irb = $irb;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getUser() === $this) {
+                $rating->setUser(null);
+            }
+        }
 
         return $this;
     }

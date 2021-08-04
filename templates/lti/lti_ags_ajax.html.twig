@@ -2,6 +2,12 @@
     <div class="card mt-3">
         <div class="card-header">
             Final Grade {% if column %}for {{ column }}{% endif %}
+            {% if role == 'Instructor' %}
+                <a aria-label="Update Grade in
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-right"
+                   href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Update Grade in
+                    eLC</a>
+            {% endif %}
         </div>
         <div class="card-body">
             {{ score.comment|raw }}

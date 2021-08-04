@@ -18,35 +18,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocType extends AbstractType
 {
-    private $projectRepository;
-    private $stageRepository;
-    public function __construct(StageRepository $stageRepository, ProjectRepository $projectRepository)
-    {
-        $this->projectRepository = $projectRepository;
-        $this->stageRepository = $stageRepository;
-    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->options = $options['options'];
-        $courseid = $this->options['courseid'] ;
         $choices = $this->options['choices'] ;
+        $stages = $this->options['stages'];
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
             ])
-            ->add('project', EntityType::class, [
-                'class' => Project::class,
-                'choices' => $this->projectRepository->findProjectsByCourse($courseid),
-                'choice_label' => 'name',
-                'multiple' => false,
-                'expanded' => true,
-                'attr' => ['class' => 'form-check-inline'],
-                'label' => 'Project',
-                'required' => 'true'
-            ])
             ->add('stage', EntityType::class, [
                 'class' => Stage::class,
-                'choices' => $this->stageRepository->findStagesByCourse($courseid),
+                'choices' => $stages,
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,

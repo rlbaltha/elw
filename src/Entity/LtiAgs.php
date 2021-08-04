@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LtiAgsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,17 @@ class LtiAgs
      * @ORM\Column(type="integer")
      */
     private $max;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="ltigrades")
+     */
+    private $projects;
+
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -90,4 +103,33 @@ class LtiAgs
 
         return $this;
     }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addLtigrade($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeLtigrade($this);
+        }
+
+        return $this;
+    }
+
+    
 }

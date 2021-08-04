@@ -2,29 +2,61 @@
 
 {% block title %}Markupset Index - {{ parent() }}{% endblock %}
 
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Markup Help</a>
+    </li>
+{% endblock %}
+
 {% block body %}
-    <h1>Markup Sets</h1>
-    <a class="btn btn-primary float-right" href="{{ path('markupset_new') }}">New Markup Set</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Level</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for markupset in markupsets %}
-            <tr>
-                <td><a aria-label="Edit Markup Set {{ markupset.name }}" href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
-                <td>{% if markupset.level == 0 %}Default{% elseif markupset.level == 2 %}Shared{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-header"><h1 class="card-title">Markup Sets</h1>
+            <a class="btn btn-primary" href="{{ path('markupset_new') }}">New Markup Set</a>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for markupset in markupsets %}
+                    <tr>
+                        <td><a aria-label="Edit Markup Set {{ markupset.name }}"
+                               href="{{ path('markupset_show', {'id': markupset.id}) }}">{{ markupset.name }}</a></td>
+                        <td>{% if markupset.level == 0 %}Default{% elseif markupset.level == 2 %}Shared{% else %}Created by {{ markupset.user.firstname }} {{ markupset.user.lastname }}{% endif %}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Markup Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Markup</strong> actual text needed here. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/journal")
@@ -19,22 +20,27 @@ class JournalController extends AbstractController
 {
 
     /**
-     * @Route("/{courseid}/{docid}/{userid}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0"})
+     * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"1"})
      */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, $courseid, $docid, $userid): Response
+    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        if ($userid==0) {
-            $username = $this->getUser()->getUsername();
-            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        if ($userid!=0) {
+            $requested_user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
+            if ($user == $requested_user or $role=='Instructor') {
+                $user = $requested_user;
+            }
+            else {
+                throw new AccessDeniedException('You do not have permissions to do this!');
+            }
         }
-        else {
-            $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
-        }
+
         $docs = $docRepository->findJournal($course, $user);
         $doc = $docRepository->findOneById($docid);
         $scores = [];
@@ -50,7 +56,8 @@ class JournalController extends AbstractController
             'scores' => $scores,
             'course' => $course,
             'classlists' => $classlists,
-            'role' => $role
+            'role' => $role,
+            'index' => $index
         ]);
     }
 

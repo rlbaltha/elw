@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rubric Block Edit - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Edit Rubric Block</h1>
+            {{ include('rubric/_form.html.twig', {'button_label': 'Update'}) }}
+
+            {{ include('rubric/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if not is_granted('ROLE_ADMIN') %}
+            $('#rubric_level').hide();
+            $('#rubric_level').prev().hide();
+            {% endif %}
+        });
+    </script>
+{% endblock %}

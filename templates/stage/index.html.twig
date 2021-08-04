@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stages - {{ parent() }}{% endblock %}
+
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Stages Help</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header"><h1 class="card-title">Stages</h1>
+            {% if (is_granted('ROLE_INSTRUCTOR')) %}
+                <a aria-label="Add stage" class="btn btn-primary" href="{{ path('stage_new') }}">Add
+                    Stage</a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for stage in stages %}
+                    <tr>
+                        <td>
+                            <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2"
+                               style="background:{{ stage.color }}"
+                               href="{% if (is_granted('ROLE_ADMIN')) or (stage.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
+                                {{ stage.name }}</a>
+                             ({% if stage.level==0 %}Default{% elseif stage.level==1 %}Instructor Created{% else %}Shared{% endif %})
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="1">No Stages Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Stages Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Stages</strong> actual text needed here. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

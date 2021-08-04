@@ -17,6 +17,7 @@
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
+        "knplabs/knp-snappy-bundle": "^1.8",
         "nucleos/dompdf-bundle": "^3.0",
         "oat-sa/bundle-lti1p3": "3.0",
         "sensio/framework-extra-bundle": "^5.1",
@@ -39,10 +40,10 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "4.4.*",
         "symfony/web-link": "4.4.*",
+        "symfony/webpack-encore-bundle": "^1.8",
         "symfony/yaml": "4.4.*"
     },
     "require-dev": {
-        "sensiolabs/security-checker": "^6.0",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",

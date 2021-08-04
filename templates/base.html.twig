@@ -10,16 +10,16 @@
     {% block stylesheets %}
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-              crossorigin="anonymous">
-        <link type="text/css" rel="stylesheet" href="{{ asset('css/local.css') }}">
+        <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css')) }}">
+        <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
+{#        {{ encore_entry_link_tags('app') }}#}
     {% endblock %}
     <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
 </head>
-<body>
 
+<body class="{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.theme != 'dark' %}light{% else %}dark{% endif %}{% endif %}">
 
+{% block nav %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavMain"
@@ -47,32 +47,34 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
                                 <a class="dropdown-item" href="{{ path('course_admin') }}">Courses</a>
-                                <a class="dropdown-item" href="{{ path('labelset_index') }}">Label Sets</a>
                                 <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
+                                <a class="dropdown-item" href="{{ path('rubric_index') }}">Rubrics</a>
+                                <a class="dropdown-item" href="{{ path('stage_index') }}">Stages</a>
                                 <a class="dropdown-item" href="{{ path('term_index') }}">Term</a>
+                                <a class="dropdown-item" href="{{ path('card_index') }}">Cards</a>
                             </div>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_index') }}?_switch_user=_exit">
+                            <a class="nav-link" href="{{ path('course_index',{'status':'default'}) }}?_switch_user=_exit">
                                 Exit login as</a>
                         </li>
                     {% endif %}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_index') }}">Courses</a>
+                            <a class="nav-link" href="{{ path('course_index',{'status':'default'}) }}">Courses</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_INSTRUCTOR') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_new') }}">Create Course</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('labelset_byuser') }}">Labels</a>
+                            <a class="nav-link" href="{{ path('stage_index') }}">Stages</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('rubric_index') }}">Rubrics</a>
                         </li>
                     {% endif %}
                 {% endblock %}
@@ -89,10 +91,10 @@
         </div>
     </div>
 </nav>
+{% endblock %}
 
 {% block toolnav %}{% endblock %}
-
-<div id="main-content" class="container-fluid mt-3">
+<div id="main-content" class="container-fluid pt-3 bg-light">
     {% for message in app.flashes('notice') %}
         <div class="alert alert-success">
             {{ message }}
@@ -104,14 +106,25 @@
 </body>
 
 {% block javascripts %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+
+
+
+    <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+    <script src="{{ absolute_url(asset('js/bootstrap.min.js')) }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($("body").hasClass("dark")) {
+                    $('.bg-light').toggleClass('bg-light bg-dark')
+                    $('.text-dark').toggleClass('text-dark text-light')
+                    $('.navbar-light').toggleClass('navbar-light navbar-dark')
+            }
+        });
+    </script>
 {% endblock %}
 
 

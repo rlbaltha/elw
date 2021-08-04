@@ -1,0 +1,15 @@
+knp_snappy:
+    process_timeout: 120
+    pdf:
+        enabled:    true
+        binary:     '%kernel.project_dir%%env(WKHTMLTOPDF_PATH)%'
+        options:
+            page-size:  Letter
+            margin-top: 20
+            margin-bottom: 20
+            margin-left: 20
+            margin-right: 20
+    image:
+        enabled:    true
+        binary:     '%kernel.project_dir%%env(WKHTMLTOIMAGE_PATH)%'
+        options:    []

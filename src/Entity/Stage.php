@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,10 +35,19 @@ class Stage
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Labelset", inversedBy="stages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="stages")
      */
-    private $labelset;
+    private $projects;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $level=1;
+
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -79,14 +90,42 @@ class Stage
         return $this;
     }
 
-    public function getLabelset(): ?Labelset
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
     {
-        return $this->labelset;
+        return $this->projects;
     }
 
-    public function setLabelset(?Labelset $labelset): self
+    public function addProject(Project $project): self
     {
-        $this->labelset = $labelset;
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addStage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeStage($this);
+        }
+
+        return $this;
+    }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?int $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

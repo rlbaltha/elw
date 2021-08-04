@@ -1,3 +1,6 @@
+
+<h2>{{ irb.title }}</h2>
+{{ irb.body|raw }}
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>

@@ -3,9 +3,7 @@
 {% block title %}Gradebook Column - {{ parent() }}{% endblock %}
 
 {% block subnav %}
-    {% if status !='Pending' %}
         {{ include('course/_subnav.html.twig') }}
-    {% endif %}
 {% endblock %}
 
 {% block toolnav %}

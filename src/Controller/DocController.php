@@ -17,6 +17,8 @@ use Twig\Extension\AbstractExtension;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
 use Caxy\HtmlDiff\HtmlDiff;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
 
 
 /**
@@ -28,9 +30,13 @@ class DocController extends AbstractController
     /** @var DompdfWrapperInterface */
     private $wrapper;
 
-    public function __construct(DompdfWrapperInterface $wrapper)
+    /** @var Pdf  */
+    private $pdf;
+
+    public function __construct(DompdfWrapperInterface $wrapper, Pdf $pdf)
     {
         $this->wrapper = $wrapper;
+        $this->pdf = $pdf;
     }
 
     /**
@@ -41,7 +47,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $page_limit = 25;
+        $page_limit = 50;
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
@@ -96,10 +102,10 @@ class DocController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $entityManager = $this->getDoctrine()->getManager();
         $docs = $docRepository->findHiddenDocs($course, $user);
-        foreach($docs as $doc){
-                $doc->setAccess('Private');
-                $entityManager->persist($doc);
-            }
+        foreach ($docs as $doc) {
+            $doc->setAccess('Private');
+            $entityManager->persist($doc);
+        }
         $entityManager->flush();
         $this->addFlash('notice', 'All documents have been released.');
 
@@ -117,7 +123,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $page_limit = 25;
+        $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
@@ -130,7 +136,42 @@ class DocController extends AbstractController
             $request->query->getInt('page', 1), /*page number*/
             $page_limit /*limit per page*/
         );
-        $header = 'Docs by '. $user->getFirstname().' '.$user->getLastname();
+        $header = 'Docs by ' . $user->getFirstname() . ' ' . $user->getLastname();
+        return $this->render('doc/index.html.twig', [
+            'header' => $header,
+            'page_limit' => $page_limit,
+            'docs' => $docs,
+            'course' => $course,
+            'role' => $role,
+            'findtype' => $findtype,
+            'classlists' => $classlists,
+            'hidden_comments' => $hidden_comments,
+            'hidden_reviews' => $hidden_reviews
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/{findtype}/{projectid}/byproject", name="doc_byproject", methods={"GET"}, defaults={"findtype":"byproject"})
+     */
+    public function byProject(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, string $courseid, string $projectid): Response
+    {
+        $findtype = 'byproject';
+        $allowed = ['Student', 'Instructor'];
+        $permissions->restrictAccessTo($courseid, $allowed);
+        $role = $permissions->getCourseRole($courseid);
+        $page_limit = 50;
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
+        $hidden_reviews = $docRepository->countHiddenReviews($course);
+        $hidden_comments = $docRepository->countHiddenComments($course);
+        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $querybuilder = $docRepository->findByProject($course, $role, $project);
+        $docs = $paginator->paginate(
+            $querybuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            $page_limit /*limit per page*/
+        );
+        $header = 'Docs for Project ' . $project->getName();
         return $this->render('doc/index.html.twig', [
             'header' => $header,
             'page_limit' => $page_limit,
@@ -146,9 +187,9 @@ class DocController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/new", name="doc_new", methods={"GET","POST"})
+     * @Route("/{courseid}/{projectid}/new", name="doc_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Permissions $permissions, $courseid): Response
+    public function new(Request $request, Permissions $permissions, string $courseid, string $projectid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -157,12 +198,13 @@ class DocController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $stages = $this->getDoctrine()->getManager()->getRepository('App:Stage')->findStagesByCourse($courseid);
-        $projects = $this->getDoctrine()->getManager()->getRepository('App:Project')->findProjectsByCourse($courseid);
+        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $stages = $project->getStages();
         $doc->setUser($user);
         $doc->setCourse($course);
-        $doc->setProject($projects[0]);
+        $doc->setProject($project);
         $doc->setStage($stages[0]);
+        $doc->setTitle('Essay for ' . $project->getName());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
@@ -189,7 +231,7 @@ class DocController extends AbstractController
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        ($permissions->getCourseRole($courseid)==='Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Review'));
+        ($permissions->getCourseRole($courseid) === 'Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Review'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
         $entityManager = $this->getDoctrine()->getManager();
@@ -207,13 +249,21 @@ class DocController extends AbstractController
 
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $scores = [];
-        if ($doc->getAgsResultId() != null)
-        {
+        if ($doc->getAgsResultId() != null) {
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
 
         $role = $permissions->getCourseRole($courseid);
-        $markupsets = $course->getMarkupsets();
+        if ($doc->getProject()) {
+            $markupsets = $doc->getProject()->getMarkupsets();
+        } elseif ($course->getMarkupsets()) {
+            $markupsets = $course->getMarkupsets();
+        }
+        else {
+            $markupsets = [];
+        }
+
+
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
             'course' => $course,
@@ -254,30 +304,6 @@ class DocController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id1}/{id2}/{courseid}/diff_pdf", name="doc_diff_pdf", methods={"GET"}, defaults={})
-     */
-    public function diff_pdf(string $id1, string $id2, string $courseid, Permissions $permissions)
-    {
-        $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
-        $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
-        $permissions->isAllowedToView($courseid, $doc1);
-        $permissions->isAllowedToView($courseid, $doc2);
-        $doc1str = $doc1->getBody();
-        $doc2str = $doc2->getBody();
-        $htmlDiff = new HtmlDiff($doc1str, $doc2str);
-        $diff = $htmlDiff->build();
-        $doc = new Doc();
-        $doc->setBody($diff);
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView('doc/pdf.html.twig', [
-            'doc' => $doc,
-        ]);
-
-        $filename = 'compare.pdf';
-        $response = $this->wrapper->getStreamResponse($html, $filename);
-        $response->send();
-    }
 
     /**
      * @Route("/{courseid}/{docid}/ags_score_view", name="ags_score_view", methods={"GET"})
@@ -285,37 +311,60 @@ class DocController extends AbstractController
     public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        $role = $permissions->getCourseRole($courseid);
         $scores = [];
         $column = '';
-        if ($doc->getAgsResultId() != null)
-        {
-            $ltiid = strstr($doc->getAgsResultId(),"/results",true);
+        if ($doc->getAgsResultId() != null) {
+            $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid)->getLabel();
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
         return $this->render('lti/lti_ags_ajax.html.twig', [
             'column' => $column,
             'scores' => $scores,
+            'doc' => $doc,
+            'role' => $role
         ]);
     }
 
-
     /**
-     * @Route("/{id}/{courseid}/pdf", name="doc_pdf", methods={"GET"})
+     * @Route("/{id}/{courseid}/doc_display", name="doc_display", methods={"GET"})
      */
-    public function pdf(Doc $doc, string $courseid, Permissions $permissions, Request $request)
+    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
     {
         $permissions->isAllowedToView($courseid, $doc);
-
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView('doc/pdf.html.twig', [
+        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        if ($doc->getProject()->getMarkupsets()) {
+            $markupsets = $doc->getProject()->getMarkupsets();
+        } else {
+            $markupsets = $course->getMarkupsets();
+        }
+        return $this->render('doc/pdf.html.twig', [
             'doc' => $doc,
+            'markupsets' => $markupsets,
         ]);
 
-        $filename = 'PDF_of_'.$doc->getTitle().'.pdf';
+    }
 
-        $response = $this->wrapper->getStreamResponse($html, $filename);
-        $response->send();
+    /**
+     * @Route("/pdf", name="doc_pdf", methods={"GET"})
+     */
+    public function pdf(Permissions $permissions, Request $request)
+    {
+        $doc_html = $request->get('html2pdf');
+        $title = $request->get('title');
+        $docid = $request->get('docid');
+        $courseid = $request->get('courseid');
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        $permissions->isAllowedToView($courseid, $doc);
+        $html = $this->renderView('doc/pdf.html.twig', [
+            'doc_html' => $doc_html,
+        ]);
+        $filename = 'PDF_of_' . $title . '.pdf';
+        return new PdfResponse(
+            $this->pdf->getOutputFromHtml($html),
+            $filename
+        );
     }
 
     /**
@@ -327,28 +376,24 @@ class DocController extends AbstractController
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
         $role = $permissions->getCourseRole($courseid);
-        if ($role == 'Instructor' and $doc->getOrigin()){
+        if ($role == 'Instructor' and $doc->getOrigin()) {
             $choices = ['Hidden' => 'Hidden', 'Private' => 'Private'];
-        }
-        elseif ($role == 'Student' and $doc->getAccess()=='Review'){
+        } elseif ($role == 'Student' and $doc->getAccess() == 'Review') {
             $choices = ['Review' => 'Review'];
-        }
-        else {
+        } else {
             $choices = ['Shared' => 'Shared', 'Private' => 'Private'];
         }
+        $stages = $doc->getProject()->getStages();
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $options = ['courseid' => $courseid, 'choices' => $choices];
+        $options = ['courseid' => $courseid, 'choices' => $choices, 'stages' => $stages];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
-        $markupsets = $course->getMarkupsets();
-
-
+        $markupsets = $doc->getProject()->getMarkupsets();
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('notice', 'Your  document has been saved.');
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
-
         return $this->render('doc/edit.html.twig', [
             'doc' => $doc,
             'markupsets' => $markupsets,
@@ -365,7 +410,7 @@ class DocController extends AbstractController
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
-        $count=0;
+        $count = 0;
         $update = $request->request->get('docBody');
         $count = $request->request->get('count');
 
@@ -392,31 +437,13 @@ class DocController extends AbstractController
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
         $access = $doc->getAccess();
-        ($access==='Shared' ? $doc->setAccess('Private') : $doc->setAccess('Shared'));
+        ($access === 'Shared' ? $doc->setAccess('Private') : $doc->setAccess('Shared'));
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
 
         return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
-
-//    /**
-//     * @Route("/{id}/{courseid}/hidden", name="doc_hidden", methods={"GET","POST"})
-//     */
-//    public function hidden(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
-//    {
-//        $allowed = ['Instructor'];
-//        $permissions->restrictAccessTo($courseid, $allowed);
-//        $permissions->isOwner($doc);
-//        $access = $doc->getAccess();
-//        ($access==='Hidden' ? $doc->setAccess('Private') : $doc->setAccess('Hidden'));
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $entityManager->persist($doc);
-//        $entityManager->flush();
-//        $this->addFlash('notice', 'Document access has been updated.');
-//
-//        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
-//    }
 
     /**
      * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})

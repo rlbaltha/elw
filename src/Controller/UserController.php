@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UsernameType;
+use App\Form\IrbType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,29 +44,6 @@ class UserController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/admin/new", name="user_new", methods={"GET","POST"})
-//     */
-//    public function new(Request $request): Response
-//    {
-//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-//        $user = new User();
-//        $form = $this->createForm(UserType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('user_index');
-//        }
-//
-//        return $this->render('user/new.html.twig', [
-//            'user' => $user,
-//            'form' => $form->createView(),
-//        ]);
-//    }
 
     /**
      * @Route("/admin/{id}", name="user_show", methods={"GET"})
@@ -180,6 +158,60 @@ class UserController extends AbstractController
         $this->addFlash('notice', 'This profile has been promoted.');
         return $this->render('user/show.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    /**
+     * @Route("/{courseid}/theme", name="user_theme", methods={"GET"})
+     */
+    public function theme(string $courseid): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        if ($user->getTheme() != 'dark') {
+            $user->setTheme('dark');
+        }
+        else {
+            $user->setTheme('light');
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
+    }
+
+    /**
+     * @Route("/{courseid}/irb", name="user_irb", methods={"GET","POST"})
+     */
+    public function irb(Request $request, string $courseid): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $irb = $this->getDoctrine()->getManager()->getRepository('App:Card')->findOneByType('irb');
+        if ($user->getIrb() == null) {
+            $user->setIrb(1);
+        }
+        $form = $this->createForm(IrbType::class, $user, [
+            'action' => $this->generateUrl('user_irb', ['courseid'=>$courseid]),
+            'method' => 'POST',
+        ]);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('notice', 'Your Research Permission has been updated.');
+            return $this->redirectToRoute('course_show', [
+                'courseid' => $courseid,
+            ]);
+        }
+
+        return $this->render('user/_irb_form.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            'irb' => $irb
         ]);
     }
 

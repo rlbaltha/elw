@@ -17,19 +17,14 @@ class LtiAgsScoreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $course = $options['course'];
         $comment = $options['comment'];
         $score = $options['score'];
         $column = $options['column'];
+        $uris = $options['uris'];
         $builder
             ->add('uri', EntityType::class, [
                 'class' => LtiAgs::class,
-                'query_builder' => function (EntityRepository $er) use ($course) {
-                    return $er->createQueryBuilder('l')
-                        ->join('l.course', 'c')
-                        ->andWhere('c.id = :val')
-                        ->setParameter('val', $course->getId());
-                },
+                'choices' => $uris,
                 'choice_label' => 'label',
                 'choice_value' => 'id',
                 'label'  => 'eLC Grade Column',
@@ -52,10 +47,10 @@ class LtiAgsScoreType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-            'course',
             'comment',
             'score',
-            'column'
+            'column',
+            'uris'
         ]);
     }
 }

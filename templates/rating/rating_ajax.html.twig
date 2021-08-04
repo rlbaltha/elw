@@ -1,0 +1,32 @@
+{% for rating in ratings %}
+
+    <div class="rubric">
+        <p><strong>Rubric Rating:</strong><br/>
+            {% if rating.scale == 1 %}
+                1: Holistic revision necessary. The student may need to revise the full
+                document.
+            {% elseif rating.scale == 2 %}
+                2: Substantial revision necessary. The student may need to revise elements in a majority of the document.
+            {% elseif rating.scale == 3 %}
+                3: Some revision necessary. The student may need to rethink or
+                restructure one or more paragraphs or large sections.
+            {% elseif rating.scale == 4 %}
+                4: Slight revision necessary. Some adjustments on the sentence or
+                paragraph level would help the document stand out.
+            {% elseif rating.scale == 5 %}
+                5: No revision necessary. The document is exemplary as it stands. While
+                further improvement is still (and always) possible, time would be better
+                spent elsewhere.
+            {% endif %}
+        </p>
+        <p><strong>Comment:</strong> {{ rating.comment }}</p>
+        <p><strong>By: </strong>{{ rating.user.firstname }} {{ rating.user.lastname }}</p>
+        {% if role == 'Instructor' %}
+            <a aria-label="Edit a Rubric Rating" class="btn btn-primary btn-sm"
+               href="{{ course_path('rating_edit', {'id': rating.id}) }}">Edit Rubric Rating</a>
+            <hr/>
+        {% endif %}
+    </div>
+
+{% endfor %}
+<span class="ratingsajax" data-id="rubricheader{{ rubricid }}_doc{{ doc.id }}">{{ ratings|length }}</span>

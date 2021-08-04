@@ -34,11 +34,13 @@ security:
     - { path: ^/course, roles: ROLE_USER }
     - { path: ^/classlist, roles: ROLE_USER }
     - { path: ^/doc, roles: ROLE_USER }
+    - { path: ^/journal, roles: ROLE_USER}
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/user, roles: ROLE_ADMIN }
-    - { path: ^/labelset, roles: ROLE_ADMIN }
+    - { path: ^/user, roles: ROLE_USER }
     - { path: ^/label, roles: ROLE_ADMIN }
     - { path: ^/markupset, roles: ROLE_INSTRUCTOR }
     - { path: ^/markup, roles: ROLE_INSTRUCTOR }
+    - { path: ^/card, roles: ROLE_ADMIN }
+    - { path: ^/rubric, roles: ROLE_INSTRUCTOR }
 
 

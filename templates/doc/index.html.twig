@@ -46,6 +46,19 @@
                             {% endfor %}
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Select Project
+                        </a>
+                        <div id="projects" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for project in course.projects %}
+                                <a class="dropdown-item"
+                                   href="{{ course_path('doc_byproject', {'projectid':project.id}) }}">{{ project.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a id="compare_click" class="nav-link" href="#">Compare</a>
                     </li>
@@ -61,12 +74,28 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ course_path('release_all_comments', {'courseid': course.id, 'findtype': findtype}) }}">Release
-                                    Hidden Feedback</a>
+                                    Hidden End Comments</a>
                             </li>
                         {% endif %}
                     {% endif %}
-                    <li class="nav-item">
-                        <a target="_blank" class="btn btn-primary" href="{{ course_path('doc_new') }}">New Doc</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            New Doc
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for project in course.projects %}
+                                <a target="_blank" class="dropdown-item"
+                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="navbar-text float-right text-dark">
+                        Docs
+                        found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}
                     </li>
                 </ul>
             </div>
@@ -75,35 +104,18 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-inline p-2">
-        Filter:
-        {% for labelset in course.labelsets %}
-            {% for label in labelset.projects %}
-                <button class="btn btn-primary btn-sm filter"
-                        style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
-            {% endfor %}
-            {% for label in labelset.stages %}
-                <button class="btn btn-primary btn-sm filter"
-                        style="background:{{ label.color }}; border-color:{{ label.color }}">{{ label.name }}</button>
-            {% endfor %}
-        {% endfor %}
-        <button class="btn btn-primary btn-sm filter">Show All</button>
-    </div>
-    <div class="float-right">Docs
-        found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}</div>
-
 
     {# table of documents #}
     <fieldset>
         <legend class="sr-only">Select two checkboxes to compare.</legend>
         <table class="table">
-            <thead>
+            <thead class="">
             <tr>
                 <th>Title<i class="fa fa-fw fa-sort"></i></th>
                 <th>Owner</th>
                 <th>Reviews</th>
-                <th>Labels</th>
-                <th>Updated<i class="fa fa-fw fa-sort"></i></th>
+                <th class="d-none d-sm-table-cell">Labels</th>
+                <th class="d-none d-sm-table-cell">Updated<i class="fa fa-fw fa-sort"></i></th>
             </tr>
             </thead>
             <tbody>
@@ -124,49 +136,102 @@
                     </td>
                     <td>
                         {% if doc.reviews|length > 0 %}
-                        <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
-                           id="dropdownMenuLink{{ doc.id }}"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Reviews
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ doc.id }}">
-                            {% for review in doc.reviews %}
-                                {% if review.access !='Hidden' %}
-                                    {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
-                                        <a target="_blank" class="dropdown-item"
-                                           href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
-                                            {% if review.comments|length > 0 %}
-                                                <span class="badge badge-primary"
-                                                      style="background:darkblue">Feedback ({{ review.comments|length }})</span>
-                                            {% endif %}
-                                        </a>
+                            <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
+                               id="dropdownMenuLink{{ doc.id }}"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reviews
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ doc.id }}">
+                                {% for review in doc.reviews %}
+                                    {% if review.access !='Hidden' %}
+                                        {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
+                                            <a target="_blank" class="dropdown-item"
+                                               href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
+                                                {% if review.comments|length > 0 %}
+                                                    <span class="badge badge-primary"
+                                                          style="background:darkblue">End Comments ({{ review.comments|length }})</span>
+                                                {% endif %}
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </td>
-                    <td>
-                    <span class="badge badge-primary"
-                          style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
-                        <span class="badge badge-primary"
-                              style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                    <td class="d-none d-sm-table-cell">
+                        {% if doc.project %}
+                            <span class="badge badge-primary"
+                                  style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                        {% endif %}
+                        {% if doc.stage %}
+                            <span class="badge badge-primary"
+                                  style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                        {% endif %}
                         <span class="badge badge-primary"
                               style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
 
 
                         {% if doc.comments|length > 0 %}
                             <span class="badge badge-primary"
-                                  style="background:darkblue">Feedback ({{ doc.comments|length }})</span>
+                                  style="background:darkblue">End Comments ({{ doc.comments|length }})</span>
 
                         {% endif %}
 
                     </td>
-                    <td>{{ doc.updated | date("M j, Y g:ia") }}</td>
+                    <td class="d-none d-sm-table-cell">{{ doc.updated | date("M j, Y g:ia") }}</td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">No documents found.</td>
+                    <td colspan="5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title d-inline">Getting started with Documents in eLW</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
+                                <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>
+                                <p><strong>Select Author</strong> will list documents shared with you by author.</p>
+                                <p><strong>Select Project</strong> will list documents by Project.</p>
+                                <p><strong>Compare</strong> will create a display of the changes between two documents.
+                                    Select any two checkboxes on the left and then click
+                                    Compare.</p>
+                                <p>Sort by clicking the column headers <strong>Title</strong> or
+                                    <strong>Updated.</strong></p>
+                                <p><strong>New Doc</strong> will create a document organized by Project. Once you have
+                                    created a document,
+                                    you can then work with it in the following ways:</p>
+                                <ul>
+                                    <li>
+                                        <strong>Create Review</strong> will create a copy of the document so you
+                                        can make inline comments and add markup.
+                                    </li>
+                                    <li>
+                                        <strong>Create End Comment</strong> allows you to attach a holistic comment. If
+                                        you're also creating a review, you should create an end comment on the review
+                                        you've created instead of
+                                        on the original document.
+                                    </li>
+                                    <li>
+                                        <strong>Submit Grade to eLC</strong> is an instructor button that will send a
+                                        grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC
+                                        Gradebook Setup"
+                                        on the eLW course home page to create the eLC grade column.
+                                    </li>
+                                    <li>
+                                        <strong>Create PDF</strong> will create a pdf that mirrors the HTML document.
+                                        Our PDF download files
+                                        do not fully comply with all applicable guidelines for accessible digital
+                                        documents.
+                                        For the most accessible experience, choose the current HTML display of the
+                                        document.
+                                    </li>
+                                    <li>
+                                        To <strong>Exit</strong> the document, simply close the tab.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

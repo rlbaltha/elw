@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Card Index - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h1 class="card-title">Card index</h1>
+            <a class="btn btn-primary btnp-sm" href="{{ path('card_new') }}">Create Card</a>
+        </div>
+    </div>
+    {% for card in cards %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 class="card-title">{{ card.title }} </h2>
+                ({{ card.type }})
+            </div>
+            <div class="card-body">{{ card.body|raw }}
+                <a class="btn btn-primary btnp-sm" href="{{ path('card_edit', {'id': card.id}) }}">edit</a>
+            </div>
+        </div>
+    {% else %}
+        <p>No cards found.</p>
+    {% endfor %}
+
+{% endblock %}
