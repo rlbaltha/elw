@@ -17,7 +17,7 @@ class RatingType extends AbstractType
                 'choices' => [
                     '1: Holistic revision necessary. The student may need to revise the full
                     document.' => '1',
-                    '2: Substantial revision necessary. The student may need to revise.' => '2',
+                    '2: Substantial revision necessary. The student may need to revise elements in a majority of the document.' => '2',
                     ' 3: Some revision necessary. The student may need to rethink or
                     restructure one or more paragraphs or large sections.' => '3',
                     '4: Slight revision necessary. Some adjustments on the sentence or
