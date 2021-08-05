@@ -167,12 +167,6 @@
                     <div id="lti{{ doc.id }}">
 
                     </div>
-                    {% if role == 'Instructor' %}
-                        <a class="btn btn-primary btn-sm ltisubmit"
-                           href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'journal'}) }}">Update
-                            Grade in
-                            eLC</a>
-                    {% endif %}
                 {% else %}
                     {% if role == 'Instructor' %}
                         <a class="btn btn-primary btn-sm ltisubmit"

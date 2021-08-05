@@ -7,6 +7,8 @@
         <div class="card-body">
             <h1 class="card-title">{{ course.name }}</h1>
             {{ include('course/_form.html.twig', {'button_label': 'Update'}) }}
+
+            <p class="alert alert-warning mt-3">Be sure to create your Projects after you have submitted your course information.</p>
         </div>
     </div>
 {% endblock %}

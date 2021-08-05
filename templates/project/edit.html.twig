@@ -12,6 +12,12 @@
     </style>
 {% endblock %}
 
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Project Help</a>
+    </li>
+{% endblock %}
+
 {% block body %}
     <div class="card">
         <div class="card-body">
@@ -25,6 +31,59 @@
             {% endif %}
         </div>
     </div>
+
+
+    {# Help Modal #}
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Project Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        eLW Documents are organized into Projects, and instructors customize the following for each
+                        project:
+                    <ul>
+                        <li><strong>Name</strong> the project – i.e. “Essay One” or “Annotated Bibliography” or “Poetry
+                            Analysis”
+                        </li>
+                        <li><strong>Select a color</strong> for the project by clicking and selecting your choice.</li>
+                        <li><strong>Select the stages</strong> for this project.</li>
+                        <li><strong>Select the Rubric Blocks</strong> for this project if you are using them .</li>
+                        <li><strong>Select the markup sets</strong> for this project.</li>
+                        <li><strong>Add the gradebook column(s)</strong> for this project if you are using them. Create
+                            gradebook columns from eLW’s course homepage.
+                        </li>
+                        <li>Click <strong>save</strong>, and then repeat these steps for all of your course’s projects.</li>
+                    </ul>
+                    </p>
+
+                    <p>
+                        You can <strong>edit</strong> a project to change or add any of the options for your projects
+                        after you have created them.
+                    </p>
+
+                    <p>
+                        When a student creates a document, they will select the appropriate project from the dropdown
+                        menu.
+                    </p>
+                    <p>
+                        <strong>You must have at least one project before students can create new
+                            documents.</strong>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}

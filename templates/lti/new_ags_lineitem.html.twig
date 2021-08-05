@@ -3,7 +3,13 @@
 {% block title %}Gradebook Column - {{ parent() }}{% endblock %}
 
 {% block subnav %}
-        {{ include('course/_subnav.html.twig') }}
+    {{ include('course/_subnav.html.twig') }}
+{% endblock %}
+
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Gradebook Help</a>
+    </li>
 {% endblock %}
 
 {% block toolnav %}
@@ -11,9 +17,48 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create New Gradebook Column</h1>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Submit') }}</button>
-    {{ form_end(form) }}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">New Gradebook Column</h1>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-primary">{{ button_label|default('Submit') }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    {# Help Modal #}
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Gradebook Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        When you set up your gradebook columns on eLW, you can grade eLW assigned work and post/access
+                        grades on both eLC and eLW. Instructors can create gradebook columns for draft work, journals,
+                        and/or final essay grades.
+                    </p>
+
+                    <p><strong>Maximum Score</strong> -- this will usually be 100, unless you have set up your eLC
+                        gradebook on a points system.</p>
+                    <p>Enter the name of the assignment in the <strong>Grade Label</strong> field (i.e. “Paper 1 Draft
+                        1”, “Journal 2”, or “Paper 1 Final”). When done, click <strong>Submit</strong> and confirm the
+                        creation in the eLC gradebook (you can manage grades in eLC to set up weights, hide the column
+                        until you have finished grading, etc.). </p>
+                    <p>To associate grade columns with a Project, return to the Projects area on your eLW course home,
+                        <strong>Edit</strong> your project and select any appropriate grade columns for the project.</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -351,8 +351,8 @@ class LtiController extends AbstractController
             $ags->setCourse($course);
             $this->getDoctrine()->getManager()->persist($ags);
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'The grade columns was added.');
-            return $this->redirectToRoute('ags_index', ['courseid' => $courseid]);
+            $this->addFlash('notice', 'The grade column was added.');
+            return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
 
         }
 

@@ -144,10 +144,14 @@ class CourseController extends AbstractController
         $options = ['user' => $user];
         $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
         $form->handleRequest($request);
+        $message = 'Your course has been updated. <br/>  Be sure that you have at least one Project for your course.  
+            <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm"
+                   href="/project/'.$courseid.'/new">Add
+                    Project</a>';
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your course has been updated.');
+            $this->addFlash('notice', $message);
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
 

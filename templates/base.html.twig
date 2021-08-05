@@ -97,7 +97,7 @@
 <div id="main-content" class="container-fluid pt-3 bg-light">
     {% for message in app.flashes('notice') %}
         <div class="alert alert-success">
-            {{ message }}
+            {{ message|raw }}
         </div>
     {% endfor %}
     {% block body %}{% endblock %}
