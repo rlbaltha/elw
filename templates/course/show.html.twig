@@ -122,7 +122,8 @@
                                                     style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
                                         </p>
                                         <p>
-                                            Rubric Blocks: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
+                                            Rubric
+                                            Blocks: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
                                         <p>
                                             Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
                                         </p>
@@ -183,17 +184,29 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Projects</strong></p>
+                    <p>eLW Documents are organized into <strong>Projects</strong> that instructors can customize:
+                    <ul>
+                        <li><strong>Project</strong> names (i.e. Essay One or Poetry Analysis). <strong>***You must have at least one
+                                project before students can create new documents.***</strong>
+                        </li>
+                        <li><strong>Stages</strong> of the project (i.e. Draft One, Final for Grading, Exploratory
+                            Draft)
+                        </li>
+                        <li><strong>Markup sets</strong> for the project (i.e. Grammar and Mechanics, Syntax and Style,
+                            or custom markup)
+                        </li>
+                        <li><strong>Rubrics</strong> for the project (optional)</li>
+                        <li><strong>Gradebook Columns</strong> for the project (i.e. Essay One Draft One, Essay One
+                            Final)
+                        </li>
+                    </ul>
+                    </p>
 
-                    <p><strong>Stages</strong></p>
+                    <p>Excepting a project name, you do not have to customize any of the above options for a project,
+                        although we do recommend setting stages and markup sets.</p>
 
-                    <p><strong>Markup</strong></p>
-
-                    <p><strong>Rubric Blocks</strong></p>
-
-                    <p><strong>Gradebook</strong></p>
-
-                    <p><strong>Classlist</strong></p>
+                    <p>The <strong>Classlist</strong> will show which students are enrolled in the eLC class and which ones
+                        have enrolled in the eLW class.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

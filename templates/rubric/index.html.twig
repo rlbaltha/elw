@@ -12,7 +12,9 @@
     <div class="card">
         <div class="card-header">
             <h1 class="card-title">Rubric Blocks</h1>
+            {% if (is_granted('ROLE_ADMIN'))%}
             <a class="btn btn-primary" href="{{ path('rubric_new') }}">New Rubric Block</a>
+            {% endif %}
         </div>
     </div>
 
@@ -42,7 +44,7 @@
         {% endfor %}
     </div>
 
-    <!-- Modal -->
+    <!-- Help Modal -->
     <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -53,7 +55,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Rubric Blocks</strong> actual text needed here. </p>
+                    <p>An instructor can attach rubric blocks to their projects by editing or creating a project.  Instructors can add comments and ratings to the block when they review student work.   </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
