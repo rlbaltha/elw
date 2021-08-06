@@ -19,7 +19,7 @@ class JournalType extends AbstractType
                 'label'  => 'Title'
             ])
             ->add('body', CKEditorType::class, [
-                'config_name' => 'simple_config',
+                'config_name' => 'doc_config',
                 'label' => ''
             ])
             ->add('project', HiddenType::class, [

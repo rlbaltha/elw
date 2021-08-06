@@ -14,11 +14,11 @@
         <a id='saving_alert' href="javascript:void(0);" class="nav-link" id="doc_save">Saving</a>
     </li>
     <li class="nav-item">
-        {% if doc.comments|length == 0 %}
+        {% if doc.comments|length == 0 and doc.agsResultId is null %}
             <a id="delete-trigger" class="nav-link" href="#">Delete</a>
             {{ include('journal/_delete_form.html.twig') }}
         {% else %}
-            <p class="navbar-text">Journal entries that have feedback cannot be deleted.</p>
+            <p class="navbar-text">Journal entries that have end comments or grades cannot be deleted.</p>
         {% endif %}
     </li>
 {% endblock %}
