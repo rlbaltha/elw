@@ -405,14 +405,19 @@
                         you're also creating a review, you should create an end comment on the review you've created
                         instead of
                         on the original document.</p>
+                    {% if role=='Instructor' %}
                     <p><strong>Submit Grade to eLC</strong> is an instructor button that will send a
                         grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
                         on the eLW course home page to create the eLC grade column. </p>
+                    {% endif %}
                     <p><strong>Create PDF</strong> will create a pdf that mirrors the HTML document. Our PDF download
                         files
                         do not fully comply with all applicable guidelines for accessible digital documents.
                         For the most accessible experience, choose the current HTML display of the document.</p>
                     <p>To <strong>Exit</strong> the document, simply close the tab.</p>
+
+                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                        Park Hall 118.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

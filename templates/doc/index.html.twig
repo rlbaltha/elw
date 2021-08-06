@@ -15,6 +15,12 @@
     {{ include('course/_subnav.html.twig') }}
 {% endblock %}
 
+{% block subnavright %}
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+    </li>
+{% endblock %}
+
 {% block toolnav %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -187,7 +193,7 @@
                             <div class="card-header">
                                 <h5 class="card-title d-inline">Getting started with Documents in eLW</h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="help_content">
                                 <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
                                 <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>
                                 <p><strong>Select Author</strong> will list documents shared with you by author.</p>
@@ -197,7 +203,7 @@
                                     Compare.</p>
                                 <p>Sort by clicking the column headers <strong>Title</strong> or
                                     <strong>Updated.</strong></p>
-                                <p><strong>New Doc</strong> will create a document organized by Project. Once you have
+                                <p><strong>New Doc</strong> will offer a dropdown of available projects for the document.  Once you have
                                     created a document,
                                     you can then work with it in the following ways:</p>
                                 <ul>
@@ -211,12 +217,14 @@
                                         you've created instead of
                                         on the original document.
                                     </li>
+                                    {% if role=='Instructor' %}
                                     <li>
                                         <strong>Submit Grade to eLC</strong> is an instructor button that will send a
                                         grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC
                                         Gradebook Setup"
                                         on the eLW course home page to create the eLC grade column.
                                     </li>
+                                    {% endif %}
                                     <li>
                                         <strong>Create PDF</strong> will create a pdf that mirrors the HTML document.
                                         Our PDF download files
@@ -229,6 +237,9 @@
                                         To <strong>Exit</strong> the document, simply close the tab.
                                     </li>
                                 </ul>
+
+                                <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                                    Park Hall 118.</p>
                             </div>
                         </div>
                     </td>
@@ -242,12 +253,33 @@
         {{ knp_pagination_render(docs) }}
     </nav>
 
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $( ".modal-body" ).append( $('#help_content').html() );
             $("#filter").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
                 $("table tr.body").filter(function () {

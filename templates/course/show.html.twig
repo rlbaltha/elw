@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block subnavright %}
+    {% if role=='Instructor' %}
     <li class="nav-item">
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Course Help</a>
     </li>
+    {% endif %}
 {% endblock %}
 
 {% block toolnav %}
@@ -36,6 +38,18 @@
     </div>
 
     {% if user.irb is null %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2>Welcome to eLW for {{ course.name }}.</h2>
+                <p>eLW offers two writing tools: <strong>Documents</strong> and <strong>Journals</strong>.  <strong>Journals</strong> are private writing spaces only visible to the student and instructor.
+                    The <strong>Documents</strong> tool collects different stages of writing projects and offers various peer and instructor feedback opportunities.</p>
+                <p>Be sure to follow each assignment's instructions regarding whether work should be posted as a journal or as a document.
+                    Also pay attention to which document settings the instructor has specified.</p>
+                <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                    Park Hall 118.</p>
+            </div>
+        </div>
+
         <div class="card mb-3">
             <div class="card-body" id="irb_card">
                 <a class="btn btn-primary btn-sm irb"
@@ -215,13 +229,15 @@
                         </li>
                     </ul>
                     </p>
-                    
+
                     <p>
                         The <strong>Gradebook Columns</strong> area of the course page allows instructors to create a
                         link between eLW work and the eLC gradebook. Instructors should create the gradebook column in
                         eLW, and it will then appear in the eLC gradebook, where they can use manage grades to change
                         the weight of the grade, hide the column until they want to release grades, etc. Instructors can
                         create gradebook columns for draft work, journals, and/or final essay grades.</p>
+                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                        Park Hall 118.</p>
 
                 </div>
                 <div class="modal-footer">
