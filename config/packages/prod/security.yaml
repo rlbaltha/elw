@@ -37,3 +37,7 @@ security:
     - { path: ^/markupset, roles: ROLE_INSTRUCTOR, requires_channel: https }
     - { path: ^/markup, roles: ROLE_INSTRUCTOR, requires_channel: https }
     - { path: ^/rubric, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/comment, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/rating, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/stage, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/term, roles: ROLE_ADMIN, requires_channel: https }

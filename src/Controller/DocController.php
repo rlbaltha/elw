@@ -306,9 +306,9 @@ class DocController extends AbstractController
 
 
     /**
-     * @Route("/{courseid}/{docid}/ags_score_view", name="ags_score_view", methods={"GET"})
+     * @Route("/{courseid}/{docid}/source/ags_score_view", name="ags_score_view", methods={"GET"})
      */
-    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti): Response
+    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti, string $source): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
         $role = $permissions->getCourseRole($courseid);
@@ -323,7 +323,8 @@ class DocController extends AbstractController
             'column' => $column,
             'scores' => $scores,
             'doc' => $doc,
-            'role' => $role
+            'role' => $role,
+            'source' => $source
         ]);
     }
 
