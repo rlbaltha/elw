@@ -37,28 +37,28 @@
         </div>
     </div>
 
-    {% if user.irb is null %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h2>Welcome to eLW for {{ course.name }}.</h2>
-                <p>eLW offers two writing tools: <strong>Documents</strong> and <strong>Journals</strong>.  <strong>Journals</strong> are private writing spaces only visible to the student and instructor.
-                    The <strong>Documents</strong> tool collects different stages of writing projects and offers various peer and instructor feedback opportunities.</p>
-                <p>Be sure to follow each assignment's instructions regarding whether work should be posted as a journal or as a document.
-                    Also pay attention to which document settings the instructor has specified.</p>
-                <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
-                    Park Hall 118.</p>
-            </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2>Welcome to eLW for {{ course.name }}.</h2>
+            <p>eLW offers two writing tools: <strong>Documents</strong> and <strong>Journals</strong>.  <strong>Journals</strong> are private writing spaces only visible to the student and instructor.
+                The <strong>Documents</strong> tool collects different stages of writing projects and offers various peer and instructor feedback opportunities.</p>
+            <p>Be sure to follow each assignment's instructions regarding whether work should be posted as a journal or as a document.
+                Also pay attention to which document settings the instructor has specified.</p>
+            <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                Park Hall 118.</p>
         </div>
+    </div>
 
-        <div class="card mb-3">
-            <div class="card-body" id="irb_card">
-                <a class="btn btn-primary btn-sm irb"
-                   href="#"
-                   data-request="{{ course_path('user_irb', {'courseid': course.id}) }}"
-                >Research Permission</a>
-            </div>
-        </div>
-    {% endif %}
+{#    {% if user.irb is null %}#}
+{#        <div class="card mb-3">#}
+{#            <div class="card-body" id="irb_card">#}
+{#                <a class="btn btn-primary btn-sm irb"#}
+{#                   href="#"#}
+{#                   data-request="{{ course_path('user_irb', {'courseid': course.id}) }}"#}
+{#                >Research Permission</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endif %}#}
 
     {% if role=='Instructor' %}
         {# Classlist #}
