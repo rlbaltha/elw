@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DataController!{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <h1>Hello, Dear Administrators.</h1>
+        <p>I hope you are having a really good day today.</p>
+
+        <div class="row">
+            <div class="col">
+                <h2>Courses by Term</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Year</td>
+                        <td>Semester</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for term in course_count %}
+                        <tr>
+                            <td>{{ term.year }}</td>
+                            <td>{{ term.semester }}</td>
+                            <td>{{ term.termcount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}

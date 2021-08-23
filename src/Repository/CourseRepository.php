@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Course;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use FontLib\Table\Type\name;
 
 /**
  * @method Course|null find($id, $lockMode = null, $lockVersion = null)
@@ -100,6 +101,19 @@ class CourseRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
             ;
+    }
+
+    public function countByTerm()
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.term', 't')
+            ->select('t.id, t.year, t.semester, count(t.id) as termcount')
+            ->groupBy('t.id')
+            ->orderBy('t.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+
     }
 
 }
