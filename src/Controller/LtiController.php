@@ -161,6 +161,10 @@ class LtiController extends AbstractController
             //Check if Instructor
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
                 $course = new Course();
+                //Untested Default Term
+                $default_term = $this->getDoctrine()->getManager()->getRepository('App:Term')->findOneBy(['status'=>'Default']);
+                $course->setTerm($default_term);
+                //Untested Default Term
                 $course->setName($course_name);
                 $course->setLtiId($lti_id);
                 $classlist = new Classlist();

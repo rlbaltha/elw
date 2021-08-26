@@ -69,6 +69,26 @@ class TermController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/{id}/default", name="term_default", methods={"GET"})
+     */
+    public function default(string $id)
+    {
+        $terms = $this->getDoctrine()->getManager()->getRepository('App:Term')->findAll();
+        foreach ($terms as &$archiveterm) {
+            $archiveterm->setStatus('Archive');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($archiveterm);
+        }
+        $term = $this->getDoctrine()->getManager()->getRepository('App:Term')->find($id);
+        $term->setStatus('Default');
+        $entityManager->persist($term);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('term_index');
+    }
+
     /**
      * @Route("/{id}", name="term_delete", methods={"DELETE"})
      */

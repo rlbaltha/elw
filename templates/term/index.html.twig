@@ -22,7 +22,12 @@
                         <td><a aria-label="Edit Term {{ term.name }}"
                                href="{{ path('term_edit', {'id': term.id}) }}">{{ term.year }}</a></td>
                         <td>{{ term.semester }}</td>
-                        <td>{{ term.status }}</td>
+                        <td>{{ term.status }}
+                            {% if term.status != 'Default'%}
+                            <a class="btn btn-primary btn-sm ml-5" aria-label="Set Default"
+                               href="{{ path('term_default', {'id': term.id}) }}">Set Default</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% else %}
                     <tr>

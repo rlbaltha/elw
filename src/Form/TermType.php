@@ -22,12 +22,6 @@ class TermType extends AbstractType
                 'multiple' => false,
                 'expanded' => true
             ])
-            ->add('status', ChoiceType::class, [
-                'choices' => ['Default' => 'Default', 'Archive' => 'Archive', 'Continuing' => 'Continuing'],
-                'multiple' => false,
-                'expanded' => true
-            ])
-
         ;
     }
 

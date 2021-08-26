@@ -29,7 +29,7 @@ class Term
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status;
+    private $status='Archive';
 
     public function getId(): ?int
     {
