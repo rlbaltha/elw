@@ -466,6 +466,11 @@
                     $.ajax({
                         url: request, success: function (result) {
                             $(target).html(result);
+                        },
+                        error:function (xhr, ajaxOptions, thrownError){
+                            if(xhr.status===404) {
+                                $(target).html('<p>Grade Column was not found</p>');
+                            }
                         }
                     });
                     $(this).hide();
