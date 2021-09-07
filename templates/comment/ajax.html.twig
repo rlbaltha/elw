@@ -1,0 +1,40 @@
+{# twig template for ajax fragment #}
+
+
+<link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+<style>
+    /* Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) {
+
+        div.document-editor {
+            min-width: 100%;
+        }
+
+        .document-editor {
+            width: 100%;
+            margin: 0;
+            font-size: 16px;
+            font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+        }
+    }
+</style>
+
+<hr/>
+{{ include('comment/_form.html.twig') }}
+
+<script>
+    $(document).ready(function () {
+        //  Submit comment form via ajax
+        $("form").on("submit", function (event) {
+            event.preventDefault();
+
+            $.post("{{ path('comment_ajax_edit', {'courseid': courseid, 'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}", formValues, function (data) {
+                // Display the returned data in browser
+                $("#comment{{ doc.id }}").html(data);
+            });
+        });
+    });
+</script>
+
+
+

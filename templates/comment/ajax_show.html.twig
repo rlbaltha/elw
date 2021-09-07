@@ -1,0 +1,29 @@
+{# twig template for ajax fragment#}
+
+{% for comment in doc.comments %}
+<div id="comment{{ comment.id }}" class="card mt-3">
+    <div class="card-header">
+        {% if comment.access=='Hidden' %}
+            <span class="badge badge-primary" style="background:black">Hidden</span>
+        {% endif %}
+        {% if app.user == comment.user %}
+            <a class="btn btn-primary btn-sm  comment_ajax"
+               data-id="comment{{ comment.id }}"
+               href="#"
+               data-request="{{ path('comment_ajax_edit', {'courseid': courseid, 'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}"
+            >Edit End Comment</a>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {{ comment.body|raw }}
+    </div>
+    {% if comment.grade %}
+        <div class="card-footer">
+            Grade: {{ comment.grade }}
+        </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+
+

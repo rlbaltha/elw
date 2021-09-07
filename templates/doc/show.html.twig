@@ -297,7 +297,7 @@
                             <a class="btn btn-primary btn-sm ltiresult"
                                data-id="lti{{ review.id }}"
                                href="#"
-                               data-request="{{ course_path('ags_score_view', {'docid': review.id}) }}"
+                               data-request="{{ course_path('ags_score_view', {'docid': review.id, 'source': 'doc'}) }}"
                             >View Score</a>
                             <div id="lti{{ review.id }}">
 

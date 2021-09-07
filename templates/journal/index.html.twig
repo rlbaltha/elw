@@ -57,14 +57,16 @@
                             <li class="nav-item classlist_prev" id="prev{{ loop.index }}">
                                 <a class="mr-2"
                                    href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">
-                                    <i class="fa fa-arrow-left" aria-hidden="true"></i> {{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
+                                    <i class="fa fa-arrow-left" aria-hidden="true"></i> {{ classlist.user.lastname }}
+                                    , {{ classlist.user.firstname }}</a>
                             </li>
                         {% endfor %}
 
                         {% for classlist in classlists %}
                             <li class="nav-item classlist_next ml-3" id="next{{ loop.index }}">
                                 <a class=""
-                                   href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">{{ classlist.user.lastname }}, {{ classlist.user.firstname }} <i class="fa fa-arrow-right"
+                                   href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">{{ classlist.user.lastname }}
+                                    , {{ classlist.user.firstname }} <i class="fa fa-arrow-right"
                                                                         aria-hidden="true"></i></a>
                             </li>
                         {% endfor %}
@@ -76,9 +78,9 @@
 {% endblock %}
 
 {% block subnavright %}
-        <li class="nav-item">
-            <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
-        </li>
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
+    </li>
 {% endblock %}
 
 {% block body %}
@@ -136,17 +138,20 @@
                         <p><strong>New Journal</strong> creates a new Journal entry. Entries will list on the left and
                             can be viewed and edited.</p>
                         {% if role=='Instructor' %}
-                        <p>Instructors can navigate through student journals via the <strong>Select Author</strong>
-                            dropdown or with the next/previous student listed on the right.</p>
-                        <p class="card-text"><strong>Create End Comment</strong> allows instructors to attach a holistic
-                            comment.</p>
-                        <p class="card-text"><strong>Submit Grade to eLC</strong> allows instructors to send a grade and
-                            a comment to eLC's
-                            gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home
-                            page to
-                            create the eLC grade column. </p>
+                            <p>Instructors can navigate through student journals via the <strong>Select Author</strong>
+                                dropdown or with the next/previous student listed on the right.</p>
+                            <p class="card-text"><strong>Create End Comment</strong> allows instructors to attach a
+                                holistic
+                                comment.</p>
+                            <p class="card-text"><strong>Submit Grade to eLC</strong> allows instructors to send a grade
+                                and
+                                a comment to eLC's
+                                gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home
+                                page to
+                                create the eLC grade column. </p>
                         {% endif %}
-                        <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                        <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu
+                            or visit the FYW Digital Learning Labs in
                             Park Hall 118.</p>
                     </div>
                 </div>
@@ -175,17 +180,19 @@
                             eLC</a>
                     {% endif %}
                 {% endif %}
+                <div id="comment{{ doc.id }}" class="card mt-3">
+                    {% for comment in doc.comments %}
 
-                {% for comment in doc.comments %}
-                    <div class="card mt-3">
                         <div class="card-header">
                             {% if comment.access=='Hidden' %}
                                 <span class="badge badge-primary" style="background:black">Hidden</span>
                             {% endif %}
                             {% if app.user == comment.user %}
-                                <a class="btn btn-primary btn-sm float-right"
-                                   href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}">Edit
-                                    End Comment</a>
+                                <a class="btn btn-primary btn-sm  comment_ajax"
+                                   data-id="comment{{ doc.id }}"
+                                   href="#"
+                                   data-request="{{ course_path('comment_ajax_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}"
+                                >Edit End Comment</a>
                             {% endif %}
                         </div>
                         <div class="card-body">
@@ -196,14 +203,19 @@
                                 Grade: {{ comment.grade }}
                             </div>
                         {% endif %}
-                    </div>
-                {% else %}
-                    {# only Instructors can offer feedback on Journal #}
-                    {% if role == "Instructor" %}
-                        <a class="btn btn-primary btn-sm"
-                           href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'journal'}) }}">Create End Comment</a>
-                    {% endif %}
-                {% endfor %}
+
+                    {% else %}
+                        {# only Instructors can offer feedback on Journal #}
+                        {% if role == "Instructor" %}
+                            <a class="btn btn-primary btn-sm  comment_ajax"
+                               data-id="comment{{ doc.id }}"
+                               href="#"
+                               data-request="{{ course_path('comment_ajax_new', {'docid': doc.id, 'source': 'journal'}) }}"
+                            >Create End Comment</a>
+                            <div id="comment{{ doc.id }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -220,14 +232,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="card-text">The <strong>Journal</strong> is a private writing space for students that is only visible to the student and the instructor.</p>
+                    <p class="card-text">The <strong>Journal</strong> is a private writing space for students that is
+                        only visible to the student and the instructor.</p>
                     {% if role=='Instructor' %}
-                    <p class="card-text"><strong>Give End Comment</strong> allows you to attach a holistic comment.</p>
-                    <p class="card-text"><strong>Submit Grade to eLC</strong> will send a grade and a comment to eLC's
-                        gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home page to
-                        create the eLC grade column. </p>
+                        <p class="card-text"><strong>Give End Comment</strong> allows you to attach a holistic comment.
+                        </p>
+                        <p class="card-text"><strong>Submit Grade to eLC</strong> will send a grade and a comment to
+                            eLC's
+                            gradebook. Before you submit a grade, go to "eLC Gradebook Setup" on the eLW course home
+                            page to
+                            create the eLC grade column. </p>
                     {% endif %}
-                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or
+                        visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
                 <div class="modal-footer">
@@ -249,11 +266,28 @@
                     url: request, success: function (result) {
                         $(target).html(result);
                     },
-                    error:function (xhr, ajaxOptions, thrownError){
-                    if(xhr.status===404) {
-                        $(target).html('<p>Grade Column was not found</p>');
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        if (xhr.status === 404) {
+                            $(target).html('<p>Grade Column was not found</p>');
+                        }
                     }
-                }
+                });
+                $(this).hide();
+            });
+
+            // New or edit comments via ajax
+            $(".comment_ajax").click(function () {
+                var request = $(this).attr('data-request')
+                var target = '#' + $(this).attr('data-id');
+                $.ajax({
+                    url: request, success: function (result) {
+                        $(target).replaceWith(result);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        if (xhr.status === 404) {
+                            $(target).html('<p>Unable to load comment form.</p>');
+                        }
+                    }
                 });
                 $(this).hide();
             });

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Form\CommentJournalType;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\DocRepository;
@@ -17,6 +18,49 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommentController extends AbstractController
 {
+
+    /**
+     * @Route("/{courseid}/{docid}/{source}/ajax_new", name="comment_ajax_new", methods={"GET","POST"})
+     */
+    public function ajax_new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
+    {
+        $username = $this->getUser()->getUsername();
+        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $role = $permissions->getCourseRole($courseid);
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $comment = new Comment();
+        if ($role=='Instructor' and $source=='doc') {
+            $comment->setAccess('Hidden');
+        }
+        if ($source=='journal') {
+            $comment->setAccess('Private');
+        }
+        $comment->setUser($user);
+        $comment->setDoc($doc);
+        $comment->setType('Holistic Feedback');
+        $form = $this->createForm(CommentJournalType::class, $comment, ['action' => $this->generateUrl('comment_ajax_new', ['courseid' => $courseid, 'docid' => $doc->getId(), 'source' => $source]),
+            'method' => 'POST',]          );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            $this->addFlash('notice', 'Your end comment has been added.');
+            if ($source!='doc') {
+                return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
+            }
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+        }
+
+        return $this->render('comment/ajax.html.twig', [
+            'form' => $form->createView(),
+            'comment' => $comment,
+            'doc' => $doc,
+            'courseid' => $courseid,
+        ]);
+    }
+
 
     /**
      * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
@@ -49,7 +93,7 @@ class CommentController extends AbstractController
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
-                return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
+                return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
             }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
@@ -64,6 +108,44 @@ class CommentController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/{courseid}/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
+     */
+    public function ajax_edit(Request $request, Comment $comment, $docid, $courseid, $source): Response
+    {
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $form = $this->createForm(CommentJournalType::class, $comment );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('notice', 'Your end comment has been updated.');
+            if ($source!='doc') {
+                return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
+            }
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+        }
+
+        return $this->render('comment/ajax.html.twig', [
+            'form' => $form->createView(),
+            'comment' => $comment,
+            'doc' => $doc,
+            'courseid' => $courseid,
+        ]);
+    }
+
+
+    /**
+     * @Route("/{docid}/ajax_show", name="comment_ajax_show", methods={"GET","POST"})
+     */
+    public function ajax_show(string $docid): Response
+    {
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        return $this->render('comment/ajax_show.html.twig', [
+            'doc' => $doc,
+            'courseid' => $doc->getCourse()->getId(),
+        ]);
+    }
 
     /**
      * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
