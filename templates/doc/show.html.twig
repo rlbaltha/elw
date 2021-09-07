@@ -297,7 +297,7 @@
                             <a class="btn btn-primary btn-sm ltiresult"
                                data-id="lti{{ review.id }}"
                                href="#"
-                               data-request="{{ course_path('ags_score_view', {'docid': review.id}) }}"
+                               data-request="{{ course_path('ags_score_view', {'docid': review.id, 'source': 'doc'}) }}"
                             >View Score</a>
                             <div id="lti{{ review.id }}">
 
@@ -406,9 +406,9 @@
                         instead of
                         on the original document.</p>
                     {% if role=='Instructor' %}
-                    <p><strong>Submit Grade to eLC</strong> is an instructor button that will send a
-                        grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
-                        on the eLW course home page to create the eLC grade column. </p>
+                        <p><strong>Submit Grade to eLC</strong> is an instructor button that will send a
+                            grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
+                            on the eLW course home page to create the eLC grade column. </p>
                     {% endif %}
                     <p><strong>Create PDF</strong> will create a pdf that mirrors the HTML document. Our PDF download
                         files
