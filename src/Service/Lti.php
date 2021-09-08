@@ -65,6 +65,8 @@ class Lti
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
+//        Need to add error capture here for
+
         $data = json_decode($response->getBody()->__toString(), true);
         return $data;
     }
