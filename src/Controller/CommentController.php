@@ -114,14 +114,18 @@ class CommentController extends AbstractController
     public function ajax_edit(Request $request, Comment $comment, $docid, $courseid, $source): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $form = $this->createForm(CommentJournalType::class, $comment );
+        $form = $this->createForm(CommentJournalType::class, $comment, [
+            'action' => $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(), 'courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]),
+            'method' => 'POST',
+        ] );
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your end comment has been updated.');
             if ($source!='doc') {
-                return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
+                $return = "success";
+                return new Response($return, 200, array('Content-Type' => 'application/json'));
             }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
@@ -133,6 +137,7 @@ class CommentController extends AbstractController
             'courseid' => $courseid,
         ]);
     }
+
 
 
     /**

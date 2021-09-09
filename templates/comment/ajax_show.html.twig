@@ -1,6 +1,6 @@
 {# twig template for ajax fragment#}
 
-{% for comment in doc.comments %}
+{% for comment in comments %}
 <div id="comment{{ comment.id }}" class="card mt-3">
     <div class="card-header">
         {% if comment.access=='Hidden' %}

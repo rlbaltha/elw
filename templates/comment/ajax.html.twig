@@ -24,15 +24,20 @@
 
 <script>
     $(document).ready(function () {
-        //  Submit comment form via ajax
-        $("form").on("submit", function (event) {
-            event.preventDefault();
-
-            $.post("{{ path('comment_ajax_edit', {'courseid': courseid, 'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}", formValues, function (data) {
-                // Display the returned data in browser
-                $("#comment{{ doc.id }}").html(data);
-            });
+        $("#ajax_submit").click(function () {
+            $("#ajax").submit();
         });
+        // // Submit ajax comment
+        // $("#ajax").submit(function(e) {
+        //     e.preventDefault();
+        //     var form = $(this);
+        //     var url = form.attr('action');
+        //     $.ajax({
+        //         type: "POST",
+        //         url: url,
+        //         data: form.serialize(), // serializes the form's elements.
+        //     });
+        // });
     });
 </script>
 
