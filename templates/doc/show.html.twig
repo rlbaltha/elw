@@ -214,6 +214,9 @@
                         <div class="card-header">
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
+                                <span class="badge badge-primary" style="background:black">Hidden</span>
+                            {% elseif comment.access=='Private' %}
+                                <span class="badge badge-primary" style="background:darkred">Private</span>
                             {% endif %}
                             {% if app.user == comment.user %}
                                 <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
@@ -389,13 +392,11 @@
                                             <span class="badge badge-primary" style="background:black">Hidden</span>
                                         {% elseif comment.access=='Private' %}
                                             <span class="badge badge-primary" style="background:darkred">Private</span>
-                                        {% elseif comment.access=='Shared' %}
-                                            <span class="badge badge-primary" style="background:darkgreen">Shared</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-right"
                                                href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                                Feedback</a>
+                                                Comment</a>
                                         {% endif %}
                                     </div>
                                     <div class="card-body">
