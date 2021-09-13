@@ -215,8 +215,6 @@
                             {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                             {% if comment.access=='Hidden' %}
                                 <span class="badge badge-primary" style="background:black">Hidden</span>
-                            {% elseif comment.access=='Private' %}
-                                <span class="badge badge-primary" style="background:darkred">Private</span>
                             {% endif %}
                             {% if app.user == comment.user %}
                                 <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
@@ -384,14 +382,12 @@
 
                         {# Comments for review #}
                         {% for comment in review.comments %}
-                            {% if comment.access == 'Shared' or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
+                            {% if comment.user == app.user or (comment.access == 'Private' and (app.user == doc.user  or app.user==review.user)) or role == 'Instructor' %}
                                 <div class="card mt-3">
                                     <div class="card-header">
                                         {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                         {% if comment.access=='Hidden' %}
                                             <span class="badge badge-primary" style="background:black">Hidden</span>
-                                        {% elseif comment.access=='Private' %}
-                                            <span class="badge badge-primary" style="background:darkred">Private</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-right"
