@@ -24,20 +24,19 @@
 
 <script>
     $(document).ready(function () {
+        // submit form comments via ajax
         $("#ajax_submit").click(function () {
-            $("#ajax").submit();
+            var form = $('#ajax');
+            var target = '#comment{{ doc.id }}';
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function (result) {
+                    $(target).replaceWith(result);
+                },
+            });
         });
-        // // Submit ajax comment
-        // $("#ajax").submit(function(e) {
-        //     e.preventDefault();
-        //     var form = $(this);
-        //     var url = form.attr('action');
-        //     $.ajax({
-        //         type: "POST",
-        //         url: url,
-        //         data: form.serialize(), // serializes the form's elements.
-        //     });
-        // });
     });
 </script>
 
