@@ -20,22 +20,42 @@
 </style>
 
 <hr/>
-{{ include('comment/_form.html.twig') }}
+<div id="comment{{ doc.id }}">
+    <div id="loading_alert" class="alert alert-info" style="display: none;">Loading</div>
+    {{ include('comment/_form.html.twig') }}
+</div>
+
 
 <script>
     $(document).ready(function () {
         // submit form comments via ajax
-        $("#ajax_submit").click(function () {
-            var form = $('#ajax');
-            var target = '#comment{{ doc.id }}';
+        $(".ajax_submit").click(function (e) {
+            $("#loading_alert").show();
+            for ( instance in CKEDITOR.instances )
+                CKEDITOR.instances[instance].updateElement();
             $.ajax({
-                url: form.attr('action'),
+                url: '{{ request_url }}',
                 method: 'POST',
-                data: form.serialize(),
-                success: function (result) {
-                    $(target).replaceWith(result);
-                },
+                data: $('form#ajax').serialize(),
             });
+
+            setTimeout(
+                function()
+                {
+                    var request = "{{ path('comment_ajax_show', {'docid': doc.id}) }}";
+                    var target = "#comment{{ doc.id }}"
+                    $.ajax({
+                        url: request, success: function (result) {
+                            $(target).replaceWith(result);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            if (xhr.status === 404) {
+                                $(target).html('<p>Unable to load comment form.</p>');
+                            }
+                        }
+                    });
+                }, 500);
+
         });
     });
 </script>

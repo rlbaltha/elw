@@ -9,9 +9,11 @@ use App\Repository\CommentRepository;
 use App\Repository\DocRepository;
 use App\Service\Permissions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route("/comment")
@@ -111,15 +113,15 @@ class CommentController extends AbstractController
     /**
      * @Route("/{courseid}/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
      */
-    public function ajax_edit(Request $request, Comment $comment, $docid, $courseid, $source): Response
+    public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $courseid, string $source, string $id): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $form = $this->createForm(CommentJournalType::class, $comment, [
-            'action' => $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(), 'courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]),
+            'action' => '#',
             'method' => 'POST',
         ] );
         $form->handleRequest($request);
-
+        $request_url = $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(), 'courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -133,6 +135,7 @@ class CommentController extends AbstractController
         return $this->render('comment/ajax.html.twig', [
             'form' => $form->createView(),
             'comment' => $comment,
+            'request_url' => $request_url,
             'doc' => $doc,
             'courseid' => $courseid,
         ]);

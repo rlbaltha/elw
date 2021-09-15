@@ -261,7 +261,7 @@
         $(document).ready(function () {
             $(".ltiresult").each(function () {
                 var request = $(this).attr('data-request')
-                var target = '#' + $(this).attr('data-id');
+                var target = '#' + $(this).attr('data-id')
                 $.ajax({
                     url: request, success: function (result) {
                         $(target).html(result);

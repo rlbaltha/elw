@@ -1,5 +1,5 @@
 {{ form_start(form, {'attr': {'class': 'd-inline', 'id':'ajax'}}) }}
     {{ form_widget(form) }}
-    <button aria-label="{% if comment is defined %}Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}{% else %}Submit{% endif %}" class="btn btn-primary btn-sm">{{ button_label|default('Submit') }}</button>
+{#    <button aria-label="{% if comment is defined %}Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}{% else %}Submit{% endif %}" class="btn btn-primary btn-sm">{{ button_label|default('Submit') }}</button>#}
 {{ form_end(form) }}
-{#<a class="btn btn-primary" href="javascript:void(0);" id="ajax_submit">Save</a>#}
+<a class="btn btn-primary ajax_submit" href="#">Save</a>
