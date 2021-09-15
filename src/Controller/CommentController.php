@@ -111,9 +111,9 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
+     * @Route("/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
      */
-    public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $courseid, string $source, string $id): Response
+    public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $source, string $id): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         $form = $this->createForm(CommentJournalType::class, $comment, [
@@ -121,7 +121,7 @@ class CommentController extends AbstractController
             'method' => 'POST',
         ] );
         $form->handleRequest($request);
-        $request_url = $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(), 'courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]);
+        $request_url = $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(),  'docid'=> $docid, 'source'=> $source]);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -129,7 +129,7 @@ class CommentController extends AbstractController
                 $return = "success";
                 return new Response($return, 200, array('Content-Type' => 'application/json'));
             }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(),  'target' => $doc->getId()]);
         }
 
         return $this->render('comment/ajax.html.twig', [
@@ -137,7 +137,6 @@ class CommentController extends AbstractController
             'comment' => $comment,
             'request_url' => $request_url,
             'doc' => $doc,
-            'courseid' => $courseid,
         ]);
     }
 
