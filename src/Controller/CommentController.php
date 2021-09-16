@@ -30,6 +30,7 @@ class CommentController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $request_url = $this->generateUrl('comment_ajax_new', ['courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
@@ -60,55 +61,11 @@ class CommentController extends AbstractController
             'comment' => $comment,
             'doc' => $doc,
             'courseid' => $courseid,
+            'request_url' => $request_url,
         ]);
     }
 
 
-    /**
-     * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
-     */
-    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
-    {
-
-        $header = 'End Comment New';
-        $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $role = $permissions->getCourseRole($courseid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $comment = new Comment();
-        if ($role=='Instructor' and $source=='doc') {
-            $comment->setAccess('Hidden');
-        }
-        if ($source=='journal') {
-            $comment->setAccess('Private');
-        }
-        $comment->setUser($user);
-        $comment->setDoc($doc);
-        $comment->setType('Holistic Feedback');
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            $this->addFlash('notice', 'Your end comment has been added.');
-            if ($source!='doc') {
-                return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
-            }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
-        }
-
-        return $this->render('comment/new.html.twig', [
-            'comment' => $comment,
-            'doc' => $doc,
-            'course' => $course,
-            'role' => $role,
-            'header' => $header,
-            'form' => $form->createView(),
-        ]);
-    }
 
     /**
      * @Route("/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
@@ -143,48 +100,20 @@ class CommentController extends AbstractController
 
 
     /**
-     * @Route("/{docid}/ajax_show", name="comment_ajax_show", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/ajax_show", name="comment_ajax_show", methods={"GET","POST"})
      */
-    public function ajax_show(string $docid): Response
+    public function ajax_show(Permissions $permissions, string $docid, string $courseid): Response
     {
+        $role = $permissions->getCourseRole($courseid);
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
         return $this->render('comment/ajax_show.html.twig', [
             'doc' => $doc,
             'courseid' => $doc->getCourse()->getId(),
-        ]);
-    }
-
-    /**
-     * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
-    {
-        $header = 'End Comment Edit';
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $role = $permissions->getCourseRole($courseid);
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your end comment has been updated.');
-            if ($source!='doc') {
-                return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
-            }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
-        }
-
-        return $this->render('comment/edit.html.twig', [
-            'comment' => $comment,
-            'header' => $header,
-            'doc' => $doc,
-            'course' => $course,
             'role' => $role,
-            'source' => $source,
-            'form' => $form->createView(),
         ]);
     }
+
+
 
     /**
      *  Release All Hidden
@@ -232,4 +161,84 @@ class CommentController extends AbstractController
         }
         return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
+
+    //    /**
+//     * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
+//     */
+//    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
+//    {
+//
+//        $header = 'End Comment New';
+//        $username = $this->getUser()->getUsername();
+//        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+//        $role = $permissions->getCourseRole($courseid);
+//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+//        $comment = new Comment();
+//        if ($role=='Instructor' and $source=='doc') {
+//            $comment->setAccess('Hidden');
+//        }
+//        if ($source=='journal') {
+//            $comment->setAccess('Private');
+//        }
+//        $comment->setUser($user);
+//        $comment->setDoc($doc);
+//        $comment->setType('Holistic Feedback');
+//        $form = $this->createForm(CommentType::class, $comment);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($comment);
+//            $entityManager->flush();
+//            $this->addFlash('notice', 'Your end comment has been added.');
+//            if ($source!='doc') {
+//                return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
+//            }
+//            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+//        }
+//
+//        return $this->render('comment/new.html.twig', [
+//            'comment' => $comment,
+//            'doc' => $doc,
+//            'course' => $course,
+//            'role' => $role,
+//            'header' => $header,
+//            'form' => $form->createView(),
+//        ]);
+//    }
+
+//    /**
+//     * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
+//     */
+//    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
+//    {
+//        $header = 'End Comment Edit';
+//        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+//        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        $role = $permissions->getCourseRole($courseid);
+//        $form = $this->createForm(CommentType::class, $comment);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $this->getDoctrine()->getManager()->flush();
+//            $this->addFlash('notice', 'Your end comment has been updated.');
+//            if ($source!='doc') {
+//                return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
+//            }
+//            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+//        }
+//
+//        return $this->render('comment/edit.html.twig', [
+//            'comment' => $comment,
+//            'header' => $header,
+//            'doc' => $doc,
+//            'course' => $course,
+//            'role' => $role,
+//            'source' => $source,
+//            'form' => $form->createView(),
+//        ]);
+//    }
+
+
 }
