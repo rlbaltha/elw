@@ -228,7 +228,7 @@
 
                         <div class="card-footer">
                             {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                            <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                            <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                         </div>
                     </div>
                 {% endif %}
@@ -399,7 +399,7 @@
                                     </div>
                                     <div class="card-footer">
                                         {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                        <span class="float-right">Posted: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                        <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                                     </div>
                                 </div>
                             {% endif %}

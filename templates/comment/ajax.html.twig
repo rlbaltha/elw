@@ -1,0 +1,61 @@
+{# twig template for ajax fragment #}
+
+<div id="comment{{ doc.id }}">
+    <style>
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) {
+
+            div.document-editor {
+                min-width: 100%;
+            }
+
+            .document-editor {
+                width: 100%;
+                margin: 0;
+                font-size: 16px;
+                font-family: "Nunito Sans", Verdana, Helvetica, sans-serif;
+            }
+        }
+    </style>
+    <div id="loading_alert" class="alert alert-info" style="display: none;">Loading</div>
+    <hr/>
+    {{ include('comment/_ajaxform.html.twig') }}
+
+    <script>
+        $(document).ready(function () {
+            // submit form comments via ajax
+            $(".ajax_submit").click(function (e) {
+                $("#loading_alert").fadeIn();
+                for ( instance in CKEDITOR.instances )
+                    CKEDITOR.instances[instance].updateElement();
+                $.ajax({
+                    url: '{{ request_url }}',
+                    method: 'POST',
+                    data: $('form#ajax').serialize(),
+                });
+                setTimeout(
+                    function()
+                    {
+                        var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
+                        var target = "#comment{{ doc.id }}"
+                        $.ajax({
+                            url: request, success: function (result) {
+                                $(target).replaceWith(result);
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                if (xhr.status === 404) {
+                                    $(target).html('<p>Unable to load comment form.</p>');
+                                }
+                            }
+                        });
+                    }, 500);
+            });
+        });
+    </script>
+</div>
+
+
+
+
+
+
