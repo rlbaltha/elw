@@ -2,6 +2,14 @@
 
 {% block title %}eLW Home - {{ parent() }}{% endblock %}
 
+
+{% block subnavright %}
+    <li class="nav-item">
+        <a id="login_trigger" class="nav-link" href="#">Admin</a>
+    </li>
+{% endblock %}
+
+
 {% block body %}
     <div class="jumbotron">
         <h1 class="display-4" style='color:#ba0c2f; font-family: "serif"; '>eLearning for Writers</h1>
@@ -9,34 +17,49 @@
                                                                                           style="opacity: 0">Write better.</span>
         </p>
         <hr class="my-4">
-        <span class="alert alert-info">{{ login_note|raw }}</span>
+        <h2 class="display-5"  style='color:#000; font-family: "serif"; '>{{ login_note|raw }}</h2>
     </div>
 
-    <h1 class="h3 mb-3 font-weight-normal">Admin Access</h1>
-    <form method="post" class="form-inline">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
+    <div id="login" style="display: none">
+
+        <h1 class="h3 mb-3 font-weight-normal">Admin Access</h1>
+        <form method="post" class="form-inline">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
 
 
-        <label for="inputUsername">Username</label>
-        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required
-               autofocus>
-        <label for="inputPassword">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" required>
+            <label for="inputUsername">Username</label>
+            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
+                   required
+                   autofocus>
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" required>
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}">
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+            <button class="btn btn-lg btn-primary" type="submit">
+                Sign in
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $("#login_trigger").click(function () {
+            $("#login").toggle();
+        });
+    </script>
+
 {% endblock %}
