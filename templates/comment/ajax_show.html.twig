@@ -2,6 +2,7 @@
 
 <div id="comment{{ doc.id }}" class="card mt-3">
     {% for comment in doc.comments %}
+        <div id="loading_alert" class="alert alert-info" style="display: none;">Loading</div>
         <div class="card-header">
             {% if comment.access=='Hidden' %}
                 <span class="badge badge-primary" style="background:black">Hidden</span>
@@ -38,6 +39,7 @@
 <script>
     // New or edit comments via ajax
     $(".comment_ajax").click(function () {
+        $("#loading_alert").fadeIn();
         var request = $(this).attr('data-request')
         var target = '#' + $(this).attr('data-id');
         $.ajax({
