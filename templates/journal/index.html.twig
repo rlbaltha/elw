@@ -163,6 +163,7 @@
             <h2>Feedback</h2>
             <hr/>
             {% if doc %}
+                {#  ajax call to show LTI grades  #}
                 {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
                     <a class="btn btn-primary btn-sm ltiresult"
                        data-id="lti{{ doc.id }}"
