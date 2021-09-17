@@ -348,7 +348,7 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/pdf", name="doc_pdf", methods={"GET"})
+     * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
     public function pdf(Permissions $permissions, Request $request)
     {

@@ -146,7 +146,6 @@
                             <p>Created: {{ doc.created | date("M j, Y g:ia") }}</p>
                             <p>Updated: {{ doc.updated | date("M j, Y g:ia") }}</p>
                             <p>Word Count: {{ doc.wordcount }}</p>
-                            </p>
                         </div>
                     </div>
             </div>
@@ -250,7 +249,7 @@
             {% endfor %}
         </div>
     </div>
-
+    </div>
     {# #################################### Reviews ######################################################## #}
     {# #################################### Reviews ######################################################## #}
     {# #################################### Reviews ######################################################## #}
@@ -452,14 +451,10 @@
     </div>
 
     {# form for pdf creation #}
-    <form id="pdf_form" name="pdf_form" action="{{ course_path('doc_pdf') }}" aria-hidden="true">
-
+    <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true">
         <input type="text" id="docid" name="docid" value="" aria-hidden="true">
-
         <input type="text" name="courseid" value="{{ course.id }}" aria-hidden="true">
-
-        <input type="text" id="html2pdf" name="html2pdf" value="" aria-hidden="true">
-
+        <textarea id="html2pdf" name="html2pdf" rows="2" cols="10" aria-hidden="true"></textarea>
         <input type="text" name="title" value="{{ doc.title }}" aria-hidden="true">
     </form>
 {% endblock %}
