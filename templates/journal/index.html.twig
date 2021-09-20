@@ -39,8 +39,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% for classlist in classlists %}
                                     <a class="dropdown-item"
-                                       href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index': loop.index}) }}">{{ classlist.user.lastname }}
-                                        , {{ classlist.user.firstname }}</a>
+                                       href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index': loop.index}) }}">{{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
                                 {% endfor %}
                             </div>
                         </li>
@@ -52,24 +51,16 @@
 
                 </ul>
                 {% if role=='Instructor' %}
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="next_prev navbar-nav ml-auto" style="display: none">
+                        <li class="nav-item"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i></li>
                         {% for classlist in classlists %}
-                            <li class="nav-item classlist_prev" id="prev{{ loop.index }}">
+                            <li class="nav-item classlist" data-id="{{ classlist.user.id }}" id="{{ loop.index }}">
                                 <a class="mr-2"
                                    href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">
-                                    <i class="fa fa-arrow-left" aria-hidden="true"></i> {{ classlist.user.lastname }}
-                                    , {{ classlist.user.firstname }}</a>
+                                    {{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
                             </li>
                         {% endfor %}
-
-                        {% for classlist in classlists %}
-                            <li class="nav-item classlist_next ml-3" id="next{{ loop.index }}">
-                                <a class=""
-                                   href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">{{ classlist.user.lastname }}
-                                    , {{ classlist.user.firstname }} <i class="fa fa-arrow-right"
-                                                                        aria-hidden="true"></i></a>
-                            </li>
-                        {% endfor %}
+                        <li class="nav-item"><i class="fa fa-arrow-right" aria-hidden="true"></i></li>
                     </ul>
                 {% endif %}
             </div>
@@ -265,13 +256,22 @@
                     }, 10);
                 {% endif %}
 
+                {# next previous student #}
+                $('.classlist').hide();
+                $('.fa').hide();
+                let dataid = {{ app.request.get('userid') }};
+                let selector_current ='li[data-id=' + dataid + ']';
+                let id_current = parseInt($(selector_current).attr('id')) ;
+                let id_next = id_current + 1;
+                let id_prev = id_current - 1;
+                let selector_next ='li[id=' + id_next + ']';
+                let selector_prev ='li[id=' + id_prev + ']';
+                $(selector_next).show();
+                if (id_next <= {{ classlists|length }}) {$('.fa-arrow-right').show()};
+                              $(selector_prev).show();
+                if (id_prev > 0) {$('.fa-arrow-left').show()};
+                $('.next_prev').show();
 
-                $('.classlist_next').hide();
-                let next = '#next' + ({{ index }} +1);
-                $(next).show();
-                $('.classlist_prev').hide();
-                let prev = '#prev' + ({{ index }} -1);
-                $(prev).show();
                 {# toggle help on this page #}
                 $("#help_card").toggle();
                 $("#help-toggle").click(function () {

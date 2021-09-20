@@ -30,7 +30,27 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col"></div>
+            <div class="col">
+                <h2>Classlist Count by Term</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Year</td>
+                        <td>Semester</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for term in classlist_count %}
+                        <tr>
+                            <td>{{ term.year }}</td>
+                            <td>{{ term.semester }}</td>
+                            <td>{{ term.termcount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

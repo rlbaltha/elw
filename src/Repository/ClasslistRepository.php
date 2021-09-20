@@ -51,4 +51,18 @@ class ClasslistRepository extends ServiceEntityRepository
         }
     }
 
+    public function countByTerm()
+    {
+            return $this->createQueryBuilder('c')
+                ->join('c.course', 'cr')
+                ->join('cr.term', 't')
+                ->select('t.id, t.year, t.semester, count(t.id) as termcount')
+                ->groupBy('t.id')
+                ->orderBy('t.id', 'DESC')
+                ->getQuery()
+                ->getResult()
+                ;
+    }
+
+
 }
