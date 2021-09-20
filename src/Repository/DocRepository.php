@@ -198,5 +198,35 @@ class DocRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    public function countJournalByTerm()
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.course', 'cr')
+            ->join('cr.term', 't')
+            ->andWhere('d.access = :val')
+            ->select('t.id, t.year, t.semester, count(t.id) as termcount')
+            ->groupBy('t.id')
+            ->orderBy('t.id', 'DESC')
+            ->setParameter('val', 'Journal')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function countDocsByTerm()
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.course', 'cr')
+            ->join('cr.term', 't')
+            ->andWhere('d.access != :val')
+            ->select('t.id, t.year, t.semester, count(t.id) as termcount')
+            ->groupBy('t.id')
+            ->orderBy('t.id', 'DESC')
+            ->setParameter('val', 'Journal')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
 }
