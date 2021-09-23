@@ -49,7 +49,27 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
+                <h2>Rubrics used in {{ term.semester }} {{ term.year }}</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Rubric</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rubric in rubric_count %}
+                        <tr>
+                            <td>{{ rubric.name }}</td>
+                            <td>{{ rubric.rubriccount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
+
+
             <div class="col">
                 <h2>Classlist Count by Term</h2>
                 <table class="table">

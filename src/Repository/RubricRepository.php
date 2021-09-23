@@ -37,32 +37,19 @@ class RubricRepository extends ServiceEntityRepository
             ;
     }
 
-    // /**
-    //  * @return Rubric[] Returns an array of Rubric objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function countRubricsByTerm($termid)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('r.projects', 'p')
+            ->join('p.course', 'cr')
+            ->join('cr.term', 't')
+            ->andWhere('t.id = :termid')
+            ->select('r.id, r.name,  count(r.id) as rubriccount')
+            ->groupBy('r.id')
+            ->setParameter('termid', $termid)
+            ->orderBy('r.name', 'DESC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Rubric
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -17,11 +17,15 @@ class DataController extends AbstractController
         $classlist_count = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->countByTerm();
         $doc_count = $this->getDoctrine()->getManager()->getRepository('App:Doc')->countDocsByTerm();
         $journal_count = $this->getDoctrine()->getManager()->getRepository('App:Doc')->countJournalByTerm();
+        $term = $this->getDoctrine()->getManager()->getRepository('App:Term')->findOneBy(['status'=>'Default']);
+        $rubric_count = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->countRubricsByTerm($term->getId());
         return $this->render('data/index.html.twig', [
             'course_count' => $course_count,
             'classlist_count' => $classlist_count,
             'doc_count' => $doc_count,
             'journal_count' => $journal_count,
+            'rubric_count' => $rubric_count,
+            'term' => $term,
         ]);
     }
 }
