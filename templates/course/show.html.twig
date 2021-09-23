@@ -61,127 +61,133 @@
 {#    {% endif %}#}
 
     {% if role=='Instructor' %}
-        {# Classlist #}
-        <div class="card mb-3">
-            <div class="card-header">
-                <h2 id="classlist-toggle" class="card-title pointer">Classlist <i id='classlist-arrows'
-                                                                                  class="fa fa-chevron-up small"></i>
-                </h2>
-                <a class="btn btn-primary btn-sm nrps"
-                   href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
-                    Classlist</a>
-            </div>
-            <div class="card-body">
-                <div class="row" id="classlist-row">
-                    <table id="classlist" class="table">
-                        <thead class="">
-                        <tr>
-                            <th>Students</th>
-                            <th>Role</th>
-                            <th>Actions</th>
-                        </tr>
-                        <thead>
-                        <tbody>
-                        {% for classlist in classlists %}
-                            <tr>
-                                <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
-                                <td>{{ classlist.role }}</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm"
-                                       href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
-                                    {{ include('classlist/_delete_form.html.twig') }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="col" id="nrps"></div>
-                </div>
-            </div>
-        </div>
-
-        {# Projects #}
-        <div class="card mb-3">
-            <div class="card-header">
-                <h2 id="projects-toggle" class="card-title pointer">Projects <i id='projects-arrows'
-                                                                                class="fa fa-chevron-up small"></i></h2>
-                <a aria-label="View and edit Stages" class="btn btn-primary btn-sm"
-                   href="{{ path('stage_index') }}">Stages</a>
-                <a aria-label="View and edit Markup" class="btn btn-primary btn-sm"
-                   href="{{ path('markupset_byuser') }}">Markup</a>
-                <a aria-label="View and edit Rubric Blocks" class="btn btn-primary btn-sm"
-                   href="{{ path('rubric_index') }}">Rubric Blocks</a>
-                <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm"
-                   href="{{ path('project_new', {'courseid': course.id}) }}">Add
-                    Project</a>
-            </div>
-
-            {% if course.projects %}
-                <div class="card-body">
-                    <div class="row" id="projects-row">
-                        {# new project config #}
-                        {% for project in course.projects %}
-                            <div class="col-sm-3">
-                                <div class="card mb-3">
-                                    <div class="card-header text-white" style="background-color: {{ project.color }}">
-                                        <h5 class="card-title d-inline">{{ project.name }}</h5>
-                                        <a aria-label="Edit Project {{ project.name }}"
-                                           class="btn btn-primary btn-sm float-right"
-                                           href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
-                                            Edit</a>
-                                    </div>
-                                    <div class="card-body">
-                                        <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
-                                            <button class="btn btn-secondary btn-sm"
-                                                    style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
-                                        </p>
-                                        <p>
-                                            Rubric
-                                            Blocks: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
-                                        <p>
-                                            Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                        </p>
-                                        <p>
-                                            Gradebook
-                                            Column(s): {% if project.ltigrades %}{% for grade in project.ltigrades %}{{ grade.label }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+        <div class="row">
+            <div class="col-lg-4">
+                {# Classlist #}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h2 id="classlist-toggle" class="card-title pointer">Classlist <i id='classlist-arrows'
+                                                                                          class="fa fa-chevron-up small"></i>
+                        </h2>
+                        <a class="btn btn-primary btn-sm nrps"
+                           href="#" data-request="{{ path('lti_nrps', {'courseid': course.id}) }}">Compare to eLC
+                            Classlist</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="classlist-row">
+                            <table id="classlist" class="table">
+                                <thead class="">
+                                <tr>
+                                    <th>Students</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                {% for classlist in classlists %}
+                                    <tr>
+                                        <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
+                                        <td>{{ classlist.role }}</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm"
+                                               href="{{ path('classlist_edit', {'id': classlist.id}) }}">Edit</a>
+                                            {{ include('classlist/_delete_form.html.twig') }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="" id="nrps"></div>
                     </div>
                 </div>
-            {% endif %}
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2 id="gradebook-toggle" class="card-title pointer">Gradebook Columns <i id='gradebook-arrows'
-                                                                                          class="fa fa-chevron-up small"></i>
-                </h2>
-                <a class="btn btn-primary btn-sm"
-                   href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
-                    Column</a>
             </div>
-            <div class="card-body">
-                <div class="row" id="gradebook-row">
-                    <table class="table">
-                        <thead class="">
-                        <tr>
-                            <th scope="col">Label</th>
-                            <th scope="col">Max Score</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for lineitem in course.ltiAgs %}
-                            <tr>
-                                <td>{{ lineitem.label }}</td>
-                                <td>{{ lineitem.max }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="col-lg-8">
+                {# Projects #}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h2 id="projects-toggle" class="card-title pointer">Projects <i id='projects-arrows'
+                                                                                        class="fa fa-chevron-up small"></i></h2>
+                        <a aria-label="View and edit Stages" class="btn btn-primary btn-sm"
+                           href="{{ path('stage_index') }}">Stages</a>
+                        <a aria-label="View and edit Markup" class="btn btn-primary btn-sm"
+                           href="{{ path('markupset_byuser') }}">Markup</a>
+                        <a aria-label="View and edit Rubric Blocks" class="btn btn-primary btn-sm"
+                           href="{{ path('rubric_index') }}">Rubric Blocks</a>
+                        <a aria-label="Add project to {{ course.name }}" class="btn btn-primary btn-sm"
+                           href="{{ path('project_new', {'courseid': course.id}) }}">Add
+                            Project</a>
+                    </div>
+
+                    {% if course.projects %}
+                        <div class="card-body">
+                            <div class="row" id="projects-row">
+                                {# new project config #}
+                                {% for project in course.projects %}
+                                    <div class="col-lg-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header text-white" style="background-color: {{ project.color }}">
+                                                <h5 class="card-title d-inline">{{ project.name }}</h5>
+                                                <a aria-label="Edit Project {{ project.name }}"
+                                                   class="btn btn-primary btn-sm float-right"
+                                                   href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
+                                                    Edit</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Stages:{% if project.stages %}  {% for stage in project.stages %}
+                                                    <button class="btn btn-secondary btn-sm"
+                                                            style="background:{{ stage.color }}">{{ stage.name }}</button> {% endfor %}{% endif %}
+                                                </p>
+                                                <p>
+                                                    Rubric
+                                                    Blocks: {% if project.rubrics %}  {% for rubric in project.rubrics %}{{ rubric.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
+                                                <p>
+                                                    Markup: {% if project.markupsets %}{% for markupset in project.markupsets %}{{ markupset.name }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                                </p>
+                                                <p>
+                                                    Gradebook
+                                                    Column(s): {% if project.ltigrades %}{% for grade in project.ltigrades %}{{ grade.label }}{% if not loop.last %}, {% endif %} {% endfor %}{% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="gradebook-toggle" class="card-title pointer">Gradebook Columns <i id='gradebook-arrows'
+                                                                                                  class="fa fa-chevron-up small"></i>
+                        </h2>
+                        <a class="btn btn-primary btn-sm"
+                           href="{{ path('ags_new', {'courseid': course.id}) }}">Create Gradebook
+                            Column</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="gradebook-row">
+                            <table class="table">
+                                <thead class="">
+                                <tr>
+                                    <th scope="col">Label</th>
+                                    <th scope="col">Max Score</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for lineitem in course.ltiAgs %}
+                                    <tr>
+                                        <td>{{ lineitem.label }}</td>
+                                        <td>{{ lineitem.max }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     {% endif %}
