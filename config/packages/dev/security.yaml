@@ -24,6 +24,7 @@ security:
           - App\Security\LoginFormAuthenticator
       logout:
         path: app_logout
+        target: /app_login
       switch_user: true
 
   # Easy way to control access for large sections of your site

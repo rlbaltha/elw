@@ -44,12 +44,12 @@
                 $('#journal_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
-            {# Delete doc trigger#}
+            {# Delete doc trigger #}
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
             });
 
-            {# Doc autosave#}
+            {# Doc autosave #}
             $('#saving_alert').hide();
             var editor = CKEDITOR.instances.journal_body;
             var autoSave = setInterval(function () {
@@ -65,6 +65,21 @@
                     $('#saving_alert').delay(3000).fadeOut();
                 }
             }, 15000);
+            {% block timeout %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            sessionTimeout({
+                warnAfter: 1800000,
+                timeOutAfter: 2100000,
+                logOutUrl: '/logout',
+                message: 'Are you still working?  Please remember to save regularly.',
+                stayConnectedBtnText: "Keep Working",
+                logOutBtnText: "Log Out",
+                titleText: "Activity Check",
+                timeOutUrl: "/logout"
+            });
+            {% endif %}
+            {% endblock %}
         });
     </script>
+
 {% endblock %}

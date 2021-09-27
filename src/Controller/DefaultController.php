@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class DefaultController extends AbstractController
@@ -21,5 +25,14 @@ class DefaultController extends AbstractController
             'login_note' => $login_note,
 
         ]);
+    }
+
+    /**
+     * @Route("/keep-alive", name="keep_alive", methods={"POST"})
+     */
+    public function keepalive(SerializerInterface $serializer): Response
+    {
+                $return = "success";
+                return new Response($return, 200, array('Content-Type' => 'application/json'));
     }
 }
