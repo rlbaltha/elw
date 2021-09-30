@@ -61,7 +61,7 @@
                     <tbody>
                     {% for rubric in rubric_count %}
                         <tr>
-                            <td>{{ rubric.name }}</td>
+                            <td> <a href="{{ path('rubric_data', {'termid': term.id, 'rubricid': rubric.id}) }}">{{ rubric.name }}</a></td>
                             <td>{{ rubric.rubriccount }}</td>
                         </tr>
                     {% endfor %}

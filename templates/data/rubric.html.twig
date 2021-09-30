@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rubric Data{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <h1>Hello, Dear Administrators.</h1>
+        <p>I hope you are having a really good day today.</p>
+
+        <div class="row">
+            <div class="col">
+                <h2>Rubrics used in {{ term.semester }} {{ term.year }}</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Rubric</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rubric in rubric_count %}
+                        <tr>
+                            <td> <a href="{{ path('rubric_data', {'termid': term.id, 'rubricid': rubric.id}) }}">{{ rubric.name }}</a></td>
+                            <td>{{ rubric.rubriccount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="col">
+                <h2>Ratings for Rubric {{ rubric.name }} for {{ term.semester }} {{ term.year }}</h2>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Scale</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rating in ratings_count %}
+                        <tr>
+                            <td>{{ rating.scale }}</td>
+                            <td>{{ rating.ratingscount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

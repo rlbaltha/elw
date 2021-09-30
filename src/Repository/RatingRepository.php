@@ -38,15 +38,22 @@ class RatingRepository extends ServiceEntityRepository
     }
 
 
-    /*
-    public function findOneBySomeField($value): ?Rating
+    public function countRatingsByRubricByTerm($termid, $rubricid)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+            ->leftJoin('r.rubric', 'ru')
+            ->leftJoin('r.doc', 'd')
+            ->leftJoin('d.course', 'cr')
+            ->leftJoin('cr.term', 't')
+            ->andWhere('t.id = :termid')
+            ->andWhere('ru.id = :rubricid')
+            ->select('r.scale,  count(r.scale) as ratingscount')
+            ->groupBy('r.scale')
+            ->setParameter('termid', $termid)
+            ->setParameter('rubricid', $rubricid)
+            ->orderBy('r.scale', 'DESC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult()
+            ;
     }
-    */
 }
