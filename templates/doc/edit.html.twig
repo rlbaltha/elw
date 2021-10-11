@@ -32,7 +32,11 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+
+        <div class="col">
+        <div id="save_error" class="alert alert-danger">The autosave failed. Please copy your current work before closing and return to eLC to login again.</div>
+
+        {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
 
         <div class="col">
             {# Note Insert #}
@@ -173,6 +177,7 @@
         }
 
         $(document).ready(function () {
+            $('#save_error').hide();
             $("label[for=doc_title]").toggle();
             $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
@@ -223,7 +228,11 @@
                         docBody: body,
                         count: count
                     }, function (data) {
+                    })
+                    .fail(function() {
+                    $('#save_error').show();
                     });
+                    ;
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
 

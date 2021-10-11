@@ -29,6 +29,9 @@
         <div class="col">
             <h1 class="mr-5">Edit {{ doc.title }}
             </h1>
+            <div id="save_error" class="alert alert-danger">The autosave failed. Please copy your current work before
+                closing and return to eLC to login again.
+            </div>
             {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
         </div>
     </div>
@@ -38,6 +41,7 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $('#save_error').hide();
             $("#submit-doc-form").click(function () {
                 var editor = CKEDITOR.instances.journal_body;
                 var count = editor.wordCount.wordCount;
@@ -60,7 +64,10 @@
                     editor.resetDirty();
                     var body = editor.getData();
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body}, function (data) {
-                    });
+                    })
+                        .fail(function () {
+                            $('#save_error').show();
+                        });
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
                 }

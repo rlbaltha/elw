@@ -119,8 +119,8 @@
             {% block timeout %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             sessionTimeout({
-                warnAfter: 10000,
-                timeOutAfter: 20000,
+                warnAfter: 1800000,
+                timeOutAfter: 2100000,
                 logOutUrl: '/logout',
                 message: 'Are you still working? Please remember to save your work regularly.',
                 stayConnectedBtnText: "Keep Working",
