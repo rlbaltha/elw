@@ -12,8 +12,8 @@ security:
   firewalls:
     main:
       logout:
-        path: app_logout
-        target: /
+        path: /logout
+        target: /app_login
       anonymous: ~
       lti1p3_message_tool: true
       guard:
