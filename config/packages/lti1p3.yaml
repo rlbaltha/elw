@@ -11,20 +11,35 @@ lti1p3:
             audience: "https://uga.view.usg.edu"
             oidc_authentication_url: "https://uga.view.usg.edu/d2l/lti/authenticate"
             oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
+        elc_test:
+            name: "elc_test"
+            audience: "https://ugatest2.view.usg.edu/"
+            oidc_authentication_url: "https://ugatest2.view.usg.edu/d2l/lti/authenticate"
+            oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
     tools:
-        localTool:
-            name: "elw"
-            audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://elw.uga.edu/lti1p3/oidc/initiation"
-            launch_url: "https://elw.uga.edu/lti_launch"
-            deep_linking_url: null
         awsTool:
             name: "elw_aws"
             audience: "https://api.brightspace.com/auth/token"
             oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/initiation"
             launch_url: "https://elw.english.uga.edu/lti_launch"
             deep_linking_url: null
+        awsDevTool:
+            name: "elw_dev"
+            audience: "https://api.brightspace.com/auth/token"
+            oidc_initiation_url: "https://dev.elw.uga.edu/lti1p3/oidc/initiation"
+            launch_url: "https://dev.elw.uga.edu/lti_launch"
+            deep_linking_url: null
     registrations:
+        elc_dev:
+            client_id: "6bc335b6-957c-4b47-a208-e3e4623b7c06"
+            platform: "elc_test"
+            tool: "awsDevTool"
+            deployment_ids:
+                - "4b32a98d-f8bd-4280-81df-3fee90248470"
+            platform_key_chain: ~
+            platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
+            tool_key_chain: "toolKey"
+            tool_jwks_url: "https://dev.elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
         elc_aws:
             client_id: "882919ca-b384-43ae-90cb-e07a7e780d24"
             platform: "elc"
@@ -35,13 +50,3 @@ lti1p3:
             platform_jwks_url: "https://uga.view.usg.edu/d2l/.well-known/jwks"
             tool_key_chain: "toolKey"
             tool_jwks_url: "https://elw.engligh.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
-        elc:
-            client_id: "04f3627d-9d0d-48b4-aaee-05cbbf3407e5"
-            platform: "elc"
-            tool: "localTool"
-            deployment_ids:
-                - "98bc1d03-b059-43d3-b94d-ad0c2d00c7ea"
-            platform_key_chain: ~
-            platform_jwks_url: "https://uga.view.usg.edu/d2l/.well-known/jwks"
-            tool_key_chain: "toolKey"
-            tool_jwks_url: "https://elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
