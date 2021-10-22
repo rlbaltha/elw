@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +32,7 @@ class DefaultController extends AbstractController
      */
     public function keepalive(SerializerInterface $serializer): Response
     {
-                $return = "success";
-                return new Response($return, 200, array('Content-Type' => 'application/json'));
+        $return = "success";
+        return new JsonResponse($return);
     }
 }

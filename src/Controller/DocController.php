@@ -19,6 +19,7 @@ use Caxy\HtmlDiff\HtmlDiff;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
@@ -426,7 +427,7 @@ class DocController extends AbstractController
         $entityManager->flush();
 
         $return = "success";
-        return new Response($return, 200, array('Content-Type' => 'application/json'));
+        return new JsonResponse($return);
     }
 
     /**

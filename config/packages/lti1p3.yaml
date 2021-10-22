@@ -13,20 +13,20 @@ lti1p3:
             oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
         elc_test:
             name: "elc_test"
-            audience: "https://ugatest2.view.usg.edu/"
+            audience: "https://ugatest2.view.usg.edu"
             oidc_authentication_url: "https://ugatest2.view.usg.edu/d2l/lti/authenticate"
             oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
     tools:
         awsTool:
             name: "elw_aws"
             audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/initiation"
+            oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://elw.english.uga.edu/lti_launch"
             deep_linking_url: null
         awsDevTool:
             name: "elw_dev"
             audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://dev.elw.uga.edu/lti1p3/oidc/initiation"
+            oidc_initiation_url: "https://dev.elw.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://dev.elw.uga.edu/lti_launch"
             deep_linking_url: null
     registrations:
