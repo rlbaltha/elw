@@ -11,7 +11,7 @@ framework:
         enabled: true
         # ID of the service used for session storage.
         # NULL means that Symfony uses PHP default session mechanism
-        handler_id: null
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
 #        handler_id: session.handler.native_file
 #        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
 #        cookie_lifetime: 7200
