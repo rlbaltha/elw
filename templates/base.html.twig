@@ -14,7 +14,7 @@
         <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
         {# {{ encore_entry_link_tags('app') }} #}
     {% endblock %}
-    <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
+    <title>{% block title %}eLW! - University of Georgia{% endblock %}</title>
 </head>
 
 <body class="{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.theme != 'dark' %}light{% else %}dark{% endif %}{% endif %}">
