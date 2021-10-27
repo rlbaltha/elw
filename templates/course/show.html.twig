@@ -62,7 +62,7 @@
 
     {% if role=='Instructor' %}
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 {# Classlist #}
                 <div class="card mb-3">
                     <div class="card-header">
@@ -79,6 +79,7 @@
                                 <thead class="">
                                 <tr>
                                     <th>Students</th>
+                                    <th>Last Login</th>
                                     <th>Role</th>
                                     <th>Actions</th>
                                 </tr>
@@ -87,6 +88,7 @@
                                 {% for classlist in classlists %}
                                     <tr>
                                         <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
+                                        <td>{{ classlist.user.lastlogin | date("M j, Y g:ia") }}</td>
                                         <td>{{ classlist.role }}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
@@ -102,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-6">
                 {# Projects #}
                 <div class="card mb-3">
                     <div class="card-header">

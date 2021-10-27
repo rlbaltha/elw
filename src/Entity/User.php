@@ -120,6 +120,11 @@ class User implements UserInterface, EquatableInterface
      */
     private $ratings;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastlogin;
+
 
     public function __construct()
     {
@@ -509,6 +514,18 @@ class User implements UserInterface, EquatableInterface
                 $rating->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastlogin(): ?\DateTimeInterface
+    {
+        return $this->lastlogin;
+    }
+
+    public function setLastlogin(?\DateTimeInterface $lastlogin): self
+    {
+        $this->lastlogin = $lastlogin;
 
         return $this;
     }

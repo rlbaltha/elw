@@ -118,6 +118,7 @@
         $(document).ready(function () {
             {% block timeout %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            // warn after 30 minutes, logout after 60 minutes
             sessionTimeout({
                 warnAfter: 1800000,
                 message: 'Are you still working? Please remember to save your work regularly.',
@@ -125,8 +126,8 @@
                 titleText: "Notice",
                 logOutUrl: "/logout",
                 logOutBtnText: "Logout",
-                timeOutAfter: null,
-                timeOutUrl: /logout
+                timeOutAfter: 3600000,
+                timeOutUrl: "/logout"
             });
             {% endif %}
             {% endblock %}

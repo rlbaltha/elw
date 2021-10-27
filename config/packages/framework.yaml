@@ -18,7 +18,9 @@ framework:
         # improves the security of the cookies used for sessions
         cookie_secure: 'auto'
         cookie_samesite: 'lax'
+        # session scrubbed after 60 minutes
         cookie_lifetime: 0
+        gc_maxlifetime: 360
 
     #esi: true
     #fragments: true
