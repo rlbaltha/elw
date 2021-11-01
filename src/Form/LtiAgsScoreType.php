@@ -3,15 +3,12 @@
 namespace App\Form;
 
 use App\Entity\LtiAgs;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
-use App\Entity\User;
 
 class LtiAgsScoreType extends AbstractType
 {
@@ -35,8 +32,7 @@ class LtiAgsScoreType extends AbstractType
                 'label'  => 'Grade (must be a number)',
                 'data' => $score
             ])
-            ->add('comment', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('comment', TextareaType::class, [
                 'label' => '',
                 'required' => false,
                 'data' => $comment
