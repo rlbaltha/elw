@@ -90,7 +90,7 @@
                                href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Create End
                                 Comment</a>
                         </li>
-                        {% if doc.agsResultId is null and role == 'Instructor' %}
+                        {% if doc.project.ltigrades|length >0 and doc.agsResultId is null and role == 'Instructor' %}
                         <li class="nav-item">
                                 <a aria-label="Submit Grade to eLC for Document {{ doc.title }}"
                                    class="nav-link ltisubmit"
