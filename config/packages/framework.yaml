@@ -20,7 +20,7 @@ framework:
         cookie_samesite: 'lax'
         # session scrubbed after 60 minutes
         cookie_lifetime: 0
-        gc_maxlifetime: 360
+        gc_maxlifetime: 5400
 
     #esi: true
     #fragments: true

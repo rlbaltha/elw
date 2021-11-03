@@ -120,13 +120,13 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             // warn after 30 minutes, logout after 60 minutes
             sessionTimeout({
-                warnAfter: 1800000,
+                warnAfter: 3600000,
                 message: 'Are you still working? Please remember to save your work regularly.',
                 stayConnectedBtnText: "Keep Working",
                 titleText: "Notice",
                 logOutUrl: "/logout",
                 logOutBtnText: "Logout",
-                timeOutAfter: 3600000,
+                timeOutAfter: 5400000,
                 timeOutUrl: "/logout"
             });
             {% endif %}
