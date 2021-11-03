@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Extension\AbstractExtension;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
@@ -47,6 +48,8 @@ class DocController extends AbstractController
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
 
@@ -123,6 +126,7 @@ class DocController extends AbstractController
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -159,6 +163,7 @@ class DocController extends AbstractController
         $findtype = 'byproject';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);

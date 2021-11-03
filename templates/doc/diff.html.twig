@@ -13,7 +13,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-{#        <a id='close-trigger' class="nav-link" href="#">Close</a>#}
+        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>
     </li>
 {% endblock %}
 
@@ -78,7 +78,7 @@
         <input type="text" id="docid" name="docid" value="" aria-hidden="true">
         <input type="text" name="courseid" value="{{ course.id }}" aria-hidden="true">
         <textarea id="html2pdf" name="html2pdf" rows="2" cols="10" aria-hidden="true"></textarea>
-        <input type="text" name="title" value="{{ doc.title }}" aria-hidden="true">
+        <input type="text" name="title" value="Compare Documents" aria-hidden="true">
     </form>
 {% endblock %}
 
@@ -86,14 +86,6 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            {#$("#compare_click").click(function () {#}
-            {#    var doc1 = {{ doc2.id }};#}
-            {#    var doc2= {{ doc1.id }};#}
-            {#    var location ='_self'#}
-            {#    var url = '/doc/'+doc1+'/'+doc2+'/'+'{{ course.id }}'+'/diff';#}
-            {#    window.open(url, location);#}
-            {#});#}
-
             $("#pdf_form").hide();
             //create pdf from current html
             $("#pdf_click").click(function () {

@@ -133,9 +133,7 @@
                         {% if doc.origin %}
                             <span class="badge badge-primary">Review</span>
                         {% endif %}
-                        <a target="_blank" aria-label="Opens in a new tab."
-                           href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }} <i
-                                    class="fa fa-external-link"></i></a>
+                        <a href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                     </td>
                     <td>
                         {{ doc.user.firstname }} {{ doc.user.lastname }}
@@ -151,7 +149,7 @@
                                 {% for review in doc.reviews %}
                                     {% if review.access !='Hidden' %}
                                         {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
-                                            <a target="_blank" class="dropdown-item"
+                                            <a class="dropdown-item"
                                                href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                                 {% if review.comments|length > 0 %}
                                                     <span class="badge badge-primary"
@@ -344,7 +342,7 @@
                 var doc1;
                 var doc2;
                 var url;
-                var location = '_blank'
+                var location = '_self'
                 if ($('input:checked').length != 2) {
                     alert('Please select only two documents to compare');
                 } else {

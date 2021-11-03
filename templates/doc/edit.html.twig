@@ -25,6 +25,9 @@
         {% endif %}
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>
+    </li>
+    <li class="nav-item">
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
 {% endblock %}
