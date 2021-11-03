@@ -92,7 +92,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for project in course.projects %}
-                                <a target="_blank" class="dropdown-item"
+                                <a class="dropdown-item"
                                    href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
                             {% endfor %}
                         </div>
