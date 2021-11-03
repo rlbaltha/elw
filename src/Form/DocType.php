@@ -26,6 +26,7 @@ class DocType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
+                'label_attr' => ['class' => 'sr-only'],
             ])
             ->add('stage', EntityType::class, [
                 'class' => Stage::class,
@@ -35,6 +36,7 @@ class DocType extends AbstractType
                 'expanded' => true,
                 'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Stage',
+                'label_attr' => ['class' => 'd-inline'],
                 'required' => 'true'
             ])
             ->add('access', ChoiceType::class, [
@@ -43,14 +45,17 @@ class DocType extends AbstractType
                 'expanded' => true,
                 'attr' => ['class' => 'form-check-inline'],
                 'label' => 'Access',
+                'label_attr' => ['class' => 'd-inline'],
                 'required' => 'true'
             ])
             ->add('wordcount', HiddenType::class, [
                 'label'  => '',
+                'label_attr' => ['class' => 'd-inline'],
             ])
             ->add('body', CKEditorType::class, [
                 'config_name' => 'doc_config',
-                'label' => '',
+                'label' => 'Body',
+                'label_attr' => ['class' => 'sr-only'],
             ])
         ;
     }
