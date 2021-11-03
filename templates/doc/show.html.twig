@@ -461,7 +461,7 @@
     </div>
 
     {# form for pdf creation #}
-    <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true">
+    <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true" style="display:none">
         <input type="text" id="docid" name="docid" value="" aria-hidden="true">
         <input type="text" name="courseid" value="{{ course.id }}" aria-hidden="true">
         <textarea id="html2pdf" name="html2pdf" rows="2" cols="10" aria-hidden="true"></textarea>
@@ -516,7 +516,6 @@
                     });
                     $(this).hide();
                 });
-                $("#pdf_form").hide();
                 //create pdf from current html
                 $(".pdf_click").click(function () {
                     //force inline notes and markup
