@@ -102,6 +102,11 @@
             {{ message|raw }}
         </div>
     {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message|raw }}
+        </div>
+    {% endfor %}
     {% block body %}{% endblock %}
 </div>
 

@@ -52,7 +52,7 @@
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>
+        <a class="nav-link" href="{{ app.session.get('referrer') }}"><i class="material-icons" style="font-size:24px;">close</i></a>
     </li>
 {% endblock %}
 
@@ -499,7 +499,7 @@
                             $(target).html(result);
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            if (xhr.status === 404) {
+                            if (xhr.status === 500) {
                                 $(target).html('<p>Grade Column was not found</p>');
                             }
                         }

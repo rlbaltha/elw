@@ -15,6 +15,7 @@ use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Lti;
 use App\Service\Permissions;
+use GuzzleHttp\Exception\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -394,8 +395,10 @@ class LtiController extends AbstractController
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
             $results = $lti->getLtiResult($doc->getAgsResultId());
-            $comment = $results[0]['comment'];
-            $score = $results[0]['resultScore'];
+            if (is_array($results) ) {
+                $comment = $results[0]['comment'];
+                $score = $results[0]['resultScore'];
+            }
         }
         $form = $this->createForm(LtiAgsScoreType::class, null, ['comment' => $comment, 'score' => $score, 'column' => $column, 'uris' => $uris]);
         $role = $permissions->getCourseRole($courseid);
@@ -435,8 +438,12 @@ class LtiController extends AbstractController
             $doc->setAgsResultId($agsResultId);
             $this->getDoctrine()->getManager()->persist($doc);
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'The grade was submitted.');
-            $response = $this->guzzle->request($method, $uri, $options);
+            try {
+                $response = $this->guzzle->request($method, $uri, $options);
+                $this->addFlash('notice', 'The grade was submitted.');
+            } catch (ClientException $e) {
+                $this->addFlash('error', 'The grade column selected no longer exists in eLC.');
+            }
 
             if ($source != 'doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
