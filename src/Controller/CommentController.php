@@ -139,9 +139,9 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{source}/{id}", name="comment_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{docid}/{target}/{source}/{id}", name="comment_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Comment $comment, $docid, $courseid, $source): Response
+    public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
@@ -153,13 +153,13 @@ class CommentController extends AbstractController
         if ($source!='doc') {
             return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
         }
-        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+        return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid, 'target' => $target]);
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{source}/new", name="comment_new", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/{target}/{source}//new", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
+    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source, $target): Response
     {
 
         $header = 'End Comment New';
@@ -167,7 +167,7 @@ class CommentController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($target);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
@@ -189,7 +189,7 @@ class CommentController extends AbstractController
             if ($source!='doc') {
                 return $this->redirectToRoute('comment_ajax_show', ['docid' => $doc->getId(), 'id' => $comment->getId()]);
             }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+            return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid, 'target' => $target]);
         }
 
         return $this->render('comment/new.html.twig', [
@@ -203,9 +203,9 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/{target}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source): Response
+    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $header = 'End Comment Edit';
         $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
@@ -220,7 +220,7 @@ class CommentController extends AbstractController
             if ($source!='doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);
             }
-            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+            return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid, 'target' => $target]);
         }
 
         return $this->render('comment/edit.html.twig', [
@@ -230,6 +230,7 @@ class CommentController extends AbstractController
             'course' => $course,
             'role' => $role,
             'source' => $source,
+            'target' => $target,
             'form' => $form->createView(),
         ]);
     }

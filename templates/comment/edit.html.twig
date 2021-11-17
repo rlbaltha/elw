@@ -37,11 +37,10 @@
             {% endif %}
         </div>
         <div class="col-lg-4 col-sm-12">
-            <h1 style="font-size: large">{{ header }}</h1>
-            <hr/>
+{#            <h1 style="font-size: large">{{ header }}</h1>#}
             {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
-            {{ include('comment/_delete_form.html.twig', {'source': source}) }}
+            {{ include('comment/_delete_form.html.twig', {'source': source,'target': target}) }}
         </div>
     </div>
 {% endblock %}

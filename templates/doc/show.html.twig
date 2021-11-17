@@ -91,7 +91,7 @@
                         </li>
                         <li class="nav-item">
                             <a aria-label="End Comment on {{ doc.title }}" class="nav-link"
-                               href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Create End
+                               href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc', 'target': doc.id}) }}">Create End
                                 Comment</a>
                         </li>
                         {% if doc.project.ltigrades|length >0 and doc.agsResultId is null and role == 'Instructor' %}
@@ -221,8 +221,7 @@
                                 {% if app.user == comment.user %}
                                     <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
                                        class="btn btn-primary btn-sm float-right"
-                                       href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                        End Comment</a>
+                                       href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': doc.id}) }}">Edit</a>
                                 {% endif %}
                             </div>
                             <div class="card-body">
@@ -281,7 +280,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a aria-label="End Comment on {{ review.title }}" class="nav-link"
-                                           href="{{ course_path('comment_new', {'docid': review.id, 'source': 'doc'}) }}">Create
+                                           href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc', 'target': review.id}) }}">Create
                                             End Comment</a>
                                     </li>
                                     {% if review.agsResultId is null and role == 'Instructor' %}
@@ -396,8 +395,7 @@
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-right"
-                                               href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                                Comment</a>
+                                               href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': review.id}) }}">Edit</a>
                                         {% endif %}
                                     </div>
                                     <div class="card-body">
