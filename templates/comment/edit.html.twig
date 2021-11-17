@@ -14,30 +14,41 @@
 {% endblock %}
 
 {% block subnavright %}
+    {{ include('course/_subnav.html.twig') }}
 {% endblock %}
-
 
 
 {% block body %}
     <div class="row doc-container">
-        <div class="col-lg-8 col-sm-12">
-            {% if doc.access!='Journal' %}
+        <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
                 <div class="document-editor">
                     {{ doc.body|raw }}
                 </div>
-            {% else %}
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h2 class="d-inline">{{ doc.title }} </h2> by {{ doc.user.firstname }} {{ doc.user.lastname }}
-                    </div>
-                    <div class="card-body">
-                        {{ doc.body|raw }}
-                    </div>
-                </div>
-            {% endif %}
         </div>
         <div class="col-lg-4 col-sm-12">
-{#            <h1 style="font-size: large">{{ header }}</h1>#}
+            <div class="card mb-2">
+                <div class="card-header">
+                    {{ doc.title }}
+                </div>
+                <div class="card-body">
+                    <p>{% if doc.project %}
+                            <span class="badge badge-primary"
+                                  style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                        {% endif %}
+                        {% if doc.stage %}
+                            <span class="badge badge-primary"
+                                  style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                        {% endif %}
+                        <span class="badge badge-primary"
+                              style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
+                    </p>
+                    <p>By {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
+                    <p>Created: {{ doc.created | date("M j, Y g:ia") }}</p>
+                    <p>Updated: {{ doc.updated | date("M j, Y g:ia") }}</p>
+                    <p>Word Count: {{ doc.wordcount }}</p>
+                </div>
+            </div>
+
             {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
             {{ include('comment/_delete_form.html.twig', {'source': source,'target': target}) }}
