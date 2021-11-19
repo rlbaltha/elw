@@ -272,6 +272,12 @@
                             </button>
                             <div class="collapse navbar-collapse" id="navbarNavReview{{ loop.index }}">
                                 <ul class="navbar-nav">
+                                    {# if owner #}
+                                    {% if app.user == review.user %}
+                                    <li class="nav-item">
+                                        <a aria-label="Edit Document {{ doc.title }}" class="nav-link" href="{{ course_path('doc_edit', {'id': review.id}) }}">Edit</a>
+                                    </li>
+                                    {% endif %}
                                     <li class="nav-item">
                                         <a data-id="{{ review.id }}"
                                            aria-label="Create PDF of Document {{ review.title }}"
