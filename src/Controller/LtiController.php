@@ -396,7 +396,7 @@ class LtiController extends AbstractController
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
             $results = $lti->getLtiResult($doc->getAgsResultId());
             if (is_array($results) ) {
-                $comment = $results[0]['comment'];
+                $comment = strip_tags(html_entity_decode($results[0]['comment'], ENT_QUOTES | ENT_XML1, 'UTF-8'));
                 $score = $results[0]['resultScore'];
             }
         }
@@ -428,7 +428,7 @@ class LtiController extends AbstractController
                     "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $scoreMaximum,
-                    "comment" => $data['comment'],
+                    "comment" => strip_tags(html_entity_decode($data['comment'], ENT_QUOTES | ENT_XML1, 'UTF-8')),
                     "timestamp" => $timestamp,
                     "activityProgress" => 'Completed',
                     "gradingProgress" => 'FullyGraded'

@@ -9,8 +9,8 @@
                     eLC</a>
             {% endif %}
         </div>
-        <div class="card-body">
-            {{ score.comment|raw }}
+        <div class="card-body" style="white-space: pre-line;">
+            {{ score.comment | raw }}
         </div>
         <div class="card-footer">
             Grade: {{ score.resultScore }}

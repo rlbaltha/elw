@@ -362,8 +362,11 @@ class DocController extends AbstractController
         $title = $request->get('title');
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
-        $permissions->isAllowedToView($courseid, $doc);
+        //check to see if request is a diff
+        if ($docid!=0) {
+            $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+            $permissions->isAllowedToView($courseid, $doc);
+        }
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
         ]);
