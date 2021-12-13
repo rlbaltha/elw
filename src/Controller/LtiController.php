@@ -422,13 +422,19 @@ class LtiController extends AbstractController
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
             $access_token = $lti->getAccessToken($registration, $scope);
+            if (is_null($data['comment'])) {
+                $datacomment = '';
+            }
+            else {
+                $datacomment = $data['comment'];
+            }
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
                     "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $scoreMaximum,
-                    "comment" => strip_tags(html_entity_decode($data['comment'], ENT_QUOTES | ENT_XML1, 'UTF-8')),
+                    "comment" => strip_tags(html_entity_decode($datacomment, ENT_QUOTES | ENT_XML1, 'UTF-8')),
                     "timestamp" => $timestamp,
                     "activityProgress" => 'Completed',
                     "gradingProgress" => 'FullyGraded'

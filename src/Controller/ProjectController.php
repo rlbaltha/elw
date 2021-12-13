@@ -44,14 +44,18 @@ class ProjectController extends AbstractController
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $options = ['user' => $user, 'courseid' => $courseid];
+        $rubrics = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->findDefaults();
         $project = new Project();
+        foreach ($rubrics as $rubric) {
+            $project->addRubric($rubric);
+        };
         $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
         $entityManager = $this->getDoctrine()->getManager();
 
         $project->setCourse($course);
         $project->setUser($user);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager->persist($project);

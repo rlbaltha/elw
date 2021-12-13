@@ -25,7 +25,7 @@ class RubricType extends AbstractType
                 'label' => ''
             ])
             ->add('level', ChoiceType::class, [
-                'choices' => ['Default' => '0', 'Instructor Created' => '1', 'Shared' => '2'],
+                'choices' => ['Default' => '0', 'Instructor Created' => '1', 'Shared' => '2','Archived' => '3'],
                 'multiple' => false,
                 'expanded' => true,
             ])
