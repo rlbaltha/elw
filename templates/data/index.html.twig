@@ -109,6 +109,24 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
+                <h2>Courses by Type in {{ term.semester }} {{ term.year }}</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Course</td>
+                        <td>Count</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for course in coursetype_count %}
+                        <tr>
+                            <td>{{ course.coursetype }}</td>
+                            <td>{{ course.coursecount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -360,6 +360,7 @@ class DocController extends AbstractController
     {
         $doc_html = $request->get('html2pdf');
         $title = $request->get('title');
+        $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
         //check to see if request is a diff
@@ -370,7 +371,7 @@ class DocController extends AbstractController
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
         ]);
-        $filename = 'PDF_of_' . $title . '.pdf';
+        $filename = 'PDF_of_' . $title_esc . '.pdf';
         return new PdfResponse(
             $this->pdf->getOutputFromHtml($html),
             $filename

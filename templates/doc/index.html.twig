@@ -119,9 +119,9 @@
             <thead class="">
             <tr>
                 <th>Title<i class="fa fa-fw fa-sort"></i></th>
-                <th>Owner</th>
+                <th>Owner<i class="fa fa-fw fa-sort"></i></th>
                 <th>Reviews</th>
-                <th class="d-none d-sm-table-cell">Labels</th>
+                <th class="d-none d-sm-table-cell">Labels<i class="fa fa-fw fa-sort"></i></th>
                 <th class="d-none d-sm-table-cell">Updated<i class="fa fa-fw fa-sort"></i></th>
             </tr>
             </thead>
@@ -137,7 +137,7 @@
                         <a href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                     </td>
                     <td>
-                        {{ doc.user.firstname }} {{ doc.user.lastname }}
+                        {{ doc.user.lastname }}, {{ doc.user.firstname }}
                     </td>
                     <td>
                         {% if doc.reviews|length > 0 %}
