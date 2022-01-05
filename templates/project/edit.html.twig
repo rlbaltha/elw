@@ -19,18 +19,66 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">Edit Project</h1>
-            {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">Edit Project</h1>
+                    {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
 
-            {% if countDocs > 0 %}
-            <div class="float-right">This Project can not be deleted because it has associated Documents.</div>
-            {% else %}
-            {{ include('project/_delete_form.html.twig') }}
-            {% endif %}
+                    {% if countDocs > 0 %}
+                        <div class="float-right">This Project can not be deleted because it has associated Documents.</div>
+                    {% else %}
+                        {{ include('project/_delete_form.html.twig') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h2 class="smaller">Descriptions of Rubric Blocks and Markup Sets</h2>
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="p-0">
+                            <span class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Rubrics
+                            </span>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            {% for rubric in rubrics %}
+                                <p class="font-weight-bold">{{ rubric.name }}</p>
+                                <p>{{ rubric.body|raw }}</p>
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="p-0">
+                            <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Markup
+                            </span>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            {% for markupset in markupsets %}
+                                <p class="font-weight-bold">{{ markupset.name }}</p>
+                                <p>{{ markupset.description|raw }}</p>
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
 
     {# Help Modal #}

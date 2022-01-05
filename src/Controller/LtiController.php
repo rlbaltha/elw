@@ -15,6 +15,7 @@ use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Lti;
 use App\Service\Permissions;
+use GuzzleHttp\Exception\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -148,6 +149,10 @@ class LtiController extends AbstractController
 
         // Actual passing of auth to Symfony firewall and sessioning
         $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $ltiAuthenticator, 'main');
+        $now = new \DateTime('now');
+        $user->setLastlogin($now);
+        $this->getDoctrine()->getManager()->persist($user);
+        $this->getDoctrine()->getManager()->flush();
 
         $context = $ltiMessage->getClaim("https://purl.imsglobal.org/spec/lti/claim/context");
         $context_key_id = 'id';
@@ -390,8 +395,10 @@ class LtiController extends AbstractController
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
             $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
             $results = $lti->getLtiResult($doc->getAgsResultId());
-            $comment = $results[0]['comment'];
-            $score = $results[0]['resultScore'];
+            if (is_array($results) ) {
+                $comment = strip_tags(html_entity_decode($results[0]['comment'], ENT_QUOTES | ENT_XML1, 'UTF-8'));
+                $score = $results[0]['resultScore'];
+            }
         }
         $form = $this->createForm(LtiAgsScoreType::class, null, ['comment' => $comment, 'score' => $score, 'column' => $column, 'uris' => $uris]);
         $role = $permissions->getCourseRole($courseid);
@@ -415,13 +422,19 @@ class LtiController extends AbstractController
             $timestamp = date(\DateTime::ISO8601);
             $registration = $this->repository->find($registration);
             $access_token = $lti->getAccessToken($registration, $scope);
+            if (is_null($data['comment'])) {
+                $datacomment = '';
+            }
+            else {
+                $datacomment = $data['comment'];
+            }
             $options = [
                 'headers' => ['Authorization' => sprintf('Bearer %s', $access_token), 'Accept' => $accept_header],
                 'json' => [
                     "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $scoreMaximum,
-                    "comment" => $data['comment'],
+                    "comment" => strip_tags(html_entity_decode($datacomment, ENT_QUOTES | ENT_XML1, 'UTF-8')),
                     "timestamp" => $timestamp,
                     "activityProgress" => 'Completed',
                     "gradingProgress" => 'FullyGraded'
@@ -431,8 +444,12 @@ class LtiController extends AbstractController
             $doc->setAgsResultId($agsResultId);
             $this->getDoctrine()->getManager()->persist($doc);
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'The grade was submitted.');
-            $response = $this->guzzle->request($method, $uri, $options);
+            try {
+                $response = $this->guzzle->request($method, $uri, $options);
+                $this->addFlash('notice', 'The grade was submitted.');
+            } catch (ClientException $e) {
+                $this->addFlash('error', 'The grade column selected no longer exists in eLC.');
+            }
 
             if ($source != 'doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
@@ -64,10 +65,13 @@ class Lti
         $registration = $this->repository->find($registration);
         $access_token = $this->getAccessToken($registration, $scope);
         $options = $this->getHeaderOptions($access_token, $accept_header);
-        $response = $this->guzzle->request($method, $uri, $options);
-//        Need to add error capture here for
 
-        $data = json_decode($response->getBody()->__toString(), true);
+        try {
+            $response = $this->guzzle->request($method, $uri, $options);
+            $data = json_decode($response->getBody()->__toString(), true);
+        } catch (ClientException $e) {
+            $data = 'Grade Column was not found.';
+        }
         return $data;
     }
 

@@ -43,15 +43,21 @@ class ProjectController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $rubrics = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->findByUser($user);
+        $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findByUser($user);
         $options = ['user' => $user, 'courseid' => $courseid];
+        $defaultrubrics = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->findDefaults();
         $project = new Project();
+        foreach ($defaultrubrics as $rubric) {
+            $project->addRubric($rubric);
+        };
         $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
         $entityManager = $this->getDoctrine()->getManager();
 
         $project->setCourse($course);
         $project->setUser($user);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager->persist($project);
@@ -61,6 +67,8 @@ class ProjectController extends AbstractController
         }
 
         return $this->render('project/new.html.twig', [
+            'rubrics' => $rubrics,
+            'markupsets' => $markupsets,
             'project' => $project,
             'form' => $form->createView(),
         ]);
@@ -79,6 +87,8 @@ class ProjectController extends AbstractController
         $courseid = $project->getCourse()->getId();
         $role = $permissions->getCourseRole($courseid);
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $rubrics = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->findByUser($user);
+        $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findByUser($user);
 
         $docs[] = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findByProject($course, $role, $project);
         $countDocs = count($docs);
@@ -93,6 +103,8 @@ class ProjectController extends AbstractController
         }
 
         return $this->render('project/edit.html.twig', [
+            'rubrics' => $rubrics,
+            'markupsets' => $markupsets,
             'project' => $project,
             'form' => $form->createView(),
             'countDocs'=> $countDocs

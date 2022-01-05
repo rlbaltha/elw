@@ -9,11 +9,28 @@
                     eLC</a>
             {% endif %}
         </div>
-        <div class="card-body">
-            {{ score.comment|raw }}
+        <div class="card-body" style="white-space: pre-line;">
+            {{ score.comment | raw }}
         </div>
         <div class="card-footer">
             Grade: {{ score.resultScore }}
         </div>
     </div>
+    {% else %}
+        <div class="card mt-3">
+            <div class="card-header">
+                Error
+                {% if role == 'Instructor' %}
+                    <a aria-label="Update Grade in
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-right"
+                       href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': source}) }}">Update Grade in
+                        eLC</a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {{ scores }}
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
 {% endfor %}

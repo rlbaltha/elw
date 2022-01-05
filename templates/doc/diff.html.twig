@@ -4,16 +4,20 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
 {% endblock %}
 
 {% block subnav %}
-
+    <li class="nav-item">
+        <a id="pdf_click" class="nav-link" href="#">Create PDF</a>
+    </li>
 {% endblock %}
 
 {% block subnavright %}
     <li class="nav-item">
-{#        <a id='close-trigger' class="nav-link" href="#">Close</a>#}
+        <a class="nav-link" href="{{ app.session.get('referrer') }}"><i class="material-icons"
+                                                                        style="font-size:24px; font-weight: bold">close</i></a>
     </li>
 {% endblock %}
 
@@ -24,7 +28,8 @@
             <div class="alert alert-secondary" role="alert">
                 Additions to the first document are <span style="color:darkgreen;text-decoration: underline;">underlined and green</span>.
                 Subtractions are formatted <span style="color:maroon;text-decoration: line-through;">red with strikethrough</span>.
-                Text replacement:  <span style="color:purple;text-decoration: line-through;">Orginal text</span>; <span style="color:darkcyan;text-decoration: underline;">Replacement text</span>.
+                Text replacement: <span style="color:purple;text-decoration: line-through;">Orginal text</span>; <span
+                        style="color:darkcyan;text-decoration: underline;">Replacement text</span>.
             </div>
             <div class="document-editor">
                 {{ diff|raw }}
@@ -33,21 +38,22 @@
 
         {# Info column #}
         <div class="col">
-{#            <a id="compare_click" class="btn btn-primary btn-sm" href="#">Swap Order</a>#}
-{#            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_diff_pdf', {'id1': doc1.id, 'id2': doc2.id}) }}">Create PDF</a>#}
-            <a id="pdf_click" class="btn btn-primary btn-sm" href="#">Create PDF</a>
+            {# <a id="compare_click" class="btn btn-primary btn-sm" href="#">Swap Order</a> #}
+
             <div class="card bg-light mt-3 mb-3">
                 <div class="card-header">
-                    <h2>First Document:  {{ doc1.title }}
+                    <h2>First Document: {{ doc1.title }}
                     </h2>
                 </div>
                 <div class="card-body">
                     <p>{{ doc1.user.firstname }} {{ doc1.user.lastname }}</p>
-                    <p>Created:  {{ doc1.created | date("M j, Y g:ia") }}</p>
+                    <p>Created: {{ doc1.created | date("M j, Y g:ia") }}</p>
                     <p>Modified: {{ doc1.updated | date("M j, Y g:ia") }} </p>
                     <p>Word Count: {{ doc1.wordcount }} </p>
-                    <span class="badge badge-primary" style="background:{{ doc1.project.color }}">{{ doc1.project.name }}</span>
-                    <span class="badge badge-primary" style="background:{{ doc1.stage.color }}">{{ doc1.stage.name }}</span>
+                    <span class="badge badge-primary"
+                          style="background:{{ doc1.project.color }}">{{ doc1.project.name }}</span>
+                    <span class="badge badge-primary"
+                          style="background:{{ doc1.stage.color }}">{{ doc1.stage.name }}</span>
 
                     <span class="badge badge-primary"
                           style="background:{% if doc1.access=='Private'%}darkred{% elseif doc1.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc1.access }}</span>
@@ -60,11 +66,13 @@
                 </div>
                 <div class="card-body">
                     <p>{{ doc2.user.firstname }} {{ doc2.user.lastname }}</p>
-                    <p>Created:  {{ doc2.created | date("M j, Y g:ia") }}</p>
+                    <p>Created: {{ doc2.created | date("M j, Y g:ia") }}</p>
                     <p>Modified: {{ doc2.updated | date("M j, Y g:ia") }} </p>
                     <p>Word Count: {{ doc2.wordcount }} </p>
-                    <span class="badge badge-primary" style="background:{{ doc2.project.color }}">{{ doc2.project.name }}</span>
-                    <span class="badge badge-primary" style="background:{{ doc2.stage.color }}">{{ doc2.stage.name }}</span>
+                    <span class="badge badge-primary"
+                          style="background:{{ doc2.project.color }}">{{ doc2.project.name }}</span>
+                    <span class="badge badge-primary"
+                          style="background:{{ doc2.stage.color }}">{{ doc2.stage.name }}</span>
 
                     <span class="badge badge-primary"
                           style="background:{% if doc2.access=='Private'%}darkred{% elseif doc2.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc2.access }}</span>
@@ -75,10 +83,10 @@
 
     {# form for pdf creation #}
     <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true">
-        <input type="text" id="docid" name="docid" value="" aria-hidden="true">
+        <input type="text" id="docid" name="docid" value="0" aria-hidden="true">
         <input type="text" name="courseid" value="{{ course.id }}" aria-hidden="true">
         <textarea id="html2pdf" name="html2pdf" rows="2" cols="10" aria-hidden="true"></textarea>
-        <input type="text" name="title" value="{{ doc.title }}" aria-hidden="true">
+        <input type="text" name="title" value="Compare Documents" aria-hidden="true">
     </form>
 {% endblock %}
 
@@ -86,28 +94,20 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            {#$("#compare_click").click(function () {#}
-            {#    var doc1 = {{ doc2.id }};#}
-            {#    var doc2= {{ doc1.id }};#}
-            {#    var location ='_self'#}
-            {#    var url = '/doc/'+doc1+'/'+doc2+'/'+'{{ course.id }}'+'/diff';#}
-            {#    window.open(url, location);#}
-            {#});#}
-
-            $("#pdf_form").hide();
-            //create pdf from current html
-            $("#pdf_click").click(function () {
-                //push html to form
-                $("#pdf_form").show();
-                let doc_html = $(".document-editor").html();
-                $("#html2pdf").val(doc_html);
-                //submit form for pdf creation
-                $("#pdf_form").submit();
                 $("#pdf_form").hide();
-            });
-            $('#close-trigger').click(function () {
-                window.close();
-            });
+                //create pdf from current html
+                $("#pdf_click").click(function () {
+                    //push html to form
+                    $("#pdf_form").show();
+                    let doc_html = $(".document-editor").html();
+                    $("#html2pdf").val(doc_html);
+                    //submit form for pdf creation
+                    $("#pdf_form").submit();
+                    $("#pdf_form").hide();
+                });
+                $('#close-trigger').click(function () {
+                    window.close();
+                });
             }
         );
     </script>

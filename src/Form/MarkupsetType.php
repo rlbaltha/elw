@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Markupset;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,6 +19,10 @@ class MarkupsetType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label'  => 'Title'
+            ])
+            ->add('description', CKEditorType::class, [
+                'config_name' => 'simple_config',
+                'label' => ''
             ])
             ->add('level', ChoiceType::class, [
                 'choices' => ['Default' => '0', 'Instructor Created' => '1', 'Shared' => '2'],

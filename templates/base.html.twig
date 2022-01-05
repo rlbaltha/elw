@@ -12,7 +12,7 @@
         <!-- Bootstrap CSS -->
         <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css')) }}">
         <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
-{#        {{ encore_entry_link_tags('app') }}#}
+        {# {{ encore_entry_link_tags('app') }} #}
     {% endblock %}
     <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
 </head>
@@ -20,78 +20,79 @@
 <body class="{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.theme != 'dark' %}light{% else %}dark{% endif %}{% endif %}">
 
 {% block nav %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavMain"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a href="{{ path('course_index') }}" class="navbar-brand">
-            <span class='navbar-brand'>eLW @ </span>
-            <img src="https://brand.uga.edu/wp-content/uploads/GEORGIA-FS-FC-768x252.png" height="40"
-                 alt="UGA logo">
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNavMain">
-            <ul class="navbar-nav">
-                <li class="nav-item skip-link">
-                    <a class="nav-link" href="#main-content">Skip to content</a>
-                </li>
-                {% block subnav %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                Admin
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
-                                <a class="dropdown-item" href="{{ path('course_admin') }}">Courses</a>
-                                <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
-                                <a class="dropdown-item" href="{{ path('rubric_index') }}">Rubrics</a>
-                                <a class="dropdown-item" href="{{ path('stage_index') }}">Stages</a>
-                                <a class="dropdown-item" href="{{ path('term_index') }}">Term</a>
-                                <a class="dropdown-item" href="{{ path('card_index') }}">Cards</a>
-                                <a class="dropdown-item" href="{{ path('data') }}">Data</a>
-                            </div>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_index',{'status':'default'}) }}?_switch_user=_exit">
-                                Exit login as</a>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('course_index',{'status':'default'}) }}">Courses</a>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_INSTRUCTOR') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('stage_index') }}">Stages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('rubric_index') }}">Rubrics</a>
-                        </li>
-                    {% endif %}
-                {% endblock %}
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% block subnavright %}
-                    <li class="nav-item">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
-                        {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavMain"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="{{ path('course_index') }}" class="navbar-brand">
+                <span class='navbar-brand'>eLW @ </span>
+                <img src="https://brand.uga.edu/wp-content/uploads/GEORGIA-FS-FC-768x252.png" height="40"
+                     alt="UGA logo">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNavMain">
+                <ul class="navbar-nav">
+                    <li class="nav-item skip-link">
+                        <a class="nav-link" href="#main-content">Skip to content</a>
                     </li>
-                {% endblock %}
-            </ul>
+                    {% block subnav %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ path('user_index') }}">Users</a>
+                                    <a class="dropdown-item" href="{{ path('course_admin') }}">Courses</a>
+                                    <a class="dropdown-item" href="{{ path('markupset_index') }}">Markup Sets</a>
+                                    <a class="dropdown-item" href="{{ path('rubric_index') }}">Rubrics</a>
+                                    <a class="dropdown-item" href="{{ path('stage_index') }}">Stages</a>
+                                    <a class="dropdown-item" href="{{ path('term_index') }}">Term</a>
+                                    <a class="dropdown-item" href="{{ path('card_index') }}">Cards</a>
+                                    <a class="dropdown-item" href="{{ path('data') }}">Data</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ path('course_index',{'status':'default'}) }}?_switch_user=_exit">
+                                    Exit login as</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('course_index',{'status':'default'}) }}">Courses</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_INSTRUCTOR') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('stage_index') }}">Stages</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('markupset_byuser') }}">Markup</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('rubric_index') }}">Rubrics</a>
+                            </li>
+                        {% endif %}
+                    {% endblock %}
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% block subnavright %}
+                        <li class="nav-item">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                            {% endif %}
+                        </li>
+                    {% endblock %}
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 {% endblock %}
 
 {% block toolnav %}{% endblock %}
@@ -101,29 +102,40 @@
             {{ message|raw }}
         </div>
     {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message|raw }}
+        </div>
+    {% endfor %}
     {% block body %}{% endblock %}
 </div>
 
 </body>
 
 {% block javascripts %}
-
-
-
-
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
     <script src="{{ absolute_url(asset('js/bootstrap.min.js')) }}"></script>
-
+    <script src="https://unpkg.com/@travishorn/session-timeout"></script>
     <script>
         $(document).ready(function () {
-            if ($("body").hasClass("dark")) {
-                    $('.bg-light').toggleClass('bg-light bg-dark')
-                    $('.text-dark').toggleClass('text-dark text-light')
-                    $('.navbar-light').toggleClass('navbar-light navbar-dark')
-            }
+            {% block timeout %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            // warn after 60 minutes, logout after 90 minutes
+            sessionTimeout({
+                warnAfter: 3600000,
+                message: 'Are you still working? Please remember to save your work regularly.',
+                stayConnectedBtnText: "Keep Working",
+                titleText: "Notice",
+                logOutUrl: "/logout",
+                logOutBtnText: "Logout",
+                timeOutAfter: 5400000,
+                timeOutUrl: "/logout"
+            });
+            {% endif %}
+            {% endblock %}
         });
     </script>
 {% endblock %}

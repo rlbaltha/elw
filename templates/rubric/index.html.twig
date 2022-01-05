@@ -26,7 +26,7 @@
                         <button class="btn btn-link" type="button" data-toggle="collapse"
                                 data-target="#collapse{{ loop.index }}" aria-expanded="true"
                                 aria-controls="collapse{{ loop.index }}">
-                            {{ rubric.name }}  ({% if rubric.level == 0 %}Default{% elseif rubric.level == 2 %}Shared{% else %}Created by {{ rubric.user.firstname }} {{ rubric.user.lastname }}{% endif %})
+                            {{ rubric.name }}  ({% if rubric.level == 0 %}Default{% elseif rubric.level == 2 %}Shared{% elseif rubric.level == 3 %}Archived{% else %}Created by {{ rubric.user.firstname }} {{ rubric.user.lastname }}{% endif %})
                         </button>
                     </h2>
                 </div>

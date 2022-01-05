@@ -34,10 +34,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared
-                            Docs</a>
-                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared#}
+{#                            Docs</a>#}
+{#                    </li>#}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown"
@@ -63,6 +63,7 @@
                                 <a class="dropdown-item"
                                    href="{{ course_path('doc_byproject', {'projectid':project.id}) }}">{{ project.name }}</a>
                             {% endfor %}
+                            <a class="dropdown-item" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">All Projects</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -92,7 +93,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for project in course.projects %}
-                                <a target="_blank" class="dropdown-item"
+                                <a class="dropdown-item"
                                    href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
                             {% endfor %}
                         </div>
@@ -118,9 +119,9 @@
             <thead class="">
             <tr>
                 <th>Title<i class="fa fa-fw fa-sort"></i></th>
-                <th>Owner</th>
+                <th>Owner<i class="fa fa-fw fa-sort"></i></th>
                 <th>Reviews</th>
-                <th class="d-none d-sm-table-cell">Labels</th>
+                <th class="d-none d-sm-table-cell">Labels<i class="fa fa-fw fa-sort"></i></th>
                 <th class="d-none d-sm-table-cell">Updated<i class="fa fa-fw fa-sort"></i></th>
             </tr>
             </thead>
@@ -133,12 +134,10 @@
                         {% if doc.origin %}
                             <span class="badge badge-primary">Review</span>
                         {% endif %}
-                        <a target="_blank" aria-label="Opens in a new tab."
-                           href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }} <i
-                                    class="fa fa-external-link"></i></a>
+                        <a href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                     </td>
                     <td>
-                        {{ doc.user.firstname }} {{ doc.user.lastname }}
+                        {{ doc.user.lastname }}, {{ doc.user.firstname }}
                     </td>
                     <td>
                         {% if doc.reviews|length > 0 %}
@@ -151,7 +150,7 @@
                                 {% for review in doc.reviews %}
                                     {% if review.access !='Hidden' %}
                                         {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
-                                            <a target="_blank" class="dropdown-item"
+                                            <a class="dropdown-item"
                                                href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                                 {% if review.comments|length > 0 %}
                                                     <span class="badge badge-primary"
@@ -195,9 +194,9 @@
                             </div>
                             <div class="card-body" id="help_content">
                                 <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
-                                <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>
+{#                                <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>#}
                                 <p><strong>Select Author</strong> will list documents shared with you by author.</p>
-                                <p><strong>Select Project</strong> will list documents by Project.</p>
+                                <p><strong>Select Project</strong> will list documents by Project.  You may also select All Projects.</p>
                                 <p><strong>Compare</strong> will create a display of the changes between two documents.
                                     Select any two checkboxes on the left and then click
                                     Compare.</p>
@@ -234,7 +233,8 @@
                                         document.
                                     </li>
                                     <li>
-                                        To <strong>Exit</strong> the document, simply close the tab.
+                                        To <strong>Close</strong> the document, click the Close link in the upper right.  You will be
+                                            returned to your most recent document listing.
                                     </li>
                                 </ul>
 
@@ -266,9 +266,9 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
-                    <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>
+{#                    <p><strong>Shared Doc</strong> will list the documents that are shared with you.</p>#}
                     <p><strong>Select Author</strong> will list documents shared with you by author.</p>
-                    <p><strong>Select Project</strong> will list documents by Project.</p>
+                    <p><strong>Select Project</strong> will list documents by Project.  You may also select All Projects.</p>
                     <p><strong>Compare</strong> will create a display of the changes between two documents.
                         Select any two checkboxes on the left and then click
                         Compare.</p>
@@ -305,7 +305,8 @@
                             document.
                         </li>
                         <li>
-                            To <strong>Exit</strong> the document, simply close the tab.
+                            <p>To <strong>Close</strong> the document, click the Close link in the upper right.  You will be
+                                returned to your most recent document listing.</p>
                         </li>
                     </ul>
 
@@ -344,7 +345,7 @@
                 var doc1;
                 var doc2;
                 var url;
-                var location = '_blank'
+                var location = '_self'
                 if ($('input:checked').length != 2) {
                     alert('Please select only two documents to compare');
                 } else {

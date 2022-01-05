@@ -116,4 +116,35 @@ class CourseRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * countByCourseTypeAndTerm
+     */
+    public function countByCoursetype($term)
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT SUBSTRING(c.name,1,8) as coursetype, COUNT(c.id) as coursecount
+            FROM App\Entity\Course c JOIN App\Entity\Term t
+            WHERE c.term=t.id and t.id = ?1
+            GROUP BY coursetype ORDER BY coursetype ASC
+            ')
+            ->setParameter('1', $term)
+            ->getResult();
+    }
+
+
+    public function countRubricsByTerm($termid)
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.projects', 'p')
+            ->join('p.course', 'cr')
+            ->join('cr.term', 't')
+            ->andWhere('t.id = :termid')
+            ->select('r.id, r.name,  count(r.id) as rubriccount')
+            ->groupBy('r.id')
+            ->setParameter('termid', $termid)
+            ->orderBy('r.name', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

@@ -45,7 +45,7 @@
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="btn btn-primary" href="{{ course_path('journal_new') }}">New Journal</a>
+                        <a class="nav-link" href="{{ course_path('journal_new') }}">New Journal Entry</a>
                     </li>
 
 
@@ -237,7 +237,7 @@
                     $(this).hide();
                 });
 
-                // Load comments via ajax
+                // Load Comments via Ajax
                 {% if docs|length >0 %}
                 setTimeout(
                     function () {

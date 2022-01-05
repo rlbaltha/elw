@@ -24,6 +24,9 @@
             <p class="navbar-text">Files that have reviews, end comments, or grades cannot be deleted.</p>
         {% endif %}
     </li>
+{#    <li class="nav-item">#}
+{#        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>#}
+{#    </li>#}
     <li class="nav-item">
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
@@ -32,7 +35,11 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">{{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+
+        <div class="col">
+        <div id="save_error" class="alert alert-danger d-none">The autosave failed. Please copy your current work before closing and return to eLC to login again.</div>
+
+        {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
 
         <div class="col">
             {# Note Insert #}
@@ -173,6 +180,7 @@
         }
 
         $(document).ready(function () {
+            $("#doc-form").addClass("form-inline");
             $("label[for=doc_title]").toggle();
             $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
@@ -223,7 +231,11 @@
                         docBody: body,
                         count: count
                     }, function (data) {
+                    })
+                    .fail(function() {
+                    $('#save_error').removeClass("d-none");
                     });
+                    ;
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
 
@@ -231,4 +243,5 @@
             }, 15000);
         });
     </script>
+
 {% endblock %}

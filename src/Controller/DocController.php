@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Extension\AbstractExtension;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
@@ -19,6 +20,7 @@ use Caxy\HtmlDiff\HtmlDiff;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
@@ -46,6 +48,8 @@ class DocController extends AbstractController
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
 
@@ -122,6 +126,7 @@ class DocController extends AbstractController
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -158,6 +163,7 @@ class DocController extends AbstractController
         $findtype = 'byproject';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
+        $this->get('session')->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
@@ -354,14 +360,18 @@ class DocController extends AbstractController
     {
         $doc_html = $request->get('html2pdf');
         $title = $request->get('title');
+        $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
-        $permissions->isAllowedToView($courseid, $doc);
+        //check to see if request is a diff
+        if ($docid!=0) {
+            $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+            $permissions->isAllowedToView($courseid, $doc);
+        }
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
         ]);
-        $filename = 'PDF_of_' . $title . '.pdf';
+        $filename = 'PDF_of_' . $title_esc . '.pdf';
         return new PdfResponse(
             $this->pdf->getOutputFromHtml($html),
             $filename
@@ -426,7 +436,7 @@ class DocController extends AbstractController
         $entityManager->flush();
 
         $return = "success";
-        return new Response($return, 200, array('Content-Type' => 'application/json'));
+        return new JsonResponse($return);
     }
 
     /**

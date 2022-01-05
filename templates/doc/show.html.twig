@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Document Show - {{ parent() }}{% endblock %}
+{% block title %}{{ doc.title }} - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -10,7 +10,8 @@
 
 {% block subnav %}
     <h1 class="navbar-brand mb-0 h1 mr-5">
-        {% if doc.origin %}<span class="badge badge-primary" style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
+        {% if doc.origin %}<span class="badge badge-primary"
+                                 style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
     </h1>
 
     {% if doc.reviews|length > 0 %}
@@ -50,6 +51,9 @@
     <li class="nav-item">
         <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ app.session.get('referrer') }}"><i class="material-icons" style="font-size:24px;">close</i></a>
+    </li>
 {% endblock %}
 
 
@@ -87,17 +91,17 @@
                         </li>
                         <li class="nav-item">
                             <a aria-label="End Comment on {{ doc.title }}" class="nav-link"
-                               href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc'}) }}">Create End
+                               href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc', 'target': doc.id}) }}">Create End
                                 Comment</a>
                         </li>
-                        {% if doc.agsResultId is null and role == 'Instructor' %}
-                        <li class="nav-item">
+                        {% if doc.project.ltigrades|length >0 and doc.agsResultId is null and role == 'Instructor' %}
+                            <li class="nav-item">
                                 <a aria-label="Submit Grade to eLC for Document {{ doc.title }}"
                                    class="nav-link ltisubmit"
                                    href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': 'doc'}) }}">Submit
                                     Grade to
                                     eLC</a>
-                        </li>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>
@@ -123,22 +127,22 @@
                 {# Doc info card #}
                 <div class="card mb-3">
                     <div class="card-header" id="info_heading">
-                         <button class="btn btn-link" style="font-size: larger" type="button" data-toggle="collapse"
-                                    data-target="#info_collapse" aria-expanded="true"
-                                    aria-controls="info_collapse">{{ doc.title }}
-                         </button>
+                        <button class="btn btn-link" style="font-size: larger" type="button" data-toggle="collapse"
+                                data-target="#info_collapse" aria-expanded="true"
+                                aria-controls="info_collapse">{{ doc.title }}
+                        </button>
                     </div>
                     <div id="info_collapse" class="collapse show"
                          aria-labelledby="info_heading" data-parent="#accordionInfo">
                         <div class="card-body">
                             <p>{% if doc.project %}
-                                <span class="badge badge-primary"
-                                      style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
-                            {% endif %}
-                            {% if doc.stage %}
-                                <span class="badge badge-primary"
-                                      style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
-                            {% endif %}
+                                    <span class="badge badge-primary"
+                                          style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
+                                {% endif %}
+                                {% if doc.stage %}
+                                    <span class="badge badge-primary"
+                                          style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
+                                {% endif %}
                                 <span class="badge badge-primary"
                                       style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
                             </p>
@@ -148,107 +152,106 @@
                             <p>Word Count: {{ doc.wordcount }}</p>
                         </div>
                     </div>
-            </div>
-
-            {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
-                <a class="btn btn-primary btn-sm ltiresult"
-                   data-id="lti{{ doc.id }}"
-                   href="#"
-                   data-request="{{ course_path('ags_score_view', {'docid': doc.id, 'source': 'doc'}) }}"
-                >View Score</a>
-                <div id="lti{{ doc.id }}">
                 </div>
-            {% endif %}
 
-            {# rubrics for original doc #}
-            {% if doc.project %}
-                <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
-                    {% for rubric in doc.project.rubrics %}
-                        <div class="card mb-1">
-                            <div class="card-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
-                                <h2 class="mb-0">
-                                    <button id="rubricheader{{ rubric.id }}_doc{{ doc.id }}" class="btn btn-link"
-                                            type="button" data-toggle="collapse"
-                                            data-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}"
-                                            aria-expanded="true"
-                                            aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
-                                        Rubric {{ loop.index }}: {{ rubric.name }}
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="r_collapse{{ loop.index }}_doc{{ doc.id }}" class="collapse"
-                                 aria-labelledby="r_heading{{ loop.index }}_doc{{ doc.id }}"
-                                 data-parent="#accordionRubric_doc{{ doc.id }}">
-                                <div class="card-body">
-                                    {{ rubric.body|raw }}
-
-                                    {% if role == 'Instructor' %}
-                                        <a id="submit_rubric{{ rubric.id }}_doc{{ doc.id }}"
-                                           aria-label="Submit a Rubric Rating" class="btn btn-primary btn-sm"
-                                           href="{{ course_path('rating_new', {'docid': doc.id, 'courseid': course.id, 'rubricid': rubric.id}) }}">Submit
-                                            a Rubric Rating</a>
-                                    {% endif %}
-                                </div>
-                                {% if app.user == doc.user or role == 'Instructor' %}
-                                <div class="card-footer" id="rubric{{ rubric.id }}_doc{{ doc.id }}">
-                                    <a class="btn btn-primary btn-sm rubricrating"
-                                       data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"
-                                       href="#"
-                                       data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
-                                    >View Rating</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {# comments for original doc #}
-            {% for comment in doc.comments %}
-                {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
-                            {% if comment.access=='Hidden' %}
-                                <span class="badge badge-primary" style="background:black">Hidden</span>
-                            {% endif %}
-                            {% if app.user == comment.user %}
-                                <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
-                                   class="btn btn-primary btn-sm float-right"
-                                   href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                    End Comment</a>
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            {{ comment.body|raw }}
-                        </div>
-
-                        <div class="card-footer">
-                            {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                            <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
-                        </div>
+                {% if doc.agsResultId is not null and (app.user == doc.user or role == 'Instructor') %}
+                    <a class="btn btn-primary btn-sm ltiresult"
+                       data-id="lti{{ doc.id }}"
+                       href="#"
+                       data-request="{{ course_path('ags_score_view', {'docid': doc.id, 'source': 'doc'}) }}"
+                    >View Score</a>
+                    <div id="lti{{ doc.id }}">
                     </div>
                 {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row" class="d-none">
-        {# Markup pops for orginal document #}
-        <div class="markup-container">
-            {% for markupset in markupsets %}
-                {% for markup in markupset.markups %}
-                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
-                         style="min-width: 10rem">
-                        <div class="popover-title"
-                             style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                        <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
+
+                {# rubrics for original doc #}
+                {% if doc.project %}
+                    <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
+                        {% for rubric in doc.project.rubrics %}
+                            <div class="card mb-1">
+                                <div class="card-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
+                                    <h2 class="mb-0">
+                                        <button id="rubricheader{{ rubric.id }}_doc{{ doc.id }}" class="btn btn-link"
+                                                type="button" data-toggle="collapse"
+                                                data-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}"
+                                                aria-expanded="true"
+                                                aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
+                                            Rubric {{ loop.index }}: {{ rubric.name }}
+                                        </button>
+                                    </h2>
+                                </div>
+
+                                <div id="r_collapse{{ loop.index }}_doc{{ doc.id }}" class="collapse"
+                                     aria-labelledby="r_heading{{ loop.index }}_doc{{ doc.id }}"
+                                     data-parent="#accordionRubric_doc{{ doc.id }}">
+                                    <div class="card-body">
+                                        {{ rubric.body|raw }}
+
+                                        {% if role == 'Instructor' %}
+                                            <a id="submit_rubric{{ rubric.id }}_doc{{ doc.id }}"
+                                               aria-label="Submit a Rubric Rating" class="btn btn-primary btn-sm"
+                                               href="{{ course_path('rating_new', {'docid': doc.id, 'courseid': course.id, 'rubricid': rubric.id}) }}">Submit
+                                                a Rubric Rating</a>
+                                        {% endif %}
+                                    </div>
+                                    {% if app.user == doc.user or role == 'Instructor' %}
+                                    <div class="card-footer" id="rubric{{ rubric.id }}_doc{{ doc.id }}">
+                                        <a class="btn btn-primary btn-sm rubricrating"
+                                           data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"
+                                           href="#"
+                                           data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
+                                        >View Rating</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
+                {% endif %}
+
+                {# comments for original doc #}
+                {% for comment in doc.comments %}
+                    {% if comment.user == app.user or (comment.access == 'Private' and app.user == doc.user) or role == 'Instructor' %}
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
+                                {% if comment.access=='Hidden' %}
+                                    <span class="badge badge-primary" style="background:black">Hidden</span>
+                                {% endif %}
+                                {% if app.user == comment.user %}
+                                    <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
+                                       class="btn btn-primary btn-sm float-right"
+                                       href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': doc.id}) }}">Edit</a>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                {{ comment.body|raw }}
+                            </div>
+
+                            <div class="card-footer">
+                                {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
+                                <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
-            {% endfor %}
+            </div>
         </div>
-    </div>
+        <div class="row" class="d-none">
+            {# Markup pops for orginal document #}
+            <div class="markup-container">
+                {% for markupset in markupsets %}
+                    {% for markup in markupset.markups %}
+                        <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
+                             style="min-width: 10rem">
+                            <div class="popover-title"
+                                 style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                            <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
     {# #################################### Reviews ######################################################## #}
     {# #################################### Reviews ######################################################## #}
@@ -259,22 +262,31 @@
             {% if (review.access =='Private' and doc.user==app.user) or role=='Instructor' or review.access =='Review' %}
                 <div class="row doc-container" id="doc{{ review.id }}">
                     {# #################################### Reviews Nav ######################################################## #}
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light col-12  mb-3" style="z-index: 0; margin-top: -1em">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light col-12  mb-3"
+                         style="z-index: 0; margin-top: -1em">
                         <div class="container-fluid">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavReview{{ loop.index }}"
+                            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                    data-target="#navbarNavReview{{ loop.index }}"
                                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
                             <div class="collapse navbar-collapse" id="navbarNavReview{{ loop.index }}">
                                 <ul class="navbar-nav">
+                                    {# if owner #}
+                                    {% if app.user == review.user %}
                                     <li class="nav-item">
-                                        <a data-id="{{ review.id }}" aria-label="Create PDF of Document {{ review.title }}"
+                                        <a aria-label="Edit Document {{ doc.title }}" class="nav-link" href="{{ course_path('doc_edit', {'id': review.id}) }}">Edit</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="nav-item">
+                                        <a data-id="{{ review.id }}"
+                                           aria-label="Create PDF of Document {{ review.title }}"
                                            class="pdf_click nav-link"
                                            href="#">Create PDF</a>
                                     </li>
                                     <li class="nav-item">
                                         <a aria-label="End Comment on {{ review.title }}" class="nav-link"
-                                           href="{{ course_path('comment_new', {'docid': review.id, 'source': 'doc'}) }}">Create
+                                           href="{{ course_path('comment_new', {'docid': doc.id, 'source': 'doc', 'target': review.id}) }}">Create
                                             End Comment</a>
                                     </li>
                                     {% if review.agsResultId is null and role == 'Instructor' %}
@@ -308,7 +320,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <span class="badge badge-primary" style="background-color: darkblue">Review</span>
-                                    of {{ doc.title }}
+                                of {{ doc.title }}
                             </div>
                             <div class="card-body">
                                 <p> by {{ review.user.firstname }} {{ review.user.lastname }}
@@ -389,8 +401,7 @@
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-right"
-                                               href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id}) }}">Edit
-                                                Comment</a>
+                                               href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': review.id}) }}">Edit</a>
                                         {% endif %}
                                     </div>
                                     <div class="card-body">
@@ -425,22 +436,26 @@
                         <p><strong>Create Review</strong> will create a copy of the document so you
                             can make inline comments and add markup.</p>
                     {% endif %}
-                    <p><strong>Create End Comment</strong> allows you to attach a holistic comment, a question, or a revision plan to a document. If
+                    <p><strong>Create End Comment</strong> allows you to attach a holistic comment, a question, or a
+                        revision plan to a document. If
                         you're also creating a review, you should create an end comment on the review you've created
                         instead of
                         on the original document.</p>
                     {% if role=='Instructor' %}
                         <p><strong>Submit Grade to eLC</strong> is an instructor button that will send a
-                            grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook Setup"
+                            grade and a comment to eLC's gradebook. Before you submit a grade, go to "eLC Gradebook
+                            Setup"
                             on the eLW course home page to create the eLC grade column. </p>
                     {% endif %}
                     <p><strong>Create PDF</strong> will create a pdf that mirrors the HTML document. Our PDF download
                         files
                         do not fully comply with all applicable guidelines for accessible digital documents.
                         For the most accessible experience, choose the current HTML display of the document.</p>
-                    <p>To <strong>Exit</strong> the document, simply close the tab.</p>
+                    <p>To <strong>Close</strong> the document, click the Close link in the upper right.  You will be
+                    returned to your most recent document listing.</p>
 
-                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or
+                        visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
                 <div class="modal-footer">
@@ -451,7 +466,7 @@
     </div>
 
     {# form for pdf creation #}
-    <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true">
+    <form method='POST' id="pdf_form" name="pdf_form" action="{{ path('doc_pdf') }}" aria-hidden="true" style="display:none">
         <input type="text" id="docid" name="docid" value="" aria-hidden="true">
         <input type="text" name="courseid" value="{{ course.id }}" aria-hidden="true">
         <textarea id="html2pdf" name="html2pdf" rows="2" cols="10" aria-hidden="true"></textarea>
@@ -487,8 +502,8 @@
                         url: request, success: function (result) {
                             $(target).html(result);
                         },
-                        error:function (xhr, ajaxOptions, thrownError){
-                            if(xhr.status===404) {
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            if (xhr.status === 500) {
                                 $(target).html('<p>Grade Column was not found</p>');
                             }
                         }
@@ -506,7 +521,6 @@
                     });
                     $(this).hide();
                 });
-                $("#pdf_form").hide();
                 //create pdf from current html
                 $(".pdf_click").click(function () {
                     //force inline notes and markup

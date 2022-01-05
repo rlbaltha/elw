@@ -33,6 +33,7 @@ class LtiAgsScoreType extends AbstractType
                 'data' => $score
             ])
             ->add('comment', TextareaType::class, [
+                'attr' => ['rows' => '10'],
                 'label' => '',
                 'required' => false,
                 'data' => $comment
