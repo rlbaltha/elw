@@ -124,7 +124,7 @@ class CourseRepository extends ServiceEntityRepository
         return $this->getEntityManager()
             ->createQuery('SELECT SUBSTRING(c.name,1,8) as coursetype, COUNT(c.id) as coursecount
             FROM App\Entity\Course c JOIN App\Entity\Term t
-            WHERE t.id = ?1
+            WHERE c.term=t.id and t.id = ?1
             GROUP BY coursetype ORDER BY coursetype ASC
             ')
             ->setParameter('1', $term)

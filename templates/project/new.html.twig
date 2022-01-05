@@ -14,10 +14,58 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">New Project</h1>
-            {{ include('project/_form.html.twig') }}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">New Project</h1>
+                        {{ include('project/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h2 class="smaller">Descriptions of Rubric Blocks and Markup Sets</h2>
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="p-0">
+                            <span class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Rubrics
+                            </span>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            {% for rubric in rubrics %}
+                                <p class="font-weight-bold">{{ rubric.name }}</p>
+                                <p>{{ rubric.body|raw }}</p>
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="p-0">
+                            <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Markup
+                            </span>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            {% for markupset in markupsets %}
+                                <p class="font-weight-bold">{{ markupset.name }}</p>
+                                <p>{{ markupset.description|raw }}</p>
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -47,7 +95,8 @@
                         <li><strong>Add the gradebook column(s)</strong> for this project if you are using them. Create
                             gradebook columns from eLW’s course homepage.
                         </li>
-                        <li>Click <strong>save</strong>, and then repeat these steps for all of your course’s projects.</li>
+                        <li>Click <strong>save</strong>, and then repeat these steps for all of your course’s projects.
+                        </li>
                     </ul>
                     </p>
 
@@ -64,7 +113,8 @@
                         <strong>You must have at least one project before students can create new
                             documents.</strong>
                     </p>
-                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
+                    <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or
+                        visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
                 <div class="modal-footer">

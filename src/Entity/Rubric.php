@@ -61,7 +61,6 @@ class Rubric
     private $ratings;
 
 
-
     public function __construct()
     {
         $this->rubricset = new ArrayCollection();
