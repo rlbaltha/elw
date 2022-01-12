@@ -1,52 +1,36 @@
 lti1p3:
     key_chains:
+        platformKey:
+            key_set_name: "platformSet"
+            public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
+            private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
+            private_key_passphrase: null
         toolKey:
             key_set_name: "toolSet"
-            public_key: "file://%kernel.project_dir%/config/secrets/public.key"
-            private_key: "file://%kernel.project_dir%/config/secrets/private.key"
+            public_key: "file://%kernel.project_dir%/config/secrets/dev/public.key"
+            private_key: "file://%kernel.project_dir%/config/secrets/dev/private.key"
             private_key_passphrase: null
     platforms:
-        elc:
-            name: "elc"
-            audience: "https://uga.view.usg.edu"
-            oidc_authentication_url: "https://uga.view.usg.edu/d2l/lti/authenticate"
-            oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
-        elc_test:
-            name: "elc_test"
-            audience: "https://ugatest2.view.usg.edu"
-            oidc_authentication_url: "https://ugatest2.view.usg.edu/d2l/lti/authenticate"
-            oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
+        localPlatform:
+            name: "Local platform"
+            audience: "http://localhost/platform"
+            oidc_authentication_url: "http://localhost/lti1p3/oidc/authentication"
+            oauth2_access_token_url: "http://localhost/lti1p3/auth/platformKey/token"
     tools:
-        awsTool:
-            name: "elw_aws"
-            audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/login-initiation"
-            launch_url: "https://elw.english.uga.edu/lti_launch"
-            deep_linking_url: null
-        awsDevTool:
-            name: "elw_dev"
-            audience: "https://api.brightspace.com/auth/token"
-            oidc_initiation_url: "https://dev.elw.uga.edu/lti1p3/oidc/login-initiation"
-            launch_url: "https://dev.elw.uga.edu/lti_launch"
+        localTool:
+            name: "Local tool"
+            audience: "http://localhost/tool"
+            oidc_initiation_url: "http://localhost/lti1p3/oidc/initiation"
+            launch_url: null
             deep_linking_url: null
     registrations:
-        elc_dev:
-            client_id: "6bc335b6-957c-4b47-a208-e3e4623b7c06"
-            platform: "elc_test"
-            tool: "awsDevTool"
+        local:
+            client_id: "client_id"
+            platform: "localPlatform"
+            tool: "localTool"
             deployment_ids:
-                - "4b32a98d-f8bd-4280-81df-3fee90248470"
-            platform_key_chain: ~
-            platform_jwks_url: "https://ugatest2.view.usg.edu/d2l/.well-known/jwks"
+                - "deploymentId1"
+            platform_key_chain: "platformKey"
             tool_key_chain: "toolKey"
-            tool_jwks_url: "https://dev.elw.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
-        elc_aws:
-            client_id: "882919ca-b384-43ae-90cb-e07a7e780d24"
-            platform: "elc"
-            tool: "awsTool"
-            deployment_ids:
-                - "24c91db3-322c-4504-9697-df4ca2ed4eb0"
-            platform_key_chain: ~
-            platform_jwks_url: "https://uga.view.usg.edu/d2l/.well-known/jwks"
-            tool_key_chain: "toolKey"
-            tool_jwks_url: "https://elw.engligh.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
+            platform_jwks_url: null
+            tool_jwks_url: null
