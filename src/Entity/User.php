@@ -144,8 +144,30 @@ class User implements UserInterface, EquatableInterface
         return $this->id;
     }
 
+
+
     /**
      * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+
+    /**
+     * A visual identifier that represents this user.  Deprectated with 6.0
      *
      * @see UserInterface
      */
@@ -203,14 +225,6 @@ class User implements UserInterface, EquatableInterface
         // not needed for apps that do not check user passwords
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
 
     public function getFirstname(): ?string
     {

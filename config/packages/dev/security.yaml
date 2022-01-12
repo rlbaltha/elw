@@ -24,9 +24,8 @@ security:
       security: false
     main:
       lazy: true
-      guard:
-        authenticators:
-          - App\Security\LoginFormAuthenticator
+      custom_authenticator:
+        - App\Security\LocalAuthenticator
       logout:
         path: /logout
         target: /app_login

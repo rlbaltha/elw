@@ -190,9 +190,6 @@
     "nikic/php-parser": {
         "version": "v4.7.0"
     },
-    "nucleos/dompdf-bundle": {
-        "version": "3.0.0"
-    },
     "nyholm/psr7": {
         "version": "1.4",
         "recipe": {
