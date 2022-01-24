@@ -2,7 +2,9 @@ security:
   enable_authenticator_manager: true
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
   password_hashers:
-    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    App\Entity\User:
+      algorithm: auto
+
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
@@ -11,13 +13,6 @@ security:
       entity:
         class: App\Entity\User
         property: username
-  encoders:
-    # use your user class name here
-    App\Entity\User:
-      # Use native password encoder
-      # This value auto-selects the best possible hashing algorithm
-      # (i.e. Sodium when available).
-      algorithm: auto
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -26,27 +21,32 @@ security:
       lazy: true
       custom_authenticator:
         - App\Security\LocalAuthenticator
+        - App\Security\LtiAuthenticator
       logout:
         path: /logout
-        target: /app_login
+        target: /login
       switch_user: true
 
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/course, roles: ROLE_USER }
-    - { path: ^/classlist, roles: ROLE_USER }
-    - { path: ^/doc, roles: ROLE_USER }
-    - { path: ^/journal, roles: ROLE_USER}
-    - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/user, roles: ROLE_USER }
-    - { path: ^/label, roles: ROLE_ADMIN }
-    - { path: ^/markupset, roles: ROLE_INSTRUCTOR }
-    - { path: ^/markup, roles: ROLE_INSTRUCTOR }
-    - { path: ^/card, roles: ROLE_ADMIN }
-    - { path: ^/rubric, roles: ROLE_INSTRUCTOR }
+    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/course, roles: ROLE_USER, requires_channel: https}
+    - { path: ^/journal, roles: ROLE_USER, requires_channel: https}
+    - { path: ^/classlist, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/doc, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }
+    - { path: ^/card, roles: ROLE_ADMIN, requires_channel: https }
+    - { path: ^/label, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/markupset, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/markup, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/rubric, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/comment, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/rating, roles: ROLE_USER, requires_channel: https }
+    - { path: ^/stage, roles: ROLE_INSTRUCTOR, requires_channel: https }
+    - { path: ^/term, roles: ROLE_ADMIN, requires_channel: https }
 
 
 when@test:

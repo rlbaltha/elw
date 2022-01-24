@@ -1,6 +1,8 @@
 {
     "type": "project",
     "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "vcs",
@@ -16,14 +18,14 @@
         "caxy/php-htmldiff": "^0.1.9",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.0",
-        "doctrine/doctrine-bundle": "^2.4",
+        "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
-        "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
         "knplabs/knp-snappy-bundle": "^1.8",
-        "oat-sa/bundle-lti1p3": "3.0",
+        "lcobucci/jwt": "^4.1",
+        "oat-sa/bundle-lti1p3": "^6.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.4.*",
@@ -63,10 +65,16 @@
         "symfony/web-profiler-bundle": "^5.4"
     },
     "config": {
+        "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -79,18 +87,15 @@
         }
     },
     "replace": {
-        "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
+        "symfony/polyfill-php72": "*"
     },
     "scripts": {
         "auto-scripts": {
-            "ckeditor:install": "symfony-cmd",
+            "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "cache:clear": "symfony-cmd"
+            "ckeditor:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -104,9 +109,8 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": true,
-            "require": "5.4.*",
-            "docker": false
+            "allow-contrib": false,
+            "require": "5.4.*"
         }
     }
 }

@@ -10,8 +10,8 @@
     {% block stylesheets %}
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- Bootstrap CSS -->
-        <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css')) }}">
-        <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
+        <link type="text/css" rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link type="text/css" rel="stylesheet" href="{{ asset('css/local.css')}}">
         {# {{ encore_entry_link_tags('app') }} #}
     {% endblock %}
     <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
@@ -117,7 +117,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
-    <script src="{{ absolute_url(asset('js/bootstrap.min.js')) }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="https://unpkg.com/@travishorn/session-timeout"></script>
     <script>
         $(document).ready(function () {

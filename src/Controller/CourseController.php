@@ -9,6 +9,7 @@ use App\Form\IrbType;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
 use App\Service\Permissions;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +21,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class CourseController extends AbstractController
 {
 
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/admin", name="course_admin", methods={"GET"})
      */
     public function admin(CourseRepository $courseRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
-
+        $header = 'Admin Course List';
         return $this->render('course/index.html.twig', [
             'courses' => $courseRepository->findAll(),
+            'header' => $header
         ]);
     }
 
@@ -39,8 +49,8 @@ class CourseController extends AbstractController
     public function index(CourseRepository $courseRepository, string $status): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $courses = $this->getDoctrine()->getManager()->getRepository('App:Course')->findByUserAndTerm($user, $status);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $courses = $this->doctrine->getManager()->getRepository('App:Course')->findByUserAndTerm($user, $status);
         if($status == 'default') {
             $header = 'My Current Courses';
         }
@@ -61,10 +71,10 @@ class CourseController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
 
-        $labelsets = $this->getDoctrine()->getManager()->getRepository('App:Labelset')->findDefault();
-        $markupsets = $this->getDoctrine()->getManager()->getRepository('App:Markupset')->findDefault();
+        $labelsets = $this->doctrine->getManager()->getRepository('App:Labelset')->findDefault();
+        $markupsets = $this->doctrine->getManager()->getRepository('App:Markupset')->findDefault();
         $course = new Course();
         foreach ($labelsets as $labelset) {
             $course->addLabelset($labelset);
@@ -82,7 +92,7 @@ class CourseController extends AbstractController
         $classlist->setStatus('Approved');
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($course);
             $entityManager->persist($classlist);
             $entityManager->flush();
@@ -102,18 +112,18 @@ class CourseController extends AbstractController
     public function show(Permissions $permissions, string $courseid): Response
     {
         //discover needed info on request
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $classuser = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $classuser = $this->doctrine->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
 
         $role = $permissions->getCourseRole($courseid);
         //check status and show course page
         $status = $classuser->getStatus();
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
 
-        $irb = $this->getDoctrine()->getManager()->getRepository('App:Card')->findOneByType('irb');
+        $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
 
         $form = $this->createForm(IrbType::class, $user, [
             'action' => $this->generateUrl('user_irb', ['courseid' => $courseid]),
@@ -139,8 +149,8 @@ class CourseController extends AbstractController
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $options = ['user' => $user];
         $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
         $form->handleRequest($request);
@@ -150,7 +160,7 @@ class CourseController extends AbstractController
                     Project</a>';
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', $message);
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
@@ -169,12 +179,12 @@ class CourseController extends AbstractController
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $form = $this->createForm(AnnouncementType::class, $course);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your eLW Reminder has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
         }
@@ -195,8 +205,8 @@ class CourseController extends AbstractController
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $entityManager = $this->doctrine->getManager();
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         foreach ($classlists as $classlist) {
             if ($classlist->getStatus() == 'Pending') {
                 $classlist->setStatus('Approved');
@@ -217,7 +227,7 @@ class CourseController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         if ($this->isCsrfTokenValid('delete' . $course->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($course);
             $entityManager->flush();
         }

@@ -10,6 +10,7 @@ use App\Service\Permissions;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Caxy\HtmlDiff\HtmlDiff;
@@ -23,13 +24,17 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DocController extends AbstractController
 {
+    /** @var RequestStack */
+    private $requestStack;
+
 
     /** @var ManagerRegistry */
     private ManagerRegistry $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
     {
         $this->doctrine = $doctrine;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -40,7 +45,7 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
 
@@ -117,7 +122,7 @@ class DocController extends AbstractController
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -154,7 +159,7 @@ class DocController extends AbstractController
         $findtype = 'byproject';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
         $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);

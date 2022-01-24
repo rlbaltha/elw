@@ -8,6 +8,7 @@ use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\DocRepository;
 use App\Service\Permissions;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,13 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class CommentController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
 
     /**
      * @Route("/{courseid}/{docid}/{source}/ajax_new", name="comment_ajax_new", methods={"GET","POST"})
@@ -27,9 +35,9 @@ class CommentController extends AbstractController
     public function ajax_new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
         $request_url = $this->generateUrl('comment_ajax_new', ['courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
@@ -46,7 +54,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
@@ -70,7 +78,7 @@ class CommentController extends AbstractController
      */
     public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $source, string $id): Response
     {
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
         $form = $this->createForm(CommentJournalType::class, $comment, [
             'action' => '#',
             'method' => 'POST',
@@ -79,7 +87,7 @@ class CommentController extends AbstractController
         $request_url = $this->generateUrl('comment_ajax_edit', ['id' => $comment->getId(),  'docid'=> $docid, 'source'=> $source]);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             if ($source!='doc') {
                 $return = "success";
                 return new Response($return, 200, array('Content-Type' => 'application/json'));
@@ -101,7 +109,7 @@ class CommentController extends AbstractController
     public function ajax_show(Permissions $permissions, string $docid, string $courseid): Response
     {
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
         return $this->render('comment/ajax_show.html.twig', [
             'doc' => $doc,
             'courseid' => $doc->getCourse()->getId(),
@@ -119,10 +127,10 @@ class CommentController extends AbstractController
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $entityManager = $this->doctrine->getManager();
         $docs = $docRepository->findDocComments($course, $user);
         foreach($docs as $doc){
             if ($doc->getComments()){
@@ -143,9 +151,9 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target): Response
     {
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($comment);
             $entityManager->flush();
         }
@@ -164,10 +172,10 @@ class CommentController extends AbstractController
 
         $header = 'End Comment New';
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($target);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($target);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
@@ -182,7 +190,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
@@ -208,14 +216,14 @@ class CommentController extends AbstractController
     public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $header = 'End Comment Edit';
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your end comment has been updated.');
             if ($source!='doc') {
                 return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'userid' => $doc->getUser()->getId(), 'courseid' => $courseid]);

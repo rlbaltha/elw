@@ -2,25 +2,31 @@
 
 namespace App\Command;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-use Symfony\Component\Security\Core\Security;class UpdatePasswordCommand extends Command
+class UpdatePasswordCommand extends Command
 {
-    private $container;
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
     private $passwordEncoder;
 
-    public function __construct(ContainerInterface $container, UserPasswordHasherInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder, ManagerRegistry $doctrine)
     {
         parent::__construct();
-        $this->container = $container;
         $this->passwordEncoder = $passwordEncoder;
+        $this->doctrine = $doctrine;
     }
+
+
+
+
     protected static $defaultName = 'app:update-password';
 
     protected function configure()
@@ -91,12 +97,12 @@ use Symfony\Component\Security\Core\Security;class UpdatePasswordCommand extends
      */
     public function changePassword($username, $password)
     {
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $this->doctrine->getManager();
         $user = $em->getRepository('App:User')->findOneByUsername($username);
         if (!$user) {
             throw new \InvalidArgumentException(sprintf('User identified by "%s" username does not exist.', $username));
         }
-        $user->setPassword($this->passwordEncoder->encodePassword(
+        $user->setPassword($this->passwordEncoder->hashPassword(
             $user,
             $password
         ));

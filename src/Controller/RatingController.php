@@ -6,6 +6,7 @@ use App\Entity\Rating;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
 use App\Service\Permissions;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RatingController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/", name="rating_index", methods={"GET"})
      */
@@ -32,12 +41,12 @@ class RatingController extends AbstractController
     public function new(Request $request, Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
     {
         $header = 'Rubric Rating';
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
-        $rubric = $this->getDoctrine()->getManager()->getRepository('App:Rubric')->find($rubricid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $rubric = $this->doctrine->getManager()->getRepository('App:Rubric')->find($rubricid);
         $rating = new Rating();
         $rating->setUser($user);
         $rating->setDoc($doc);
@@ -46,7 +55,7 @@ class RatingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($rating);
             $entityManager->flush();
 
@@ -79,8 +88,8 @@ class RatingController extends AbstractController
     public function ajax_view(Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
     {
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
-        $ratings = $this->getDoctrine()->getManager()->getRepository('App:Rating')->findAjax($docid, $rubricid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $ratings = $this->doctrine->getManager()->getRepository('App:Rating')->findAjax($docid, $rubricid);
         return $this->render('rating/rating_ajax.html.twig', [
             'rubricid' => $rubricid,
             'ratings' => $ratings,
@@ -103,7 +112,7 @@ class RatingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
 
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $course->getId(), 'target' => $doc->getId()]);
         }
@@ -127,7 +136,7 @@ class RatingController extends AbstractController
         $course = $doc->getCourse();
 
         if ($this->isCsrfTokenValid('delete'.$rating->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($rating);
             $entityManager->flush();
         }

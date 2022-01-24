@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Rubric;
 use App\Form\RubricType;
 use App\Repository\RubricRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RubricController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/", name="rubric_index", methods={"GET"})
      */
@@ -31,14 +40,14 @@ class RubricController extends AbstractController
     public function new(Request $request): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $rubric = new Rubric();
         $form = $this->createForm(RubricType::class, $rubric);
         $form->handleRequest($request);
         $rubric->setUser($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($rubric);
             $entityManager->flush();
             $this->addFlash('notice', 'Your Rubric has been created.');
@@ -61,7 +70,7 @@ class RubricController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
 
             return $this->redirectToRoute('rubric_index');
         }
@@ -78,7 +87,7 @@ class RubricController extends AbstractController
     public function delete(Request $request, Rubric $rubric): Response
     {
         if ($this->isCsrfTokenValid('delete'.$rubric->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($rubric);
             $entityManager->flush();
         }

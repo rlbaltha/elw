@@ -8,11 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface, EquatableInterface
+class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id()
@@ -203,11 +204,11 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @see UserInterface
+     * @return string the hashed password for this user
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -218,13 +219,15 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed for apps that do not check user passwords
+        return null;
     }
-
 
     public function getFirstname(): ?string
     {
@@ -417,7 +420,7 @@ class User implements UserInterface, EquatableInterface
         return $this->updated;
     }
 
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): ?bool
     {
         return true;
     }

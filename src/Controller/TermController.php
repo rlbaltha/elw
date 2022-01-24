@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Term;
 use App\Form\TermType;
 use App\Repository\TermRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TermController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/", name="term_index", methods={"GET"})
      */
@@ -35,7 +44,7 @@ class TermController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($term);
             $entityManager->flush();
             $this->addFlash('notice', 'The term has been created.');
@@ -58,7 +67,7 @@ class TermController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'The term has been updated.');
             return $this->redirectToRoute('term_index');
         }
@@ -75,13 +84,13 @@ class TermController extends AbstractController
      */
     public function default(string $id)
     {
-        $terms = $this->getDoctrine()->getManager()->getRepository('App:Term')->findAll();
+        $terms = $this->doctrine->getManager()->getRepository('App:Term')->findAll();
         foreach ($terms as &$archiveterm) {
             $archiveterm->setStatus('Archive');
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($archiveterm);
         }
-        $term = $this->getDoctrine()->getManager()->getRepository('App:Term')->find($id);
+        $term = $this->doctrine->getManager()->getRepository('App:Term')->find($id);
         $term->setStatus('Default');
         $entityManager->persist($term);
         $entityManager->flush();
@@ -95,7 +104,7 @@ class TermController extends AbstractController
     public function delete(Request $request, Term $term): Response
     {
         if ($this->isCsrfTokenValid('delete'.$term->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($term);
             $entityManager->flush();
         }

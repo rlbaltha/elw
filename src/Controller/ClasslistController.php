@@ -6,6 +6,7 @@ use App\Entity\Classlist;
 use App\Form\ClasslistType;
 use App\Repository\ClasslistRepository;
 use App\Service\Permissions;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClasslistController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
 
 //    /**
 //     * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
@@ -27,7 +35,7 @@ class ClasslistController extends AbstractController
 //        $form->handleRequest($request);
 //
 //        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager = $this->doctrine->getManager();
 //            $entityManager->persist($classlist);
 //            $entityManager->flush();
 //
@@ -51,7 +59,7 @@ class ClasslistController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'This student has been updated.');
             return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
         }
@@ -69,7 +77,7 @@ class ClasslistController extends AbstractController
     {
         $courseid = $classlist->getCourse()->getId();
         if ($this->isCsrfTokenValid('delete'.$classlist->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($classlist);
             $entityManager->flush();
         }
