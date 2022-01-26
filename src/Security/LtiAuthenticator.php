@@ -3,40 +3,60 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 
 class LtiAuthenticator extends AbstractAuthenticator
 {
 
+    use TargetPathTrait;
+
+    private UrlGeneratorInterface $urlGenerator;
+
+    private UserRepository $userRepository;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->userRepository = $userRepository;
+    }
+
     public function supports(Request $request): ?bool
     {
-
         return false;
 
     }
 
     public function authenticate(Request $request): Passport
     {
-        $username = $request->request->get('username', '');
 
-
-        $passport = new SelfValidatingPassport(new UserBadge($username), []);
-
+        $username = $request->attributes->get('username', '');
+        $user = $this->userRepository->findOneBy(['username' => $username]);
+        $passport = new SelfValidatingPassport(
+            new UserBadge($user->getUserIdentifier()), []
+        );
         return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // on success, let the request continue
-        return null;
+
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+            return new RedirectResponse($targetPath);
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('course_index'));
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

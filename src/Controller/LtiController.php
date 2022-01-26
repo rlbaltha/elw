@@ -25,6 +25,9 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use Symfony\Component\Security\Core\Security;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use OAT\Library\Lti1p3Core\Message\Launch\Validator\Tool\ToolLaunchValidator;
+use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepositoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class LtiController extends AbstractController
 {
@@ -46,6 +49,8 @@ class LtiController extends AbstractController
     /** @var RequestStack */
     private $requestStack;
 
+    /** @var NonceRepositoryInterface $nonceRepository */
+    private $nonceRepository;
 
 
     public function __construct(
@@ -54,7 +59,8 @@ class LtiController extends AbstractController
         ClientInterface $guzzle,
         ManagerRegistry $doctrine,
         UserPasswordHasherInterface $passwordHasher,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        NonceRepositoryInterface $nonceRepository
     )
     {
         $this->security = $security;
@@ -63,30 +69,44 @@ class LtiController extends AbstractController
         $this->requestStack = $requestStack;
         $this->passwordHasher = $passwordHasher;
         $this->doctrine = $doctrine;
+        $this->nonceRepository = $nonceRepository;
     }
 
 
     /**
      * @Route("/lti_launch", name="lti_launch")
      */
-    public function lti_launch(CourseRepository $courseRepository, LtiAuthenticator $ltiAuthenticator, Request $request)
+    public function lti_launch(CourseRepository $courseRepository, LtiAuthenticator $ltiAuthenticator, Request $request, ServerRequestInterface $serverRequest, RegistrationRepositoryInterface $repository, NonceRepositoryInterface $nonceRepository)
     {
-        /** @var LtiToolMessageSecurityToken $token */
-        $token = $this->security->getToken();
-        if (!$token instanceof LtiToolMessageSecurityToken) {
-            return $this->redirectToRoute('course_index');
-        }
 
-        // Related registration
-        $registration = $token->getRegistration();
-        // You can even access validation results
-        $validationResults = $token->getValidationResult();
+        // Create the validator
+        $validator = new ToolLaunchValidator($repository, $nonceRepository);
+
+        // Perform validation
+        $launch = $validator->validatePlatformOriginatingLaunch($serverRequest);
+        $ltiMessage = $launch->getPayload();
+        $registration = $launch->getRegistration();
 
 
-        // Related LTI message
-        //all the payload from ELC; payload depend on how Deployment is created on platform;
-        // be sure to include all user and course info in Security Settings
-        $ltiMessage = $token->getPayload();
+
+//        $security = $this->security;
+//        /** @var LtiToolMessageSecurityToken $token */
+//        $token = $this->security->getToken();
+//
+//
+//        if (!$token instanceof LtiToolMessageSecurityToken) {
+//            return $this->redirectToRoute('course_index');
+//        }
+//        // Related registration
+//        $registration = $token->getRegistration();
+//        // You can even access validation results
+//        $validationResults = $token->getValidationResult();
+//
+//
+//        // Related LTI message
+//        //all the payload from ELC; payload depend on how Deployment is created on platform;
+//        // be sure to include all user and course info in Security Settings
+//        $ltiMessage = $token->getPayload();
 
 
         $this->requestStack->getSession()->set('lti_registration', $registration->getIdentifier());
@@ -141,7 +161,8 @@ class LtiController extends AbstractController
         }
 
         // Actual passing of auth to Symfony firewall and sessioning
-        $ltiAuthenticator->authenticate($user);
+        $request->attributes->set('username', $username);
+        $ltiAuthenticator->authenticate($request);
         $now = new \DateTime('now');
         $user->setLastlogin($now);
         $this->doctrine->getManager()->persist($user);

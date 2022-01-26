@@ -56,7 +56,7 @@
                                 </div>
                             </li>
                         {% endif %}
-                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        {% if is_granted('IS_IMPERSONATOR') %}
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ path('course_index',{'status':'default'}) }}?_switch_user=_exit">
