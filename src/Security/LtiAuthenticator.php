@@ -10,11 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 
 class LtiAuthenticator extends AbstractAuthenticator
@@ -42,10 +44,19 @@ class LtiAuthenticator extends AbstractAuthenticator
     {
 
         $username = $request->attributes->get('username', '');
-        $user = $this->userRepository->findOneBy(['username' => $username]);
+        $request->getSession()->set(Security::LAST_USERNAME, $username);
         $passport = new SelfValidatingPassport(
-            new UserBadge($user->getUserIdentifier()), []
+            new UserBadge($username, function($userIdentifier) {
+                // optionally pass a callback to load the User manually
+                $user = $this->userRepository->findOneBy(['username' => $userIdentifier]);
+                if (!$user) {
+                    throw new UserNotFoundException();
+                }
+                return $user;
+            })
+            , []
         );
+
         return $passport;
     }
 

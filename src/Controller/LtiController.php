@@ -14,26 +14,29 @@ use App\Repository\CourseRepository;
 use App\Security\LtiAuthenticator;
 use App\Service\Lti;
 use App\Service\Permissions;
-use Doctrine\Persistence\ManagerRegistry;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Message\LtiToolMessageSecurityToken;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
-use Symfony\Component\Security\Core\Security;
-use GuzzleHttp\ClientInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use OAT\Library\Lti1p3Core\Message\Launch\Validator\Tool\ToolLaunchValidator;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepositoryInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use GuzzleHttp\ClientInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use OAT\Library\Lti1p3Core\Message\Launch\Validator\ToolLaunchValidator;
 use Psr\Http\Message\ServerRequestInterface;
 
 class LtiController extends AbstractController
 {
     /** @var ManagerRegistry */
     private ManagerRegistry $doctrine;
-    
+
+    /** @var UserPasswordHasherInterface */
+    private $passwordHasher;
+
     /** @var Security */
     private $security;
 
@@ -43,14 +46,6 @@ class LtiController extends AbstractController
     /** @var ClientInterface */
     private $guzzle;
 
-    /** @var UserPasswordHasherInterface */
-    private $passwordHasher;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var NonceRepositoryInterface $nonceRepository */
-    private $nonceRepository;
 
 
     public function __construct(
@@ -58,28 +53,26 @@ class LtiController extends AbstractController
         RegistrationRepositoryInterface $repository,
         ClientInterface $guzzle,
         ManagerRegistry $doctrine,
-        UserPasswordHasherInterface $passwordHasher,
-        RequestStack $requestStack,
-        NonceRepositoryInterface $nonceRepository
+        UserPasswordHasherInterface $passwordHasher
     )
     {
         $this->security = $security;
         $this->repository = $repository;
         $this->guzzle = $guzzle;
-        $this->requestStack = $requestStack;
-        $this->passwordHasher = $passwordHasher;
         $this->doctrine = $doctrine;
-        $this->nonceRepository = $nonceRepository;
+        $this->passwordHasher = $passwordHasher;
     }
 
 
     /**
      * @Route("/lti_launch", name="lti_launch")
      */
-    public function lti_launch(CourseRepository $courseRepository, LtiAuthenticator $ltiAuthenticator, Request $request, ServerRequestInterface $serverRequest, RegistrationRepositoryInterface $repository, NonceRepositoryInterface $nonceRepository)
+    public function lti_launch(CourseRepository $courseRepository, ServerRequestInterface $serverRequest,
+                               RegistrationRepositoryInterface $repository, NonceRepositoryInterface $nonceRepository,
+                               UserAuthenticatorInterface $userAuthenticator, LtiAuthenticator $ltiAuthenticator,
+                               Session $session, Request $request)
     {
-
-        // Create the validator
+        // Create the lti token validator
         $validator = new ToolLaunchValidator($repository, $nonceRepository);
 
         // Perform validation
@@ -87,32 +80,11 @@ class LtiController extends AbstractController
         $ltiMessage = $launch->getPayload();
         $registration = $launch->getRegistration();
 
+        //set lti ids for future use
+        $session->set('lti_registration', $registration->getIdentifier());
+        $session->set('deployment_id', $ltiMessage->getDeploymentId());
 
-
-//        $security = $this->security;
-//        /** @var LtiToolMessageSecurityToken $token */
-//        $token = $this->security->getToken();
-//
-//
-//        if (!$token instanceof LtiToolMessageSecurityToken) {
-//            return $this->redirectToRoute('course_index');
-//        }
-//        // Related registration
-//        $registration = $token->getRegistration();
-//        // You can even access validation results
-//        $validationResults = $token->getValidationResult();
-//
-//
-//        // Related LTI message
-//        //all the payload from ELC; payload depend on how Deployment is created on platform;
-//        // be sure to include all user and course info in Security Settings
-//        $ltiMessage = $token->getPayload();
-
-
-        $this->requestStack->getSession()->set('lti_registration', $registration->getIdentifier());
-        $this->requestStack->getSession()->set('deployment_id', $ltiMessage->getDeploymentId());
-
-
+        // Get user
         $userIdentity = $ltiMessage->getUserIdentity();
         $firstname = $userIdentity->getGivenName();
         $lastname = $userIdentity->getFamilyName();
@@ -163,6 +135,8 @@ class LtiController extends AbstractController
         // Actual passing of auth to Symfony firewall and sessioning
         $request->attributes->set('username', $username);
         $ltiAuthenticator->authenticate($request);
+        $userAuthenticator->authenticateUser($user, $ltiAuthenticator, $request);
+
         $now = new \DateTime('now');
         $user->setLastlogin($now);
         $this->doctrine->getManager()->persist($user);
@@ -222,14 +196,14 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/nrps", name="lti_nrps", methods={"GET","POST"})
      */
-    public function nrps(Permissions $permissions, string $courseid, Lti $lti)
+    public function nrps(Permissions $permissions, string $courseid, Lti $lti, Session $session)
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
-        $registration = $this->requestStack->getSession()->get('lti_registration');
-        $deployment_id = $this->requestStack->getSession()->get('deployment_id');
+        $registration = $session->get('lti_registration');
+        $deployment_id = $session->get('deployment_id');
         $method = 'get';
         $scope = 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly';
         $accept_header = 'application/vnd.ims.lti-nrps.v2.membershipcontainer+json';
@@ -271,22 +245,22 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_index", name="ags_index", methods={"GET"})
      */
-    public function ags(Permissions $permissions, string $courseid, Lti $lti)
+    public function ags(Permissions $permissions, string $courseid, Lti $lti, Session $session)
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
-        $registration = $this->requestStack->getSession()->get('lti_registration');
-        $deployment_id = $this->requestStack->getSession()->get('deployment_id');
+        $registration = $session->get('lti_registration');
+        $deployment_id = $session->get('deployment_id');
 
         $method = 'get';
-        $scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/lineitem'];
+        $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
 
         $registration = $this->repository->find($registration);
         $uri = $registration->getPlatform()->getAudience() . '/d2l/api/lti/ags/2.0/deployment/' . $deployment_id . '/orgunit/' . $course->getLtiId() . '/lineitems';
-        $access_token = $lti->getAccessToken($registration, $scopes);
+        $access_token = $lti->getAccessToken($registration, $scope);
         $options = $lti->getHeaderOptions($access_token, $accept_header);
         $response = $this->guzzle->request($method, $uri, $options);
         $data = json_decode($response->getBody()->__toString(), true);
@@ -303,14 +277,14 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/{agsid}/ags_delete", name="ags_delete", methods={"GET"})
      */
-    public function ags_delete(Permissions $permissions, string $courseid, string $agsid, Lti $lti)
+    public function ags_delete(Permissions $permissions, string $courseid, string $agsid, Lti $lti, Session $session)
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
         $local_ags = $this->doctrine->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
-        $registration = $this->requestStack->get('lti_registration');
+        $registration = $session->get('lti_registration');
         $method = 'DELETE';
         $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
         $accept_header = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
@@ -335,7 +309,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/ags_new", name="ags_new", methods={"GET","POST"})
      */
-    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti)
+    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti, Session $session)
     {
         $form = $this->createForm(LtiAgsLineitemType::class);
 
@@ -344,8 +318,8 @@ class LtiController extends AbstractController
             $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
             $role = $permissions->getCourseRole($courseid);
 
-            $registration = $this->requestStack->get('lti_registration');
-            $deployment_id = $this->requestStack->get('deployment_id');
+            $registration = $session->get('lti_registration');
+            $deployment_id = $session->get('deployment_id');
 
             $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
@@ -387,7 +361,7 @@ class LtiController extends AbstractController
     /**
      * @Route("/lti/{courseid}/{docid}/{source}/ags_score", name="ags_score_new", methods={"GET","POST"})
      */
-    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, string $courseid, string $docid, string $source)
+    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, Session $session, string $courseid, string $docid, string $source)
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -424,7 +398,7 @@ class LtiController extends AbstractController
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $registration = $this->requestStack->get('lti_registration');
+            $registration = $session->get('lti_registration');
             $method = 'POST';
             $scope = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
