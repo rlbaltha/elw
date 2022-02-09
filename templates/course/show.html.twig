@@ -74,7 +74,7 @@
                             Classlist</a>
                     </div>
                     <div class="card-body">
-                        <div class="row" id="classlist-row">
+                        <div class="row classlist-row">
                             <table id="classlist" class="table">
                                 <thead class="">
                                 <tr>
@@ -99,11 +99,13 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
+                            <div id="nrps"></div>
                         </div>
-                        <div class="" id="nrps"></div>
+
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-6">
                 {# Projects #}
                 <div class="card mb-3">
@@ -276,7 +278,7 @@
                 $('#projects-arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             });
             $("#classlist-toggle").click(function () {
-                $("#classlist-row").toggle();
+                $(".classlist-row").toggle();
                 $('#classlist-arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             });
             $("#gradebook-toggle").click(function () {
