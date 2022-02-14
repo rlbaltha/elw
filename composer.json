@@ -90,7 +90,7 @@
     "scripts": {
         "auto-scripts": {
             "ckeditor:install": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "assets:install": "symfony-cmd",
             "cache:clear": "symfony-cmd"
         },
         "post-install-cmd": [
