@@ -43,7 +43,8 @@
         </li>
     {% endif %}
     <li class="nav-item">
-        <a class="nav-link toggle-inline" href="#">Notes <span id="toggle">Popover</span></a>
+        <a class="nav-link toggle-inline" href="#" aria-label="toggle view"><span class="sr-only">Click to toggle the way the additional text is viewed.
+            The default view is most accessible.</span> Notes <span id="toggle">Popover</span></a>
     </li>
 {% endblock %}
 
@@ -103,6 +104,9 @@
                                     eLC</a>
                             </li>
                         {% endif %}
+                        <li class="nav-item ml-5">
+                            <span class="navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -298,6 +302,9 @@
                                                 eLC</a>
                                         </li>
                                     {% endif %}
+                                    <li class="nav-item ml-5">
+                                        <span class="navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -538,13 +545,14 @@
                     $("#pdf_form").submit();
                     $("#pdf_form").hide();
                 });
-
                 function popover_toggle() {
                     $('#toggle').text(($('#toggle').text() === 'Popover' ? 'Inline' : 'Popover'));
+                    $('.popover-alert').text(($('#toggle').text() === 'Inline' ? 'In this view, hover over highlighted text for additional information.' : 'In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
                     $('.note, .super').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
                 };
+
                 $(".toggle-inline").click(function () {
                     popover_toggle();
                 });
