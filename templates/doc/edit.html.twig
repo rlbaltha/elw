@@ -4,7 +4,7 @@
 
 {% block subnav %}
     <li class="nav-item">
-        <a id="doc-title-toggle" class="nav-link" href="#">Settings
+        <a id="doc-title-toggle" class="nav-link" href="#" aria-expanded="true">Settings
             <i id='settings_arrows' class="fa fa-chevron-up"></i></a>
     </li>
     <li class="nav-item">
@@ -190,12 +190,15 @@
             $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
-            $("fieldset").toggle();
-            $("#doc_project").toggle();
-            $("#doc_stage").toggle();
-            $("#doc_access").toggle();
-            $("#doc_wordcount").toggle();
-            $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $("fieldset").toggle();
+                $("#doc_project").toggle();
+                $("#doc_stage").toggle();
+                $("#doc_access").toggle();
+                $("#doc_wordcount").toggle();
+                $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $(this).attr('aria-expanded', function (i, attr) {
+                return attr == 'true' ? 'false' : 'true'
+                });
             {% endif %}
             $("#doc-title-toggle").click(function () {
                 $("fieldset").toggle();
@@ -204,6 +207,9 @@
                 $("#doc_access").toggle();
                 $("#doc_wordcount").toggle();
                 $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $(this).attr('aria-expanded', function (i, attr) {
+                return attr == 'true' ? 'false' : 'true'
+                });
             });
             $("#submit-doc-form").click(function () {
                 var editor = CKEDITOR.instances.doc_body;
