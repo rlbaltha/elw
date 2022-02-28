@@ -224,7 +224,7 @@
                                 {% endif %}
                                 {% if app.user == comment.user %}
                                     <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
-                                       class="btn btn-primary btn-sm float-right"
+                                       class="btn btn-primary btn-sm float-end"
                                        href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': doc.id}) }}">Edit</a>
                                 {% endif %}
                             </div>
@@ -234,7 +234,7 @@
 
                             <div class="card-footer">
                                 {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                <span class="float-end">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                             </div>
                         </div>
                     {% endif %}
@@ -407,7 +407,7 @@
                                             <span class="badge bg-primary" style="background:black">Hidden</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
-                                            <a class="btn btn-primary btn-sm float-right"
+                                            <a class="btn btn-primary btn-sm float-end"
                                                href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': review.id}) }}">Edit</a>
                                         {% endif %}
                                     </div>
@@ -416,7 +416,7 @@
                                     </div>
                                     <div class="card-footer">
                                         {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                        <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                        <span class="float-end">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                                     </div>
                                 </div>
                             {% endif %}

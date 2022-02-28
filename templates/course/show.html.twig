@@ -133,7 +133,7 @@
                                             <div class="card-header text-white" style="background-color: {{ project.color }}">
                                                 <h5 class="card-title d-inline">{{ project.name }}</h5>
                                                 <a aria-label="Edit Project {{ project.name }}"
-                                                   class="btn btn-primary btn-sm float-right"
+                                                   class="btn btn-primary btn-sm float-end"
                                                    href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
                                                     Edit</a>
                                             </div>

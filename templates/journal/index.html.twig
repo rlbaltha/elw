@@ -110,7 +110,7 @@
                         <h2 class="d-inline">{{ doc.title }}</h2>
                         {% if app.user==doc.user %}
                             <a aria-label="Edit Journal entry {{ doc.title }}"
-                               class="btn btn-primary btn-sm float-right"
+                               class="btn btn-primary btn-sm float-end"
                                href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
                         {% endif %}
                     </div>

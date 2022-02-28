@@ -1,4 +1,4 @@
-<form class="d-inline float-right" method="post" action="{{ path('classlist_delete', {'id': classlist.id}) }}" onsubmit="return confirm('Are you sure you want to remove this student from this class?');">
+<form class="d-inline float-end" method="post" action="{{ path('classlist_delete', {'id': classlist.id}) }}" onsubmit="return confirm('Are you sure you want to remove this student from this class?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classlist.id) }}">
     <button class="btn btn-danger btn-sm">Remove</button>
