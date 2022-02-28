@@ -14,7 +14,7 @@
 {% block toolnav %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -32,7 +32,7 @@
                     {% if role=='Instructor' %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-toggle="dropdown"
+                               data-bs-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Select Author
                             </a>
@@ -51,7 +51,7 @@
 
                 </ul>
                 {% if role=='Instructor' %}
-                    <ul class="next_prev navbar-nav ml-auto" style="display: none">
+                    <ul class="next_prev navbar-nav ms-auto" style="display: none">
                         <li class="nav-item"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i></li>
                         {% for classlist in classlists %}
                             <li class="nav-item classlist" data-id="{{ classlist.user.id }}" id="{{ loop.index }}">
@@ -70,7 +70,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
     </li>
 {% endblock %}
 

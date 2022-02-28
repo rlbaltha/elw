@@ -4,7 +4,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Rubric Blocks Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Rubric Blocks Help</a>
     </li>
 {% endblock %}
 
@@ -23,8 +23,8 @@
             <div class="card">
                 <div class="card-header" id="heading{{ loop.index }}">
                     <h2 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                data-target="#collapse{{ loop.index }}" aria-expanded="true"
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ loop.index }}" aria-expanded="true"
                                 aria-controls="collapse{{ loop.index }}">
                             {{ rubric.name }}  ({% if rubric.level == 0 %}Default{% elseif rubric.level == 2 %}Shared{% elseif rubric.level == 3 %}Archived{% else %}Created by {{ rubric.user.firstname }} {{ rubric.user.lastname }}{% endif %})
                         </button>

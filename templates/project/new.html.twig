@@ -9,7 +9,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Project Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Project Help</a>
     </li>
 {% endblock %}
 
@@ -31,7 +31,7 @@
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h5 class="p-0">
-                            <span class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <span class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Rubrics
                             </span>
                         </h5>
@@ -40,7 +40,7 @@
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="card-body">
                             {% for rubric in rubrics %}
-                                <p class="font-weight-bold">{{ rubric.name }}</p>
+                                <p class="fw-bold">{{ rubric.name }}</p>
                                 <p>{{ rubric.body|raw }}</p>
                                 <hr/>
                             {% endfor %}
@@ -50,7 +50,7 @@
                 <div class="card">
                     <div class="card-header" id="headingTwo">
                         <h5 class="p-0">
-                            <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <span class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Markup
                             </span>
                         </h5>
@@ -58,7 +58,7 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div class="card-body">
                             {% for markupset in markupsets %}
-                                <p class="font-weight-bold">{{ markupset.name }}</p>
+                                <p class="fw-bold">{{ markupset.name }}</p>
                                 <p>{{ markupset.description|raw }}</p>
                                 <hr/>
                             {% endfor %}

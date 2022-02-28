@@ -16,6 +16,13 @@ body {
     color: #343a40; font-style: italic;
 }
 
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+}
+
 div.checkbox > label {
     margin-right:2em;
 }
@@ -78,10 +85,19 @@ h2 {
     border-radius: .2rem;
 }
 
-.badge-primary {
+.bg-default {
     background-color: #20399D;
     border-color: #20399D;
     font-weight: bolder;
+    text-decoration: none;
+}
+
+.bg-default:hover {
+    background-color: #20399D;
+    border-color: #20399D;
+    font-weight: bolder;
+    text-decoration: none;
+    color: white;
 }
 
 .btn-danger {

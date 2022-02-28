@@ -24,11 +24,8 @@
             <p class="navbar-text">Files that have reviews, end comments, or grades cannot be deleted.</p>
         {% endif %}
     </li>
-{#    <li class="nav-item">#}
-{#        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>#}
-{#    </li>#}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
 {% endblock %}
 
@@ -47,8 +44,8 @@
                     <div class="card">
                         <div class="card-header" id="i_heading">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#i_collapse" aria-expanded="true"
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#i_collapse" aria-expanded="true"
                                         aria-controls="i_collapsei">
                                     Insert Note
                                 </button>
@@ -59,7 +56,7 @@
                              aria-labelledby="i_heading" data-parent="#accordionInsert">
                             <div class="card-body">
                     <form id='note_insert_form' name='note_insert_form'>
-                        <label class="sr-only" for="insert_value">Insert Note</label>
+                        <label class="visually-hidden" for="insert_value">Insert Note</label>
                         <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
                         <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary btn-sm"
                            title="Insert Note">Insert</a>
@@ -75,8 +72,8 @@
                     <div class="card">
                         <div class="card-header" id="m_heading{{ loop.index }}">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#m_collapse{{ loop.index }}" aria-expanded="true"
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#m_collapse{{ loop.index }}" aria-expanded="true"
                                         aria-controls="m_collapse{{ loop.index }}">
                                     Markup {{ loop.index }}: {{ markupset.name }}
                                 </button>
@@ -90,7 +87,7 @@
                                 <ul style="list-style-type:none; padding-left: 0;">
                                 {% for markup in markupset.markups %}
                                     <li style="display:inline">
-                                    <a class="badge badge-primary" style="background-color:{{ markup.color }}"
+                                    <a class="badge bg-primary" style="background-color:{{ markup.color }}"
                                        href="javascript:insert_markup('{{ markup.id }}', '{{ markup.name }}','{{ markup.color }}');"
                                        title="Submit entry">{{ markup.name }}</a>
                                     </li>
@@ -108,8 +105,8 @@
                         <div class="card">
                             <div class="card-header" id="r_heading{{ loop.index }}">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#r_collapse{{ loop.index }}" aria-expanded="true"
+                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#r_collapse{{ loop.index }}" aria-expanded="true"
                                             aria-controls="r_collapse{{ loop.index }}">
                                        Rubric {{ loop.index }}: {{ rubric.name }}
                                     </button>

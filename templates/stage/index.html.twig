@@ -4,7 +4,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Stages Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Stages Help</a>
     </li>
 {% endblock %}
 
@@ -27,7 +27,7 @@
                 {% for stage in stages %}
                     <tr>
                         <td>
-                            <a aria-label="Edit Stage {{ stage.name }}" class="badge badge-primary p-2"
+                            <a aria-label="Edit Stage {{ stage.name }}" class="badge bg-default p-2"
                                style="background:{{ stage.color }}"
                                href="{% if (is_granted('ROLE_ADMIN')) or (stage.user == app.user) %}{{ path('stage_edit', {'id': stage.id}) }}{% else %}#{% endif %}">
                                 {{ stage.name }}</a>
