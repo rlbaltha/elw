@@ -10,7 +10,7 @@
 
 {% block subnav %}
     <h1 class="navbar-brand mb-0 h1 mr-5">
-        {% if doc.origin %}<span class="badge bg-primary"
+        {% if doc.origin %}<span class="badge bg-default"
                                  style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
     </h1>
 
@@ -31,7 +31,7 @@
                                href="#">
                                 Review By {{ review.user.firstname }} {{ review.user.lastname }}
                                 {% if review.comments|length > 0 %}
-                                    <span class="badge bg-primary"
+                                    <span class="badge bg-default"
                                           style="background:darkblue">Comments ({{ review.comments|length }})</span>
 
                                 {% endif %}
@@ -140,14 +140,14 @@
                          aria-labelledby="info_heading" data-parent="#accordionInfo">
                         <div class="card-body">
                             <p>{% if doc.project %}
-                                    <span class="badge bg-primary"
+                                    <span class="badge bg-default"
                                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                                 {% endif %}
                                 {% if doc.stage %}
-                                    <span class="badge bg-primary"
+                                    <span class="badge bg-default"
                                           style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                                 {% endif %}
-                                <span class="badge bg-primary"
+                                <span class="badge bg-default"
                                       style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
                             </p>
                             <p>By {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
@@ -220,7 +220,7 @@
                             <div class="card-header">
                                 {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                 {% if comment.access=='Hidden' %}
-                                    <span class="badge bg-primary" style="background:black">Hidden</span>
+                                    <span class="badge bg-default" style="background:black">Hidden</span>
                                 {% endif %}
                                 {% if app.user == comment.user %}
                                     <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
@@ -326,7 +326,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <span class="badge bg-primary" style="background-color: darkblue">Review</span>
+                                <span class="badge bg-default" style="background-color: darkblue">Review</span>
                                 of {{ doc.title }}
                             </div>
                             <div class="card-body">
@@ -404,7 +404,7 @@
                                     <div class="card-header">
                                         {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                         {% if comment.access=='Hidden' %}
-                                            <span class="badge bg-primary" style="background:black">Hidden</span>
+                                            <span class="badge bg-default" style="background:black">Hidden</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
                                             <a class="btn btn-primary btn-sm float-end"

@@ -29,7 +29,7 @@
                 {% for markup in markupset.markups %}
                     <tr>
                         <td>
-                            <a aria-label="Edit Markup {{ markup.name }}" class="badge bg-primary p-2"
+                            <a aria-label="Edit Markup {{ markup.name }}" class="badge bg-default p-2"
                                style="background:{{ markup.color }}"
                                href="{% if (is_granted('ROLE_ADMIN')) or (markupset.user == app.user) %}{{ path('markup_edit', {'id': markup.id}) }}{% else %}#{% endif %}">
                                 {{ markup.name }}

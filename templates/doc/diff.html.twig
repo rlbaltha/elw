@@ -50,12 +50,12 @@
                     <p>Created: {{ doc1.created | date("M j, Y g:ia") }}</p>
                     <p>Modified: {{ doc1.updated | date("M j, Y g:ia") }} </p>
                     <p>Word Count: {{ doc1.wordcount }} </p>
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{{ doc1.project.color }}">{{ doc1.project.name }}</span>
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{{ doc1.stage.color }}">{{ doc1.stage.name }}</span>
 
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{% if doc1.access=='Private'%}darkred{% elseif doc1.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc1.access }}</span>
                 </div>
             </div>
@@ -69,12 +69,12 @@
                     <p>Created: {{ doc2.created | date("M j, Y g:ia") }}</p>
                     <p>Modified: {{ doc2.updated | date("M j, Y g:ia") }} </p>
                     <p>Word Count: {{ doc2.wordcount }} </p>
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{{ doc2.project.color }}">{{ doc2.project.name }}</span>
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{{ doc2.stage.color }}">{{ doc2.stage.name }}</span>
 
-                    <span class="badge bg-primary"
+                    <span class="badge bg-default"
                           style="background:{% if doc2.access=='Private'%}darkred{% elseif doc2.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc2.access }}</span>
                 </div>
             </div>

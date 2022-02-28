@@ -32,14 +32,14 @@
                 </div>
                 <div class="card-body">
                     <p>{% if doc.project %}
-                            <span class="badge bg-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                         {% endif %}
                         {% if doc.stage %}
-                            <span class="badge bg-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                         {% endif %}
-                        <span class="badge bg-primary"
+                        <span class="badge bg-default"
                               style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
                     </p>
                     <p>By {{ doc.user.firstname }} {{ doc.user.lastname }}</p>

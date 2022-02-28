@@ -34,10 +34,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared#}
-{#                            Docs</a>#}
-{#                    </li>#}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
@@ -132,7 +128,7 @@
                         <label class="visually-hidden visually-hidden-focusable" for="{{ doc.id }}">Select for comparison</label><input
                                 type="checkbox" id="{{ doc.id }}" name="compare">
                         {% if doc.origin %}
-                            <span class="badge bg-primary">Review</span>
+                            <span class="badge bg-default">Review</span>
                         {% endif %}
                         <a href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                     </td>
@@ -153,7 +149,7 @@
                                             <a class="dropdown-item"
                                                href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                                 {% if review.comments|length > 0 %}
-                                                    <span class="badge bg-primary"
+                                                    <span class="badge bg-default"
                                                           style="background:darkblue">End Comments ({{ review.comments|length }})</span>
                                                 {% endif %}
                                             </a>
@@ -165,19 +161,19 @@
                     </td>
                     <td class="d-none d-sm-table-cell">
                         {% if doc.project %}
-                            <span class="badge bg-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                         {% endif %}
                         {% if doc.stage %}
-                            <span class="badge bg-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                         {% endif %}
-                        <span class="badge bg-primary"
+                        <span class="badge bg-default"
                               style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
 
 
                         {% if doc.comments|length > 0 %}
-                            <span class="badge bg-primary"
+                            <span class="badge bg-default"
                                   style="background:darkblue">End Comments ({{ doc.comments|length }})</span>
 
                         {% endif %}
