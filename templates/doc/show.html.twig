@@ -104,10 +104,8 @@
                                     eLC</a>
                             </li>
                         {% endif %}
-                        <li class="nav-item ml-5">
-                            <span class="navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
-                        </li>
-                    </ul>
+                        </ul>
+                    <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                 </div>
             </div>
         </nav>
@@ -568,7 +566,7 @@
                     let p = $(this).position();
                     let note_index = index + 1;
                     let note_number = '<span class="blue">' + note_index + '</span>';
-                    let note = '<span id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><span class="popover-content">' + note_number + $(this).html() + '</span></span>';
+                    let note = '<span id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem; padding: 1rem; text-indent: 0"><span class="popover-content">' + note_number + $(this).html() + '</span></span>';
                     $(this).prev().append(note);
                 });
 

@@ -120,3 +120,5 @@ a, .page-link {
 .pagination > span {
     padding: 1em;
 }
+
+a {text-decoration: none}

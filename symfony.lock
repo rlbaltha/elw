@@ -106,9 +106,6 @@
     "doctrine/persistence": {
         "version": "1.3.8"
     },
-    "doctrine/reflection": {
-        "version": "1.2.1"
-    },
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
@@ -117,6 +114,9 @@
     },
     "ezyang/htmlpurifier": {
         "version": "v4.13.0"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.6"
     },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.3",
@@ -163,8 +163,8 @@
             "config/packages/knp_snappy.yaml"
         ]
     },
-    "kub-at/php-simple-html-dom-parser": {
-        "version": "1.9.1"
+    "laminas/laminas-code": {
+        "version": "4.5.1"
     },
     "lcobucci/clock": {
         "version": "2.0.0"
@@ -218,15 +218,6 @@
     "oat-sa/lib-lti1p3-core": {
         "version": "2.4.0"
     },
-    "oat-sa/lib-lti1p3-nrps": {
-        "version": "2.0.0"
-    },
-    "ocramius/package-versions": {
-        "version": "1.4.2"
-    },
-    "ocramius/proxy-manager": {
-        "version": "2.2.3"
-    },
     "paragonie/random_compat": {
         "version": "v9.99.100"
     },
@@ -235,9 +226,6 @@
     },
     "phar-io/version": {
         "version": "3.1.0"
-    },
-    "php": {
-        "version": "7.2"
     },
     "php-http/message-factory": {
         "version": "v1.0.2"
@@ -742,11 +730,5 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
-    },
-    "zendframework/zend-code": {
-        "version": "3.4.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }
