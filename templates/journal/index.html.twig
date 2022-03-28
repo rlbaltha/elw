@@ -52,10 +52,10 @@
                 </ul>
                 {% if role=='Instructor' %}
                     <ul class="next_prev navbar-nav ms-auto" style="display: none">
-                        <li class="nav-item"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i></li>
+                        <li class="nav-item"><i class="fa fa-arrow-left me-2" aria-hidden="true"></i></li>
                         {% for classlist in classlists %}
                             <li class="nav-item classlist" data-id="{{ classlist.user.id }}" id="{{ loop.index }}">
-                                <a class="mr-2"
+                                <a class="me-2"
                                    href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">
                                     {{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
                             </li>
@@ -184,9 +184,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="helpModalLabel">Journal Help</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                     </div>
                     <div class="modal-body">
                         <p class="card-text">The <strong>Journal</strong> is a private writing space for students that
@@ -206,9 +204,6 @@
                             or
                             visit the FYW Digital Learning Labs in
                             Park Hall 118.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
