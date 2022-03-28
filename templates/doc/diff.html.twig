@@ -24,7 +24,7 @@
 
 {% block body %}
     <div class="row doc-container">
-        <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
             <div class="alert alert-secondary" role="alert">
                 Additions to the first document are <span style="color:darkgreen;text-decoration: underline;">underlined and green</span>.
                 Subtractions are formatted <span style="color:maroon;text-decoration: line-through;">red with strikethrough</span>.
@@ -37,13 +37,11 @@
         </div>
 
         {# Info column #}
-        <div class="col">
+        <div class="col-lg-4">
             {# <a id="compare_click" class="btn btn-primary btn-sm" href="#">Swap Order</a> #}
-
-            <div class="card bg-light mt-3 mb-3">
-                <div class="card-header">
-                    <h2>First Document: {{ doc1.title }}
-                    </h2>
+            <div class="card bg-light mb-3">
+                    <div class="card-header">
+                    <span class="" style="font-size: larger" >First Document: {{ doc1.title }}</span>
                 </div>
                 <div class="card-body">
                     <p>{{ doc1.user.firstname }} {{ doc1.user.lastname }}</p>
@@ -61,8 +59,7 @@
             </div>
             <div class="card bg-light mt-3 mb-3">
                 <div class="card-header">
-                    <h2>Second Document:{{ doc2.title }}
-                    </h2>
+                    <span class="" style="font-size: larger" >Second Document:{{ doc2.title }}</span>
                 </div>
                 <div class="card-body">
                     <p>{{ doc2.user.firstname }} {{ doc2.user.lastname }}</p>

@@ -17,6 +17,7 @@ use Caxy\HtmlDiff\HtmlDiff;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Snappy\Pdf;
 
 
 /**
@@ -352,7 +353,7 @@ class DocController extends AbstractController
     /**
      * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
-    public function pdf(Permissions $permissions, Request $request)
+    public function pdf(Permissions $permissions, Request $request, Pdf $pdf)
     {
         $doc_html = $request->get('html2pdf');
         $title = $request->get('title');
@@ -369,7 +370,7 @@ class DocController extends AbstractController
         ]);
         $filename = 'PDF_of_' . $title_esc . '.pdf';
         return new PdfResponse(
-            $this->pdf->getOutputFromHtml($html),
+            $pdf->getOutputFromHtml($html),
             $filename
         );
     }
