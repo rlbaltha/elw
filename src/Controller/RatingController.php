@@ -35,6 +35,31 @@ class RatingController extends AbstractController
         ]);
     }
 
+    // set the choices for the new and edit rating form (level denotes default).  These options must match the rating_ajax.html.twig
+    // template
+    public function choices($rubric_level) {
+        if ($rubric_level !== 0) {
+            $choices = ['1: Holistic revision necessary. The student may need to revise the full
+                    document.' => '1',
+                '2: Substantial revision necessary. The student may need to revise elements in a majority of the document.' => '2',
+                ' 3: Some revision necessary. The student may need to rethink or
+                    restructure one or more paragraphs or large sections.' => '3',
+                '4: Slight revision necessary. Some adjustments on the sentence or
+                    paragraph level would help the document stand out.' => '4',
+                '5: No revision necessary. The document is exemplary as it stands. While
+                    further improvement is still (and always) possible, time would be better
+                    spent elsewhere.' => '5',];
+        }
+        else {
+            $choices = ['1: Process 1.' => '1',
+                '2: Process 2.' => '2',
+                ' 3: Process 3.' => '3',
+                '4: Process 4.' => '4',
+                '5: Process 5.' => '5',];
+        }
+        return $choices;
+    }
+
     /**
      * @Route("/{docid}/{rubricid}/{courseid}/new", name="rating_new", methods={"GET","POST"})
      */
@@ -51,7 +76,9 @@ class RatingController extends AbstractController
         $rating->setUser($user);
         $rating->setDoc($doc);
         $rating->setRubric($rubric);
-        $form = $this->createForm(RatingType::class, $rating);
+        $choices = $this->choices($rubric->getLevel());
+        $options = ['choices' => $choices];
+        $form = $this->createForm(RatingType::class, $rating, ['options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -107,8 +134,10 @@ class RatingController extends AbstractController
         $doc = $rating->getDoc();
         $course = $doc->getCourse();
         $role = $permissions->getCourseRole($course->getId());
-
-        $form = $this->createForm(RatingType::class, $rating);
+        $rubric = $rating->getRubric();
+        $choices = $this->choices($rubric->getLevel());
+        $options = ['choices' => $choices];
+        $form = $this->createForm(RatingType::class, $rating, ['options' => $options]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

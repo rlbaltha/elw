@@ -2,21 +2,37 @@
 
     <div class="rubric">
         <p><strong>Rubric Rating:</strong><br/>
-            {% if rating.scale == 1 %}
-                1: Holistic revision necessary. The student may need to revise the full
-                document.
-            {% elseif rating.scale == 2 %}
-                2: Substantial revision necessary. The student may need to revise elements in a majority of the document.
-            {% elseif rating.scale == 3 %}
-                3: Some revision necessary. The student may need to rethink or
-                restructure one or more paragraphs or large sections.
-            {% elseif rating.scale == 4 %}
-                4: Slight revision necessary. Some adjustments on the sentence or
-                paragraph level would help the document stand out.
-            {% elseif rating.scale == 5 %}
-                5: No revision necessary. The document is exemplary as it stands. While
-                further improvement is still (and always) possible, time would be better
-                spent elsewhere.
+            {# Conditionals for display different text for rating scale based on default rubric level (e.g. Process).
+            These options must match the choices function in the RatingController #}
+            {% if rating.rubric.level != 0 %}
+                {% if rating.scale == 1 %}
+                    1: Holistic revision necessary. The student may need to revise the full
+                    document.
+                {% elseif rating.scale == 2 %}
+                    2: Substantial revision necessary. The student may need to revise elements in a majority of the document.
+                {% elseif rating.scale == 3 %}
+                    3: Some revision necessary. The student may need to rethink or
+                    restructure one or more paragraphs or large sections.
+                {% elseif rating.scale == 4 %}
+                    4: Slight revision necessary. Some adjustments on the sentence or
+                    paragraph level would help the document stand out.
+                {% elseif rating.scale == 5 %}
+                    5: No revision necessary. The document is exemplary as it stands. While
+                    further improvement is still (and always) possible, time would be better
+                    spent elsewhere.
+                {% endif %}
+            {% else %}
+                {% if rating.scale == 1 %}
+                    1: Process 1.
+                {% elseif rating.scale == 2 %}
+                    2: Process 2.
+                {% elseif rating.scale == 3 %}
+                    3: Process 3.
+                {% elseif rating.scale == 4 %}
+                    4: Process 4.
+                {% elseif rating.scale == 5 %}
+                    5: Process.
+                {% endif %}
             {% endif %}
         </p>
         <p><strong>Comment:</strong> {{ rating.comment }}</p>
