@@ -55,15 +55,36 @@ h2 {
     border-bottom: 1px solid #dee2e6 !important;
 }
 
-.table td a {
+a {
+    text-decoration: none;
+    color: #343a40;
+}
+
+/********** badge listing for stage, markup, and buttons **********/
+.table td a.badge, .table td a.btn, .card-header a.btn {
+    text-decoration: none;
+    color: #fff;
+}
+
+.table td a.badge:hover, .table td a.btn:hover, .card-header a.btn:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+
+
+/********** doc, journal, and course listing **********/
+.table td a, .card-header a {
     text-decoration: none;
     color: #20399D;
 }
 
-.table td a:hover {
+.table td a:hover, .card-header a:hover {
     text-decoration: underline;
     color: #20399D;
 }
+
+
+
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
 {
@@ -122,14 +143,6 @@ h2 {
     border-color: darkred;
 }
 
-a, .page-link {
-    color: #20399D;
-}
-
-.page-item.active .page-link {
-    background-color: #20399D;
-    border-color: #20399D;
-}
 
 .pointer {cursor: pointer;}
 
@@ -138,7 +151,11 @@ a, .page-link {
     padding: 1em;
 }
 
-a {
-    text-decoration: none;
-    color: #343a40;
+.page-link {
+    color: #20399D;
+}
+
+.page-item.active .page-link {
+    background-color: #20399D;
+    border-color: #20399D;
 }
