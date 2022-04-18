@@ -454,7 +454,7 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"POST"})
      */
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {

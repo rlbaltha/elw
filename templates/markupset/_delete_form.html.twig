@@ -1,5 +1,4 @@
 <form class="d-inline float-end" method="post" action="{{ path('markupset_delete', {'id': markupset.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ markupset.id) }}">
     <button aria-label="Delete Markup Set {{ markupset.name }}" class="btn btn-danger">Delete</button>
 </form>

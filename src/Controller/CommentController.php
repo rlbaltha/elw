@@ -147,7 +147,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{target}/{source}/{id}", name="comment_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{docid}/{target}/{source}/{id}/delete", name="comment_delete", methods={"POST"})
      */
     public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target): Response
     {
@@ -165,7 +165,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{docid}/{target}/{source}//new", name="comment_new", methods={"GET","POST"})
+     * @Route("/{courseid}/{docid}/{target}/{source}/new", name="comment_new", methods={"GET","POST"})
      */
     public function new(Request $request, Permissions $permissions, $docid, $courseid, $source, $target): Response
     {

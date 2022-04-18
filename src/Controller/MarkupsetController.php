@@ -123,7 +123,7 @@ class MarkupsetController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="markupset_delete", methods={"DELETE"})
+     * @Route("/{id}", name="markupset_delete", methods={"POST"})
      */
     public function delete(Request $request, Markupset $markupset): Response
     {

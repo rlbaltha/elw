@@ -50,6 +50,25 @@
                         });
                     }, 500);
             });
+            // cancel submit (hide form)
+            $(".ajax_cancel").click(function (e) {
+                setTimeout(
+                    function()
+                    {
+                        var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
+                        var target = "#comment{{ doc.id }}"
+                        $.ajax({
+                            url: request, success: function (result) {
+                                $(target).replaceWith(result);
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                if (xhr.status === 404) {
+                                    $(target).html('<p>Unable to load comment form.</p>');
+                                }
+                            }
+                        });
+                    }, 500);
+            });
         });
     </script>
 </div>

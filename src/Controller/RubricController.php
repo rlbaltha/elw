@@ -82,7 +82,7 @@ class RubricController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="rubric_delete", methods={"DELETE"})
+     * @Route("/{id}", name="rubric_delete", methods={"POST"})
      */
     public function delete(Request $request, Rubric $rubric): Response
     {

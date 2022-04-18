@@ -99,7 +99,7 @@ class TermController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="term_delete", methods={"DELETE"})
+     * @Route("/{id}", name="term_delete", methods={"POST"})
      */
     public function delete(Request $request, Term $term): Response
     {

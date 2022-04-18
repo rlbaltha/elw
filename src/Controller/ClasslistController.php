@@ -25,30 +25,6 @@ class ClasslistController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-//    /**
-//     * @Route("/{courseid}/new", name="classlist_new", methods={"GET","POST"})
-//     */
-//    public function new(Request $request, $courseid): Response
-//    {
-//        $classlist = new Classlist();
-//        $form = $this->createForm(ClasslistType::class, $classlist);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager = $this->doctrine->getManager();
-//            $entityManager->persist($classlist);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('course_show', ['courseid' => $classlist->getCourse()->getId()]);
-//        }
-//
-//        return $this->render('classlist/new.html.twig', [
-//            'classlist' => $classlist,
-//            'form' => $form->createView(),
-//        ]);
-//    }
-
-
 
     /**
      * @Route("/{id}/edit", name="classlist_edit", methods={"GET","POST"})
@@ -71,7 +47,7 @@ class ClasslistController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="classlist_delete", methods={"DELETE"})
+     * @Route("/{id}", name="classlist_delete", methods={"POST"})
      */
     public function delete(Request $request, Classlist $classlist): Response
     {

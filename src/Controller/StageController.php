@@ -91,7 +91,7 @@ class StageController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="stage_delete", methods={"DELETE"})
+     * @Route("/{id}", name="stage_delete", methods={"POST"})
      */
     public function delete(Request $request, Stage $stage): Response
     {

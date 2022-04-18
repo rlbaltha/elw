@@ -81,7 +81,7 @@ class MarkupController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="markup_delete", methods={"DELETE"})
+     * @Route("/{id}", name="markup_delete", methods={"POST"})
      */
     public function delete(Request $request, Markup $markup): Response
     {

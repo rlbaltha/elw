@@ -121,7 +121,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="project_delete", methods={"DELETE"})
+     * @Route("/{id}", name="project_delete", methods={"POST"})
      */
     public function delete(Request $request, Project $project): Response
     {

@@ -117,7 +117,7 @@ class JournalController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"POST"})
      */
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
