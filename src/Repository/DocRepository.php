@@ -6,6 +6,7 @@ use App\Entity\Doc;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use http\QueryString;
 use PhpParser\Node\Scalar;
 
 /**
@@ -76,7 +77,7 @@ class DocRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Doc[] Returns an array of Doc objects
+     * @return QueryString
      */
     public function findByProject($course, $role, $project): QueryBuilder
     {

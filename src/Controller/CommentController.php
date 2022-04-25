@@ -203,6 +203,7 @@ class CommentController extends AbstractController
         return $this->render('comment/new.html.twig', [
             'comment' => $comment,
             'doc' => $doc,
+            'source' => $source,
             'course' => $course,
             'role' => $role,
             'header' => $header,

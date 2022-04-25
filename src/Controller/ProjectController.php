@@ -99,8 +99,9 @@ class ProjectController extends AbstractController
         $rubrics = $this->doctrine->getManager()->getRepository('App:Rubric')->findByUser($user);
         $markupsets = $this->doctrine->getManager()->getRepository('App:Markupset')->findByUser($user);
 
-        $docs[] = $this->doctrine->getManager()->getRepository('App:Doc')->findByProject($course, $role, $project);
-        $countDocs = count($docs);
+        $docs_query = $this->doctrine->getManager()->getRepository('App:Doc')->findByProject($course, $role, $project);
+        $docs = $docs_query->getQuery()->getResult();
+
         $options = ['user' => $user, 'courseid' => $courseid];
         $form = $this->createForm(ProjectType::class, $project, ['options' => $options]);
         $form->handleRequest($request);
@@ -116,7 +117,7 @@ class ProjectController extends AbstractController
             'markupsets' => $markupsets,
             'project' => $project,
             'form' => $form->createView(),
-            'countDocs'=> $countDocs
+            'docs'=> $docs
         ]);
     }
 
@@ -127,13 +128,7 @@ class ProjectController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
-        if ($project->getLabelset()) {
-            $courses = $project->getLabelset()->getCourses();
-            $courseid = $courses[0]->getId();
-        }
-        else {
-            $courseid = $project->getCourse()->getId();
-        }
+        $courseid = $project->getCourse()->getId();
 
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
             $entityManager = $this->doctrine->getManager();
@@ -141,7 +136,7 @@ class ProjectController extends AbstractController
             $entityManager->flush();
         }
         $this->addFlash('notice', 'Your Project has been deleted.');
-        return $this->redirectToRoute('project_index', ['courseid'=> $courseid]);
+        return $this->redirectToRoute('course_show', ['courseid'=> $courseid]);
     }
 }
 

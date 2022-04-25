@@ -299,7 +299,8 @@ class LtiController extends AbstractController
             $uri = $doc->getAgsResultId();
             $results = $lti->getLtiResult($uri);
             if (is_array($results) ) {
-                $comment = strip_tags(html_entity_decode($results[0]['comment'], ENT_QUOTES | ENT_XML1, 'UTF-8'));
+                $comment_org = html_entity_decode($results[0]['comment'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
+                $comment = str_replace('&#13;', '', $comment_org);
                 $score = $results[0]['resultScore'];
             }
         }
@@ -334,7 +335,7 @@ class LtiController extends AbstractController
                     "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $scoreMaximum,
-                    "comment" => strip_tags(html_entity_decode($datacomment, ENT_QUOTES | ENT_XML1, 'UTF-8')),
+                    "comment" => strip_tags(html_entity_decode($datacomment, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8')),
                     "timestamp" => $timestamp,
                     "activityProgress" => 'Completed',
                     "gradingProgress" => 'FullyGraded'
@@ -359,6 +360,7 @@ class LtiController extends AbstractController
 
         return $this->render('comment/new.html.twig', [
             'doc' => $doc,
+            'source' => $source,
             'course' => $course,
             'role' => $role,
             'header' => $header,
