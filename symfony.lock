@@ -205,12 +205,12 @@
         ]
     },
     "oat-sa/bundle-lti1p3": {
-        "version": "2.0",
+        "version": "3.0",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.0",
-            "ref": "35a9f3abdc25714f58187042a80d34349ebb5c96"
+            "branch": "main",
+            "version": "3.0",
+            "ref": "2ab374bc274fde3da5cff38d840f620178f56a6b"
         },
         "files": [
             "config/packages/lti1p3.yaml",
