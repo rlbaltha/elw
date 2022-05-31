@@ -126,13 +126,8 @@ span.markup {
     padding: 2px;
 }
 
-.popover-content {
-    padding: 2px;
-}
-
 .popover {
-    block: inline !important;
-    padding: 1rem;
+
 }
 
 .notefocus {

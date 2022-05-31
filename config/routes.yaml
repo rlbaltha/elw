@@ -1,9 +1,9 @@
+
+
 index:
-    path: /
-    controller: App\Controller\DefaultController::home
+  path: /
+  controller: App\Controller\DefaultController::home
 
 app_logout:
-    path: /logout
-    methods: GET
-
-
+  path: /logout
+  methods: GET

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Markupset;
 use App\Form\MarkupsetType;
 use App\Repository\MarkupsetRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class MarkupsetController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/", name="markupset_index", methods={"GET"})
      */
@@ -39,7 +48,7 @@ class MarkupsetController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
 
         return $this->render('markupset/index.html.twig', [
             'markupsets' => $markupsetRepository->findByUser($user),
@@ -51,7 +60,7 @@ class MarkupsetController extends AbstractController
     public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
 
         $markupset = new Markupset();
         $markupset->setUser($user);
@@ -60,7 +69,7 @@ class MarkupsetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($markupset);
             $entityManager->flush();
             $this->addFlash('notice', 'Your Markup Set has been created.');
@@ -99,7 +108,7 @@ class MarkupsetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your Markup Set has been updated.');
             if ($authorizationChecker->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('markupset_index');
@@ -114,12 +123,12 @@ class MarkupsetController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="markupset_delete", methods={"DELETE"})
+     * @Route("/{id}", name="markupset_delete", methods={"POST"})
      */
     public function delete(Request $request, Markupset $markupset): Response
     {
         if ($this->isCsrfTokenValid('delete'.$markupset->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($markupset);
             $entityManager->flush();
         }

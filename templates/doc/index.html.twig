@@ -17,30 +17,26 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
 {% endblock %}
 
 {% block toolnav %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <h1 class="mr-5">{{ header }} </h1>
+            <span class="navbar-brand">{{ header }} </span>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ course_path('doc_index') }}">My Docs</a>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link" href="{{ course_path('doc_index', {'findtype': 'SharedDocs'}) }}">Shared#}
-{#                            Docs</a>#}
-{#                    </li>#}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown"
+                           data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             Select Author
                         </a>
@@ -54,7 +50,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown"
+                           data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             Select Project
                         </a>
@@ -87,7 +83,7 @@
                     {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown"
+                           data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             New Doc
                         </a>
@@ -99,8 +95,8 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="navbar-text float-right text-dark">
+                <ul class="navbar-nav ms-auto">
+                    <li class="navbar-text float-end text-dark">
                         Docs
                         found: {{ docs.getTotalItemCount }} {% if page_limit < docs.getTotalItemCount %}({{ page_limit }} per page ){% endif %}
                     </li>
@@ -114,7 +110,7 @@
 
     {# table of documents #}
     <fieldset>
-        <legend class="sr-only">Select two checkboxes to compare.</legend>
+        <legend class="visually-hidden">Select two checkboxes to compare. The Title, Owner, Labels and Updated columns are sortable by clicking the column header.</legend>
         <table class="table">
             <thead class="">
             <tr>
@@ -129,10 +125,10 @@
             {% for doc in docs %}
                 <tr class="body">
                     <td>
-                        <label class="sr-only sr-only-focusable" for="{{ doc.id }}">Select for comparison</label><input
+                        <label class="visually-hidden visually-hidden-focusable" for="{{ doc.id }}">Select for comparison</label><input
                                 type="checkbox" id="{{ doc.id }}" name="compare">
                         {% if doc.origin %}
-                            <span class="badge badge-primary">Review</span>
+                            <span class="badge bg-default">Review</span>
                         {% endif %}
                         <a href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">{{ doc.title }}</a>
                     </td>
@@ -143,7 +139,7 @@
                         {% if doc.reviews|length > 0 %}
                             <a class="dropdown dropdown-toggle d-inline invisible" href="#" role="button"
                                id="dropdownMenuLink{{ doc.id }}"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Reviews
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ doc.id }}">
@@ -153,7 +149,7 @@
                                             <a class="dropdown-item"
                                                href="{{ course_path('doc_show', {'id': doc.id, 'target': review.id}) }}">By {{ review.user.firstname }} {{ review.user.lastname }}
                                                 {% if review.comments|length > 0 %}
-                                                    <span class="badge badge-primary"
+                                                    <span class="badge bg-default"
                                                           style="background:darkblue">End Comments ({{ review.comments|length }})</span>
                                                 {% endif %}
                                             </a>
@@ -165,19 +161,19 @@
                     </td>
                     <td class="d-none d-sm-table-cell">
                         {% if doc.project %}
-                            <span class="badge badge-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                         {% endif %}
                         {% if doc.stage %}
-                            <span class="badge badge-primary"
+                            <span class="badge bg-default"
                                   style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                         {% endif %}
-                        <span class="badge badge-primary"
+                        <span class="badge bg-default"
                               style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
 
 
                         {% if doc.comments|length > 0 %}
-                            <span class="badge badge-primary"
+                            <span class="badge bg-default"
                                   style="background:darkblue">End Comments ({{ doc.comments|length }})</span>
 
                         {% endif %}
@@ -260,9 +256,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
@@ -313,9 +307,7 @@
                     <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>

@@ -10,14 +10,14 @@
 
 {% block subnav %}
     <h1 class="navbar-brand mb-0 h1 mr-5">
-        {% if doc.origin %}<span class="badge badge-primary"
+        {% if doc.origin %}<span class="badge bg-default"
                                  style="background-color: darkblue">Review</span> {% endif %}{{ doc.title }}
     </h1>
 
     {% if doc.reviews|length > 0 %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-               data-toggle="dropdown"
+               data-bs-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
                 Reviews
             </a>
@@ -31,7 +31,7 @@
                                href="#">
                                 Review By {{ review.user.firstname }} {{ review.user.lastname }}
                                 {% if review.comments|length > 0 %}
-                                    <span class="badge badge-primary"
+                                    <span class="badge bg-default"
                                           style="background:darkblue">Comments ({{ review.comments|length }})</span>
 
                                 {% endif %}
@@ -43,13 +43,14 @@
         </li>
     {% endif %}
     <li class="nav-item">
-        <a class="nav-link toggle-inline" href="#">Notes <span id="toggle">Popover</span></a>
+        <a class="nav-link toggle-inline" href="#" aria-label="toggle view"><span class="visually-hidden">Click to toggle the way the additional text is viewed.
+            The default view is most accessible.</span> Notes <span id="toggle">Popover</span></a>
     </li>
 {% endblock %}
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ app.session.get('referrer') }}"><i class="material-icons" style="font-size:24px;">close</i></a>
@@ -66,7 +67,7 @@
         {# #################################### Original Doc Nav ######################################################## #}
         <nav class="navbar navbar-expand-lg navbar-light bg-light col-12 mb-3" style="z-index: 0; margin-top: -1em">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDoc"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDoc"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -103,7 +104,8 @@
                                     eLC</a>
                             </li>
                         {% endif %}
-                    </ul>
+                        </ul>
+                    <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                 </div>
             </div>
         </nav>
@@ -127,8 +129,8 @@
                 {# Doc info card #}
                 <div class="card mb-3">
                     <div class="card-header" id="info_heading">
-                        <button class="btn btn-link" style="font-size: larger" type="button" data-toggle="collapse"
-                                data-target="#info_collapse" aria-expanded="true"
+                        <button class="btn btn-link" style="font-size: larger" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#info_collapse" aria-expanded="true"
                                 aria-controls="info_collapse">{{ doc.title }}
                         </button>
                     </div>
@@ -136,14 +138,14 @@
                          aria-labelledby="info_heading" data-parent="#accordionInfo">
                         <div class="card-body">
                             <p>{% if doc.project %}
-                                    <span class="badge badge-primary"
+                                    <span class="badge bg-default"
                                           style="background:{{ doc.project.color }}">{{ doc.project.name }}</span>
                                 {% endif %}
                                 {% if doc.stage %}
-                                    <span class="badge badge-primary"
+                                    <span class="badge bg-default"
                                           style="background:{{ doc.stage.color }}">{{ doc.stage.name }}</span>
                                 {% endif %}
-                                <span class="badge badge-primary"
+                                <span class="badge bg-default"
                                       style="background:{% if doc.access=='Private'%}darkred{% elseif doc.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc.access }}</span>
                             </p>
                             <p>By {{ doc.user.firstname }} {{ doc.user.lastname }}</p>
@@ -172,8 +174,8 @@
                                 <div class="card-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
                                     <h2 class="mb-0">
                                         <button id="rubricheader{{ rubric.id }}_doc{{ doc.id }}" class="btn btn-link"
-                                                type="button" data-toggle="collapse"
-                                                data-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}"
                                                 aria-expanded="true"
                                                 aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
                                             Rubric {{ loop.index }}: {{ rubric.name }}
@@ -216,11 +218,11 @@
                             <div class="card-header">
                                 {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                 {% if comment.access=='Hidden' %}
-                                    <span class="badge badge-primary" style="background:black">Hidden</span>
+                                    <span class="badge bg-default" style="background:black">Hidden</span>
                                 {% endif %}
                                 {% if app.user == comment.user %}
                                     <a aria-label="Update End Comment posted on {{ comment.created | date("M j, Y g:ia") }}"
-                                       class="btn btn-primary btn-sm float-right"
+                                       class="btn btn-primary btn-sm float-end"
                                        href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': doc.id}) }}">Edit</a>
                                 {% endif %}
                             </div>
@@ -230,7 +232,7 @@
 
                             <div class="card-footer">
                                 {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                <span class="float-end">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                             </div>
                         </div>
                     {% endif %}
@@ -265,8 +267,8 @@
                     <nav class="navbar navbar-expand-lg navbar-light bg-light col-12  mb-3"
                          style="z-index: 0; margin-top: -1em">
                         <div class="container-fluid">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                    data-target="#navbarNavReview{{ loop.index }}"
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarNavReview{{ loop.index }}"
                                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
@@ -299,6 +301,7 @@
                                         </li>
                                     {% endif %}
                                 </ul>
+                                <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                             </div>
                         </div>
                     </nav>
@@ -319,7 +322,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <span class="badge badge-primary" style="background-color: darkblue">Review</span>
+                                <span class="badge bg-default" style="background-color: darkblue">Review</span>
                                 of {{ doc.title }}
                             </div>
                             <div class="card-body">
@@ -352,8 +355,8 @@
                                         <div class="card-header" id="r_heading{{ loop.index }}_doc{{ review.id }}">
                                             <h2 class="mb-0">
                                                 <button id="rubricheader{{ rubric.id }}_doc{{ review.id }}"
-                                                        class="btn btn-link" type="button" data-toggle="collapse"
-                                                        data-target="#r_collapse{{ loop.index }}_doc{{ review.id }}"
+                                                        class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#r_collapse{{ loop.index }}_doc{{ review.id }}"
                                                         aria-expanded="true"
                                                         aria-controls="r_collapse{{ loop.index }}_doc{{ review.id }}">
                                                     Rubric {{ loop.index }}: {{ rubric.name }}
@@ -397,10 +400,10 @@
                                     <div class="card-header">
                                         {{ comment.type }} by {{ comment.user.firstname }} {{ comment.user.lastname }}
                                         {% if comment.access=='Hidden' %}
-                                            <span class="badge badge-primary" style="background:black">Hidden</span>
+                                            <span class="badge bg-default" style="background:black">Hidden</span>
                                         {% endif %}
                                         {% if app.user == comment.user %}
-                                            <a class="btn btn-primary btn-sm float-right"
+                                            <a class="btn btn-primary btn-sm float-end"
                                                href="{{ course_path('comment_edit', {'docid': doc.id, 'source': 'doc', 'id': comment.id, 'target': review.id}) }}">Edit</a>
                                         {% endif %}
                                     </div>
@@ -409,7 +412,7 @@
                                     </div>
                                     <div class="card-footer">
                                         {% if comment.grade %}Grade: {{ comment.grade }}{% endif %}
-                                        <span class="float-right">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
+                                        <span class="float-end">Updated: {{ comment.updated | date("m/d/y g:ia") }}</span>
                                     </div>
                                 </div>
                             {% endif %}
@@ -427,9 +430,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     {% if app.user != doc.user and doc.access!='Review' %}
@@ -457,9 +458,6 @@
                     <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or
                         visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -538,13 +536,14 @@
                     $("#pdf_form").submit();
                     $("#pdf_form").hide();
                 });
-
                 function popover_toggle() {
                     $('#toggle').text(($('#toggle').text() === 'Popover' ? 'Inline' : 'Popover'));
+                    $('.popover-alert').text(($('#toggle').text() === 'Inline' ? 'In this view, hover over highlighted text for additional information.' : 'In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
                     $('.note, .super').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
                 };
+
                 $(".toggle-inline").click(function () {
                     popover_toggle();
                 });
@@ -560,7 +559,7 @@
                     let p = $(this).position();
                     let note_index = index + 1;
                     let note_number = '<span class="blue">' + note_index + '</span>';
-                    let note = '<span id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem;"><span class="popover-content">' + note_number + $(this).html() + '</span></span>';
+                    let note = '<span id="n' + note_index + '" data-id="h' + note_index + '" class="popover popover-note" style="min-width: 20rem; padding: 1rem; text-indent: 0"><span class="popover-content">' + note_number + $(this).html() + '</span></span>';
                     $(this).prev().append(note);
                 });
 

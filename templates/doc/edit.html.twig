@@ -3,8 +3,9 @@
 {% block title %}Document Edit - {{ parent() }}{% endblock %}
 
 {% block subnav %}
+    <h1 class="navbar-brand mb-0 h1 mr-5">Document Edit</h1>
     <li class="nav-item">
-        <a id="doc-title-toggle" class="nav-link" href="#">Settings
+        <a id="doc-title-toggle" class="nav-link" href="#" aria-expanded="true">Settings
             <i id='settings_arrows' class="fa fa-chevron-up"></i></a>
     </li>
     <li class="nav-item">
@@ -24,11 +25,8 @@
             <p class="navbar-text">Files that have reviews, end comments, or grades cannot be deleted.</p>
         {% endif %}
     </li>
-{#    <li class="nav-item">#}
-{#        <a class="nav-link" href="{{ app.session.get('referrer') }}">Close</a>#}
-{#    </li>#}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
 {% endblock %}
 
@@ -47,8 +45,8 @@
                     <div class="card">
                         <div class="card-header" id="i_heading">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#i_collapse" aria-expanded="true"
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#i_collapse" aria-expanded="true"
                                         aria-controls="i_collapsei">
                                     Insert Note
                                 </button>
@@ -59,7 +57,7 @@
                              aria-labelledby="i_heading" data-parent="#accordionInsert">
                             <div class="card-body">
                     <form id='note_insert_form' name='note_insert_form'>
-                        <label class="sr-only" for="insert_value">Insert Note</label>
+                        <label class="visually-hidden" for="insert_value">Insert Note</label>
                         <textarea class='form-control' id="insert_value" name="html_insert"></textarea>
                         <a id='note_insert_submit' href="javascript:void(0)" class="btn btn-primary btn-sm"
                            title="Insert Note">Insert</a>
@@ -75,8 +73,8 @@
                     <div class="card">
                         <div class="card-header" id="m_heading{{ loop.index }}">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#m_collapse{{ loop.index }}" aria-expanded="true"
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#m_collapse{{ loop.index }}" aria-expanded="true"
                                         aria-controls="m_collapse{{ loop.index }}">
                                     Markup {{ loop.index }}: {{ markupset.name }}
                                 </button>
@@ -86,11 +84,16 @@
                         <div id="m_collapse{{ loop.index }}" class="collapse"
                              aria-labelledby="m_heading{{ loop.index }}" data-parent="#accordionMarkup">
                             <div class="card-body">
+                                {# markup tags as list for accessibility#}
+                                <ul style="list-style-type:none; padding-left: 0;">
                                 {% for markup in markupset.markups %}
-                                    <a class="badge badge-primary" style="background-color:{{ markup.color }}"
+                                    <li style="display:inline">
+                                    <a class="badge bg-default" style="background-color:{{ markup.color }}"
                                        href="javascript:insert_markup('{{ markup.id }}', '{{ markup.name }}','{{ markup.color }}');"
                                        title="Submit entry">{{ markup.name }}</a>
+                                    </li>
                                 {% endfor %}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -103,8 +106,8 @@
                         <div class="card">
                             <div class="card-header" id="r_heading{{ loop.index }}">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#r_collapse{{ loop.index }}" aria-expanded="true"
+                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#r_collapse{{ loop.index }}" aria-expanded="true"
                                             aria-controls="r_collapse{{ loop.index }}">
                                        Rubric {{ loop.index }}: {{ rubric.name }}
                                     </button>
@@ -129,9 +132,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Document Help</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
 
@@ -146,9 +147,7 @@
                     <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -185,12 +184,15 @@
             $("label[for=insert_value]").toggle();
             CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
-            $("fieldset").toggle();
-            $("#doc_project").toggle();
-            $("#doc_stage").toggle();
-            $("#doc_access").toggle();
-            $("#doc_wordcount").toggle();
-            $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $("fieldset").toggle();
+                $("#doc_project").toggle();
+                $("#doc_stage").toggle();
+                $("#doc_access").toggle();
+                $("#doc_wordcount").toggle();
+                $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $(this).attr('aria-expanded', function (i, attr) {
+                return attr == 'true' ? 'false' : 'true'
+                });
             {% endif %}
             $("#doc-title-toggle").click(function () {
                 $("fieldset").toggle();
@@ -199,6 +201,9 @@
                 $("#doc_access").toggle();
                 $("#doc_wordcount").toggle();
                 $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                $(this).attr('aria-expanded', function (i, attr) {
+                return attr == 'true' ? 'false' : 'true'
+                });
             });
             $("#submit-doc-form").click(function () {
                 var editor = CKEDITOR.instances.doc_body;

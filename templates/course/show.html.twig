@@ -11,7 +11,7 @@
 {% block subnavright %}
     {% if role=='Instructor' %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Course Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Course Help</a>
     </li>
     {% endif %}
 {% endblock %}
@@ -74,7 +74,7 @@
                             Classlist</a>
                     </div>
                     <div class="card-body">
-                        <div class="row" id="classlist-row">
+                        <div class="row classlist-row">
                             <table id="classlist" class="table">
                                 <thead class="">
                                 <tr>
@@ -99,11 +99,13 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
+                            <div id="nrps"></div>
                         </div>
-                        <div class="" id="nrps"></div>
+
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-6">
                 {# Projects #}
                 <div class="card mb-3">
@@ -131,7 +133,7 @@
                                             <div class="card-header text-white" style="background-color: {{ project.color }}">
                                                 <h5 class="card-title d-inline">{{ project.name }}</h5>
                                                 <a aria-label="Edit Project {{ project.name }}"
-                                                   class="btn btn-primary btn-sm float-right"
+                                                   class="btn btn-primary btn-sm float-end"
                                                    href="{% if (is_granted('ROLE_ADMIN')) or (role=='Instructor') %}{{ path('project_edit', {'id': project.id}) }}{% else %}#{% endif %}">
                                                     Edit</a>
                                             </div>
@@ -201,9 +203,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Course Help</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -248,9 +248,7 @@
                         Park Hall 118.</p>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -276,7 +274,7 @@
                 $('#projects-arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             });
             $("#classlist-toggle").click(function () {
-                $("#classlist-row").toggle();
+                $(".classlist-row").toggle();
                 $('#classlist-arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
             });
             $("#gradebook-toggle").click(function () {

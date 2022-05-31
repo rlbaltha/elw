@@ -14,16 +14,16 @@
 {% block toolnav %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <h1 class="mr-5">
+            <span class="navbar-brand">
                 {% if doc %}
                     {% if app.user==doc.user %}My{% elseif doc %}{{ doc.user.firstname }} {{ doc.user.lastname }}'s{% endif %}
                 {% endif %}
                 Journal
-            </h1>
+            </span>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item skip-link">
@@ -32,7 +32,7 @@
                     {% if role=='Instructor' %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-toggle="dropdown"
+                               data-bs-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 Select Author
                             </a>
@@ -51,11 +51,11 @@
 
                 </ul>
                 {% if role=='Instructor' %}
-                    <ul class="next_prev navbar-nav ml-auto" style="display: none">
-                        <li class="nav-item"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i></li>
+                    <ul class="next_prev navbar-nav ms-auto" style="display: none">
+                        <li class="nav-item"><i class="fa fa-arrow-left me-2" aria-hidden="true"></i></li>
                         {% for classlist in classlists %}
                             <li class="nav-item classlist" data-id="{{ classlist.user.id }}" id="{{ loop.index }}">
-                                <a class="mr-2"
+                                <a class="me-2"
                                    href="{{ course_path('journal_index', {'userid': classlist.user.id, 'index':loop.index}) }}">
                                     {{ classlist.user.lastname }}, {{ classlist.user.firstname }}</a>
                             </li>
@@ -70,7 +70,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Journal Help</a>
     </li>
 {% endblock %}
 
@@ -110,7 +110,7 @@
                         <h2 class="d-inline">{{ doc.title }}</h2>
                         {% if app.user==doc.user %}
                             <a aria-label="Edit Journal entry {{ doc.title }}"
-                               class="btn btn-primary btn-sm float-right"
+                               class="btn btn-primary btn-sm float-end"
                                href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
                         {% endif %}
                     </div>
@@ -184,9 +184,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="helpModalLabel">Journal Help</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                     </div>
                     <div class="modal-body">
                         <p class="card-text">The <strong>Journal</strong> is a private writing space for students that
@@ -206,9 +204,6 @@
                             or
                             visit the FYW Digital Learning Labs in
                             Park Hall 118.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

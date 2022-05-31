@@ -14,7 +14,7 @@
 
 {% block subnavright %}
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#helpModal" href="javascript:void(0);" class="nav-link">Project Help</a>
+        <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Project Help</a>
     </li>
 {% endblock %}
 
@@ -26,8 +26,8 @@
                     <h1 class="card-title">Edit Project</h1>
                     {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
 
-                    {% if countDocs > 0 %}
-                        <div class="float-right">This Project can not be deleted because it has associated Documents.</div>
+                    {% if docs|length > 0 %}
+                        <div class="float-end">This Project can not be deleted because it has {{ docs|length  }} associated Documents.</div>
                     {% else %}
                         {{ include('project/_delete_form.html.twig') }}
                     {% endif %}
@@ -40,7 +40,7 @@
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h5 class="p-0">
-                            <span class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <span class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Rubrics
                             </span>
                         </h5>
@@ -49,7 +49,7 @@
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="card-body">
                             {% for rubric in rubrics %}
-                                <p class="font-weight-bold">{{ rubric.name }}</p>
+                                <p class="fw-bold">{{ rubric.name }}</p>
                                 <p>{{ rubric.body|raw }}</p>
                                 <hr/>
                             {% endfor %}
@@ -59,7 +59,7 @@
                 <div class="card">
                     <div class="card-header" id="headingTwo">
                         <h5 class="p-0">
-                            <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <span class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Markup
                             </span>
                         </h5>
@@ -67,7 +67,7 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div class="card-body">
                             {% for markupset in markupsets %}
-                                <p class="font-weight-bold">{{ markupset.name }}</p>
+                                <p class="fw-bold">{{ markupset.name }}</p>
                                 <p>{{ markupset.description|raw }}</p>
                                 <hr/>
                             {% endfor %}
@@ -88,9 +88,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Project Help</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -127,9 +125,7 @@
                     <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or visit the FYW Digital Learning Labs in
                         Park Hall 118.</p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>

@@ -2,3 +2,11 @@
     {{ form_widget(form) }}
     <button aria-label="{% if comment is defined %}Update Feedback posted on {{ comment.created | date("M j, Y g:ia") }}{% else %}Submit{% endif %}" class="btn btn-primary btn-sm">{{ button_label|default('Submit') }}</button>
 {{ form_end(form) }}
+
+{#Needs testing locally and on dev server#}
+{% if source != 'doc' %}
+<a class="btn btn-primary btn-sm float-end" href="{{ course_path('journal_index', {'docid': doc.id, 'userid': doc.user.id}) }}">Cancel</a>
+{% else %}
+<a class="btn btn-primary btn-sm float-end" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">Cancel</a>
+{% endif %}
+

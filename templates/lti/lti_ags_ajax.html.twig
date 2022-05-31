@@ -4,7 +4,7 @@
             Final Grade {% if column %}for {{ column }}{% endif %}
             {% if role == 'Instructor' %}
                 <a aria-label="Update Grade in
-                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-right"
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-end"
                    href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': source}) }}">Update Grade in
                     eLC</a>
             {% endif %}
@@ -22,7 +22,7 @@
                 Error
                 {% if role == 'Instructor' %}
                     <a aria-label="Update Grade in
-                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-right"
+                        eLC for Document {{ doc.title }}" class="btn btn-primary btn-sm ltisubmit float-end"
                        href="{{ course_path('ags_score_new', {'docid': doc.id, 'source': source}) }}">Update Grade in
                         eLC</a>
                 {% endif %}

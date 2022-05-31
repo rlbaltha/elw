@@ -9,18 +9,15 @@ use App\Service\Lti;
 use App\Service\Permissions;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Extension\AbstractExtension;
-use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
 use Caxy\HtmlDiff\HtmlDiff;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Knp\Snappy\Pdf;
 
 
 /**
@@ -28,17 +25,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DocController extends AbstractController
 {
+    /** @var RequestStack */
+    private $requestStack;
 
-    /** @var DompdfWrapperInterface */
-    private $wrapper;
 
-    /** @var Pdf  */
-    private $pdf;
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
 
-    public function __construct(DompdfWrapperInterface $wrapper, Pdf $pdf)
+    public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
     {
-        $this->wrapper = $wrapper;
-        $this->pdf = $pdf;
+        $this->doctrine = $doctrine;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -49,16 +46,16 @@ class DocController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
 
         if ($findtype == 'SharedDocs') {
             $querybuilder = $docRepository->findSharedDocs($course, $role);
@@ -101,10 +98,10 @@ class DocController extends AbstractController
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $entityManager = $this->doctrine->getManager();
         $docs = $docRepository->findHiddenDocs($course, $user);
         foreach ($docs as $doc) {
             $doc->setAccess('Private');
@@ -126,15 +123,15 @@ class DocController extends AbstractController
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneById($userid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $querybuilder = $docRepository->findByUser($course, $role, $user);
         $docs = $paginator->paginate(
             $querybuilder, /* query NOT result */
@@ -163,14 +160,14 @@ class DocController extends AbstractController
         $findtype = 'byproject';
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
-        $this->get('session')->set('referrer', $request->getRequestUri());
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->find($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $project = $this->doctrine->getManager()->getRepository('App:Project')->find($projectid);
         $querybuilder = $docRepository->findByProject($course, $role, $project);
         $docs = $paginator->paginate(
             $querybuilder, /* query NOT result */
@@ -202,16 +199,16 @@ class DocController extends AbstractController
 
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $project = $this->getDoctrine()->getManager()->getRepository('App:Project')->find($projectid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $project = $this->doctrine->getManager()->getRepository('App:Project')->find($projectid);
         $stages = $project->getStages();
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setProject($project);
         $doc->setStage($stages[0]);
         $doc->setTitle('Essay for ' . $project->getName());
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
         return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
@@ -228,9 +225,9 @@ class DocController extends AbstractController
 
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $origin = $this->getDoctrine()->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $origin = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
         $doc_title = 'for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $doc->setUser($user);
         $doc->setCourse($course);
@@ -240,7 +237,7 @@ class DocController extends AbstractController
         ($permissions->getCourseRole($courseid) === 'Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Review'));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
         return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
@@ -253,7 +250,7 @@ class DocController extends AbstractController
     {
         $permissions->isAllowedToView($courseid, $doc);
 
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $scores = [];
         if ($doc->getAgsResultId() != null) {
             $scores = $lti->getLtiResult($doc->getAgsResultId());
@@ -285,9 +282,9 @@ class DocController extends AbstractController
      */
     public function diff(string $id1, string $id2, string $courseid, Permissions $permissions): Response
     {
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc1 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id1);
-        $doc2 = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($id2);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $doc1 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id1);
+        $doc2 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id2);
         $permissions->isAllowedToView($courseid, $doc1);
         $permissions->isAllowedToView($courseid, $doc2);
         if ($doc1->getCreated() > $doc2->getCreated()) {
@@ -316,13 +313,13 @@ class DocController extends AbstractController
      */
     public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti, string $source): Response
     {
-        $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
         $role = $permissions->getCourseRole($courseid);
         $scores = [];
         $column = '';
         if ($doc->getAgsResultId() != null) {
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
-            $column = $this->getDoctrine()->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid)->getLabel();
+            $column = $this->doctrine->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid)->getLabel();
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
         return $this->render('lti/lti_ags_ajax.html.twig', [
@@ -340,7 +337,7 @@ class DocController extends AbstractController
     public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
     {
         $permissions->isAllowedToView($courseid, $doc);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         if ($doc->getProject()->getMarkupsets()) {
             $markupsets = $doc->getProject()->getMarkupsets();
         } else {
@@ -356,7 +353,7 @@ class DocController extends AbstractController
     /**
      * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
-    public function pdf(Permissions $permissions, Request $request)
+    public function pdf(Permissions $permissions, Request $request, Pdf $pdf)
     {
         $doc_html = $request->get('html2pdf');
         $title = $request->get('title');
@@ -365,7 +362,7 @@ class DocController extends AbstractController
         $courseid = $request->get('courseid');
         //check to see if request is a diff
         if ($docid!=0) {
-            $doc = $this->getDoctrine()->getManager()->getRepository('App:Doc')->find($docid);
+            $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
             $permissions->isAllowedToView($courseid, $doc);
         }
         $html = $this->renderView('doc/pdf.html.twig', [
@@ -373,7 +370,7 @@ class DocController extends AbstractController
         ]);
         $filename = 'PDF_of_' . $title_esc . '.pdf';
         return new PdfResponse(
-            $this->pdf->getOutputFromHtml($html),
+            $pdf->getOutputFromHtml($html),
             $filename
         );
     }
@@ -395,13 +392,13 @@ class DocController extends AbstractController
             $choices = ['Shared' => 'Shared', 'Private' => 'Private'];
         }
         $stages = $doc->getProject()->getStages();
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $options = ['courseid' => $courseid, 'choices' => $choices, 'stages' => $stages];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
         $markupsets = $doc->getProject()->getMarkupsets();
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your  document has been saved.');
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
         }
@@ -431,7 +428,7 @@ class DocController extends AbstractController
 
         $doc->setBody($update);
         $doc->setWordcount($count);
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
 
@@ -449,7 +446,7 @@ class DocController extends AbstractController
         $permissions->isOwner($doc);
         $access = $doc->getAccess();
         ($access === 'Shared' ? $doc->setAccess('Private') : $doc->setAccess('Shared'));
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
 
@@ -457,7 +454,7 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"POST"})
      */
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
@@ -466,7 +463,7 @@ class DocController extends AbstractController
         $permissions->isOwner($doc);
 
         if ($this->isCsrfTokenValid('delete' . $doc->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($doc);
             $entityManager->flush();
         }

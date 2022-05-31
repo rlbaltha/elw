@@ -7,6 +7,7 @@ use App\Form\JournalType;
 use App\Repository\DocRepository;
 use App\Service\Lti;
 use App\Service\Permissions;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class JournalController extends AbstractController
 {
+    
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
 
     /**
      * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"1"})
@@ -27,12 +36,12 @@ class JournalController extends AbstractController
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->getDoctrine()->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($userid!=0) {
-            $requested_user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneById($userid);
+            $requested_user = $this->doctrine->getManager()->getRepository('App:User')->findOneById($userid);
             if ($user == $requested_user or $role=='Instructor') {
                 $user = $requested_user;
             }
@@ -71,13 +80,13 @@ class JournalController extends AbstractController
 
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->getDoctrine()->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc->setTitle('New Journal Entry');
         $doc->setUser($user);
         $doc->setCourse($course);
         $doc->setAccess('Journal');
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
         return $this->redirectToRoute('journal_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
@@ -96,7 +105,7 @@ class JournalController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your journal has been saved.');
             return $this->redirectToRoute('journal_index', ['docid' => $doc->getId(), 'courseid' => $courseid]);
         }
@@ -108,7 +117,7 @@ class JournalController extends AbstractController
     }
 
     /**
-     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"DELETE"})
+     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"POST"})
      */
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
@@ -117,7 +126,7 @@ class JournalController extends AbstractController
         $permissions->isOwner($doc);
 
         if ($this->isCsrfTokenValid('delete' . $doc->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($doc);
             $entityManager->flush();
         }

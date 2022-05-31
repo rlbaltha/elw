@@ -5,13 +5,14 @@
         <div id="loading_alert" class="alert alert-info" style="display: none;">Loading</div>
         <div class="card-header">
             {% if comment.access=='Hidden' %}
-                <span class="badge badge-primary" style="background:black">Hidden</span>
+                <span class="badge bg-default" style="background:black">Hidden</span>
             {% endif %}
             {% if app.user == comment.user %}
-                <a class="btn btn-primary btn-sm float-right comment_ajax"
+                <a class="btn btn-primary btn-sm float-end comment_ajax"
                    data-id="comment{{ doc.id }}"
                    href="#"
                    data-request="{{ path('comment_ajax_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}"
+                   aria-label="Update end comment for {{doc.title}}"
                 >Edit</a>
             {% endif %}
         </div>
@@ -19,7 +20,7 @@
                 {{ comment.body|raw }}
         </div>
         {% if comment.grade %}
-            <div class="card-footer">
+            <div class="card-footer"
                 Grade: {{ comment.grade }}
             </div>
         {% endif %}

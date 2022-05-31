@@ -16,6 +16,13 @@ body {
     color: #343a40; font-style: italic;
 }
 
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+}
+
 div.checkbox > label {
     margin-right:2em;
 }
@@ -31,6 +38,7 @@ label.required {
 h1 {
     font-size: 1.5em;
 }
+
 h2 {
     font-size: 1.5em;
 }
@@ -39,6 +47,43 @@ h2 {
     color: black;
     font-family: Arial;
 }
+
+.table td, .table th, .table tr {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+a {
+    text-decoration: none;
+    color: #343a40;
+}
+
+/********** badge listing for stage, markup, and buttons **********/
+.table td a.badge, .table td a.btn, .card-header a.btn {
+    text-decoration: none;
+    color: #fff;
+}
+
+.table td a.badge:hover, .table td a.btn:hover, .card-header a.btn:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+
+
+/********** doc, journal, and course listing **********/
+.table td a, .card-header a {
+    text-decoration: none;
+    color: #20399D;
+}
+
+.table td a:hover, .card-header a:hover {
+    text-decoration: underline;
+    color: #20399D;
+}
+
+
 
 /********** Accessibility **********/
 .skip-link a, .skip-link a:hover, .skip-link a:visited
@@ -78,10 +123,19 @@ h2 {
     border-radius: .2rem;
 }
 
-.badge-primary {
+.bg-default {
     background-color: #20399D;
     border-color: #20399D;
     font-weight: bolder;
+    text-decoration: none;
+}
+
+.bg-default:hover {
+    background-color: #20399D;
+    border-color: #20399D;
+    font-weight: bolder;
+    text-decoration: none;
+    color: white;
 }
 
 .btn-danger {
@@ -89,18 +143,19 @@ h2 {
     border-color: darkred;
 }
 
-a, .page-link {
-    color: #20399D;
-}
-
-.page-item.active .page-link {
-    background-color: #20399D;
-    border-color: #20399D;
-}
 
 .pointer {cursor: pointer;}
 
 /********** Pagination **********/
 .pagination > span {
     padding: 1em;
+}
+
+.page-link {
+    color: #20399D;
+}
+
+.page-item.active .page-link {
+    background-color: #20399D;
+    border-color: #20399D;
 }

@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Form\UsernameType;
 use App\Form\IrbType;
 use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,6 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
+    /** @var ManagerRegistry */
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/admin/", name="user_index", methods={"GET"})
      */
@@ -114,7 +123,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('user_index');
         }
@@ -136,7 +145,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'This profile has been updated.');
             return $this->redirectToRoute('course_show', [
                 'courseid' => $courseid,
@@ -168,14 +177,14 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         if ($user->getTheme() != 'dark') {
             $user->setTheme('dark');
         }
         else {
             $user->setTheme('light');
         }
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
@@ -188,8 +197,8 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $username = $this->getUser()->getUsername();
-        $user = $this->getDoctrine()->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $irb = $this->getDoctrine()->getManager()->getRepository('App:Card')->findOneByType('irb');
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
         if ($user->getIrb() == null) {
             $user->setIrb(1);
         }
@@ -201,7 +210,7 @@ class UserController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your Research Permission has been updated.');
             return $this->redirectToRoute('course_show', [
                 'courseid' => $courseid,
@@ -216,14 +225,14 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/admin/{id}", name="user_delete", methods={"DELETE"})
+     * @Route("/admin/{id}", name="user_delete", methods={"POST"})
      */
     public function delete(Request $request, User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
         }

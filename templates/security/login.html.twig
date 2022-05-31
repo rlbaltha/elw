@@ -16,15 +16,16 @@
         <p class="lead"><span id="motto1" style="opacity: 0">Learn together. </span><span id="motto2"
                                                                                           style="opacity: 0">Write better.</span>
         </p>
+        <p>{{ error }}</p>
         <hr class="my-4">
-        <h2 class="display-5"  style='color:#000; font-family: "serif"; '>{{ login_note|raw }}</h2>
+        {#        <h2 class="display-5"  style='color:#000; font-family: "serif"; '>{{ login_note|raw }}</h2>#}
     </div>
 
 
     <div id="login" style="display: none">
 
-        <h1 class="h3 mb-3 font-weight-normal">Admin Access</h1>
-        <form method="post" class="form-inline">
+        <h1 class="h3 mb-3 fw-normal">Admin Access</h1>
+        <form method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -35,17 +36,15 @@
                 </div>
             {% endif %}
 
-
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
             <label for="inputUsername">Username</label>
-            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
-                   required
-                   autofocus>
+            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
             <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" required>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
             <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}">
-
+                   value="{{ csrf_token('authenticate') }}"
+            >
             <button class="btn btn-lg btn-primary" type="submit">
                 Sign in
             </button>
