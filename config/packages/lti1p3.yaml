@@ -1,3 +1,6 @@
+# N.B.:  The LTI bundle used in the LTI Service (src/Service/LTI.php) requires a difference config for the audience;
+# thus 'elc' and 'elc_access' in the registration, platform, and tool config.
+# Note also that the tool audience is the client id and the platform audience is the platform url
 lti1p3:
     key_chains:
         toolKey:
@@ -29,7 +32,7 @@ lti1p3:
     tools:
         awsTool:
             name: "elw_aws"
-            audience: "https://api.brightspace.com/auth/token"
+            audience: "882919ca-b384-43ae-90cb-e07a7e780d24"
             oidc_initiation_url: "https://elw.english.uga.edu/lti1p3/oidc/login-initiation"
             launch_url: "https://elw.english.uga.edu/lti_launch"
             deep_linking_url: null

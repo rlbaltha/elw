@@ -10,6 +10,7 @@ lti1p3_message_platform:
 lti1p3_service_platform:
     resource: '@Lti1p3Bundle/Resources/config/routing/service/platform.yaml'
 
+# Fix for the name change in the LTI bundle
 lti1p3_message_oidc_initiation:
     path: '/lti1p3/oidc/login-initiation'
     methods: [GET, POST]

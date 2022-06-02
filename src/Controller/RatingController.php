@@ -51,11 +51,11 @@ class RatingController extends AbstractController
                     spent elsewhere.' => '5',];
         }
         else {
-            $choices = ['1: Process 1.' => '1',
-                '2: Process 2.' => '2',
-                ' 3: Process 3.' => '3',
-                '4: Process 4.' => '4',
-                '5: Process 5.' => '5',];
+            $choices = ['1: Unengaged with the writing process or no evidence of revision.' => '1',
+                '2: Minimally engaged with the writing process.' => '2',
+                ' 3: Somewhat engaged with the writing process.' => '3',
+                '4: Highly engaged with the writing process.' => '4',
+                '5: Exemplary engagement with the draft structure or revision process.' => '5',];
         }
         return $choices;
     }
