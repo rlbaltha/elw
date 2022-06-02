@@ -29,6 +29,7 @@
                 <h2 class="pointer">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
                 {% if role=='Instructor' %}
+
                     <a class="btn btn-primary btn-sm"
                        href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
                         eLW Reminder</a>

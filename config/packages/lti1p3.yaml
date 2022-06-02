@@ -11,6 +11,11 @@ lti1p3:
             audience: "https://uga.view.usg.edu"
             oidc_authentication_url: "https://uga.view.usg.edu/d2l/lti/authenticate"
             oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
+        elc_access:
+            name: "elc_access"
+            audience: "https://api.brightspace.com/auth/token"
+            oidc_authentication_url: "https://uga.view.usg.edu/d2l/lti/authenticate"
+            oauth2_access_token_url: "https://auth.brightspace.com/core/connect/token"
         elc_test:
             name: "elc_test"
             audience: "https://ugatest2.view.usg.edu"
@@ -58,6 +63,16 @@ lti1p3:
         elc_aws:
             client_id: "882919ca-b384-43ae-90cb-e07a7e780d24"
             platform: "elc"
+            tool: "awsTool"
+            deployment_ids:
+                - "24c91db3-322c-4504-9697-df4ca2ed4eb0"
+            platform_key_chain: ~
+            platform_jwks_url: "https://uga.view.usg.edu/d2l/.well-known/jwks"
+            tool_key_chain: "toolKey"
+            tool_jwks_url: "https://elw.engligh.uga.edu/lti1p3/.well-known/jwks/toolSet.json"
+        elc_aws_access:
+            client_id: "882919ca-b384-43ae-90cb-e07a7e780d24"
+            platform: "elc_access"
             tool: "awsTool"
             deployment_ids:
                 - "24c91db3-322c-4504-9697-df4ca2ed4eb0"
