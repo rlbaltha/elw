@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @Route("/course")
@@ -109,7 +110,7 @@ class CourseController extends AbstractController
     /**
      * @Route("/{courseid}/show", name="course_show", methods={"GET"})
      */
-    public function show(Permissions $permissions, string $courseid): Response
+    public function show(Permissions $permissions, string $courseid, SessionInterface $session): Response
     {
         //discover needed info on request
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -129,6 +130,7 @@ class CourseController extends AbstractController
             'action' => $this->generateUrl('user_irb', ['courseid' => $courseid]),
             'method' => 'POST',
         ]);
+
         return $this->render('course/show.html.twig', [
             'course' => $course,
             'classlists' => $classlists,

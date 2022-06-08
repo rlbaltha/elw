@@ -12,6 +12,7 @@
                    data-id="comment{{ doc.id }}"
                    href="#"
                    data-request="{{ path('comment_ajax_edit', {'docid': doc.id, 'source': 'journal', 'id': comment.id}) }}"
+                   aria-label="Update end comment for {{doc.title}}"
                 >Edit</a>
             {% endif %}
         </div>
@@ -19,7 +20,7 @@
                 {{ comment.body|raw }}
         </div>
         {% if comment.grade %}
-            <div class="card-footer">
+            <div class="card-footer"
                 Grade: {{ comment.grade }}
             </div>
         {% endif %}
