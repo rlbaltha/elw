@@ -24,6 +24,7 @@
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "knplabs/knp-paginator-bundle": "^5.2",
         "knplabs/knp-snappy-bundle": "^1.8",
+        "lcobucci/jwt": "4.1.5",
         "oat-sa/bundle-lti1p3": "5.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
