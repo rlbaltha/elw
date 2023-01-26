@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Doc;
+use App\Entity\Notification;
 use App\Form\DocType;
 use App\Repository\DocRepository;
 use App\Service\Lti;
@@ -240,6 +241,17 @@ class DocController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
+
+        $notification = new Notification();
+        $notification->setAction('review');
+        $notification->setDocid($docid);
+        $notification->setReviewid($doc->getId());
+        $notification->setCourseid($courseid);
+        $notification->setFromUser($user);
+        $notification->setForUser($origin->getUser()->getId());
+        $entityManager->persist($notification);
+        $entityManager->flush();
+
         return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
 
@@ -331,24 +343,24 @@ class DocController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/doc_display", name="doc_display", methods={"GET"})
-     */
-    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
-    {
-        $permissions->isAllowedToView($courseid, $doc);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        if ($doc->getProject()->getMarkupsets()) {
-            $markupsets = $doc->getProject()->getMarkupsets();
-        } else {
-            $markupsets = $course->getMarkupsets();
-        }
-        return $this->render('doc/pdf.html.twig', [
-            'doc' => $doc,
-            'markupsets' => $markupsets,
-        ]);
-
-    }
+//    /**
+//     * @Route("/{id}/{courseid}/doc_display", name="doc_display", methods={"GET"})
+//     */
+//    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
+//    {
+//        $permissions->isAllowedToView($courseid, $doc);
+//        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+//        if ($doc->getProject()->getMarkupsets()) {
+//            $markupsets = $doc->getProject()->getMarkupsets();
+//        } else {
+//            $markupsets = $course->getMarkupsets();
+//        }
+//        return $this->render('doc/pdf.html.twig', [
+//            'doc' => $doc,
+//            'markupsets' => $markupsets,
+//        ]);
+//
+//    }
 
     /**
      * @Route("/pdf", name="doc_pdf", methods={"POST"})

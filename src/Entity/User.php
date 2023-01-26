@@ -126,6 +126,12 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      */
     private $lastlogin;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="from_user")
+     */
+    private $notifications;
+
+
 
     public function __construct()
     {
@@ -138,6 +144,8 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->rubricsets = new ArrayCollection();
         $this->rubrics = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->for_user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -546,5 +554,36 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setFromUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getFromUser() === $this) {
+                $notification->setFromUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 }

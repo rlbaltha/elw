@@ -124,6 +124,8 @@ class CourseController extends AbstractController
         $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
 
+        $notifications = $this->doctrine->getManager()->getRepository('App:Notification')->findByUser($user->getId(), $courseid);
+
         $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
 
         $form = $this->createForm(IrbType::class, $user, [
@@ -134,6 +136,7 @@ class CourseController extends AbstractController
         return $this->render('course/show.html.twig', [
             'course' => $course,
             'classlists' => $classlists,
+            'notifications' => $notifications,
             'role' => $role,
             'user' => $user,
             'status' => $status,

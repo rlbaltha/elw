@@ -28,6 +28,15 @@
             <div class="jumbotron">
                 <h2 class="pointer">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
+                <hr/>
+                {% for notification in notifications %}
+                    <p><a class=""
+                          href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.reviewid}) }}">You have a new
+                        {{ notification.action }} from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }} posted {{ notification.created|date("M j, Y g:ia") }}</a>
+                    </p>
+                {% endfor %}
+
+
                 {% if role=='Instructor' %}
 
                     <a class="btn btn-primary btn-sm"
