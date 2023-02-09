@@ -29,13 +29,33 @@
                 <h2 class="pointer">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
                 <hr/>
-                {% for notification in notifications %}
-                    <p><a class=""
-                          href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.reviewid}) }}">You have a new
-                        {{ notification.action }} from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }} posted {{ notification.created|date("M j, Y g:ia") }}</a>
-                    </p>
-                {% endfor %}
 
+                {# table of notifications #}
+                {% if notifications|length > 0 %}
+                <fieldset>
+                    <table class="table">
+                        <thead class="">
+                        <tr>
+                            <th>Activity</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for notification in notifications %}
+                        <tr class="body">
+                            <td>
+                                <a href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.reviewid}) }}">You have a new
+                        {{ notification.action }} from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }}.</a>
+                            </td>
+                            <td>
+                                {{ notification.created|date("M j, Y g:ia") }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+                {% endif %}
 
                 {% if role=='Instructor' %}
 
@@ -90,6 +110,7 @@
                                 <tr>
                                     <th>Students</th>
                                     <th>Last Login</th>
+                                    <th>Previous Login</th>
                                     <th>Role</th>
                                     <th>Actions</th>
                                 </tr>
@@ -99,6 +120,7 @@
                                     <tr>
                                         <td>{{ classlist.user.lastname }}, {{ classlist.user.firstname }} </td>
                                         <td>{{ classlist.user.lastlogin | date("M j, Y g:ia") }}</td>
+                                        <td>{{ classlist.user.previouslogin | date("M j, Y g:ia") }}</td>
                                         <td>{{ classlist.role }}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"

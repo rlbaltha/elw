@@ -42,18 +42,23 @@ class NotificationRepository extends ServiceEntityRepository
     /**
      * @return Notification[] Returns an array of Notification objects
      */
-    public function findByUser($userid, $courseid): array
+    public function findByUser($userid, $courseid, $previouslogin): array
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.for_user = :userid')
             ->andWhere('n.courseid = :courseid')
+            ->andWhere('n.created > :previouslogin')
             ->setParameter('userid', $userid)
             ->setParameter('courseid', $courseid)
+            ->setParameter('previouslogin', $previouslogin)
             ->orderBy('n.created', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
+
+
 
 //    public function findOneBySomeField($value): ?Notification
 //    {

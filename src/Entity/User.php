@@ -131,6 +131,11 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $previouslogin;
+
 
 
     public function __construct()
@@ -581,6 +586,18 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
                 $notification->setFromUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPreviouslogin(): ?\DateTimeInterface
+    {
+        return $this->previouslogin;
+    }
+
+    public function setPreviouslogin(?\DateTimeInterface $previouslogin): self
+    {
+        $this->previouslogin = $previouslogin;
 
         return $this;
     }

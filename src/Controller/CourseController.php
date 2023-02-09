@@ -12,6 +12,7 @@ use App\Service\Permissions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -25,9 +26,13 @@ class CourseController extends AbstractController
     /** @var ManagerRegistry */
     private ManagerRegistry $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    /** @var RequestStack */
+    private $requestStack;
+
+    public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
     {
         $this->doctrine = $doctrine;
+        $this->requestStack = $requestStack;
     }
     
     /**
@@ -110,8 +115,9 @@ class CourseController extends AbstractController
     /**
      * @Route("/{courseid}/show", name="course_show", methods={"GET"})
      */
-    public function show(Permissions $permissions, string $courseid, SessionInterface $session): Response
+    public function show(Permissions $permissions, string $courseid, Request $request,): Response
     {
+        $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         //discover needed info on request
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
@@ -123,9 +129,8 @@ class CourseController extends AbstractController
         $status = $classuser->getStatus();
         $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-
-        $notifications = $this->doctrine->getManager()->getRepository('App:Notification')->findByUser($user->getId(), $courseid);
-
+        $previouslogin = $user->getPreviouslogin();
+        $notifications = $this->doctrine->getManager()->getRepository('App:Notification')->findByUser($user->getId(), $courseid, $previouslogin);
         $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
 
         $form = $this->createForm(IrbType::class, $user, [
