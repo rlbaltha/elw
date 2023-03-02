@@ -104,9 +104,20 @@ class DocController extends AbstractController
         $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $entityManager = $this->doctrine->getManager();
         $docs = $docRepository->findHiddenDocs($course, $user);
+        $now = new \DateTime('now');
         foreach ($docs as $doc) {
             $doc->setAccess('Private');
+            $doc->setReleasedate($now);
             $entityManager->persist($doc);
+
+            $notification = new Notification();
+            $notification->setAction('review');
+            $notification->setDocid($doc->getOrigin()->getId());
+            $notification->setReviewid($doc->getId());
+            $notification->setCourseid($courseid);
+            $notification->setFromUser($user);
+            $notification->setForUser($doc->getOrigin()->getUser()->getId());
+            $entityManager->persist($notification);
         }
         $entityManager->flush();
         $this->addFlash('notice', 'All documents have been released.');
@@ -223,7 +234,7 @@ class DocController extends AbstractController
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
-
+        $now = new \DateTime('now');
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
         $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
@@ -235,22 +246,23 @@ class DocController extends AbstractController
         $doc->setOrigin($origin);
         $doc->setTitle($doc_title);
         $doc->setBody($origin->getBody());
-        ($permissions->getCourseRole($courseid) === 'Instructor' ? $doc->setAccess('Hidden') : $doc->setAccess('Review'));
+        ($permissions->getCourseRole($courseid) === 'Instructor' ? $doc->setAccess('Hidden') : ($doc->setAccess('Review') AND $doc->setReleasedate($now)));
         $doc->setProject($origin->getProject());
         $doc->setStage($origin->getStage());
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
-
-        $notification = new Notification();
-        $notification->setAction('review');
-        $notification->setDocid($docid);
-        $notification->setReviewid($doc->getId());
-        $notification->setCourseid($courseid);
-        $notification->setFromUser($user);
-        $notification->setForUser($origin->getUser()->getId());
-        $entityManager->persist($notification);
-        $entityManager->flush();
+        if ($permissions->getCourseRole($courseid) !== 'Instructor'){
+            $notification = new Notification();
+            $notification->setAction('review');
+            $notification->setDocid($docid);
+            $notification->setReviewid($doc->getId());
+            $notification->setCourseid($courseid);
+            $notification->setFromUser($user);
+            $notification->setForUser($origin->getUser()->getId());
+            $entityManager->persist($notification);
+            $entityManager->flush();
+        }
 
         return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
@@ -393,6 +405,9 @@ class DocController extends AbstractController
     public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];
+        $username = $this->getUser()->getUsername();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $entityManager = $this->doctrine->getManager();
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
         $role = $permissions->getCourseRole($courseid);
@@ -409,7 +424,21 @@ class DocController extends AbstractController
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);
         $markupsets = $doc->getProject()->getMarkupsets();
+        $now = new \DateTime('now');
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($role == 'Instructor' and $doc->getAccess()=='Private') {
+                $doc->setReleasedate($now);
+
+                $notification = new Notification();
+                $notification->setAction('review');
+                $notification->setDocid($doc->getOrigin()->getId());
+                $notification->setReviewid($doc->getId());
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getOrigin()->getUser()->getId());
+                $entityManager->persist($notification);
+                $entityManager->persist($doc);
+            }
             $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your  document has been saved.');
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
