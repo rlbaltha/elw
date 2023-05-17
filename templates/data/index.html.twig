@@ -50,7 +50,19 @@
                     </tbody>
                 </table>
 
-                <h2>Rubrics used in {{ term.semester }} {{ term.year }}</h2>
+                <h2 class="d-inline">Rubrics used in {{ term.semester }} {{ term.year }}</h2>
+                <div class="ms-3 d-inline dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuTerms" data-bs-toggle="dropdown" aria-expanded="false">
+                        Rubrics by Term
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuTerms">
+                        {% set rubricid = 0 %}
+                        {% for rubric in rubric_count%}{% if loop.first %}{% set rubricid %}{{ rubric.id }}{% endset %}{% endif %}{% endfor %}
+                        {% for term in terms %}
+                            <li><a class="dropdown-item" href="{{ path('rubric_data', {'termid': term.id, 'rubricid': rubricid}) }}">{{ term.semester }} {{ term.year }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 <table class="table">
                     <thead>
                     <tr>

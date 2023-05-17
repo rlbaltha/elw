@@ -122,11 +122,11 @@ class CourseRepository extends ServiceEntityRepository
     public function countByCoursetype($term)
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT SUBSTRING(c.name,1,8) as coursetype, COUNT(c.id) as coursecount
+            ->createQuery("SELECT SUBSTRING(REPLACE(REPLACE(REPLACE(c.name, ' ',''), 'English','ENGL'), 'XLSAS_',''),1,8) as coursetype, COUNT(c.id) as coursecount
             FROM App\Entity\Course c JOIN App\Entity\Term t
             WHERE c.term=t.id and t.id = ?1
             GROUP BY coursetype ORDER BY coursetype ASC
-            ')
+            ")
             ->setParameter('1', $term)
             ->getResult();
     }

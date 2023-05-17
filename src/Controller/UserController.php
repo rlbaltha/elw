@@ -158,17 +158,17 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/{id}/promote", name="user_promote", methods={"GET"})
-     */
-    public function promote(User $user): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $this->addFlash('notice', 'This profile has been promoted.');
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
-    }
+//    /**
+//     * @Route("/admin/{id}/promote", name="user_promote", methods={"GET"})
+//     */
+//    public function promote(User $user): Response
+//    {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//        $this->addFlash('notice', 'This profile has been promoted.');
+//        return $this->render('user/show.html.twig', [
+//            'user' => $user,
+//        ]);
+//    }
 
     /**
      * @Route("/{courseid}/theme", name="user_theme", methods={"GET"})

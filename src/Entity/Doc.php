@@ -107,6 +107,12 @@ class Doc
     private $ratings;
 
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $releasedate;
+
+
 
     public function __construct()
     {
@@ -114,6 +120,7 @@ class Doc
         $this->labels = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
 
@@ -342,6 +349,18 @@ class Doc
                 $rating->setDoc(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getReleasedate(): ?\DateTimeInterface
+    {
+        return $this->releasedate;
+    }
+
+    public function setReleasedate(?\DateTimeInterface $releasedate): self
+    {
+        $this->releasedate = $releasedate;
 
         return $this;
     }
