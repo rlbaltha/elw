@@ -134,6 +134,8 @@ class LtiController extends AbstractController
         $userAuthenticator->authenticateUser($user, $ltiAuthenticator, $request);
 
         $now = new \DateTime('now');
+        $lastlogin = $user->getLastlogin();
+        $user->setPreviouslogin($lastlogin);
         $user->setLastlogin($now);
         $this->doctrine->getManager()->persist($user);
         $this->doctrine->getManager()->flush();
