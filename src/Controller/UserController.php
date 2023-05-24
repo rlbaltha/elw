@@ -15,18 +15,23 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
+    /** @var UserPasswordHasherInterface */
+    private $passwordHasher;
+
     /** @var ManagerRegistry */
     private ManagerRegistry $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher)
     {
         $this->doctrine = $doctrine;
+        $this->passwordHasher = $passwordHasher;
     }
     
     /**
@@ -239,4 +244,5 @@ class UserController extends AbstractController
         $this->addFlash('notice', 'This profile has been deleted.');
         return $this->redirectToRoute('user_index');
     }
+
 }
