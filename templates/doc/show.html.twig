@@ -104,7 +104,7 @@
                                     eLC</a>
                             </li>
                         {% endif %}
-                        </ul>
+                    </ul>
                     <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                 </div>
             </div>
@@ -197,13 +197,13 @@
                                         {% endif %}
                                     </div>
                                     {% if app.user == doc.user or role == 'Instructor' %}
-                                    <div class="card-footer" id="rubric{{ rubric.id }}_doc{{ doc.id }}">
-                                        <a class="btn btn-primary btn-sm rubricrating"
-                                           data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"
-                                           href="#"
-                                           data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
-                                        >View Rating</a>
-                                    </div>
+                                        <div class="card-footer" id="rubric{{ rubric.id }}_doc{{ doc.id }}">
+                                            <a class="btn btn-primary btn-sm rubricrating"
+                                               data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"
+                                               href="#"
+                                               data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
+                                            >View Rating</a>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -239,21 +239,6 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row" class="d-none">
-            {# Markup pops for orginal document #}
-            <div class="markup-container">
-                {% for markupset in markupsets %}
-                    {% for markup in markupset.markups %}
-                        <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
-                             style="min-width: 10rem">
-                            <div class="popover-title"
-                                 style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
-                            <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-        </div>
     </div>
     {# #################################### Reviews ######################################################## #}
     {# #################################### Reviews ######################################################## #}
@@ -276,9 +261,9 @@
                                 <ul class="navbar-nav">
                                     {# if owner #}
                                     {% if app.user == review.user %}
-                                    <li class="nav-item">
-                                        <a aria-label="Edit Document {{ doc.title }}" class="nav-link" href="{{ course_path('doc_edit', {'id': review.id}) }}">Edit</a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a aria-label="Edit Document {{ doc.title }}" class="nav-link" href="{{ course_path('doc_edit', {'id': review.id}) }}">Edit</a>
+                                        </li>
                                     {% endif %}
                                     <li class="nav-item">
                                         <a data-id="{{ review.id }}"
@@ -423,6 +408,24 @@
         {% endif %}
     {% endfor %}
 
+    <!-- Markup -->
+    <div class="row" class="d-none">
+        {# Markup pops#}
+        <div class="markup-container">
+            {% for markupset in markupsets %}
+                {% for markup in markupset.markups %}
+                    <div data-id='{{ markup.id }}' id='{{ markup.name }}' class='popover popover-markup d-none'
+                         style="min-width: 10rem">
+                        <div class="popover-title"
+                             style="background: {{ markup.color }}; padding:.5em; color:#fff; min-width: 5em;">{{ markup.name }}</div>
+                        <div class="popover-content" style="padding:.5em;">{{ markup.description|raw }}</div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+
     <!-- Help Modal -->
     <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
          aria-hidden="true">
@@ -453,7 +456,7 @@
                         do not fully comply with all applicable guidelines for accessible digital documents.
                         For the most accessible experience, choose the current HTML display of the document.</p>
                     <p>To <strong>Close</strong> the document, click the Close link in the upper right.  You will be
-                    returned to your most recent document listing.</p>
+                        returned to your most recent document listing.</p>
 
                     <p class="alert alert-info">For additional <strong>eLW help</strong>, contact esupport@uga.edu or
                         visit the FYW Digital Learning Labs in
@@ -539,7 +542,7 @@
                 function popover_toggle() {
                     $('#toggle').text(($('#toggle').text() === 'Popover' ? 'Inline' : 'Popover'));
                     $('.popover-alert').text(($('#toggle').text() === 'Inline' ? 'In this view, hover over highlighted text for additional information.' : 'In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
-                    $('.note, .super').toggle();
+                    $('.note').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
                 };

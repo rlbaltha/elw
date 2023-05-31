@@ -14,16 +14,19 @@ fos_ck_editor:
             width: '70vw'
             toolbar: [ [ 'Styles' ], [ 'Undo', 'Redo' ], [ 'Font', 'FontSize' ], [ 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat', 'CopyFormatting' ], [ 'TextColor', 'BGColor' ], [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'Link', 'Unlink' ], [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ], [ 'Image', 'Table' ], [ 'Maximize' ] , [ 'About' ]]
             allowedContent: 'p h2 h3 h4 img{text-align,margin-left}(*); a[!href,target]{*}(*); table th tr td strong s em; ol ul li span(*){font-size,font-family,color,background-color}[data-id]; img[*]{*}; '
-            extraPlugins: ['wordcount', 'notification']
+            extraPlugins: ['wordcount', 'notification', 'blockimagepaste']
             stylesSet: 'elw_styles:/ckeditor_styles.js'
         simple_config:
             toolbar: [ [ 'Undo', 'Redo' ], [ 'Font', 'FontSize' ] [ 'Bold', 'Italic'],  [ 'TextColor', 'BGColor' ], [ 'Link', 'Unlink' ], [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ]]
             allowedContent: 'p h2 h3 h4 img{text-align,margin-left}(*); a[!href,target]{*}(*); table th tr td strong s em; ol ul li span(*){font-size,font-family,color,background-color}[data-id]; img[*]{*}; '
-            extraPlugins: ['wordcount', 'notification']
+            extraPlugins: ['wordcount', 'notification', 'blockimagepaste']
     plugins:
         wordcount:
             path:     "/plugins/wordcount/" # with trailing slash
             filename: "plugin.js"
         notification:
             path:     "/plugins/notification/" # with trailing slash
+            filename: "plugin.js"
+        blockimagepaste:
+            path: "/plugins/blockimagepaste/" # with trailing slash
             filename: "plugin.js"
