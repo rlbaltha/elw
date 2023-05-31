@@ -12,7 +12,7 @@
 
                 // Replace data: images in Firefox and upload them
                 e.data.dataValue = html.replace( /<img( [^>]*)?>/gi, function( img ) {
-                    alert('Pasting images directly into the editor is not allowed. ');
+                    alert('Pasting images directly into the editor is not allowed. Please use the Image insert button on the toolbar.');
                     return '';
                 });
             });
