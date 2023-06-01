@@ -38,7 +38,7 @@
 
         {# Info column #}
         <div class="col-lg-4">
-            {# <a id="compare_click" class="btn btn-primary btn-sm" href="#">Swap Order</a> #}
+
             <div class="card bg-light mb-3">
                     <div class="card-header">
                     <span class="" style="font-size: larger" >First Document: {{ doc1.title }}</span>
@@ -75,6 +75,7 @@
                           style="background:{% if doc2.access=='Private'%}darkred{% elseif doc2.access=='Hidden' %}black{% else %}green{% endif %}">{{ doc2.access }}</span>
                 </div>
             </div>
+            <a class="btn btn-primary btn-sm" href="{{ course_path('doc_diff', {'id1': doc2.id, 'id2': doc1.id, 'order': '1'}) }}">Swap Order</a>
         </div>
     </div>
 

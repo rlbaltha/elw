@@ -629,20 +629,20 @@
                 $('.doc-container').hide();
                 $('#doc{{ target }}').show()
 
-                $("#compare_click").click(function () {
-                    let doc1;
-                    let doc2;
-                    let url;
-                    let location = '_blank'
-                    if ($('input:checked').length != 2) {
-                        alert('Please select only two documents to compare');
-                    } else {
-                        let doc1 = $('input:checked:eq( 0 )').attr('id');
-                        let doc2 = $('input:checked:eq( 1 )').attr('id');
-                        let url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}' + '/diff';
-                        window.open(url, location);
-                    }
-                });
+                {#$("#compare_click").click(function () {#}
+                {#    let doc1;#}
+                {#    let doc2;#}
+                {#    let url;#}
+                {#    let location = '_blank'#}
+                {#    if ($('input:checked').length != 2) {#}
+                {#        alert('Please select only two documents to compare');#}
+                {#    } else {#}
+                {#        let doc1 = $('input:checked:eq( 0 )').attr('id');#}
+                {#        let doc2 = $('input:checked:eq( 1 )').attr('id');#}
+                {#        let url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}'+ '/' + '0' +'/diff';#}
+                {#        window.open(url, location);#}
+                {#    }#}
+                {#});#}
 
             }
         );

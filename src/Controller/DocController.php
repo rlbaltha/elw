@@ -302,16 +302,16 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/{id1}/{id2}/{courseid}/diff", name="doc_diff", methods={"GET"}, defaults={})
+     * @Route("/{id1}/{id2}/{courseid}/{order}/diff", name="doc_diff", methods={"GET"}, defaults={"order" = "0" })
      */
-    public function diff(string $id1, string $id2, string $courseid, Permissions $permissions): Response
+    public function diff(string $id1, string $id2, string $courseid, string $order, Permissions $permissions): Response
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $doc1 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id1);
         $doc2 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id2);
         $permissions->isAllowedToView($courseid, $doc1);
         $permissions->isAllowedToView($courseid, $doc2);
-        if ($doc1->getCreated() > $doc2->getCreated()) {
+        if ($order==="0" and $doc1->getCreated() > $doc2->getCreated()) {
             $doc_temp = $doc2;
             $doc2 = $doc1;
             $doc1 = $doc_temp;
@@ -426,7 +426,7 @@ class DocController extends AbstractController
         $markupsets = $doc->getProject()->getMarkupsets();
         $now = new \DateTime('now');
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($role == 'Instructor' and $doc->getAccess()=='Private') {
+            if ($role == 'Instructor' and $doc->getAccess()=='Private' and $doc->getOrigin()) {
                 $doc->setReleasedate($now);
 
                 $notification = new Notification();

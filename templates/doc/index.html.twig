@@ -343,7 +343,7 @@
                 } else {
                     var doc1 = $('input:checked:eq( 0 )').attr('id');
                     var doc2 = $('input:checked:eq( 1 )').attr('id');
-                    var url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}' + '/diff';
+                    var url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}' + '/0/diff';
                     window.open(url, location);
                 }
             });
