@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Notification;
 use App\Form\CommentJournalType;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
@@ -56,6 +57,17 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
+
+            if ($source=='journal'){
+                $notification = new Notification();
+                $notification->setAction('journal_comment');
+                $notification->setDocid($docid);
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getUser()->getId());
+                $entityManager->persist($notification);
+            }
+
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
@@ -135,8 +147,17 @@ class CommentController extends AbstractController
         foreach($docs as $doc){
             if ($doc->getComments()){
                 foreach ($doc->getComments() as $comment) {
-                    $comment->setAccess('Private');
-                    $entityManager->persist($comment);
+                    if ($comment->getAccess() !== 'Private'){
+                        $comment->setAccess('Private');
+                        $notification = new Notification();
+                        $notification->setAction('comment');
+                        $notification->setDocid($doc->getId());
+                        $notification->setCourseid($courseid);
+                        $notification->setFromUser($user);
+                        $notification->setForUser($doc->getUser()->getId());
+                        $entityManager->persist($notification);
+                        $entityManager->persist($comment);
+                    }
                 }
             }
         }
@@ -192,6 +213,20 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
+            if ($permissions->getCourseRole($courseid) !== 'Instructor'){
+                $notification = new Notification();
+                if ($source=='journal') {
+                    $notification->setAction('journal_comment');
+                }
+                else {
+                    $notification->setAction('comment');
+                }
+                $notification->setDocid($docid);
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getUser()->getId());
+                $entityManager->persist($notification);
+            }
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
