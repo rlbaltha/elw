@@ -201,9 +201,6 @@ class CommentController extends AbstractController
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
         }
-        if ($source=='journal') {
-            $comment->setAccess('Private');
-        }
         $comment->setUser($user);
         $comment->setDoc($doc);
         $comment->setType('Holistic Feedback');
@@ -213,20 +210,19 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
-            if ($permissions->getCourseRole($courseid) !== 'Instructor'){
+            $request_data = $request->request->get('comment');
+            $access = $request_data['access'];
+
+            if ( (($permissions->getCourseRole($courseid) !== 'Instructor') or ($permissions->getCourseRole($courseid) === 'Instructor' and $access === 'Private'))) {
                 $notification = new Notification();
-                if ($source=='journal') {
-                    $notification->setAction('journal_comment');
-                }
-                else {
-                    $notification->setAction('comment');
-                }
-                $notification->setDocid($docid);
+                $notification->setAction('comment');
+                $notification->setDocid($target);
                 $notification->setCourseid($courseid);
                 $notification->setFromUser($user);
                 $notification->setForUser($doc->getUser()->getId());
                 $entityManager->persist($notification);
             }
+
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
