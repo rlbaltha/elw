@@ -44,11 +44,14 @@
                         {% for notification in notifications %}
                         <tr class="body">
                             <td>
-                                {% if notification.action=='review' %}
+                                {% if notification.action=='review'%}
                                     <a href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.reviewid}) }}">You have a new
                                         {{ notification.action }} from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }}.</a>
                                 {% elseif notification.action=='journal_comment' %}
                                     <a href="{{ course_path('journal_index', {'docid': notification.docid, 'courseid': course.id}) }}">You have feedback from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }} on a journal entry.</a>
+                                {% elseif notification.action=='review_comment' %}
+                                        <a href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.reviewid}) }}">You have a new
+                                            comment on a review from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }}.</a>
                                 {% else %}
                                     <a href="{{ course_path('doc_show', {'id': notification.docid, 'courseid': course.id, 'target': notification.docid}) }}">You have a new
                                         {{ notification.action }} from {{ notification.fromUser.firstname }} {{ notification.fromUser.lastname }}.</a>
