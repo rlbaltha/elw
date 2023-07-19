@@ -255,7 +255,6 @@ class CommentController extends AbstractController
                     $notification->setFromUser($user);
                     $notification->setForUser($doc->getUser()->getId());
                     $entityManager->persist($notification);
-                    $entityManager->persist($comment);
                 }
                 // if get comment on review of my doc from some else
                 elseif  (($access === 'Private') and ($comment->getDoc()->getOrigin()) and ($comment->getUser() !== $comment->getDoc()->getOrigin()->getUser())){
@@ -267,8 +266,8 @@ class CommentController extends AbstractController
                     $notification->setFromUser($user);
                     $notification->setForUser($doc->getOrigin()->getUser()->getId());
                     $entityManager->persist($notification);
-                    $entityManager->persist($comment);
                 }
+            $entityManager->persist($comment);
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
