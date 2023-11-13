@@ -28,6 +28,7 @@
         "knplabs/knp-snappy-bundle": "^1.8",
         "lcobucci/jwt": "4.1.5",
         "oat-sa/bundle-lti1p3": "5.0",
+        "league/oauth2-server": "8.4.2",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.4.*",
