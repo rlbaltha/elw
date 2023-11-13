@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Notification;
 use App\Form\CommentJournalType;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -56,6 +58,17 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($comment);
+
+            if ($source=='journal'){
+                $notification = new Notification();
+                $notification->setAction('journal_comment');
+                $notification->setDocid($docid);
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getUser()->getId());
+                $entityManager->persist($notification);
+            }
+
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
             if ($source!='doc') {
@@ -135,8 +148,33 @@ class CommentController extends AbstractController
         foreach($docs as $doc){
             if ($doc->getComments()){
                 foreach ($doc->getComments() as $comment) {
-                    $comment->setAccess('Private');
-                    $entityManager->persist($comment);
+                    if ($comment->getAccess() !== 'Private'){
+                        $comment->setAccess('Private');
+                        // if get comment on my doc from someone else
+                        if ($comment->getUser() !== $comment->getDoc()->getUser()){
+                            $notification = new Notification();
+                            $notification->setAction('comment');
+                            $notification->setDocid($doc->getId());
+                            $notification->setCourseid($courseid);
+                            $notification->setFromUser($user);
+                            $notification->setForUser($doc->getUser()->getId());
+                            $entityManager->persist($notification);
+                            $entityManager->persist($comment);
+                            }
+                        // if get comment on review of my doc from some else
+                        elseif  (($comment->getDoc()->getOrigin()) and ($comment->getUser() !== $comment->getDoc()->getOrigin()->getUser())){
+                            $notification = new Notification();
+                            $notification->setAction('review_comment');
+                            $notification->setDocid($doc->getOrigin()->getId());
+                            $notification->setReviewid($doc->getId());
+                            $notification->setCourseid($courseid);
+                            $notification->setFromUser($user);
+                            $notification->setForUser($doc->getOrigin()->getUser()->getId());
+                            $entityManager->persist($notification);
+                            $entityManager->persist($comment);
+                        }
+
+                    }
                 }
             }
         }
@@ -164,6 +202,24 @@ class CommentController extends AbstractController
         return $this->redirectToRoute('doc_show', ['id' => $docid, 'courseid' => $courseid, 'target' => $target]);
     }
 
+
+    /**
+     * checks if the current user is allowed to view the doc
+     * if not, throws an access denied exception
+     * if so, returns true
+     */
+    public function isAllowedToView($courseid, $doc)
+    {
+        //grab our current user's role in our current course
+        $currentUserRole = $this->getCourseRole($courseid);
+        //test if user is allowed to see the doc
+        if($currentUserRole === 'Instructor' or $doc->getAccess()==='Shared' or $this->isOwner($doc) or $doc->getOrigin()==='Shared'){
+            return true;
+        } else {
+            throw new AccessDeniedException();
+        }
+    }
+
     /**
      * @Route("/{courseid}/{docid}/{target}/{source}/new", name="comment_new", methods={"GET","POST"})
      */
@@ -180,9 +236,6 @@ class CommentController extends AbstractController
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
         }
-        if ($source=='journal') {
-            $comment->setAccess('Private');
-        }
         $comment->setUser($user);
         $comment->setDoc($doc);
         $comment->setType('Holistic Feedback');
@@ -191,6 +244,29 @@ class CommentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
+            $request_data = $request->request->get('comment');
+            $access = $request_data['access'];
+                // if get comment on my doc from someone else
+                if ($access === 'Private' and $comment->getUser() !== $comment->getDoc()->getUser()){
+                    $notification = new Notification();
+                    $notification->setAction('comment');
+                    $notification->setDocid($doc->getId());
+                    $notification->setCourseid($courseid);
+                    $notification->setFromUser($user);
+                    $notification->setForUser($doc->getUser()->getId());
+                    $entityManager->persist($notification);
+                }
+                // if get comment on review of my doc from some else
+                elseif  (($access === 'Private') and ($comment->getDoc()->getOrigin()) and ($comment->getUser() !== $comment->getDoc()->getOrigin()->getUser())){
+                    $notification = new Notification();
+                    $notification->setAction('review_comment');
+                    $notification->setDocid($doc->getOrigin()->getId());
+                    $notification->setReviewid($doc->getId());
+                    $notification->setCourseid($courseid);
+                    $notification->setFromUser($user);
+                    $notification->setForUser($doc->getOrigin()->getUser()->getId());
+                    $entityManager->persist($notification);
+                }
             $entityManager->persist($comment);
             $entityManager->flush();
             $this->addFlash('notice', 'Your end comment has been added.');
@@ -217,6 +293,8 @@ class CommentController extends AbstractController
     public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $header = 'End Comment Edit';
+        $username = $this->getUser()->getUsername();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
@@ -224,6 +302,35 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->persist($comment);
+            $request_data = $request->request->get('comment');
+            $access = $request_data['access'];
+
+            // if get comment on my doc from someone else
+            if ($access === 'Private' and $comment->getUser() !== $comment->getDoc()->getUser()){
+                $notification = new Notification();
+                $notification->setAction('comment');
+                $notification->setDocid($doc->getId());
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getUser()->getId());
+                $entityManager->persist($notification);
+                $entityManager->persist($comment);
+            }
+            // if get comment on review of my doc from some else
+            elseif  (($access === 'Private') and ($comment->getDoc()->getOrigin()) and ($comment->getUser() !== $comment->getDoc()->getOrigin()->getUser())){
+                $notification = new Notification();
+                $notification->setAction('review_comment');
+                $notification->setDocid($doc->getOrigin()->getId());
+                $notification->setReviewid($doc->getId());
+                $notification->setCourseid($courseid);
+                $notification->setFromUser($user);
+                $notification->setForUser($doc->getOrigin()->getUser()->getId());
+                $entityManager->persist($notification);
+                $entityManager->persist($comment);
+            }
+
             $this->doctrine->getManager()->flush();
             $this->addFlash('notice', 'Your end comment has been updated.');
             if ($source!='doc') {

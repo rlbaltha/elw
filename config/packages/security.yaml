@@ -27,6 +27,7 @@ security:
     - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/lti_launch, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/course, roles: ROLE_USER}
     - { path: ^/journal, roles: ROLE_USER}
     - { path: ^/classlist, roles: ROLE_USER }
@@ -35,6 +36,7 @@ security:
     - { path: ^/card, roles: ROLE_ADMIN }
     - { path: ^/label, roles: ROLE_INSTRUCTOR }
     - { path: ^/markupset, roles: ROLE_INSTRUCTOR }
+    - { path: ^/lti, roles: ROLE_USER }
     - { path: ^/markup, roles: ROLE_INSTRUCTOR }
     - { path: ^/rubric, roles: ROLE_INSTRUCTOR }
     - { path: ^/comment, roles: ROLE_USER }
