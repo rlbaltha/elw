@@ -29,3 +29,7 @@ services:
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
             - '%env(DATABASE_URL)%'
+
+    App\Service\LtiModifiedBuilder:
+        decorates: 'OAT\Library\Lti1p3Core\Security\Jwt\Builder\BuilderInterface'
+        arguments: ['@App\Service\LtiModifiedBuilder.inner']
