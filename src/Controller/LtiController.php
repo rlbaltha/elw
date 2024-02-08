@@ -25,8 +25,8 @@ use GuzzleHttp\ClientInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\Persistence\ManagerRegistry;
-//for v6 use OAT\Library\Lti1p3Core\Message\Launch\Validator\Tool\ToolLaunchValidator;
-use OAT\Library\Lti1p3Core\Message\Launch\Validator\ToolLaunchValidator;
+use OAT\Library\Lti1p3Core\Message\Launch\Validator\Tool\ToolLaunchValidator;
+//use OAT\Library\Lti1p3Core\Message\Launch\Validator\ToolLaunchValidator;
 use Psr\Http\Message\ServerRequestInterface;
 
 class LtiController extends AbstractController
