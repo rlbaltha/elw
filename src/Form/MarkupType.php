@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Markup;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,8 +24,8 @@ class MarkupType extends AbstractType
             ->add('color', TextType::class, [
                 'label'  => 'Color'
             ])
-            ->add('description', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('description', TextareaType::class, [
+                'required' => false,
                 'label' => ''
             ])
 

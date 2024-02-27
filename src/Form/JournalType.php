@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Doc;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
@@ -18,8 +19,7 @@ class JournalType extends AbstractType
             ->add('title', TextType::class, [
                 'label'  => 'Title'
             ])
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'doc_config',
+            ->add('body', TextareaType::class, [
                 'label' => ''
             ])
             ->add('project', HiddenType::class, [

@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Card;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +17,10 @@ class CardType extends AbstractType
             ->add('title', TextType::class, [
                 'label'  => 'Title',
             ])
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('body', TextareaType::class, [
+                'required' => false,
                 'label' => '',
             ])
-            ->add('type')
             ->add('type', TextType::class, [
                 'label'  => 'Type (lower case and underscore, no spaces, e.g., help_doc)',
             ])

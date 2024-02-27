@@ -112,7 +112,7 @@
 
         <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
             {# This is the orginal document #}
-            <div id="doc_core{{ doc.id }}" class="document-editor">
+            <div id="doc_core{{ doc.id }}" class="document-editor ck-content">
                 {{ doc.body|raw }}
 
                 {# This is the markup for the original document #}
@@ -293,7 +293,7 @@
 
                     <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
                         {# This is the the Review(s) #}
-                        <div id="doc_core{{ review.id }}" class="document-editor">
+                        <div id="doc_core{{ review.id }}" class="document-editor ck-content">
                             {{ review.body|raw }}
 
                             {# This is the Markup for the Review(s) #}

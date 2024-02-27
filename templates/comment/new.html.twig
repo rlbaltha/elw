@@ -65,6 +65,8 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/comment_editor_init.js') }}"></script>
     <script>
         $(document).ready(function () {
             let access = "{{ doc.access }}";

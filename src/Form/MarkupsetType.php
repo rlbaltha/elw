@@ -6,6 +6,7 @@ use App\Entity\Markupset;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,8 +21,8 @@ class MarkupsetType extends AbstractType
             ->add('name', TextType::class, [
                 'label'  => 'Title'
             ])
-            ->add('description', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('description', TextareaType::class, [
+                'required' => false,
                 'label' => ''
             ])
             ->add('level', ChoiceType::class, [

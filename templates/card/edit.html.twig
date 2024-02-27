@@ -10,3 +10,36 @@
 
     {{ include('card/_delete_form.html.twig') }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script>
+        let editor;
+        ClassicEditor.create(document.getElementById("card_body"), {
+            toolbar: {
+                items: [
+                    'undo', 'redo',
+                    'bold', 'italic', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            htmlSupport: {
+                allow: [
+                    {
+                        name: /.*/,
+                        attributes: true,
+                        classes: true,
+                        styles: true
+                    }
+                ]
+            },
+        })
+            .then(newEditor => {
+                editor = newEditor;
+            });
+    </script>
+{% endblock %}

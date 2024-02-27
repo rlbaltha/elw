@@ -8,6 +8,7 @@ use App\Entity\Stage;
 use App\Repository\ProjectRepository;
 use App\Repository\StageRepository;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -52,10 +53,7 @@ class DocType extends AbstractType
                 'label'  => '',
                 'label_attr' => ['class' => 'd-inline'],
             ])
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'doc_config',
-                'label' => 'Body',
-                'label_attr' => ['class' => 'visually-hidden'],
+            ->add('body', TextareaType::class, [
             ])
         ;
     }

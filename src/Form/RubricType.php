@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Rubric;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -20,8 +20,8 @@ class RubricType extends AbstractType
                 'label'  => 'Name'
             ])
             ->add('sort', IntegerType::class)
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('body', TextareaType::class, [
+                'required' => false,
                 'label' => ''
             ])
             ->add('level', ChoiceType::class, [

@@ -2,6 +2,11 @@
 
 {% block title %}Document Edit - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css')}}">
+{% endblock %}
+
 {% block subnav %}
     <h1 class="navbar-brand mb-0 h1 mr-5">Document Edit</h1>
     <li class="nav-item">
@@ -34,12 +39,24 @@
 {% block body %}
     <div class="row">
 
-        <div class="col">
+        <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
         <div id="save_error" class="alert alert-danger d-none">The autosave failed. Please copy your current work before closing and return to eLC to login again.</div>
+<div class="editor"></div>
+        {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
 
-        {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}</div>
+        </div>
 
         <div class="col">
+        {# Word Count #}
+        <div class="card mb-3">
+        <div class="card-header">Document Statistics</div>
+        <div class="card-body">
+            <div><span>Word Count: </span><span id="word-count"></span></div>
+            <div><span> Document status: </span><span  id="editor-status">Unchanged</span></div>
+        </div>
+
+        </div>
+
             {# Note Insert #}
             <div class="accordion" id="accordionInsert">
                     <div class="card">
@@ -155,34 +172,46 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/doc_editor_init.js') }}"></script>
     <script>
         {# Markup insert and tracking #}
+        function getValues(range) {
+            var selection_text = "";
+                 for (const item of range.getItems()) {
+                        selection_text = selection_text + item.data
+                 }
+                 return selection_text;
+        }
         function insert_markup(id, name, color) {
-            var nEditor = CKEDITOR.instances.doc_body;
-            nEditor.focus();
-            var markup_html = CKEDITOR.dom.element.createFromHtml('<span data-id="' + id + '" title="' + name + '" class="markup" style="background-color:' + color + '">' + nEditor.getSelection().getNative() + ' </span>');
-            nEditor.insertElement(markup_html);
+            editor.focus();
+            editor.model.change( writer => {
+                 const range = editor.model.document.selection.getFirstRange();
+                 const selection_text = getValues(range);
+                 const content = '<span data-id="' + id + '" title="' + name + '" class="markup" style="background-color:' + color + '">'+ selection_text + '</span>';
+                 const viewFragment = editor.data.processor.toView( content );
+                 const modelFragment = editor.data.toModel( viewFragment );
+                 editor.model.insertContent( modelFragment, range )
+            } );
         }
         {# Note insert #}
         function note() {
-            var note_id = new Date().getTime();
-            var nEditor = CKEDITOR.instances.doc_body;
-            nEditor.focus();
-            if (nEditor.mode == 'wysiwyg') {
-                var hightlight = CKEDITOR.dom.element.createFromHtml('<span id="span' + note_id + '" class="highlight">' + nEditor.getSelection().getNative() + ' </span>');
-                nEditor.insertElement(hightlight);
-                var note = CKEDITOR.dom.element.createFromHtml('<span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>');
-                nEditor.insertElement(note);
-                $('#insert_value').val('');
-            } else
-                alert('You must be on WYSIWYG mode!');
+            editor.model.change( writer => {
+                 var note_id = new Date().getTime();
+                 const range = editor.model.document.selection.getFirstRange();
+                 const selection_text = getValues(range);
+                 const content = '<span data-id="' + note_id + '" class="mark highlight">'+ selection_text + '</span><span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>';
+                 const viewFragment = editor.data.processor.toView( content );
+                 const modelFragment = editor.data.toModel( viewFragment );
+                 editor.model.insertContent( modelFragment, range )
+                 $('#insert_value').val('');
+            } );
         }
 
         $(document).ready(function () {
             $("#doc-form").addClass("form-inline");
             $("label[for=doc_title]").toggle();
             $("label[for=insert_value]").toggle();
-            CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 14px; font-family: Arial, sans-serif;padding: 1in;}");
             {% if doc.origin is not null %}
                 $("fieldset").toggle();
                 $("#doc_project").toggle();
@@ -206,8 +235,7 @@
                 });
             });
             $("#submit-doc-form").click(function () {
-                var editor = CKEDITOR.instances.doc_body;
-                var count = editor.wordCount.wordCount;
+                var count = $('#word-count').text();
                 $('#doc_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
@@ -224,13 +252,11 @@
 
             {# Doc autosave #}
             $('#saving_alert').hide();
-            var editor = CKEDITOR.instances.doc_body;
             var autoSave = setInterval(function () {
-                var buffer = editor.checkDirty();
-                var count = editor.wordCount.wordCount;
-                if (buffer == 1) {
+                var buffer = $('#editor-status').text();
+                var count = $('#word-count').text();
+                if (buffer == 'changed') {
                     $('#doc_wordcount').val(count);
-                    editor.resetDirty();
                     var body = editor.getData();
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {
                         docBody: body,
@@ -241,6 +267,7 @@
                     $('#save_error').removeClass("d-none");
                     });
                     ;
+                    $('#editor-status').text('changes saved');
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
 

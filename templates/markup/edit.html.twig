@@ -20,6 +20,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
     <script src="{{ asset('js/colorPick.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -35,5 +36,23 @@
                 }
             });
         });
+    </script>
+    <script>
+        let editor;
+        ClassicEditor.create(document.getElementById("markup_description"), {
+            toolbar: {
+                items: [
+                    'undo', 'redo',
+                    'bold', 'italic', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+        })
+            .then(newEditor => {
+                editor = newEditor;
+            });
     </script>
 {% endblock %}

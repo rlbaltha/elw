@@ -12,3 +12,26 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script>
+        let editor;
+        ClassicEditor.create(document.getElementById("announcement_announcement"), {
+            toolbar: {
+                items: [
+                    'undo', 'redo',
+                    'bold', 'italic', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+        })
+            .then(newEditor => {
+                editor = newEditor;
+            });
+    </script>
+{% endblock %}

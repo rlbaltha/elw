@@ -20,57 +20,69 @@
     <div id="loading_alert" class="alert alert-info" style="display: none;">Loading</div>
     <hr/>
     {{ include('comment/_ajaxform.html.twig') }}
-
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            // submit form comments via ajax
-            $(".ajax_submit").click(function (e) {
-                $("#loading_alert").fadeIn();
-                for ( instance in CKEDITOR.instances )
-                    CKEDITOR.instances[instance].updateElement();
-                $.ajax({
-                    url: '{{ request_url }}',
-                    method: 'POST',
-                    data: $('form#ajax').serialize(),
-                });
-                setTimeout(
-                    function()
-                    {
-                        var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
-                        var target = "#comment{{ doc.id }}"
-                        $.ajax({
-                            url: request, success: function (result) {
-                                $(target).replaceWith(result);
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                if (xhr.status === 404) {
-                                    $(target).html('<p>Unable to load comment form.</p>');
+        ClassicEditor.create(document.getElementById("comment_journal_body"), {
+            toolbar: {
+                items: [
+                    'bold', 'italic', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+        })
+            .then(newEditor => {
+                editor = newEditor;
+                editor.focus();
+                document.querySelector( '.ajax_submit' ).addEventListener( 'click', () => {
+                    editor.updateSourceElement();
+                    const form_data = $('form#ajax').serializeArray();
+                    $("#loading_alert").fadeIn();
+                    $.ajax({
+                        url: '{{ request_url }}',
+                        method: 'POST',
+                        data: form_data,
+                    });
+
+                    setTimeout(
+                        function () {
+                            var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
+                            var target = "#comment{{ doc.id }}"
+                            $.ajax({
+                                url: request, success: function (result) {
+                                    $(target).replaceWith(result);
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    if (xhr.status === 404) {
+                                        $(target).html('<p>Unable to load comment form.</p>');
+                                    }
                                 }
-                            }
-                        });
-                    }, 500);
+                            });
+                        }, 500);
+                } );
             });
-            // cancel submit (hide form)
-            $(".ajax_cancel").click(function (e) {
-                setTimeout(
-                    function()
-                    {
-                        var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
-                        var target = "#comment{{ doc.id }}"
-                        $.ajax({
-                            url: request, success: function (result) {
-                                $(target).replaceWith(result);
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                if (xhr.status === 404) {
-                                    $(target).html('<p>Unable to load comment form.</p>');
-                                }
+        // cancel submit (hide form)
+        $(".ajax_cancel").click(function (e) {
+            setTimeout(
+                function () {
+                    var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
+                    var target = "#comment{{ doc.id }}"
+                    $.ajax({
+                        url: request, success: function (result) {
+                            $(target).replaceWith(result);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            if (xhr.status === 404) {
+                                $(target).html('<p>Unable to load comment form.</p>');
                             }
-                        });
-                    }, 500);
-            });
+                        }
+                    });
+                }, 500);
         });
     </script>
+
 </div>
 
 

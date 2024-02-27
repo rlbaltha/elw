@@ -28,6 +28,16 @@
     <div class="row">
         <div class="col">
             <span class="navbar-brand">Edit {{ doc.title }}</span>
+            {# Word Count #}
+            <div class="card mb-3">
+                <div class="card-header">Document Statistics</div>
+                <div class="card-body">
+                    <div><span>Word Count: </span><span id="word-count"></span></div>
+                    <div><span> Document status: </span><span  id="editor-status">Unchanged</span></div>
+                </div>
+
+            </div>
+
             <div id="save_error" class="alert alert-danger d-none">The autosave failed. Please copy your current work before
                 closing and return to eLC to login again.
             </div>
@@ -38,36 +48,41 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/journal_editor_init.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#submit-doc-form").click(function () {
-                var editor = CKEDITOR.instances.journal_body;
-                var count = editor.wordCount.wordCount;
+                var count = $('#word-count').text();
                 $('#journal_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
+
             {# Delete doc trigger #}
             $('#delete-trigger').click(function () {
                 $("#delete-form").submit();
             });
 
-            {# Doc autosave #}
             $('#saving_alert').hide();
-            var editor = CKEDITOR.instances.journal_body;
             var autoSave = setInterval(function () {
-                var count = editor.wordCount.wordCount;
-                var buffer = editor.checkDirty();
-                if (buffer == 1) {
+                var buffer = $('#editor-status').text();
+                var count = $('#word-count').text();
+                if (buffer == 'changed') {
                     $('#journal_wordcount').val(count);
-                    editor.resetDirty();
                     var body = editor.getData();
-                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {docBody: body}, function (data) {
+                    $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {
+                        docBody: body,
+                        count: count
+                    }, function (data) {
                     })
-                    .fail(function () {
-                       $('#save_error').removeClass("d-none");
-                    });
+                        .fail(function() {
+                            $('#save_error').removeClass("d-none");
+                        });
+                    ;
+                    $('#editor-status').text('changes saved');
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
+
                 }
             }, 15000);
         });

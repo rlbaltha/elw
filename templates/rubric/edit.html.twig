@@ -15,6 +15,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
     <script>
         $(document).ready(function () {
             {% if not is_granted('ROLE_ADMIN') %}
@@ -22,5 +23,23 @@
             $('#rubric_level').prev().hide();
             {% endif %}
         });
+    </script>
+    <script>
+        let editor;
+        ClassicEditor.create(document.getElementById("rubric_body"), {
+            toolbar: {
+                items: [
+                    'undo', 'redo',
+                    'bold', 'italic', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+        })
+            .then(newEditor => {
+                editor = newEditor;
+            });
     </script>
 {% endblock %}

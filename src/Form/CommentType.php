@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Comment;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,8 +24,7 @@ class CommentType extends AbstractType
                 'expanded' => true,
                 'label' => 'Type of Comment'
             ])
-            ->add('body', CKEditorType::class, [
-                'config_name' => 'simple_config',
+            ->add('body', TextareaType::class, [
                 'label' => ''
             ])
             ->add('access', ChoiceType::class, [

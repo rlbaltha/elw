@@ -111,6 +111,7 @@ class CommentController extends AbstractController
         return $this->render('comment/ajax.html.twig', [
             'form' => $form->createView(),
             'comment' => $comment,
+            'comment_id' => $id,
             'request_url' => $request_url,
             'doc' => $doc,
         ]);
