@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8">
     <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css')) }}">
-    <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/local.css')) }}">
-    <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/ckeditor_document.css')) }}">
+    <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/localv2.css')) }}">
+    <link type="text/css" rel="stylesheet" href="{{ absolute_url(asset('css/ckeditor_document_v2.css')) }}">
 </head>
 <body>
+<div class="document-editor ck-content">
 {{ doc_html|raw }}
+</div>
 </body>
 </html>

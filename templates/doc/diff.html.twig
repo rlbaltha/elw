@@ -5,7 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css') }}">
 {% endblock %}
 
 {% block subnav %}
@@ -31,7 +31,7 @@
                 Text replacement: <span style="color:purple;text-decoration: line-through;">Orginal text</span>; <span
                         style="color:darkcyan;text-decoration: underline;">Replacement text</span>.
             </div>
-            <div class="document-editor">
+            <div class="document-editor ck-content">
                 {{ diff|raw }}
             </div>
         </div>

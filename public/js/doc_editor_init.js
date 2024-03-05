@@ -9,14 +9,10 @@ ClassicEditor.create(document.getElementById("doc_body"), {
     },
     style: {
         definitions: [
-            {name: 'Title', element: 'p', classes: ['doc_title']},
-            {name: 'Works Cited Title', element: 'p', classes: ['doc_wc']},
-            {name: 'Header', element: 'p', classes: ['doc_header']},
-            {name: 'Block Quote', element: 'p', classes: ['doc_block_quote']},
-            {name: 'Paragraph', element: 'p', classes: ['doc_paragraph_indent']},
+            {name: 'Indented Paragraph', element: 'p', classes: ['doc_paragraph_indent']},
+            {name: 'Hanging Indent', element: 'p', classes: ['doc_hanging_indent']},
             {name: 'Single Space', element: 'p', classes: ['doc_single_space']},
             {name: 'Double Space', element: 'p', classes: ['doc_double_space']},
-            {name: 'Hanging Indent', element: 'p', classes: ['doc_hanging_indent']},
         ]
     },
     toolbar: {
@@ -28,7 +24,7 @@ ClassicEditor.create(document.getElementById("doc_body"), {
             'outdent', 'indent', '|',
             'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
             'alignment', '|',
-            'link', 'blockQuote', 'insertTable', 'mediaEmbed', '|', 'removeFormat',
+            'link', 'blockQuote', 'insertTable','|', 'removeFormat',
             {
                 label: 'More styles',
                 icon: 'threeVerticalDots',
@@ -38,7 +34,13 @@ ClassicEditor.create(document.getElementById("doc_body"), {
         ],
         shouldNotGroupWhenFull: true
     },
+    mediaEmbed: {
+        previewsInData: true,
+    },
     htmlSupport: {
+        // elements [attributes]{styles}(classes)
+        // span(*){font-size,font-family,color,background-color}[data-id]
+        // img{text-align,margin-left}(*); a[!href,target]{*}(*);img[*]{*}
         allow: [
             {
                 name: /^(div|p|h2|h3|table|th|tr|td|strong|s|em|ol|ul|li)$/,

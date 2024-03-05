@@ -4,7 +4,13 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
+    <style>
+    .ck-editor__editable_inline {
+        min-height: 60vh;
+        max-height: 60vh;
+    }
+    </style>
 {% endblock %}
 
 {% block subnav %}
@@ -41,9 +47,7 @@
 
         <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
         <div id="save_error" class="alert alert-danger d-none">The autosave failed. Please copy your current work before closing and return to eLC to login again.</div>
-<div class="editor"></div>
         {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
-
         </div>
 
         <div class="col">

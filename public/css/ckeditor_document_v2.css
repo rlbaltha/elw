@@ -43,7 +43,7 @@ html  {
     /* For desktop: */
     div.document-editor {
         min-width: 8.5in;
-        min-height: 11in;
+        max-height: 100%;
         padding: 10%;
         border: 1px #D3D3D3 solid;
         border-radius: 5px;
@@ -114,16 +114,15 @@ table thead th:first-of-type {
     color:blue;
     background-color:white;
     border: #bababa solid 1px;
-    border-radius: 4px 4px 4px 4px;
-    padding:2px 2px 2px 2px;
+    border-radius: 10%;
+    padding:4px;
 }
 .ck-content span.markup {
     color:white;
-    border-radius: 4px 4px 4px 4px;
-    padding: 0.1875em;
+    padding: 4px;
 }
 .ck-content .popover-title {
-    padding: 2px;
+    padding: 4px;
 }
 
 .ck-content .popover {
@@ -156,29 +155,21 @@ table thead th:first-of-type {
 .ck-content p.doc_hanging_indent {
     text-indent:-0.5in;
     margin-left:0.5in;
-    line-height: 200%;
 }
 
-.ck-content .doc_header {text-align:left; line-height: 200%;}
+.ck-content .doc_header {text-align:left;}
 
-.ck-content .doc_wc {text-align:center; line-height: 200%;}
+.ck-content .doc_wc {text-align:center;}
 
-.ck-content .doc_block_quote {margin-left:0.5in; line-height: 200%;}
+.ck-content .doc_block_quote {margin-left:0.5in;}
 
 .ck-content p.doc_paragraph_indent {
     text-indent:0.5in;
-    line-height: 200%;
 }
 
-
-
-.ck-content p {
-    text-indent:0.5in;
-    line-height: 200%;
-}
 
 .ck-content .doc_single_space {
-    line-height: 100%;
+    line-height: 120%;
 }
 
 .ck-content .doc_double_space {
@@ -216,6 +207,11 @@ ins.mod {text-decoration: none}
     --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
     --ck-todo-list-checkmark-size: 16px;
 }
+
+/*!*limit editable area for scrollbar*!*/
+/*.ck-editor__editable_inline {*/
+/*    max-height: 70vh;*/
+/*}*/
 
 /* @ckeditor/ckeditor5-table/theme/tablecolumnresize.css */
 .ck-content .table .ck-table-resized {

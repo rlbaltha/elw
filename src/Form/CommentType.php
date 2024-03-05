@@ -25,6 +25,7 @@ class CommentType extends AbstractType
                 'label' => 'Type of Comment'
             ])
             ->add('body', TextareaType::class, [
+                'required' => false,
                 'label' => ''
             ])
             ->add('access', ChoiceType::class, [

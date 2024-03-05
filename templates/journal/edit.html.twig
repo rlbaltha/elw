@@ -2,6 +2,17 @@
 
 {% block title %}Journal Edit - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 60vh;
+            max-height: 60vh;
+        }
+    </style>
+{% endblock %}
+
 {% block subnav %}
     <li class="navbar-brand">{{ doc.title }}</li>
     <li class="nav-item">
@@ -27,7 +38,7 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <span class="navbar-brand">Edit {{ doc.title }}</span>
+            <span class="navbar-brand">{{ doc.title }}</span>
             {# Word Count #}
             <div class="card mb-3">
                 <div class="card-header">Document Statistics</div>

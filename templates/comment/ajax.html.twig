@@ -25,10 +25,12 @@
         ClassicEditor.create(document.getElementById("comment_journal_body"), {
             toolbar: {
                 items: [
+                    'undo', 'redo',
                     'bold', 'italic', 'strikethrough', '|',
                     'bulletedList', 'numberedList', '|',
                     'outdent', 'indent', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+                    'fontColor', 'highlight', '|',
+                    'link'
                 ],
                 shouldNotGroupWhenFull: true
             },

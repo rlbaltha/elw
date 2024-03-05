@@ -27,7 +27,7 @@
     {% else %}
         {# only Instructors can offer feedback on Journal #}
         {% if role == "Instructor" %}
-            <a class="btn btn-primary btn-sm  comment_ajax"
+            <a class="btn btn-primary btn-sm  comment_ajax" style="width: 100%"
                data-id="comment{{ doc.id }}"
                href="#"
                data-request="{{ course_path('comment_ajax_new', {'courseid': courseid, 'docid': doc.id, 'source': 'journal'}) }}"

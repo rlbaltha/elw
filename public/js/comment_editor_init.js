@@ -6,7 +6,8 @@ ClassicEditor.create(document.getElementById("comment_body"), {
             'bold', 'italic', 'strikethrough', '|',
             'bulletedList', 'numberedList', '|',
             'outdent', 'indent', '|',
-            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|'
+            'fontColor', 'highlight', '|',
+            'link'
         ],
         shouldNotGroupWhenFull: true
     },

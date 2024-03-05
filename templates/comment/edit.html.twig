@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css') }}">
 {% endblock %}
 
 {% block title %}{{ header }} - {{ parent() }}{% endblock %}
@@ -21,9 +21,9 @@
 {% block body %}
     <div class="row doc-container">
         <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
-                <div class="document-editor">
-                    {{ doc.body|raw }}
-                </div>
+            <div class="document-editor ck-content">
+                {{ doc.body|raw }}
+            </div>
         </div>
         <div class="col-lg-4 col-sm-12">
             <div class="card mb-2">
@@ -48,10 +48,17 @@
                     <p>Word Count: {{ doc.wordcount }}</p>
                 </div>
             </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    Comment for {{ doc.title }}
+                </div>
+                <div class="card-body">
+                    {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
-            {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
+                    {{ include('comment/_delete_form.html.twig', {'source': source,'target': target}) }}
+                </div>
+            </div>
 
-            {{ include('comment/_delete_form.html.twig', {'source': source,'target': target}) }}
         </div>
     </div>
 {% endblock %}
@@ -64,13 +71,13 @@
         $(document).ready(function () {
             let access = "{{ doc.access }}";
             let role = "{{ role }}";
-            if ( role==="Student") {
+            if (role === "Student") {
                 $('#comment_grade').hide();
                 $('#comment_grade').prev().hide();
                 $('#comment_access').hide();
                 $('#comment_access').prev().hide();
             }
-            if ( access === "Journal") {
+            if (access === "Journal") {
                 $('#comment_type').hide();
                 $('#comment_type').prev().hide();
                 $('#comment_access').hide();
