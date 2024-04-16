@@ -22,6 +22,7 @@
     {{ parent() }}
     <script src="{{ asset('js/ckeditor.js') }}"></script>
     <script src="{{ asset('js/colorPick.js') }}"></script>
+{#    These colors must be replicated in the ckeditor_document_vx.css#}
     <script>
         $(document).ready(function () {
             var color = $("#markup_color").val();

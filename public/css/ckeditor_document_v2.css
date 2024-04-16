@@ -734,3 +734,43 @@ ins.mod {text-decoration: none}
         display: none;
     }
 }
+
+/*Classes for markup*/
+/*If colors are removed from color picker, leave these for backwards compatibility*/
+
+.markup_darkblue {
+    background-color: darkblue;
+}
+
+.markup_darkred {
+    background-color: darkred;
+}
+
+.markup_rebeccapurple {
+    background-color: rebeccapurple;
+}
+
+.markup_brown {
+    background-color: brown;
+}
+
+.markup_darkgreen {
+    background-color: darkgreen;
+}
+
+.markup_darkslateblue {
+    background-color: darkslateblue;
+}
+
+.markup_darkolivegreen {
+    background-color: darkolivegreen;
+}
+
+.markup_darkcyan {
+    background-color: darkcyan;
+}
+
+.markup_maroon {
+    background-color: maroon;
+}
+

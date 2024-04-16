@@ -7,8 +7,8 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
     <style>
     .ck-editor__editable_inline {
-        min-height: 60vh;
-        max-height: 60vh;
+        min-height: 75vh;
+        max-height: 75vh;
     }
     </style>
 {% endblock %}
@@ -190,26 +190,32 @@
         function insert_markup(id, name, color) {
             editor.focus();
             editor.model.change( writer => {
+                 const markup_color = 'markup_' + color;
+                 const name = 'add real name here';
                  const range = editor.model.document.selection.getFirstRange();
                  const selection_text = getValues(range);
-                 const content = '<span data-id="' + id + '" title="' + name + '" class="markup" style="background-color:' + color + '">'+ selection_text + '</span>';
+                 const content = '<span data-id="' + id + '" title="' + name + '" class="markup '+ markup_color +'">'+ selection_text + '</span>';
                  const viewFragment = editor.data.processor.toView( content );
                  const modelFragment = editor.data.toModel( viewFragment );
                  editor.model.insertContent( modelFragment, range )
             } );
         }
+
         {# Note insert #}
+        $( "#insert_value" ).on( "focus", function() {
+          editor.execute( 'highlight', { value: 'yellowMarker' } );
+        } );
         function note() {
             editor.model.change( writer => {
-                 var note_id = new Date().getTime();
-                 const range = editor.model.document.selection.getFirstRange();
-                 const selection_text = getValues(range);
-                 const content = '<span data-id="' + note_id + '" class="mark highlight">'+ selection_text + '</span><span id="note' + note_id + '" class="note"> ' + document.getElementById('insert_value').value + ' </span>';
+                 const note_value = document.getElementById("insert_value").value;
+                 const note_id = new Date().getTime();
+                 const content = '<span data-id="' + note_id + '" class="note">'+ note_value + '</span>';
                  const viewFragment = editor.data.processor.toView( content );
                  const modelFragment = editor.data.toModel( viewFragment );
-                 editor.model.insertContent( modelFragment, range )
-                 $('#insert_value').val('');
+                 const last_position = editor.model.document.selection.getLastPosition();
+                 editor.model.insertContent( modelFragment, last_position);
             } );
+            $('#insert_value').val('');
         }
 
         $(document).ready(function () {
