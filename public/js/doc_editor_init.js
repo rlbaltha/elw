@@ -1,5 +1,37 @@
 let editor;
 ClassicEditor.create(document.getElementById("doc_body"), {
+    highlight: {
+        options: [
+            {
+                model: 'yellowMarker',
+                class: 'marker-yellow',
+                title: 'Yellow marker',
+                color: 'var(--ck-highlight-marker-yellow)',
+                type: 'marker'
+            },
+            {
+                model: 'greenMarker',
+                class: 'marker-green',
+                title: 'Green marker',
+                color: 'var(--ck-highlight-marker-green)',
+                type: 'marker'
+            },
+            {
+                model: 'pinkMarker',
+                class: 'marker-pink',
+                title: 'Pink marker',
+                color: 'var(--ck-highlight-marker-pink)',
+                type: 'marker'
+            },
+            {
+                model: 'blueMarker',
+                class: 'marker-blue',
+                title: 'Blue marker',
+                color: 'var(--ck-highlight-marker-blue)',
+                type: 'marker'
+            },
+        ]
+    },
     wordCount: {
         onUpdate: stats => {
             // Prints the current content statistics.
@@ -17,7 +49,6 @@ ClassicEditor.create(document.getElementById("doc_body"), {
     },
     toolbar: {
         items: [
-            'undo', 'redo',
             'style',
             'bold', 'italic', 'strikethrough', '|',
             'bulletedList', 'numberedList', '|',
