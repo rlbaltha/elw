@@ -24,7 +24,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col">
+        <div class="col-10">
             <div class="jumbotron">
                 <h2 class="pointer">Hello, {{ user.firstname }}!</h2>
                 {{ course.announcement|raw }}
@@ -73,9 +73,15 @@
                        href="{{ course_path('course_announcement', {'courseid': course.id}) }}">Edit
                         eLW Reminder</a>
                 {% endif %}
+
             </div>
         </div>
+        <div class="col">
+        eLW is supported by <br>
+        <img class="img-fluid float-right" style="max-width: 100%" src="{{ asset('images/PLC Logo.jpeg') }}">
+        </div>
     </div>
+
 
     <div class="card mb-3">
         <div class="card-body">

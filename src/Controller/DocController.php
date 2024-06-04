@@ -15,10 +15,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Caxy\HtmlDiff\HtmlDiff;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+//use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Snappy\Pdf;
+//use Knp\Snappy\Pdf;
+use Pontedilana\PhpWeasyPrint\Pdf;
+use Pontedilana\WeasyprintBundle\WeasyPrint\Response\PdfResponse;
+
+
 
 
 /**
@@ -384,10 +388,12 @@ class DocController extends AbstractController
         $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
-        //check to see if request is a diff
+
+        //check to see if request is a diff plus general permissions
         if ($docid!=0) {
             $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
-            $permissions->isAllowedToView($courseid, $doc);
+            $origin = $doc->getOrigin();
+            $permissions->isAllowedToView($courseid, $origin);
         }
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,

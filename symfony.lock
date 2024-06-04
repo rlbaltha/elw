@@ -265,6 +265,9 @@
             "tests/bootstrap.php"
         ]
     },
+    "pontedilana/weasyprint-bundle": {
+        "version": "2.1.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -360,9 +363,6 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
-    },
-    "stella-maris/clock": {
-        "version": "0.1.4"
     },
     "symfony/asset": {
         "version": "v4.4.11"
