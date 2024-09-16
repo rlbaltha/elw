@@ -28,7 +28,7 @@ class LtiAgsRepository extends ServiceEntityRepository
             ->join('l.course', 'c')
             ->andWhere('c.id = :val')
             ->setParameter('val', $courseid)
-            ->setMaxResults(20)
+            ->setMaxResults(40)
             ->getQuery()
             ->getResult()
         ;
