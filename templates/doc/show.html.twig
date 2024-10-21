@@ -170,6 +170,38 @@
 
                 {# rubrics for original doc #}
                 {% if doc.project %}
+
+                    <div class="accordion" id="accordionRubric_doc{{ doc.id }}">
+                        {% for rubric in doc.project.rubrics %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}" aria-expanded="true" aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
+                                    Rubric {{ loop.index }}: {{ rubric.name }}
+                                </button>
+                            </h2>
+                            <div id="r_collapse{{ loop.index }}_doc{{ doc.id }}" class="accordion-collapse collapse show" aria-labelledby="r_heading{{ loop.index }}_doc{{ doc.id }}" data-bs-parent="#accordionRubric_doc{{ doc.id }}">
+                                <div class="accordion-body">
+                                    {{ rubric.body|raw }}
+
+                                    {% if role == 'Instructor' %}
+                                        <a id="submit_rubric{{ rubric.id }}_doc{{ doc.id }}"
+                                           aria-label="Submit a Rubric Rating" class="btn btn-primary btn-sm"
+                                           href="{{ course_path('rating_new', {'docid': doc.id, 'courseid': course.id, 'rubricid': rubric.id}) }}">Submit
+                                            a Rubric Rating</a>
+                                    {% endif %}
+                                    {% if app.user == doc.user or role == 'Instructor' %}
+                                            <a class="btn btn-primary btn-sm rubricrating"
+                                               data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"
+                                               href="#"
+                                               data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"
+                                            >View Rating</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
                     <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
                         {% for rubric in doc.project.rubrics %}
                             <div class="card mb-1">
