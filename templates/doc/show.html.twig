@@ -203,48 +203,6 @@
                         </div>
                         {% endfor %}
                     </div>
-
-{#                    <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">#}
-{#                        {% for rubric in doc.project.rubrics %}#}
-{#                            <div class="card mb-1">#}
-{#                                <div class="card-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">#}
-{#                                    <h2 class="mb-0">#}
-{#                                        <button id="rubricheader{{ rubric.id }}_doc{{ doc.id }}" class="btn btn-link"#}
-{#                                                type="button" data-bs-toggle="collapse"#}
-{#                                                data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}"#}
-{#                                                aria-expanded="true"#}
-{#                                                aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">#}
-{#                                            Rubric {{ loop.index }}: {{ rubric.name }}#}
-{#                                        </button>#}
-{#                                    </h2>#}
-{#                                </div>#}
-
-{#                                <div id="r_collapse{{ loop.index }}_doc{{ doc.id }}" class="collapse"#}
-{#                                     aria-labelledby="r_heading{{ loop.index }}_doc{{ doc.id }}"#}
-{#                                     data-parent="#accordionRubric_doc{{ doc.id }}">#}
-{#                                    <div class="card-body">#}
-{#                                        {{ rubric.body|raw }}#}
-
-{#                                        {% if role == 'Instructor' %}#}
-{#                                            <a id="submit_rubric{{ rubric.id }}_doc{{ doc.id }}"#}
-{#                                               aria-label="Submit a Rubric Rating" class="btn btn-primary btn-sm"#}
-{#                                               href="{{ course_path('rating_new', {'docid': doc.id, 'courseid': course.id, 'rubricid': rubric.id}) }}">Submit#}
-{#                                                a Rubric Rating</a>#}
-{#                                        {% endif %}#}
-{#                                    </div>#}
-{#                                    {% if app.user == doc.user or role == 'Instructor' %}#}
-{#                                        <div class="card-footer" id="rubric{{ rubric.id }}_doc{{ doc.id }}">#}
-{#                                            <a class="btn btn-primary btn-sm rubricrating"#}
-{#                                               data-id="rubric{{ rubric.id }}_doc{{ doc.id }}"#}
-{#                                               href="#"#}
-{#                                               data-request="{{ course_path('rating_view', {'docid': doc.id, 'rubricid': rubric.id, 'courseid': course.id}) }}"#}
-{#                                            >View Rating</a>#}
-{#                                        </div>#}
-{#                                    {% endif %}#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
                 {% endif %}
 
                 {# comments for original doc #}
@@ -678,20 +636,13 @@
                 $('.doc-container').hide();
                 $('#doc{{ target }}').show()
 
-                    {# $("#compare_click").click(function () { #}
-                    {#    let doc1; #}
-                    {#    let doc2; #}
-                    {#    let url; #}
-                    {#    let location = '_blank' #}
-                    {#    if ($('input:checked').length != 2) { #}
-                    {#        alert('Please select only two documents to compare'); #}
-                    {#    } else { #}
-                    {#        let doc1 = $('input:checked:eq( 0 )').attr('id'); #}
-                    {#        let doc2 = $('input:checked:eq( 1 )').attr('id'); #}
-                    {#        let url = '/doc/' + doc1 + '/' + doc2 + '/' + '{{ course.id }}'+ '/' + '0' +'/diff'; #}
-                    {#        window.open(url, location); #}
-                    {#    } #}
-                    {# }); #}
+            $(".accordion-header").parent('.accordion-item').hover(
+                function() {
+                    $(this).children('.collapse').collapse('show');
+                }, function() {
+                    $(this).children('.collapse').collapse('hide');
+                }
+            );
 
             }
         );
