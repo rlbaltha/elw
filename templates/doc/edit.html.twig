@@ -120,30 +120,25 @@
                     </div>
                 {% endfor %}
             </div>
+            
             {# rubrics #}
             {% if doc.project.rubrics %}
-                <div class="accordion mt-3" id="accordionRubric">
-                    {% for rubric in doc.project.rubrics %}
-                        <div class="card">
-                            <div class="card-header" id="r_heading{{ loop.index }}">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#r_collapse{{ loop.index }}" aria-expanded="true"
-                                            aria-controls="r_collapse{{ loop.index }}">
-                                       Rubric {{ loop.index }}: {{ rubric.name }}
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="r_collapse{{ loop.index }}" class="collapse"
-                                 aria-labelledby="r_heading{{ loop.index }}" data-parent="#accordionRubric">
-                                <div class="card-body">
+                <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
+                        {% for rubric in doc.project.rubrics %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
+                                <button id="rubricheader{{ loop.index }}_doc{{ doc.id }}" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}" aria-expanded="false" aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
+                                    Rubric {{ loop.index }}: {{ rubric.name }}
+                                </button>
+                            </h2>
+                            <div id="r_collapse{{ loop.index }}_doc{{ doc.id }}" class="accordion-collapse collapse" aria-labelledby="r_heading{{ loop.index }}_doc{{ doc.id }}" data-bs-parent="#accordionRubric_doc{{ doc.id }}">
+                                <div class="accordion-body">
                                     {{ rubric.body|raw }}
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
             {% endif %}
         </div>
 
@@ -283,6 +278,15 @@
 
                 }
             }, 15000);
+
+            $(".accordion-header").parent('.accordion-item').hover(
+                function() {
+                    $(this).children('.collapse').collapse('show');
+                }, function() {
+                    $(this).children('.collapse').collapse('hide');
+                }
+            );
+
         });
     </script>
 
