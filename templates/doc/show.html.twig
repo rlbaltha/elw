@@ -175,7 +175,7 @@
                         {% for rubric in doc.project.rubrics %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
-                                <button id="rubricheader{{ loop.index }}_doc{{ doc.id }}" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}" aria-expanded="false" aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
+                                <button id="rubricheader{{ rubric.id }}_doc{{ doc.id }}" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#r_collapse{{ loop.index }}_doc{{ doc.id }}" aria-expanded="false" aria-controls="r_collapse{{ loop.index }}_doc{{ doc.id }}">
                                     Rubric {{ loop.index }}: {{ rubric.name }}
                                 </button>
                             </h2>
