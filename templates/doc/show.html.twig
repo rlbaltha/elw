@@ -170,6 +170,11 @@
 
                 {# rubrics for original doc #}
                 {% if doc.project %}
+                    {# rubric collection call TEST #}
+                    <a aria-label="Rubric Collection for {{ doc.title }}"
+                       class="btn-secondary"
+                       href="{{ course_path('rating_collection_new', {'docid': doc.id,}) }}">Rate Rubrics</a>
+
                     <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
                         {% for rubric in doc.project.rubrics %}
                             <div class="card mb-1">

@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Doc;
+use App\Entity\Project;
 use App\Entity\Rating;
+use App\Entity\Ratingset;
+use App\Form\RatingCollectionType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
 use App\Service\Permissions;
@@ -155,6 +159,54 @@ class RatingController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/{docid}/{courseid}/collection_new", name="rating_collection_new", methods={"GET","POST"})
+     */
+    public function collection_new(Request $request, Permissions $permissions, int $docid, int $courseid): Response
+    {
+        $header = 'Rubric Ratings';
+        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $role = $permissions->getCourseRole($courseid);
+        $username = $this->getUser()->getUsername();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $project = $doc->getProject();
+        $ratingset = New Ratingset();
+
+        foreach ($project->getRubrics() as $rubric) {
+            $rating = new Rating();
+            $rating->setUser($user);
+            $rating->setDoc($doc);
+            $rating->setRubric($rubric);
+            $choices = $this->choices($rubric->getLevel());
+            $options = ['choices' => $choices];
+            $ratingset -> addRating($rating);
+        }
+
+
+
+        $form = $this->createForm(RatingCollectionType::class, $ratingset);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->persist($rating);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
+        }
+
+        return $this->render('rating/new.html.twig', [
+            'doc' => $doc,
+            'course' => $course,
+            'role' => $role,
+            'header' => $header,
+            'form' => $form->createView(),
+        ]);
+    }
+
 
     /**
      * @Route("/{id}", name="rating_delete", methods={"POST"})
