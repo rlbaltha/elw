@@ -13,7 +13,7 @@ class RatingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->options = $options['options'];
-        $choices = $this->options['choices'] ;
+        $choices = $this->options['choices'];
         $builder
             ->add('scale', ChoiceType::class, [
                 'choices' => $choices,
