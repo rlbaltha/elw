@@ -1,19 +1,84 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Ratingset{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css') }}">
+{% endblock %}
+
+{% block title %}{{ header }} - {{ parent() }}{% endblock %}
+
+{% block subnav %}
+    {{ include('course/_subnav.html.twig') }}
+{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-        {% for rating in form.rating %}
-            {{ ratingset.rating[loop.index-1].rubric.body | raw }}
-            {{ form_row(rating.scale) }}
-            {{ form_row(rating.comment) }}
-            <hr/>
-        {% endfor %}
-    {{ form_rest(form) }}
-    <button id="submit" class="btn btn-primary pull-right" type="submit">Update</button>
-    {{ form_end(form) }}
+    <div class="row doc-container">
+        <div class="col-lg-8 col-sm-12">
+            {% if doc.access!='Journal' %}
+                <div class="document-editor">
+                    {{ doc.body|raw }}
+                </div>
+            {% else %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="d-inline">{{ doc.title }} </h2> by {{ doc.user.firstname }} {{ doc.user.lastname }}
+                    </div>
+                    <div class="card-body">
+                        {{ doc.body|raw }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 col-sm-12">
+            <h1 style="font-size: large">{{ header }}</h1>
+            <div class="card mb-1">
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {% for rating in form.rating %}
+                        {{ ratingset.rating[loop.index-1].rubric.body | raw }}
+                        {{ form_row(rating.scale) }}
+                        {{ form_row(rating.comment) }}
+                        <hr/>
+                    {% endfor %}
+                    {{ form_rest(form) }}
+                    <button id="submit" class="btn btn-primary pull-right" type="submit">Update</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
 
 
+    </div>
+    </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock %}
+
+
+
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Edit Ratingset{% endblock %}#}
+
+{#{% block body %}#}
+{#    {{ form_start(form) }}#}
+{#    {{ form_errors(form) }}#}
+{#        {% for rating in form.rating %}#}
+{#            {{ ratingset.rating[loop.index-1].rubric.body | raw }}#}
+{#            {{ form_row(rating.scale) }}#}
+{#            {{ form_row(rating.comment) }}#}
+{#            <hr/>#}
+{#        {% endfor %}#}
+{#    {{ form_rest(form) }}#}
+{#    <button id="submit" class="btn btn-primary pull-right" type="submit">Update</button>#}
+{#    {{ form_end(form) }}#}
+
+
+{#{% endblock %}#}

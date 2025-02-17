@@ -84,7 +84,7 @@ class RatingsetController extends AbstractController
         }
         $entityManager->persist($ratingset);
         $entityManager->flush();
-        return $this->redirect($this->generateUrl('app_ratingset_edit', array('id' => $ratingset->getId() )));
+        return $this->redirect($this->generateUrl('app_ratingset_edit', array('id' => $ratingset->getId(),'courseid' => $courseid, )));
     }
 
     #[Route('/{id}', name: 'app_ratingset_show', methods: ['GET'])]
@@ -95,11 +95,15 @@ class RatingsetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_ratingset_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/{courseid}/edit', name: 'app_ratingset_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ratingset $ratingset, RatingsetRepository $ratingsetRepository, Permissions $permissions): Response
     {
         $doc = $ratingset->getRating()[0]->getDoc();
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($doc->getCourse());
+        $header = 'Rubric Collection Ratings';
+        $role = $permissions->getCourseRole($course->getId());
+
+
         $form = $this->createForm(RatingsetType::class, $ratingset);
 
         $form->handleRequest($request);
@@ -111,7 +115,11 @@ class RatingsetController extends AbstractController
         }
 
         return $this->renderForm('ratingset/edit.html.twig', [
+            'doc' => $doc,
             'ratingset' => $ratingset,
+            'course' => $course,
+            'role' => $role,
+            'header' => $header,
             'form' => $form,
         ]);
     }
