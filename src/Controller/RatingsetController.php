@@ -98,12 +98,10 @@ class RatingsetController extends AbstractController
     #[Route('/{id}/edit', name: 'app_ratingset_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ratingset $ratingset, RatingsetRepository $ratingsetRepository, Permissions $permissions): Response
     {
-        $rubric_level = 0;
-        $choices = $this->choices($rubric_level);
-        $options = ['choices' => $choices];
         $doc = $ratingset->getRating()[0]->getDoc();
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($doc->getCourse());
-        $form = $this->createForm(RatingsetType::class, $ratingset, ['options' => $options]);
+        $form = $this->createForm(RatingsetType::class, $ratingset);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

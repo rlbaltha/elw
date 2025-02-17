@@ -12,12 +12,8 @@ class RatingsetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $this->options = $options['options'];
-        $choices = $this->options['choices'] ;
-        $options = array('choices' => $choices);
         $builder->add('rating', CollectionType::class, [
             'entry_type' => RatingType::class,
-            'entry_options' => ['options' => $options],
         ]);
         ;
     }

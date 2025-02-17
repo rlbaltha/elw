@@ -3,16 +3,16 @@
 {% block title %}Edit Ratingset{% endblock %}
 
 {% block body %}
-{#    {{ include('ratingset/_form.html.twig', {'button_label': 'Update'}) }}#}
-
     {{ form_start(form) }}
+    {{ form_errors(form) }}
         {% for rating in form.rating %}
-            {{ ratingset.rating[loop.index-1].rubric.name | raw }}
             {{ ratingset.rating[loop.index-1].rubric.body | raw }}
             {{ form_row(rating.scale) }}
             {{ form_row(rating.comment) }}
+            <hr/>
         {% endfor %}
-    <button id="submit" class="btn btn-primary pull-right" type="submit">Post</button>
+    {{ form_rest(form) }}
+    <button id="submit" class="btn btn-primary pull-right" type="submit">Update</button>
     {{ form_end(form) }}
 
 

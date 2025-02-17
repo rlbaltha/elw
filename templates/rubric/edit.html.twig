@@ -7,17 +7,9 @@
         <div class="card-body">
             <h1 class="card-title">Edit Rubric Block</h1>
 
-            {{ form_start(form) }}
+            {{ include('rubric/_form.html.twig', {'button_label': 'Update'}) }}
 
-            <h3>Rubrics</h3>
-{#                {% for rubric in form.rubrics %}#}
-{#                    {{ form_widget(form) }}#}
-{#                {% endfor %}#}
-            {{ form_end(form) }}
-
-{#            {{ include('rubric/_form.html.twig', {'button_label': 'Update'}) }}#}
-
-{#            {{ include('rubric/_delete_form.html.twig') }}#}
+            {{ include('rubric/_delete_form.html.twig') }}
         </div>
     </div>
 {% endblock %}
