@@ -103,6 +103,15 @@ class RatingsetController extends AbstractController
         $header = 'Rubric Collection Ratings';
         $role = $permissions->getCourseRole($course->getId());
 
+        $role = $permissions->getCourseRole($course->getId());
+        if ($doc->getProject()) {
+            $markupsets = $doc->getProject()->getMarkupsets();
+        } elseif ($course->getMarkupsets()) {
+            $markupsets = $course->getMarkupsets();
+        }
+        else {
+            $markupsets = [];
+        }
 
         $form = $this->createForm(RatingsetType::class, $ratingset);
 
@@ -116,6 +125,7 @@ class RatingsetController extends AbstractController
 
         return $this->renderForm('ratingset/edit.html.twig', [
             'doc' => $doc,
+            'markupsets' => $markupsets,
             'ratingset' => $ratingset,
             'course' => $course,
             'role' => $role,

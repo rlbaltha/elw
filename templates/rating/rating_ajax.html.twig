@@ -40,6 +40,11 @@
         {% if role == 'Instructor' %}
             <a aria-label="Edit a Rubric Rating" class="btn btn-primary btn-sm"
                href="{{ course_path('rating_edit', {'id': rating.id}) }}">Edit Rubric Rating</a>
+
+            {% if rating.ratingset %}
+                <a aria-label="Edit a Rubric Rating" class="btn btn-primary btn-sm"
+                   href="{{ course_path('app_ratingset_edit', {'id': rating.ratingset.id}) }}">Edit Rubric Rating Set</a>
+                {% endif %}
             <hr/>
         {% endif %}
     </div>

@@ -50,7 +50,8 @@ class RatingType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Rating::class
+            'data_class' => Rating::class,
+            'options' => null
         ]);
     }
 }
