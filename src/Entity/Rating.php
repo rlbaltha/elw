@@ -45,6 +45,11 @@ class Rating
      */
     private $rubric;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Ratingset::class, inversedBy="rating")
+     */
+    private $ratingset;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +111,18 @@ class Rating
     public function setRubric(?Rubric $rubric): self
     {
         $this->rubric = $rubric;
+
+        return $this;
+    }
+
+    public function getRatingset(): ?Ratingset
+    {
+        return $this->ratingset;
+    }
+
+    public function setRatingset(?Ratingset $ratingset): self
+    {
+        $this->ratingset = $ratingset;
 
         return $this;
     }

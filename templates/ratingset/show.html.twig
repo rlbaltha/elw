@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ratingset{% endblock %}
+
+{% block body %}
+    <h1>Ratingset</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ratingset.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ratingset_index') }}">back to list</a>
+
+    <a href="{{ path('app_ratingset_edit', {'id': ratingset.id}) }}">edit</a>
+
+    {{ include('ratingset/_delete_form.html.twig') }}
+{% endblock %}

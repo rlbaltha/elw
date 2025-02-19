@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Rubric;
+use App\Form\RubricCollectionType;
 use App\Form\RubricType;
 use App\Repository\RubricRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -77,6 +79,26 @@ class RubricController extends AbstractController
 
         return $this->render('rubric/edit.html.twig', [
             'rubric' => $rubric,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{project}/collection_edit", name="rubric_collection_edit", methods={"GET","POST"})
+     */
+    public function collection_edit(Request $request, Project $project): Response
+    {
+        $form = $this->createForm(RubricCollectionType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->doctrine->getManager()->flush();
+
+            return $this->redirectToRoute('rubric_index');
+        }
+
+        return $this->render('rubric/edit.html.twig', [
+            'project' => $project,
             'form' => $form->createView(),
         ]);
     }

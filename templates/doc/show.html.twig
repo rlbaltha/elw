@@ -171,7 +171,13 @@
                 {# rubrics for original doc #}
                 {% if doc.project %}
 
-                    <div class="accordion" id="accordionRubric_doc{{ doc.id }}">
+                    {# rubric collection call TEST #}
+                    <a aria-label="Rubric Collection for {{ doc.title }}"
+                       class="btn btn-primary"
+                       href="{{ course_path('app_ratingset_new', {'docid': doc.id,}) }}">Rate Rubrics</a>
+
+                    <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
+
                         {% for rubric in doc.project.rubrics %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="r_heading{{ loop.index }}_doc{{ doc.id }}">
