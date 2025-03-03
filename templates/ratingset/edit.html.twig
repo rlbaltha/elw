@@ -26,25 +26,27 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-sm-12">
-            <h1 style="font-size: large">{{ header }}</h1>
-            <div class="card mb-1">
-                <div class="card-body">
-                    {{ form_start(form) }}
-                    {{ form_errors(form) }}
-                    {% for rating in form.rating %}
+        <div class="col-lg-4 col-sm-12 mb-5">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% for rating in form.rating %}
+                <div class="card mb-1">
+                    <div class="card-header">
+                        <h2 class="mb-0">Rubric: {{ ratingset.rating[loop.index-1].rubric.name | raw }}</h2>
+                    </div>
+                    <div class="card-body">
                         {{ ratingset.rating[loop.index-1].rubric.body | raw }}
                         {{ form_row(rating.scale) }}
                         {{ form_row(rating.comment) }}
-                        <hr/>
-                    {% endfor %}
-                    {{ form_rest(form) }}
-                    <button id="submit" class="btn btn-primary pull-right" type="submit">Update</button>
-                    {{ form_end(form) }}
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+            {{ form_rest(form) }}
+                    <button id="submit" class="btn btn-primary  btn-sm pull-left" type="submit">Update</button>
+            {{ form_end(form) }}
+            <a class="btn btn-primary btn-sm float-end" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">Cancel</a>
+            {{ include('ratingset/_delete_form.html.twig') }}
         </div>
-
 
     </div>
     <!-- Markup -->

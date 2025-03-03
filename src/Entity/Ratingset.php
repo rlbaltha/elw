@@ -20,7 +20,7 @@ class Ratingset
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="ratingset")
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="ratingset", cascade={"remove"})
      */
     private $rating;
 

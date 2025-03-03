@@ -137,10 +137,14 @@ class RatingsetController extends AbstractController
     #[Route('/{id}', name: 'app_ratingset_delete', methods: ['POST'])]
     public function delete(Request $request, Ratingset $ratingset, RatingsetRepository $ratingsetRepository): Response
     {
+        $doc = $ratingset->getRating()[0]->getDoc();
+        $course = $doc->getCourse();
+
         if ($this->isCsrfTokenValid('delete'.$ratingset->getId(), $request->request->get('_token'))) {
             $ratingsetRepository->remove($ratingset, true);
         }
 
-        return $this->redirectToRoute('app_ratingset_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $course->getId(), 'target' => $doc->getId()]);
+
     }
 }
