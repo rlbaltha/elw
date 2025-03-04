@@ -1,5 +1,0 @@
-<form class="d-inline float-end" method="post" action="{{ path('app_ratingset_delete', {'id': ratingset.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ratingset.id) }}">
-    <button class="btn btn-danger btn-sm">Delete</button>
-</form>
-

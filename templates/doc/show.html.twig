@@ -204,9 +204,9 @@
                     </div>
                     {% if role == 'Instructor' and doc.project.rubrics|length > 0 %}
                         {# rubric collection #}
-                        <a aria-label="Rubric Collection for {{ doc.title }}"
+                        <a aria-label="Rate All Rubrics for {{ doc.title }}"
                            id="docid{{ doc.id}}"
-                           class=" btn btn-primary btn-sm mt-3"
+                           class=" btn btn-primary btn-sm mt-3 rateallbtn"
                            href="{{ course_path('app_ratingset_new', {'docid': doc.id,}) }}">Rate All Rubrics</a>
                     {% endif %}
                 {% endif %}
@@ -369,9 +369,9 @@
                             </div>
                             {% if role == 'Instructor' and doc.project.rubrics|length > 0  %}
                                 {# rubric collection #}
-                                <a aria-label="Rubric Collection for {{ doc.title }}"
+                                <a aria-label="Rate All Rubrics {{ doc.title }}"
                                    id="docid{{ review.id}}"
-                                   class="btn btn-primary btn-sm mt-3"
+                                   class="btn btn-primary btn-sm mt-3 rateallbtn"
                                    href="{{ course_path('app_ratingset_new', {'docid': review.id,}) }}">Rate All Rubrics</a>
                             {% endif %}
                         {% endif %}
@@ -478,6 +478,8 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+               $('.rateallbtn').hide();
+
                 //wait for ajax before counting ratings
                 setTimeout(
                     function () {
@@ -490,9 +492,9 @@
                             let button = str.replace("rubricheader", "submit_rubric");
                             $(target).append(ratings_count);
                             $(this).hide()
-                            if (count > 0) {
-                                $(button).hide();
-                                $(docid).hide();
+                            if (count < 1) {
+                                $(button).show();
+                                $(docid).show();
                             }
                         });
                     }, 1500);
