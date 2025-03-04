@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Doc;
+use App\Entity\Project;
 use App\Entity\Rating;
+use App\Entity\Ratingset;
+use App\Form\RatingCollectionType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
 use App\Service\Permissions;
@@ -155,6 +159,7 @@ class RatingController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * @Route("/{id}", name="rating_delete", methods={"POST"})

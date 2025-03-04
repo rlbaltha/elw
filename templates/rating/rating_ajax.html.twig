@@ -38,11 +38,11 @@
         <p><strong>Comment:</strong> {{ rating.comment }}</p>
         <p><strong>By: </strong>{{ rating.user.firstname }} {{ rating.user.lastname }}</p>
         {% if role == 'Instructor' %}
-            <a aria-label="Edit a Rubric Rating" class="btn btn-primary btn-sm"
-               href="{{ course_path('rating_edit', {'id': rating.id}) }}">Edit Rubric Rating</a>
+                <a aria-label="Edit a Rubric Rating" class="btn btn-primary btn-sm"
+                   href="{{ course_path('rating_edit', {'id': rating.id}) }}">Edit Rubric Rating</a>
             <hr/>
         {% endif %}
     </div>
 
 {% endfor %}
-<span class="ratingsajax" data-id="rubricheader{{ rubricid }}_doc{{ doc.id }}">{{ ratings|length }}</span>
+<span class="ratingsajax" data-id="rubricheader{{ rubricid }}_doc{{ doc.id }}" data-docid="docid{{ doc.id }}">{{ ratings|length }}</span>
