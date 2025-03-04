@@ -44,8 +44,8 @@
             {{ form_rest(form) }}
                     <button id="submit" class="btn btn-primary  btn-sm pull-left" type="submit">Update</button>
             {{ form_end(form) }}
-            <a class="btn btn-primary btn-sm float-end" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">Cancel</a>
-{#            {{ include('ratingset/_delete_form.html.twig') }}#}
+{#            <a class="btn btn-primary btn-sm float-end" href="{{ course_path('doc_show', {'id': doc.id, 'target': doc.id}) }}">Cancel</a>#}
+            {{ include('ratingset/_delete_form.html.twig') }}
         </div>
 
     </div>
