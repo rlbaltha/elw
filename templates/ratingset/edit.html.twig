@@ -35,7 +35,7 @@
                         <h2 class="mb-0">Rubric: {{ ratingset.rating[loop.index-1].rubric.name | raw }}</h2>
                     </div>
                     <div class="card-body">
-                        {{ ratingset.rating[loop.index-1].rubric.body | raw }}
+{#                        {{ ratingset.rating[loop.index-1].rubric.body | raw }}#}
                         {{ form_row(rating.scale) }}
                         {{ form_row(rating.comment) }}
                     </div>

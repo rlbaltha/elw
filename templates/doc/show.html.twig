@@ -170,6 +170,13 @@
 
                 {# rubrics for original doc #}
                 {% if doc.project %}
+                    {% if role == 'Instructor' and doc.project.rubrics|length > 0 %}
+                        {# rubric collection #}
+                        <a aria-label="Rate All Rubrics for {{ doc.title }}"
+                           id="docid{{ doc.id}}"
+                           class=" btn btn-primary btn-sm mt-3 rateallbtn"
+                           href="{{ course_path('app_ratingset_new', {'docid': doc.id,}) }}">Rate All Rubrics</a>
+                    {% endif %}
                     <div class="accordion mt-3" id="accordionRubric_doc{{ doc.id }}">
                         {% for rubric in doc.project.rubrics %}
                             <div class="accordion-item">
@@ -202,13 +209,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                    {% if role == 'Instructor' and doc.project.rubrics|length > 0 %}
-                        {# rubric collection #}
-                        <a aria-label="Rate All Rubrics for {{ doc.title }}"
-                           id="docid{{ doc.id}}"
-                           class=" btn btn-primary btn-sm mt-3 rateallbtn"
-                           href="{{ course_path('app_ratingset_new', {'docid': doc.id,}) }}">Rate All Rubrics</a>
-                    {% endif %}
+
                 {% endif %}
 
                 {# comments for original doc #}
@@ -353,7 +354,7 @@
                                                 <div class="accordion-body">
                                                     {{ rubric.body|raw }}
 
-                                                    {% if app.user == review.user or role == 'Instructor' %}
+                                                    {% if app.user == review.origin.user or role == 'Instructor' %}
                                                         <div class="" id="rubric{{ rubric.id }}_doc{{ review.id }}">
                                                             <a class="btn btn-primary btn-sm rubricrating"
                                                                data-id="rubric{{ rubric.id }}_doc{{ review.id }}"
@@ -479,7 +480,6 @@
     <script>
         $(document).ready(function () {
                $('.rateallbtn').hide();
-
                 //wait for ajax before counting ratings
                 setTimeout(
                     function () {
