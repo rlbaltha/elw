@@ -77,7 +77,7 @@ class Permissions
         //grab our current user's role in our current course
         $currentUserRole = $this->getCourseRole($courseid);
         //test if user is allowed to see the doc
-        if($currentUserRole === 'Instructor' or $doc->getAccess()==='Shared' or $this->isOwner($doc) or $doc->getOrigin()==='Shared'){
+        if($currentUserRole === 'Instructor' or $doc->getAccess()==='Shared' or $this->isOwner($doc)){
             return true;
         } else {
             throw new AccessDeniedException();

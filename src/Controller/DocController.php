@@ -388,12 +388,16 @@ class DocController extends AbstractController
         $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
-
+        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
         //check to see if request is a diff plus general permissions
         if ($docid!=0) {
-            $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
-//            $origin = $doc->getOrigin();
-            $permissions->isAllowedToView($courseid, $doc);
+            if($doc->getOrigin() != null) {
+                $origin = $doc->getOrigin();
+                $permissions->isAllowedToView($courseid, $origin);
+            }
+            else {
+                $permissions->isAllowedToView($courseid, $doc);
+            }
         }
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
