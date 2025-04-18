@@ -392,8 +392,8 @@ class DocController extends AbstractController
         //check to see if request is a diff plus general permissions
         if ($docid!=0) {
             $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
-            $origin = $doc->getOrigin();
-            $permissions->isAllowedToView($courseid, $origin);
+//            $origin = $doc->getOrigin();
+            $permissions->isAllowedToView($courseid, $doc);
         }
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
