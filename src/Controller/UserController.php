@@ -42,15 +42,27 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
         $form = $this->createFindForm($user);
-        $page_limit = 50;
+        $users = null;
 
-        $querybuilder = $userRepository->findUsers();
-        $users = $paginator->paginate(
-            $querybuilder, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            $page_limit /*limit per page*/
-        );
+        return $this->render('user/index.html.twig', [
+            'users' => $users,
+            'form'=>$form->createView()
+        ]);
+    }
 
+
+    /**
+     * @Route("/admin/find", name="user_find", methods={"GET","POST"})
+     */
+    public function find(UserRepository $userRepository, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = new User();
+        $form = $this->createFindForm($user);
+        $postData = $request->request->get('form');
+        $name = $postData['lastname'];
+
+        $users = $userRepository->findByLastname($name);
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
@@ -69,35 +81,6 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-
-
-    /**
-     * @Route("/admin/find", name="user_find", methods={"GET","POST"})
-     */
-    public function find(PaginatorInterface $paginator, UserRepository $userRepository, Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = new User();
-        $form = $this->createFindForm($user);
-        $postData = $request->request->get('form');
-        $name = $postData['lastname'];
-
-        $page_limit = 50;
-
-        $querybuilder = $userRepository->findByLastname($name);
-        $users = $paginator->paginate(
-            $querybuilder, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            $page_limit /*limit per page*/
-        );
-
-
-        return $this->render('user/index.html.twig', [
-            'users' => $users,
-            'form'=>$form->createView()
-        ]);
-    }
-
 
     /**
      * Creates a form to find Users by lastname.
