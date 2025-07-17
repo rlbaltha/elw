@@ -38,6 +38,45 @@ class CourseRepository extends ServiceEntityRepository
     */
 
     /**
+     * @return Course[] Returns an array of Course objects
+     */
+    public function findCourses($name, $user)
+    {
+        $namesearch = '%' . $name . '%';
+        return $this->createQueryBuilder('c')
+            ->join('c.classlists', 'cl')
+            ->join('c.term', 'ct')
+            ->andWhere('cl.user = :val1')
+            ->setParameter('val1', $user)
+            ->andWhere('c.name LIKE :val2 or ct.semester LIKE :val2 or ct.year LIKE :val2')
+            ->setParameter('val2', $namesearch)
+            ->addOrderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Course[] Returns an array of Course objects
+     */
+    public function findAdminCourses($name)
+    {
+        $namesearch = '%' . $name . '%';
+        $role = 'instructor';
+        return $this->createQueryBuilder('c')
+            ->join('c.term', 'ct')
+            ->join('c.classlists', 'cl')
+            ->join('cl.user', 'cu')
+            ->andWhere('c.name LIKE :val or ct.semester LIKE :val or ct.year LIKE :val or (cl.role = :val2 and cu.lastname LIKE :val)')
+            ->setParameter('val', $namesearch)
+            ->setParameter('val2', $role)
+            ->addOrderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
     * @return Course[] Returns an array of Course objects
     */
     public function findByUser($user)

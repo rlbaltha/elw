@@ -15,6 +15,11 @@
         </div>
     </div>
     <div class="row">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary btn-sm">{{ button_label|default('Find') }}</button>
+        {{ form_end(form) }}
+
         {% for course in courses %}
             <div class="col-lg-3">
                 <div class="card mr-1 mb-3">

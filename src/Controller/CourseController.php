@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classlist;
 use App\Entity\Course;
+use App\Entity\User;
 use App\Form\AnnouncementType;
 use App\Form\IrbType;
 use App\Form\CourseType;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * @Route("/course")
@@ -40,11 +42,100 @@ class CourseController extends AbstractController
      */
     public function admin(CourseRepository $courseRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $header = 'Admin Course List';
+        $course = new Course();
+        $form = $this->createAdminFindForm($course);
         return $this->render('course/index.html.twig', [
             'courses' => $courseRepository->findAll(),
-            'header' => $header
+            'header' => $header,
+            'form'=>$form->createView()
+        ]);
+    }
+
+    /**
+     * Creates a form to find Course by title for Admin.
+     *
+     * @param Course $course The entity
+     *
+     * @return Form form
+     */
+    private function createAdminFindForm(Course $course)
+    {
+        $form = $this->createFormBuilder($course)
+            ->setAction($this->generateUrl('course_admin_find'))
+            ->add('name',TextType::class, array('label'  => 'Find Courses by Instructor Name, Course Name, Semester, or Year','attr' => array('class' => 'form-control'),))
+            ->getForm();
+
+        return $form;
+
+
+    }
+
+
+    /**
+     * @Route("/adminFind", name="course_admin_find", methods={"GET","POST"})
+     */
+    public function adminFind(CourseRepository $courseRepository, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $course = new Course();
+        $form = $this->createAdminFindForm($course);
+        $header = 'My Courses';
+        $postData = $request->request->get('form');
+        $name = $postData['name'];
+
+
+        $courses = $courseRepository->findAdminCourses($name);
+
+        return $this->render('course/index.html.twig', [
+            'courses' => $courses,
+            'header' => $header,
+            'form'=>$form->createView()
+        ]);
+    }
+
+
+    /**
+     * Creates a form to find Course by title.
+     *
+     * @param Course $course The entity
+     *
+     * @return Form form
+     */
+    private function createFindForm(Course $course)
+    {
+        $form = $this->createFormBuilder($course)
+            ->setAction($this->generateUrl('course_find'))
+            ->add('name',TextType::class, array('label'  => 'Find Courses by Name, Semester, or Year','attr' => array('class' => 'form-control'),))
+            ->getForm();
+
+        return $form;
+
+
+    }
+
+    /**
+     * @Route("/find", name="course_find", methods={"GET","POST"})
+     */
+    public function find(CourseRepository $courseRepository, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $username = $this->getUser()->getUsername();
+        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $course = new Course();
+        $form = $this->createFindForm($course);
+        $header = 'My Courses';
+        $postData = $request->request->get('form');
+        $name = $postData['name'];
+
+
+        $courses = $courseRepository->findCourses($name, $user);
+
+        return $this->render('course/index.html.twig', [
+            'courses' => $courses,
+            'header' => $header,
+            'form'=>$form->createView()
         ]);
     }
 
@@ -57,6 +148,8 @@ class CourseController extends AbstractController
         $username = $this->getUser()->getUsername();
         $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $courses = $this->doctrine->getManager()->getRepository('App:Course')->findByUserAndTerm($user, $status);
+        $course = new Course();
+        $form = $this->createFindForm($course, $user);
         if($status == 'default') {
             $header = 'My Current Courses';
         }
@@ -65,7 +158,8 @@ class CourseController extends AbstractController
         }
         return $this->render('course/index.html.twig', [
             'courses' => $courses,
-            'header' => $header
+            'header' => $header,
+            'form'=>$form->createView()
         ]);
     }
 
