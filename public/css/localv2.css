@@ -125,6 +125,15 @@ a {
     border-color: #ba0c2f;
 }
 
+.btn-link {
+    color: #20399D;
+}
+
+.btn-link:hover {
+    color: #0e1e69;
+}
+
+
 .btn-sm {
     padding: .5rem .6rem;
     font-size: .875rem;
