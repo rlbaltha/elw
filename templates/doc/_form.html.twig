@@ -1,3 +1,18 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<div class="my-custom-class-for-errors">
+    {{ form_errors(form) }}
+</div>
+
+    {{ form_row(form.title) }}
+    {{ form_row(form.stage) }}
+    {{ form_row(form.access) }}
+    {{ form_row(form.wordcount) }}
+    <div class="editor-container editor-container_classic-editor editor-container_include-style editor-container_include-fullscreen"
+         id="editor-container" >
+        <div class="editor-container__editor">
+            {{ form_row(form.body) }}
+        </div>
+    </div>
 {{ form_end(form) }}
+
+

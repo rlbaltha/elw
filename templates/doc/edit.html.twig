@@ -5,10 +5,12 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('style.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css')}}">
+
     <style>
-    .ck-editor__editable_inline {
-        min-height: 75vh;
-        max-height: 75vh;
+    .editor-container__editor {
+    min-width: 100% !important;
     }
     </style>
 {% endblock %}
@@ -171,8 +173,18 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/ckeditor.js') }}"></script>
-    <script src="{{ asset('js/doc_editor_init.js') }}"></script>
+    	<script type="importmap">
+		{
+			"imports": {
+				"ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
+				"ckeditor5/": "./ckeditor5/"
+			}
+		}
+		</script>
+		<script type="module" src="{{ asset('main.js') }}"></script>
+
+{#    <script src="{{ asset('js/ckeditor.js') }}"></script>#}
+{#    <script src="{{ asset('js/doc_editor_init.js') }}"></script>#}
     <script>
         {# Markup insert and tracking #}
         function getValues(range) {
