@@ -231,5 +231,6 @@ const editorConfig = {
 };
 
 
-ClassicEditor.create(document.getElementById("doc_body"), editorConfig)
-
+const editor = await ClassicEditor.create(document.getElementById("doc_body"), editorConfig)
+// Add the global `editor` variable (only needed for debugging).
+window.editor = editor;
