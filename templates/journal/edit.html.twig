@@ -5,11 +5,18 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('style.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css')}}">
+
     <style>
-        .ck-editor__editable_inline {
+        .editor-container__editor {
+            min-width: 100% !important;
+        }
+        .ck-editor__editable {
             min-height: 60vh;
             max-height: 60vh;
         }
+
     </style>
 {% endblock %}
 
@@ -59,8 +66,18 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/ckeditor.js') }}"></script>
-    <script src="{{ asset('js/journal_editor_init.js') }}"></script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
+				"ckeditor5/": "./ckeditor5/"
+			}
+		}
+    </script>
+    <script type="module" src="{{ asset('js/journal_editor_init.js') }}"></script>
+
+
     <script>
         $(document).ready(function () {
             $("#submit-doc-form").click(function () {
@@ -77,8 +94,9 @@
             $('#saving_alert').hide();
             var autoSave = setInterval(function () {
                 var buffer = $('#editor-status').text();
-                var count = $('#word-count').text();
-                if (buffer == 'changed') {
+                var count = $('#ck-editor__editable').val().replace(/^[\s,.;]+/, "").replace(/[\s,.;]+$/, "").split(/[\s,.;]+/).length;
+
+                if (buffer == 'Changed') {
                     $('#journal_wordcount').val(count);
                     var body = editor.getData();
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {

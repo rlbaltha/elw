@@ -186,11 +186,8 @@
 			}
 		}
 		</script>
-		<script type="module" src="{{ asset('main.js') }}"></script>
-
-{#    <script src="{{ asset('js/ckeditor.js') }}"></script>#}
-{#    <script src="{{ asset('js/doc_editor_init.js') }}"></script>#}
-    <script>
+    <script type="module" src="{{ asset('js/doc_editor_init.js') }}"></script>
+<script>
         {# Markup insert and tracking #}
         function getValues(range) {
             var selection_text = "";
@@ -272,14 +269,13 @@
                 $("#delete-form").submit();
             });
 
-            {# Doc autosave #}
             $('#saving_alert').hide();
             var autoSave = setInterval(function () {
                 var buffer = $('#editor-status').text();
-                var count = $('#word-count').text();
-                if (buffer == 'changed') {
-                    $('#doc_wordcount').val(count);
+                if (buffer == 'Changed') {
                     var body = editor.getData();
+                    var count = 15;
+                    $('#doc_wordcount').val(count);
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {
                         docBody: body,
                         count: count
@@ -305,6 +301,30 @@
             );
 
         });
+
+
+//         Possible word count
+//         // Get the editor data as an HTML string
+// const htmlData = editor.getData();
+//
+// // A simple (but potentially imperfect) way to strip HTML tags and count
+// function countWordsAndCharacters(html) {
+//     // Create a temporary div element to leverage the browser's DOM parsing
+//     const div = document.createElement("div");
+//     div.innerHTML = html;
+//     const textOnly = div.textContent || div.innerText || "";
+//
+//     // Count words (basic split by whitespace)
+//     const wordsArray = textOnly.trim().split(/\s+/);
+//     const wordCount = (wordsArray.length === 1 && wordsArray[0] === "") ? 0 : wordsArray.length;
+//
+//     return {
+//         words: wordCount,
+//     };
+// }
+//
+// const stats = countWordsAndCharacters(htmlData);
+// console.log(stats);
     </script>
 
 {% endblock %}
