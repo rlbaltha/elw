@@ -62,7 +62,7 @@
         <div class="card mb-3">
         <div class="card-header">Document Statistics</div>
         <div class="card-body">
-            <div><span>Word Count: </span><span id="word-count"></span></div>
+            <div><span>Word Count: </span><span id="word-count">{{ doc.wordcount }}</span></div>
             <div><span> Document status: </span><span  id="editor-status">Unchanged</span></div>
         </div>
 
@@ -254,7 +254,8 @@
                 });
             });
             $("#submit-doc-form").click(function () {
-                var count = $('#word-count').text();
+                var body = editor.getData();
+                var count = countWords(body);
                 $('#doc_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
             });
@@ -274,7 +275,7 @@
                 var buffer = $('#editor-status').text();
                 if (buffer == 'Changed') {
                     var body = editor.getData();
-                    var count = 15;
+                    var count = countWords(body);
                     $('#doc_wordcount').val(count);
                     $.post("{{ course_path('doc_autosave', { 'id': doc.id }) }}", {
                         docBody: body,
@@ -286,6 +287,7 @@
                     });
                     ;
                     $('#editor-status').text('changes saved');
+                    $('#word-count').text(count);
                     $('#saving_alert').fadeIn();
                     $('#saving_alert').delay(3000).fadeOut();
 
@@ -303,28 +305,33 @@
         });
 
 
-//         Possible word count
-//         // Get the editor data as an HTML string
-// const htmlData = editor.getData();
-//
-// // A simple (but potentially imperfect) way to strip HTML tags and count
-// function countWordsAndCharacters(html) {
-//     // Create a temporary div element to leverage the browser's DOM parsing
-//     const div = document.createElement("div");
-//     div.innerHTML = html;
-//     const textOnly = div.textContent || div.innerText || "";
-//
-//     // Count words (basic split by whitespace)
-//     const wordsArray = textOnly.trim().split(/\s+/);
-//     const wordCount = (wordsArray.length === 1 && wordsArray[0] === "") ? 0 : wordsArray.length;
-//
-//     return {
-//         words: wordCount,
-//     };
-// }
-//
-// const stats = countWordsAndCharacters(htmlData);
-// console.log(stats);
+
+// A simple (but potentially imperfect) way to strip HTML tags and count
+function countWords(body) {
+    var countP = countPElementsInString(body);
+    // Create a temporary div element to leverage the browser's DOM parsing
+    const div = document.createElement("div");
+    div.innerHTML = body;
+    const textOnly = div.textContent || div.innerText || "";
+    // Count words (basic split by whitespace)
+    const wordsArray = textOnly.trim().split(/\s+/);
+    const countW = (wordsArray.length === 1 && wordsArray[0] === "") ? 0 : wordsArray.length;
+    const wordCount = countP + countW -1;
+    return wordCount;
+}
+
+function countPElementsInString(body) {
+  // Create a new DOMParser instance
+  const parser = new DOMParser();
+  // Parse the HTML string into a Document object
+  const doc = parser.parseFromString(body, 'text/html');
+  // Select all 'p' elements within the parsed document
+  const paragraphs = doc.querySelectorAll('p');
+  // Return the number of found 'p' elements
+  return paragraphs.length;
+}
+
+
     </script>
 
 {% endblock %}
