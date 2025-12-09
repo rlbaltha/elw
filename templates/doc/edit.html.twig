@@ -27,7 +27,7 @@
             <i id='settings_arrows' class="fa fa-chevron-up"></i></a>
     </li>
     <li class="nav-item">
-        <a href="#" id="submit-doc-form" class="btn btn-primary">Save</a>
+        <a aria-keyshortcuts="Alt+S" href="#" id="submit-doc-form" class="btn btn-primary">Save</a>
     </li>
 {% endblock %}
 
@@ -101,7 +101,7 @@
                     <div class="card">
                         <div class="card-header" id="m_heading{{ loop.index }}">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                <button id="m_button{{ loop.index }}" class="btn btn-link" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#m_collapse{{ loop.index }}" aria-expanded="true"
                                         aria-controls="m_collapse{{ loop.index }}">
                                     Markup {{ loop.index }}: {{ markupset.name }}
@@ -187,7 +187,8 @@
 		}
 		</script>
     <script type="module" src="{{ asset('js/doc_editor_init.js') }}"></script>
-<script>
+    <script>
+
         {# Markup insert and tracking #}
         function getValues(range) {
             var selection_text = "";
@@ -225,6 +226,7 @@
                  editor.model.insertContent( modelFragment, last_position);
             } );
             $('#insert_value').val('');
+            editor.editing.view.focus()
         }
 
         $(document).ready(function () {
@@ -242,7 +244,10 @@
                 return attr == 'true' ? 'false' : 'true'
                 });
             {% endif %}
-            $("#doc-title-toggle").click(function () {
+
+            $("#doc-title-toggle").click(doctitletoggle);
+
+            function doctitletoggle() {
                 $("fieldset").toggle();
                 $("#doc_project").toggle();
                 $("#doc_stage").toggle();
@@ -252,13 +257,17 @@
                 $(this).attr('aria-expanded', function (i, attr) {
                 return attr == 'true' ? 'false' : 'true'
                 });
-            });
-            $("#submit-doc-form").click(function () {
+            };
+
+            $("#submit-doc-form").click(submitdocform);
+
+            function submitdocform() {
                 var body = editor.getData();
                 var count = countWords(body);
                 $('#doc_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
-            });
+            };
+
             $(function () {
                 $('#note_insert_submit').click(function () {
                     note();
@@ -301,6 +310,43 @@
                     $(this).children('.collapse').collapse('hide');
                 }
             );
+        // Accessibility speedkeys for doc editing
+        // function to set speedkey Alt+S for submitting a doc
+           document.addEventListener('keydown', function(event) {
+             const isModifier = event.altKey;
+             const isKey = event.key === 's' || event.key === 's';
+             if (isModifier && isKey) {
+             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
+             submitdocform();
+            }
+        });
+        // function to set speedkey Alt+N for inserting a note
+           document.addEventListener('keydown', function(event) {
+             const isModifier = event.altKey;
+             const isKey = event.key === 'n' || event.key === 'n';
+             if (isModifier && isKey) {
+             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
+             document.getElementById("insert_value").focus();
+            }
+        });
+        // function to set speedkey Alt+M for inserting markup
+           document.addEventListener('keydown', function(event) {
+             const isModifier = event.altKey;
+             const isKey = event.key === 'm' || event.key === 'm';
+             if (isModifier && isKey) {
+             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
+             document.getElementById("m_button1").focus();
+            }
+        });
+        // function to set speedkey Alt+T for inserting markup
+           document.addEventListener('keydown', function(event) {
+             const isModifier = event.altKey;
+             const isKey = event.key === 't' || event.key === 't';
+             if (isModifier && isKey) {
+             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
+             doctitletoggle();
+            }
+        });
 
         });
 

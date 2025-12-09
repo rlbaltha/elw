@@ -102,12 +102,12 @@
 {% block toolnav %}{% endblock %}
 <div id="main-content" class="container-fluid pt-3 bg-light">
     {% for message in app.flashes('notice') %}
-        <div class="alert alert-success">
+        <div role="alert" class="alert alert-success">
             {{ message|raw }}
         </div>
     {% endfor %}
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
+        <div role="alert" class="alert alert-danger">
             {{ message|raw }}
         </div>
     {% endfor %}
@@ -119,29 +119,23 @@
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-{#    <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>#}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <script src="https://unpkg.com/@travishorn/session-timeout"></script>
-    <script>
-        $(document).ready(function () {
-            {% block timeout %}
+    {% block timeout %}
+    <script type="module" src="{{ asset('js/sessiontimeout.js')}}">
+
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            // warn after 60 minutes, logout after 90 minutes
+            import sessionTimeout from "{{ asset('js/sessiontimeout.js')}}";
             sessionTimeout({
-                warnAfter: 3600000,
-                message: 'Are you still working? Please remember to save your work regularly.',
-                stayConnectedBtnText: "Keep Working",
-                titleText: "Notice",
-                logOutUrl: "/logout",
-                logOutBtnText: "Logout",
-                timeOutAfter: 5400000,
-                timeOutUrl: "/logout"
+                continueText: "Continue Session",
+                logoutText: "Log Out",
+                message: "Your session is about to expire.",
+                timeoutAt: 20 * 60 * 1000, // Call onTimeout after 20 minutes
+                warnAt: 15 * 60 * 1000, // Show warning after 15 minutes
             });
             {% endif %}
-            {% endblock %}
-        });
     </script>
+    {% endblock %}
 {% endblock %}
 
 
