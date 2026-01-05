@@ -21,6 +21,9 @@ class JournalType extends AbstractType
             ->add('body', TextareaType::class, [
                 'label' => ''
             ])
+            ->add('access', HiddenType::class, [
+                'required'=>false
+            ])
             ->add('project', HiddenType::class, [
                 'required'=>false
             ])
