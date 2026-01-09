@@ -16,6 +16,15 @@
         {# {{ encore_entry_link_tags('app') }} #}
     {% endblock %}
     <title>{% block title %}eLW - University of Georgia{% endblock %}</title>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
+				"ckeditor5/": "./ckeditor5/"
+			}
+		}
+    </script>
 </head>
 
 <body class="{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.theme != 'dark' %}light{% else %}dark{% endif %}{% endif %}">

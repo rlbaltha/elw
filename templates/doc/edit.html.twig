@@ -176,16 +176,10 @@
     </div>
 {% endblock %}
 
+{% block head %}
+{% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    	<script type="importmap">
-		{
-			"imports": {
-				"ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
-				"ckeditor5/": "./ckeditor5/"
-			}
-		}
-		</script>
     <script type="module" src="{{ asset('js/doc_editor_init.js') }}"></script>
     <script>
 
@@ -313,7 +307,7 @@
         // Accessibility speedkeys for doc editing
         // function to set speedkey Alt+S for submitting a doc
            document.addEventListener('keydown', function(event) {
-             const isModifier = event.altKey;
+             const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
              const isKey = event.key === 's' || event.key === 's';
              if (isModifier && isKey) {
              event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
