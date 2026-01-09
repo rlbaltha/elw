@@ -317,7 +317,7 @@
         // function to set speedkey Alt+N for inserting a note
            document.addEventListener('keydown', function(event) {
              const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === 'n' || event.key === 'n';
+             const isKey = event.key === '1' || event.key === '1';
              if (isModifier && isKey) {
              event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
              document.getElementById("insert_value").focus();
@@ -326,7 +326,7 @@
         // function to set speedkey Alt+M for inserting markup
            document.addEventListener('keydown', function(event) {
              const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === 'm' || event.key === 'm';
+             const isKey = event.key === '2' || event.key === '2';
              if (isModifier && isKey) {
              event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
              document.getElementById("m_button1").focus();
@@ -335,7 +335,7 @@
         // function to set speedkey Alt+T for inserting markup
            document.addEventListener('keydown', function(event) {
              const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === 't' || event.key === 't';
+             const isKey = event.key === '3' || event.key === '3';
              if (isModifier && isKey) {
              event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
              doctitletoggle();
