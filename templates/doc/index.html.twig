@@ -256,7 +256,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                    <button type="button" data-toggle="tooltip" data-placement="top" title="Close help" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
@@ -372,6 +372,11 @@
             }
             ;
         });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]'.toolip()
+        })
     </script>
 {% endblock %}
 
