@@ -89,8 +89,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for project in course.projects %}
-                                <a class="dropdown-item"
-                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
+                                <a class="dropdown-item" aria-label="Create a new document for {{ project.name }}"
+                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}
+                                </a>
                             {% endfor %}
                         </div>
                     </li>
