@@ -89,8 +89,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for project in course.projects %}
-                                <a class="dropdown-item"
-                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}</a>
+                                <a class="dropdown-item" aria-label="Create a new document for {{ project.name }}"
+                                   href="{{ course_path('doc_new', {'projectid':project.id}) }}">for {{ project.name }}
+                                </a>
                             {% endfor %}
                         </div>
                     </li>
@@ -256,7 +257,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                    <button type="button" data-toggle="tooltip" data-placement="top" title="Close help" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p><strong>My Docs</strong> will list your documents and Reviews for others.</p>
@@ -298,6 +299,7 @@
                             For the most accessible experience, choose the current HTML display of the
                             document.
                         </li>
+                        <p class="alert alert-warning">When using highlighting and color, choose sufficient contrast to ensure readability and accessibility.</p>
                         <li>
                             <p>To <strong>Close</strong> the document, click the Close link in the upper right.  You will be
                                 returned to your most recent document listing.</p>
@@ -372,6 +374,11 @@
             }
             ;
         });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]'.toolip()
+        })
     </script>
 {% endblock %}
 

@@ -54,7 +54,7 @@
             Help</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ app.session.get('referrer') }}"><i class="material-icons" style="font-size:24px;">close</i></a>
+        <a class="nav-link" data-toggle="tooltip" data-placement="top" title="Close this document" href="{{ app.session.get('referrer') }}" aria-label="Close document"><i class="material-icons" aria-hidden="true" style="font-size:24px;">close</i></a>
     </li>
 {% endblock %}
 
@@ -432,7 +432,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Document Help</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-toggle="tooltip" data-placement="top" title="Close help" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     {% if app.user != doc.user and doc.access!='Review' %}
@@ -653,5 +653,10 @@
 
             }
         );
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]'.toolip()
+        })
     </script>
 {% endblock %}

@@ -26,7 +26,7 @@ class DocType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label'  => 'Title',
-                'label_attr' => ['class' => 'visually-hidden'],
+                'label_attr' => ['class' => 'd-inline'],
             ])
             ->add('stage', EntityType::class, [
                 'class' => Stage::class,

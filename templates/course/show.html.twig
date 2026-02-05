@@ -251,7 +251,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="helpModalLabel">Course Help</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                    <button type="button" class="btn-close" data-toggle="tooltip" data-placement="top" title="Close help" data-bs-dismiss="modal" aria-label="Close Help"></button>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -344,5 +344,10 @@
                 $(this).hide();
             });
         });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]'.toolip()
+        })
     </script>
 {% endblock %}

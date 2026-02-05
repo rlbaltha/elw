@@ -128,6 +128,7 @@
                             instructor.</p>
                         <p><strong>New Journal</strong> creates a new Journal entry. Entries will list on the left and
                             can be viewed and edited.</p>
+                        <p class="alert alert-warning">When using highlighting and color, choose sufficient contrast to ensure readability and accessibility.</p>
                         {% if role=='Instructor' %}
                             <p>Instructors can navigate through student journals via the <strong>Select Author</strong>
                                 dropdown or with the next/previous student listed on the right.</p>
@@ -184,12 +185,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="helpModalLabel">Journal Help</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                        <button type="button" data-toggle="tooltip" data-placement="top" title="Close help" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
                     </div>
                     <div class="modal-body">
                         <p class="card-text">The <strong>Journal</strong> is a private writing space for students that
                             is
                             only visible to the student and the instructor.</p>
+                        <p class="alert alert-warning">When using highlighting and color, choose sufficient contrast to ensure readability and accessibility.</p>
                         {% if role=='Instructor' %}
                             <p class="card-text"><strong>Give End Comment</strong> allows you to attach a holistic
                                 comment.
@@ -276,6 +278,11 @@
                 });
             })
             ;
+        </script>
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]'.toolip()
+            })
         </script>
     {% endblock %}
 
