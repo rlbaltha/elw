@@ -2,6 +2,13 @@
 
 {% block title %}Rubric Block Edit - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('style.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css')}}">
+{% endblock %}
+
 {% block body %}
     <div class="card">
         <div class="card-body">
@@ -14,9 +21,18 @@
     </div>
 {% endblock %}
 
+
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
+				"ckeditor5/": "./ckeditor5/"
+			}
+		}
+    </script>
+    <script type="module" src="{{ asset('js/rubric_editor_init.js') }}"></script>
     <script>
         $(document).ready(function () {
             {% if not is_granted('ROLE_ADMIN') %}
@@ -24,24 +40,5 @@
             $('#rubric_level').prev().hide();
             {% endif %}
         });
-    </script>
-    <script>
-        let editor;
-        ClassicEditor.create(document.getElementById("rubric_body"), {
-            toolbar: {
-                items: [
-                    'undo', 'redo',
-                    'bold', 'italic', 'strikethrough', '|',
-                    'bulletedList', 'numberedList', '|',
-                    'outdent', 'indent', '|',
-                    'fontColor', 'highlight', '|',
-                    'link'
-                ],
-                shouldNotGroupWhenFull: true
-            },
-        })
-            .then(newEditor => {
-                editor = newEditor;
-            });
     </script>
 {% endblock %}
