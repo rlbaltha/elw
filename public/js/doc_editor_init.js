@@ -177,15 +177,34 @@
         ]
     },
         htmlSupport: {
-        allow: [
-    {
-        name: /^.*$/,
-        styles: true,
-        attributes: true,
-        classes: true
-    }
-        ]
-    },
+            // elements [attributes]{styles}(classes)
+            // span(*){font-size,font-family,color,background-color}[data-id]
+            // img{text-align,margin-left}(*); a[!href,target]{*}(*);img[*]{*}
+            allow: [
+                {
+                    name: /^(div|p|h2|h3|table|th|tr|td|strong|s|em|ol|ul|li)$/,
+                    classes: true,
+                },
+                {
+                    name: 'span',
+                    attributes: ['data-id'],
+                    classes: true,
+                    styles: ['font-size','font-family','color','background-color']
+                },
+                {
+                    name: 'img',
+                    classes: true,
+                    styles: true
+                },
+                {
+                    name: 'a',
+                    attributes: ['href','target'],
+                    classes: true,
+                    styles: true
+                },
+
+            ]
+        },
         image: {
         toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText']
     },
