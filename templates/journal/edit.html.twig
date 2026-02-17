@@ -80,10 +80,16 @@
 
     <script>
         $(document).ready(function () {
-            $("#submit-doc-form").click(function () {
-                var count = $('#word-count').text();
+            function submitdocform() {
+                var body = editor.getData();
+                var count = countWords(body);
                 $('#journal_wordcount').val(count);
                 $("#doc-form").submit(); // Submit the form
+            };
+
+
+            $("#submit-doc-form").click(function () {
+                submitdocform()
             });
 
             {# Delete doc trigger #}
@@ -139,6 +145,18 @@
                 // Return the number of found 'p' elements
                 return paragraphs.length;
             }
+
+            // Accessibility speedkeys for doc editing
+            // function to set speedkey Alt+S for submitting a doc
+            document.addEventListener('keydown', function(event) {
+                const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
+                const isKey = event.key === 's' || event.key === 's';
+                if (isModifier && isKey) {
+                    event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
+                    submitdocform();
+                }
+            });
+
         });
     </script>
 
