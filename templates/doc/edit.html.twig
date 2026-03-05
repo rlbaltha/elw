@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link type="text/css" rel="stylesheet" href="{{ asset('style.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
 
     <style>
     .editor-container__editor {
@@ -179,6 +180,8 @@
             height: 800,
             api_key: 'djv9sd5cglz5juyg74qpl35zvkwsgf1aj22n0cg9f57sq3nx',
             onboarding: false,
+            content_css: '{{ asset('css/ckeditor_document_v2.css')}}',
+            // content_style: 'span.note { color:blue; background-color:white; border: #bababa solid 1px; border-radius: 10%;padding:4px; } span.highlight {background-color: hsl(60, 97%, 73%);}',
             plugins: [
                 // Core editing features
                 'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount'
@@ -211,37 +214,26 @@
                  }
                  return selection_text;
         }
+        {# Markup Insert #}
         function insert_markup(id, name, color) {
-            editor.focus();
-            editor.model.change( writer => {
-                 const markup_color = 'markup_' + color;
-                 const name = 'add real name here';
-                 const range = editor.model.document.selection.getFirstRange();
-                 const selection_text = getValues(range);
-                 const content = '<span data-id="' + id + '" title="' + name + '" class="markup '+ markup_color +'">'+ selection_text + '</span>';
-                 const viewFragment = editor.data.processor.toView( content );
-                 const modelFragment = editor.data.toModel( viewFragment );
-                 editor.model.insertContent( modelFragment, range )
-            } );
+            const selected_text = tinyMCE.activeEditor.selection.getContent();
+            const markup_color = 'markup_'+color;
+            const content = '<span data-id="' + id + '" title="' + name + '" class="markup '+ markup_color +'">'+ selected_text + '</span>';
+            tinymce.activeEditor.execCommand('InsertHTML', false, content);
         }
 
         {# Note insert #}
-        $( "#insert_value" ).on( "focus", function() {
-          editor.execute( 'highlight', { value: 'yellowMarker' } );
-        } );
         function note() {
-            editor.model.change( writer => {
+                 const selected_text = tinyMCE.activeEditor.selection.getContent();
+                 const highlite_selected_text = '<span class="highlight">'+ selected_text + '</span>';
                  const note_value = document.getElementById("insert_value").value;
                  const note_id = new Date().getTime();
-                 const content = '<span data-id="' + note_id + '" class="note">'+ note_value + '</span>';
-                 const viewFragment = editor.data.processor.toView( content );
-                 const modelFragment = editor.data.toModel( viewFragment );
-                 const last_position = editor.model.document.selection.getLastPosition();
-                 editor.model.insertContent( modelFragment, last_position);
-            } );
+                 const note = '<span data-id="' + note_id + '" class="note">'+ note_value + '</span>';
+                 const insert_note = highlite_selected_text + note;
+                 tinymce.activeEditor.execCommand('InsertHTML', false, insert_note);
             $('#insert_value').val('');
-            editor.editing.view.focus()
         }
+
 
         $(document).ready(function () {
             $("#doc-form").addClass("form-inline");
