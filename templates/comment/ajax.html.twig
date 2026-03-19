@@ -1,14 +1,15 @@
 {# twig template for ajax fragment #}
 
 <div id="comment{{ doc.id }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css')}}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('style.css')}}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/ckeditor_document_v2.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css') }}">
 
     <style>
         .editor-container__editor {
             min-width: 100% !important;
         }
+
         .ck-editor__editable {
             min-height: 30vh;
             max-height: 30vh;
@@ -19,224 +20,52 @@
     <hr/>
     {{ include('comment/_ajaxform.html.twig') }}
 
-
-    <script type="importmap">
-        {
-            "imports": {
-                "ckeditor5": "{{ asset('ckeditor5/ckeditor5.js') }}",
-				"ckeditor5/": "./ckeditor5/"
-			}
-		}
-    </script>
-{#    <script type="module" src="{{ asset('js/journal_comment_editor_init.js') }}"></script>#}
-
-    <script type="module">
-        /**
-         * This configuration was generated using the CKEditor 5 Builder. You can modify it anytime using this link:
-         * https://ckeditor.com/ckeditor-5/builder/#installation/NoNgNARATAdA7DAHBSBGOAWKI6NwZjgFZUBOfABlxFNVRCrhCKn1IyPwzIotMQwoIAUwB2KCmGCowkyTIUBdSMLKoKZCIqA=
-         */
-
-        import {
-            ClassicEditor,
-            Autosave,
-            Essentials,
-            Paragraph,
-            Autoformat,
-            ImageInsertViaUrl,
-            ImageBlock,
-            ImageToolbar,
-            AutoImage,
-            BlockQuote,
-            Bold,
-            Link,
-            Heading,
-            ImageCaption,
-            ImageInline,
-            ImageStyle,
-            ImageTextAlternative,
-            Indent,
-            IndentBlock,
-            Italic,
-            LinkImage,
-            List,
-            MediaEmbed,
-            Table,
-            TableToolbar,
-            TableCaption,
-            TextTransformation,
-            TodoList,
-            Underline,
-            Emoji,
-            Mention,
-            Fullscreen,
-            Strikethrough,
-            Subscript,
-            Superscript,
-            FontBackgroundColor,
-            FontColor,
-            FontFamily,
-            FontSize,
-            Highlight,
-            HorizontalLine,
-            Alignment,
-            Style,
-            GeneralHtmlSupport,
-            ImageUpload,
-            CloudServices
-        } from 'ckeditor5';
-
-        /**
-         * Create a free account with a trial: https://portal.ckeditor.com/checkout?plan=free
-         */
-        const LICENSE_KEY = 'GPL'; // or <YOUR_LICENSE_KEY>.
-
-        const editorConfig = {
-            toolbar: {
-                items: [
-                    'undo', 'redo',
-                    'bold', 'italic', 'strikethrough', '|',
-                    'bulletedList', 'numberedList', '|',
-                    'outdent', 'indent', '|',
-                    'fontColor', 'highlight', '|',
-                    'link'
-                ],
-                shouldNotGroupWhenFull: false
-            },
+    <script>
+        $('#comment_journal_body').tinymce({
+            api_key: 'djv9sd5cglz5juyg74qpl35zvkwsgf1aj22n0cg9f57sq3nx',
+            onboarding: false,
+            menubar: false,
+            content_css: '{{ asset('css/ckeditor_document_v2.css') }}',
+            // content_style: 'span.note { color:blue; background-color:white; border: #bababa solid 1px; border-radius: 10%;padding:4px; } span.highlight {background-color: hsl(60, 97%, 73%);}',
             plugins: [
-                Alignment,
-                Autoformat,
-                AutoImage,
-                Autosave,
-                BlockQuote,
-                Bold,
-                CloudServices,
-                Emoji,
-                Essentials,
-                FontBackgroundColor,
-                FontColor,
-                FontFamily,
-                FontSize,
-                GeneralHtmlSupport,
-                Heading,
-                Highlight,
-                HorizontalLine,
-                ImageBlock,
-                ImageCaption,
-                ImageInline,
-                ImageInsertViaUrl,
-                ImageStyle,
-                ImageTextAlternative,
-                ImageToolbar,
-                ImageUpload,
-                Indent,
-                IndentBlock,
-                Italic,
-                Link,
-                LinkImage,
-                List,
-                MediaEmbed,
-                Mention,
-                Paragraph,
-                Strikethrough,
-                Style,
-                Subscript,
-                Superscript,
-                Table,
-                TableCaption,
-                TableToolbar,
-                TextTransformation,
-                TodoList,
-                Underline
+                // Core editing features
+                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount'
             ],
-            fontFamily: {
-                supportAllValues: true
-            },
-            fontSize: {
-                options: [10, 12, 14, 'default', 18, 20, 22],
-                supportAllValues: true
-            },
-            htmlSupport: {
-                allow: [
-                    {
-                        name: /^.*$/,
-                        styles: true,
-                        attributes: true,
-                        classes: true
-                    }
-                ]
-            },
-            licenseKey: LICENSE_KEY,
-            link: {
-                addTargetToExternalLinks: true,
-                defaultProtocol: 'https://',
-                decorators: {
-                    toggleDownloadable: {
-                        mode: 'manual',
-                        label: 'Downloadable',
-                        attributes: {
-                            download: 'file'
-                        }
-                    }
-                }
-            },
-            mention: {
-                feeds: [
-                    {
-                        marker: '@',
-                        feed: [
-                            /* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-                        ]
-                    }
-                ]
-            },
-            menuBar: {
-                isVisible: false
-            },
-            placeholder: 'Type or paste your content here!',
-        };
+            toolbar: 'undo redo | bold italic  strikethrough |  numlist bullist  | link forecolor backcolor | removeformat',
+            setup: function (editor) {
+            }
+        });
 
-        ClassicEditor
-            .create(document.getElementById("comment_journal_body"), editorConfig)
-            .then(editor => {
-                window.editor = editor;
-                console.log('Editor was initialized', editor);
-            })
-            .then(() => {
-                editor.focus();
-                document.querySelector( '.ajax_submit' ).addEventListener( 'click', () => {
-                    editor.updateSourceElement();
-                    const form_data = $('form#ajax').serializeArray();
-                    $("#loading_alert").fadeIn();
+        $('.ajax_submit').click(function(e) {
+            tinyMCE.triggerSave();
+            let formData = $('[name="comment_journal"]').serialize();
+            //Perform the AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '{{ request_url }}', // Replace with your server endpoint
+                data: formData,
+                });
+                tinymce.remove(tinymce.activeEditor);
+
+                setTimeout(
+                function () {
+                    var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
+                    var target = "#comment{{ doc.id }}"
                     $.ajax({
-                        url: '{{ request_url }}',
-                        method: 'POST',
-                        data: form_data,
+                        url: request, success: function (result) {
+                            $(target).replaceWith(result);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            if (xhr.status === 404) {
+                                $(target).html('<p>Unable to load comment form.</p>');
+                            }
+                        }
                     });
-
-                    setTimeout(
-                        function () {
-                            var request = "{{ path('comment_ajax_show', {'courseid': doc.course.id, 'docid': doc.id}) }}";
-                            var target = "#comment{{ doc.id }}"
-                            $.ajax({
-                                url: request, success: function (result) {
-                                    $(target).replaceWith(result);
-                                },
-                                error: function (xhr, ajaxOptions, thrownError) {
-                                    if (xhr.status === 404) {
-                                        $(target).html('<p>Unable to load comment form.</p>');
-                                    }
-                                }
-                            });
-                        }, 500);
-                } );
-            })
-            .catch(error => {
-                console.error(error);
+                }, 500);
             });
+    </script>
 
-
-
-
+    <script>
         // cancel submit (hide form)
         $(".ajax_cancel").click(function (e) {
             setTimeout(

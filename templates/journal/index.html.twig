@@ -276,13 +276,8 @@
                     var text = $('#expand_arrows').text();
                     $('#expand_arrows').text(text == "expand_less" ? "expand_more" : "expand_less");
                 });
-            })
-            ;
-        </script>
-        <script>
-            $(function () {
-                $('[data-toggle="tooltip"]'.toolip()
-            })
+            });
+            $('[data-toggle="tooltip"]').tooltip();
         </script>
     {% endblock %}
 
