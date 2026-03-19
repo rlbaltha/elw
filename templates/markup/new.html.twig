@@ -23,7 +23,22 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script>
+        $('#markup_description').tinymce({
+            api_key: 'djv9sd5cglz5juyg74qpl35zvkwsgf1aj22n0cg9f57sq3nx',
+            onboarding: false,
+            menubar: false,
+            content_css: '{{ asset('css/ckeditor_document_v2.css')}}',
+            // content_style: 'span.note { color:blue; background-color:white; border: #bababa solid 1px; border-radius: 10%;padding:4px; } span.highlight {background-color: hsl(60, 97%, 73%);}',
+            plugins: [
+                // Core editing features
+                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', "textcolor"
+            ],
+            toolbar: 'undo redo | bold italic  strikethrough |  numlist bullist  | link forecolor backcolor | removeformat',
+            setup: function(editor) {
+            }
+        });
+    </script>
     <script src="{{ asset('js/colorPick.js') }}"></script>
     {#    These colors must be replicated in the ckeditor_document_vx.css#}
     <script>
@@ -39,24 +54,5 @@
                 }
             });
         });
-    </script>
-    <script>
-        let editor;
-        ClassicEditor.create(document.getElementById("markup_description"), {
-            toolbar: {
-                items: [
-                    'undo', 'redo',
-                    'bold', 'italic', 'strikethrough', '|',
-                    'bulletedList', 'numberedList', '|',
-                    'outdent', 'indent', '|',
-                    'fontColor', 'highlight', '|',
-                    'link'
-                ],
-                shouldNotGroupWhenFull: true
-            },
-        })
-            .then(newEditor => {
-                editor = newEditor;
-            });
     </script>
 {% endblock %}

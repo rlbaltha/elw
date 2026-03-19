@@ -21,12 +21,12 @@ class MarkupType extends AbstractType
             ->add('name', TextType::class, [
                 'label'  => 'Name'
             ])
-            ->add('color', TextType::class, [
-                'label'  => 'Color'
-            ])
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'label' => ''
+            ])
+            ->add('color', TextType::class, [
+                'label'  => 'Color'
             ])
 
         ;
