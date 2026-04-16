@@ -349,6 +349,7 @@
                     window.open(url, location);
                 }
             });
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
     {# Simple table sort #}
@@ -371,10 +372,8 @@
             var count = $(this).children().length;
             if (count !== 0) {
                 $(this).parent().children(":first").removeClass('invisible')
-            }
-            ;
+            };
         });
-        $('[data-toggle="tooltip"]').tooltip();
     </script>
 {% endblock %}
 

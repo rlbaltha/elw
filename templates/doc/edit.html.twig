@@ -177,6 +177,7 @@
     {{ parent() }}
     <script>
         $('#doc_body').tinymce({
+            selector: 'textarea#custom-shortcut',
             height: 850,
             api_key: 'djv9sd5cglz5juyg74qpl35zvkwsgf1aj22n0cg9f57sq3nx',
             onboarding: false,
@@ -184,15 +185,41 @@
             // content_style: 'span.note { color:blue; background-color:white; border: #bababa solid 1px; border-radius: 10%;padding:4px; } span.highlight {background-color: hsl(60, 97%, 73%);}',
             plugins: [
                 // Core editing features
-                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', 'image', 'paste'
+                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', 'image', 'help',
             ],
-            toolbar: 'undo redo | fontfamily fontsize | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat',
+            toolbar: 'undo redo | fontfamily fontsize | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat | help',
             paste_data_images: true,
             setup: function(editor) {
                 editor.on('init', function (e) {
                     var wordCount = editor.plugins.wordcount.getCount();
                     const wordCountWrapper = document.getElementById('word-count');
                     wordCountWrapper.innerText = wordCount;
+                });
+                editor.addShortcut('alt+y', 'Add yellow highlight to selected text.', () => {
+                    editor.execCommand('hilitecolor', false , '#FFFF00');
+                });
+                editor.addShortcut('alt+n', 'Toggle to Insert Note', () => {
+                     document.getElementById("insert_value").focus();
+                });
+                editor.addShortcut('alt+m', 'Toggle to Markup', () => {
+                     document.getElementById("m_button1").focus();
+                });
+                editor.addShortcut('alt+s', 'Save the Document', () => {
+                    var editor = tinymce.activeEditor;
+                    var wordCount = editor.plugins.wordcount.getCount();
+                    $('#doc_wordcount').val(wordCount);
+                    $("#doc-form").submit(); // Submit the form
+                });
+                editor.addShortcut('alt+t', 'Toggle Title Editing', () => {
+                     $("fieldset").toggle();
+                     $("#doc_project").toggle();
+                     $("#doc_stage").toggle();
+                     $("#doc_access").toggle();
+                     $("#doc_wordcount").toggle();
+                     $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                     $(this).attr('aria-expanded', function (i, attr) {
+                     return attr == 'true' ? 'false' : 'true'
+                     });
                 });
                 editor.on('WordCountUpdate', function (e) {
                     var wordCount = editor.plugins.wordcount.getCount();
@@ -206,6 +233,7 @@
             }
         });
     </script>
+
     <script>
         {# Markup insert and tracking #}
         function getValues(range) {
@@ -324,106 +352,7 @@
                     $(this).children('.collapse').collapse('hide');
                 }
             );
-        // Accessibility speedkeys for doc editing
-        // function to set speedkey Alt+S for submitting a doc
-           document.addEventListener('keydown', function(event) {
-             const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === 's' || event.key === 's';
-             if (isModifier && isKey) {
-             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
-             submitdocform();
-            }
         });
-        // function to set speedkey Alt+N for inserting a note
-           document.addEventListener('keydown', function(event) {
-             const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === '1' || event.key === '1';
-             if (isModifier && isKey) {
-             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
-             document.getElementById("insert_value").focus();
-            }
-        });
-        // function to set speedkey Alt+M for inserting markup
-           document.addEventListener('keydown', function(event) {
-             const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === '2' || event.key === '2';
-             if (isModifier && isKey) {
-             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
-             document.getElementById("m_button1").focus();
-            }
-        });
-        // function to set speedkey Alt+T for inserting markup
-           document.addEventListener('keydown', function(event) {
-             const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-             const isKey = event.key === '3' || event.key === '3';
-             if (isModifier && isKey) {
-             event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
-             doctitletoggle();
-            }
-        });
-
-        });
-
-
-
-// A simple (but potentially imperfect) way to strip HTML tags and count
-function countWords(body) {
-    var countP = countPElementsInString(body);
-    var countLI = countLIElementsInString(body);
-    // Create a temporary div element to leverage the browser's DOM parsing
-    const div = document.createElement("div");
-    div.innerHTML = body;
-    const textOnly = div.textContent || div.innerText || "";
-    // Count words (basic split by whitespace)
-    const wordsArray = textOnly.trim().split(/\s+/);
-    const countW = (wordsArray.length === 1 && wordsArray[0] === "") ? 0 : wordsArray.length;
-    const wordCount = countP + countW + countLI;
-    alert(countW);
-    alert(countP);
-    alert(countLI);
-    return wordCount;
-}
-
-function countPElementsInString(body) {
-  // Create a new DOMParser instance
-  const parser = new DOMParser();
-  // Parse the HTML string into a Document object
-  const doc = parser.parseFromString(body, 'text/html');
-  // Select all 'p' elements within the parsed document
-  const paragraphs = doc.querySelectorAll('p');
-  let count = 0;
-    // 2. Iterate through the collected elements.
-    for (let i = 0; i < paragraphs.length; i++) {
-        const paragraph = paragraphs[i];
-        // 3. Get the text content and trim leading/trailing whitespace.
-        const textContent = paragraph.textContent.trim();
-        // 4. Check if the trimmed text content has a length greater than 0.
-        if (textContent.length > 0) {
-            count++;
-        }
-    }
-  // Return the number of found 'p' elements
-  return count -1;
-}
-
-function countLIElementsInString(body) {
-  // Create a new DOMParser instance
-  const parser = new DOMParser();
-  // Parse the HTML string into a Document object
-  const doc = parser.parseFromString(body, 'text/html');
-  // Select all 'p' elements within the parsed document
-  const li = doc.querySelectorAll('li');
-  // Return the number of found 'p' elements
-  let licount = 0
-  if (li.length == 0) {
-     licount = 0
-  }
-  else {
-     licount = li.length;
-  }
-  return licount;
-}
-
 </script>
 
 {% endblock %}
