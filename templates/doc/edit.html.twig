@@ -195,25 +195,25 @@
                     const wordCountWrapper = document.getElementById('word-count');
                     wordCountWrapper.innerText = wordCount;
                 });
-                editor.addShortcut('alt+y', 'Add yellow highlight to selected text.', () => {
+                editor.addShortcut('alt+shift+y', 'Add yellow highlight to selected text.', () => {
                     editor.execCommand('hilitecolor', false , '#FFFF00');
                 });
-                editor.addShortcut('alt+i+n', 'Toggle to Insert Note', () => {
+                editor.addShortcut('alt+shift+i', 'Toggle to Insert Note', () => {
                      document.getElementById("insert_value").focus();
                 });
-                editor.addShortcut('alt+m', 'Toggle to Markup', () => {
+                editor.addShortcut('alt+shift+m', 'Toggle to Markup', () => {
                      document.getElementById("m_button1").focus();
                 });
-                editor.addShortcut('alt+r', 'Toggle to Rubrics', () => {
+                editor.addShortcut('alt+shift+r', 'Toggle to Rubrics', () => {
                      document.getElementById("rubricheader1").focus();
                 });
-                editor.addShortcut('alt+s', 'Save the Document', () => {
+                editor.addShortcut('alt+shift+s', 'Save the Document', () => {
                     var editor = tinymce.activeEditor;
                     var wordCount = editor.plugins.wordcount.getCount();
                     $('#doc_wordcount').val(wordCount);
                     $("#doc-form").submit(); // Submit the form
                 });
-                editor.addShortcut('alt+t', 'Toggle Title Editing', () => {
+                editor.addShortcut('alt+shift+t', 'Toggle Title Editing', () => {
                      $("fieldset").toggle();
                      $("#doc_project").toggle();
                      $("#doc_stage").toggle();
