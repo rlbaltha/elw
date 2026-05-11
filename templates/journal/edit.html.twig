@@ -74,6 +74,15 @@
                     const wordCountWrapper = document.getElementById('word-count');
                     wordCountWrapper.innerText = wordCount;
                 });
+                editor.addShortcut('alt+shift+y', 'Add yellow highlight to selected text.', () => {
+                    editor.execCommand('hilitecolor', false , '#FFFF00');
+                });
+                editor.addShortcut('alt+shift+s', 'Save the Document', () => {
+                    var editor = tinymce.activeEditor;
+                    var wordCount = editor.plugins.wordcount.getCount();
+                    $('#journal_wordcount').val(wordCount);
+                    $("#doc-form").submit(); // Submit the form
+                });
                 editor.on('WordCountUpdate', function (e) {
                     var wordCount = editor.plugins.wordcount.getCount();
                     const wordCountWrapper = document.getElementById('word-count');
@@ -97,7 +106,6 @@
                 $('#journal_wordcount').val(wordCount);
                 $("#doc-form").submit(); // Submit the form
             }
-
 
             $("#submit-doc-form").click(function () {
                 submitdocform()
@@ -134,18 +142,6 @@
 
                 }
             }, 15000);
-
-            // Accessibility speedkeys for doc editing
-            // function to set speedkey Alt+S for submitting a doc
-            document.addEventListener('keydown', function(event) {
-                const isModifier = navigator.platform.match("Mac") ? event.metaKey : event.altKey;
-                const isKey = event.key === 's' || event.key === 's';
-                if (isModifier && isKey) {
-                    event.preventDefault(); // Prevent default browser actions (e.g., bookmarking)
-                    submitdocform();
-                }
-            });
-
         });
     </script>
 
