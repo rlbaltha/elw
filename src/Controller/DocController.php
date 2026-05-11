@@ -382,8 +382,9 @@ class DocController extends AbstractController
      * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
     public function pdf(Permissions $permissions, Request $request, Pdf $pdf)
-    {
-        $doc_html = $request->get('html2pdf');
+    {   $doc_html = "<head><meta name='description' content='This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.'></head><h1></h1><p class='small'>Note:  This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.</p>";
+        $doc_body = $request->get('html2pdf');
+        $doc_html .= $doc_body;
         $title = $request->get('title');
         $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
@@ -402,7 +403,7 @@ class DocController extends AbstractController
         $html = $this->renderView('doc/pdf.html.twig', [
             'doc_html' => $doc_html,
         ]);
-        $filename = 'PDF_of_' . $title_esc . '.pdf';
+        $filename = 'PDF_of_' . $title_esc . '(limited-accessibility).pdf';
         return new PdfResponse(
             $pdf->getOutputFromHtml($html),
             $filename
