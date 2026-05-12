@@ -42,10 +42,6 @@
             </div>
         </li>
     {% endif %}
-    <li class="nav-item">
-        <a class="nav-link toggle-inline" href="#" aria-label="toggle view"><span class="visually-hidden">Click to toggle the way the additional text is viewed.
-            The default view is most accessible.</span> Notes <span id="toggle">Popover</span></a>
-    </li>
 {% endblock %}
 
 {% block subnavright %}
@@ -109,8 +105,12 @@
                                     eLC</a>
                             </li>
                         {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link toggle-inline" href="#" aria-label="Toggle Inline or Popover View"><span class="visually-hidden">Click to toggle the way the additional text is viewed.
+            The inline (default) view is most accessible.</span><span id="toggle">Change to Popover View</span></a>
+                        </li>
                     </ul>
-                    <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
+                    <span class="ms-5 navbar-text popover-alert">This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                 </div>
             </div>
         </nav>
@@ -291,7 +291,7 @@
                                         </li>
                                     {% endif %}
                                 </ul>
-                                <span class="ms-5 navbar-text popover-alert">In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
+                                <span class="ms-5 navbar-text popover-alert">This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                             </div>
                         </div>
                     </nav>
@@ -547,8 +547,8 @@
                 });
 
                 function popover_toggle() {
-                    $('#toggle').text(($('#toggle').text() === 'Popover' ? 'Inline' : 'Popover'));
-                    $('.popover-alert').text(($('#toggle').text() === 'Inline' ? 'In this view, hover over highlighted text for additional information.' : 'In this view, inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
+                    $('#toggle').text(($('#toggle').text() === 'Change to Popover View' ? 'Change to Inline View' : 'Change to Popover View'));
+                    $('.popover-alert').text(($('#toggle').text() === 'Change to Inline View' ? 'This popover view is not designed for accessibility; hover over highlighted text for additional information.' : 'This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
                     $('.note').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
