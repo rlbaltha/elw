@@ -56,8 +56,10 @@
 
 
 {% block body %}
-    <div role="alert" class="alert alert-warning">
-        Our PDF files do not fully comply with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.
+    <div id="accessibility_notice" role="alert" class="alert alert-warning">
+        <a class="nav-link float-end" data-toggle="tooltip" data-placement="top" title="Close this notice" href="#" aria-label="Close notice"><i class="material-icons" aria-hidden="true" style="font-size:24px;">close</i></a>
+        <span class="small"> Our PDF files do not fully comply with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.</span><br/>
+        <span class="popover-alert small">This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
     </div>
     {# #################################### Original Doc ######################################################## #}
     {# #################################### Original Doc ######################################################## #}
@@ -105,12 +107,14 @@
                                     eLC</a>
                             </li>
                         {% endif %}
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link toggle-inline" href="#" aria-label="Toggle Inline or Popover View"><span class="visually-hidden">Click to toggle the way the additional text is viewed.
             The inline (default) view is most accessible.</span><span id="toggle">Change to Popover View</span></a>
                         </li>
                     </ul>
-                    <span class="ms-5 navbar-text popover-alert">This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
+
                 </div>
             </div>
         </nav>
@@ -291,7 +295,6 @@
                                         </li>
                                     {% endif %}
                                 </ul>
-                                <span class="ms-5 navbar-text popover-alert">This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.</span>
                             </div>
                         </div>
                     </nav>
@@ -604,7 +607,7 @@
                 $('.popover').hide();
 
                 $('.markup').mouseover(function () {
-                    if ($('#toggle').text() !== 'Popover') {
+                    if ($('#toggle').text() !== 'Change to Popover View') {
                         $('.popover').hide();
                         let id = "div[data-id='" + $(this).attr('data-id') + "']";
                         let offset = $(this).offset();
@@ -613,12 +616,12 @@
                 });
 
                 $('.popover').click(function () {
-                    if ($('#toggle').text() !== 'Popover') {
+                    if ($('#toggle').text() !== 'Change to Popover View') {
                         $('.popover').hide();
                     }
                 });
-                $('.marker-yellow').mouseover(function () {
-                    if ($('#toggle').text() !== 'Popover') {
+                $('.highlight').mouseover(function () {
+                    if ($('#toggle').text() !== 'Change to Popover View') {
                         $('.note').hide();
                         // let id = "span[data-id='" + $(this).attr('id') + "']";
                         // let offset = $(this).position();
@@ -628,8 +631,8 @@
                         $(this).next().show();
                     }
                 });
-                $('.marker-yellow').mouseout(function () {
-                    if ($('#toggle').text() !== 'Popover') {
+                $('.highlight').mouseout(function () {
+                    if ($('#toggle').text() !== 'Change to Popover View') {
                         $('.note').hide();
                         $('.popover').hide();
                     }
@@ -641,6 +644,12 @@
                     $('.doc-container').hide();
                     $(id).show();
                 });
+
+            $('#accessibility_notice').click(function () {
+                $(this).addClass("visually-hidden");
+            });
+
+
 
                 $('.doc-container, .popover-markup').removeClass('d-none');
                 $('.doc-container').hide();
