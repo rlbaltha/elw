@@ -99,18 +99,16 @@
 
 {% block toolnav %}{% endblock %}
 <div id="main-content" class="container-fluid pt-3 bg-light">
-    <div class="flash-messages" aria-live="assertive">
     {% for message in app.flashes('notice') %}
-        <div role="alert" class="alert alert-success">
+        <div aria-live="assertive" role="status" class="flash-messages alert alert-success">
             {{ message|raw }}
         </div>
     {% endfor %}
     {% for message in app.flashes('error') %}
-        <div role="alert" class="alert alert-danger">
+        <div aria-live="assertive" role="status" class="flash-messages alert alert-danger">
             {{ message|raw }}
         </div>
     {% endfor %}
-    </div>
     {% block body %}{% endblock %}
 </div>
 
