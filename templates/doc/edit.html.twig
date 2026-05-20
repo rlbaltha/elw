@@ -45,6 +45,8 @@
 
 {% block body %}
     <div class="row">
+        <div id="success-message" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
 
         <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
         <div id="save_error" class="alert alert-danger d-none">The autosave failed. Please copy your current work before closing and return to eLC to login again.</div>
@@ -259,6 +261,7 @@
 
         {# Note insert #}
         function note() {
+            $('#success-message').text("");
                  const selected_text = tinyMCE.activeEditor.selection.getContent();
                  const highlite_selected_text = '<span class="highlight">'+ selected_text + '</span>';
                  const note_value = document.getElementById("insert_value").value;
@@ -267,6 +270,10 @@
                  const insert_note = highlite_selected_text + note;
                  tinymce.activeEditor.insertContent(insert_note);
             $('#insert_value').val('');
+            setTimeout(() => {
+                $('#success-message').text("Note successfully inserted.");
+            }, 50);
+
         }
 
 

@@ -99,6 +99,7 @@
 
 {% block toolnav %}{% endblock %}
 <div id="main-content" class="container-fluid pt-3 bg-light">
+    <div class="flash-messages" aria-live="assertive">
     {% for message in app.flashes('notice') %}
         <div role="alert" class="alert alert-success">
             {{ message|raw }}
@@ -109,6 +110,7 @@
             {{ message|raw }}
         </div>
     {% endfor %}
+    </div>
     {% block body %}{% endblock %}
 </div>
 
