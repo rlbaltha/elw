@@ -51,7 +51,9 @@
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
+        "symfony/webpack-encore-bundle": "^2.4",
         "symfony/yaml": "5.4.*",
+        "tinymce/tinymce": "^8.5",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
