@@ -2208,25 +2208,26 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.10.6",
+            "version": "7.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "e7412b3180912c01650cc66647f18c1d1cbe9b94"
+                "reference": "c987f8ce84b8434fa430795eca0f3430663da72b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/e7412b3180912c01650cc66647f18c1d1cbe9b94",
-                "reference": "e7412b3180912c01650cc66647f18c1d1cbe9b94",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/c987f8ce84b8434fa430795eca0f3430663da72b",
+                "reference": "c987f8ce84b8434fa430795eca0f3430663da72b",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^2.3",
-                "guzzlehttp/psr7": "^2.8",
+                "guzzlehttp/promises": "^2.5",
+                "guzzlehttp/psr7": "^2.11",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
-                "symfony/deprecation-contracts": "^2.2 || ^3.0"
+                "symfony/deprecation-contracts": "^2.5 || ^3.0",
+                "symfony/polyfill-php80": "^1.24"
             },
             "provide": {
                 "psr/http-client-implementation": "1.0"
@@ -2315,7 +2316,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.10.6"
+                "source": "https://github.com/guzzle/guzzle/tree/7.11.0"
             },
             "funding": [
                 {
@@ -2331,24 +2332,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-01T13:06:22+00:00"
+            "time": "2026-06-02T12:40:51+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.4.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "09e8a212562fb1fb6a512c4156ed71525969d6c2"
+                "reference": "4360e982f87f5f258bf872d094647791db2f4c8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/09e8a212562fb1fb6a512c4156ed71525969d6c2",
-                "reference": "09e8a212562fb1fb6a512c4156ed71525969d6c2",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/4360e982f87f5f258bf872d094647791db2f4c8e",
+                "reference": "4360e982f87f5f258bf872d094647791db2f4c8e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5 || ^8.0"
+                "php": "^7.2.5 || ^8.0",
+                "symfony/deprecation-contracts": "^2.5 || ^3.0"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
@@ -2398,7 +2400,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.4.1"
+                "source": "https://github.com/guzzle/promises/tree/2.5.0"
             },
             "funding": [
                 {
@@ -2414,27 +2416,29 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-20T22:57:30+00:00"
+            "time": "2026-06-02T12:23:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.10.4",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "d2a1a094e396da8957e797489fddaf860c340cfc"
+                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/d2a1a094e396da8957e797489fddaf860c340cfc",
-                "reference": "d2a1a094e396da8957e797489fddaf860c340cfc",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/bbb5e61349fa5cb822b3e87842b951088b76b81f",
+                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.1 || ^2.0",
-                "ralouphie/getallheaders": "^3.0"
+                "ralouphie/getallheaders": "^3.0",
+                "symfony/deprecation-contracts": "^2.5 || ^3.0",
+                "symfony/polyfill-php80": "^1.24"
             },
             "provide": {
                 "psr/http-factory-implementation": "1.0",
@@ -2515,7 +2519,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.10.4"
+                "source": "https://github.com/guzzle/psr7/tree/2.11.0"
             },
             "funding": [
                 {
@@ -2531,7 +2535,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-29T12:59:07+00:00"
+            "time": "2026-06-02T12:30:48+00:00"
         },
         {
             "name": "knplabs/knp-components",
@@ -4140,16 +4144,16 @@
         },
         {
             "name": "pontedilana/php-weasyprint",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pontedilana/php-weasyprint.git",
-                "reference": "41fab3fb87a41dcb6c6587ef36e2e87017deb8fb"
+                "reference": "eaadec8389ce3e3d43f1fe6bbca415c06262a262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pontedilana/php-weasyprint/zipball/41fab3fb87a41dcb6c6587ef36e2e87017deb8fb",
-                "reference": "41fab3fb87a41dcb6c6587ef36e2e87017deb8fb",
+                "url": "https://api.github.com/repos/pontedilana/php-weasyprint/zipball/eaadec8389ce3e3d43f1fe6bbca415c06262a262",
+                "reference": "eaadec8389ce3e3d43f1fe6bbca415c06262a262",
                 "shasum": ""
             },
             "require": {
@@ -4188,7 +4192,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pontedilana/php-weasyprint/issues",
-                "source": "https://github.com/pontedilana/php-weasyprint/tree/2.6.0"
+                "source": "https://github.com/pontedilana/php-weasyprint/tree/2.7.0"
             },
             "funding": [
                 {
@@ -4200,7 +4204,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2026-05-25T14:49:19+00:00"
+            "time": "2026-06-03T07:20:31+00:00"
         },
         {
             "name": "pontedilana/weasyprint-bundle",
@@ -10691,16 +10695,16 @@
         },
         {
             "name": "tinymce/tinymce",
-            "version": "8.5.1",
+            "version": "8.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tinymce/tinymce-dist.git",
-                "reference": "265989e814097c17f3196d33244a778c4925e80b"
+                "reference": "4ec295845c55ee20abd551c98bc42f1079c43c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/265989e814097c17f3196d33244a778c4925e80b",
-                "reference": "265989e814097c17f3196d33244a778c4925e80b",
+                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/4ec295845c55ee20abd551c98bc42f1079c43c83",
+                "reference": "4ec295845c55ee20abd551c98bc42f1079c43c83",
                 "shasum": ""
             },
             "type": "component",
@@ -10744,9 +10748,9 @@
                 "wysiwyg"
             ],
             "support": {
-                "source": "https://github.com/tinymce/tinymce-dist/tree/8.5.1"
+                "source": "https://github.com/tinymce/tinymce-dist/tree/8.6.0"
             },
-            "time": "2026-05-19T23:39:20+00:00"
+            "time": "2026-06-03T03:28:15+00:00"
         },
         {
             "name": "twig/extra-bundle",
