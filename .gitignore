@@ -23,9 +23,3 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
-
-###> symfony/webpack-encore-bundle ###
-/node_modules/
-npm-debug.log
-yarn-error.log
-###< symfony/webpack-encore-bundle ###

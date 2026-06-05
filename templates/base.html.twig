@@ -10,7 +10,6 @@
     <meta name="msapplication-TileImage"
           content="https://brand.uga.edu/wp-content/uploads/cropped-favicon-144x144-1-270x270.png"/>
     {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -120,7 +119,6 @@
 </body>
 
 {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
     <script src="https://code.jquery.com/jquery-4.0.0.js"
             integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.js"
@@ -130,8 +128,6 @@
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"></script>
     <script src="{{ asset('js/sessiontimeout.js') }}">
-    <script src="{{ asset('build/tinymce/tinymce.js') }}" referrerpolicy="origin" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 
 {% block timeout %}
     <script type="module" src="{{ asset('js/sessiontimeout.js') }}">
