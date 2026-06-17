@@ -1,10 +1,6 @@
 {# twig template for ajax fragment #}
 
 <div id="comment{{ doc.id }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('css/editor_document_v2.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('style.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('ckeditor5/ckeditor5.css') }}">
-
     <style>
         .editor-container__editor {
             min-width: 100% !important;
@@ -37,6 +33,9 @@
             setup: function (editor) {
             }
         });
+        setTimeout(() => {
+            $("#comment_journal_body_ifr").focus();
+        }, 500);
 
         $('.ajax_submit').click(function(e) {
             tinyMCE.triggerSave();

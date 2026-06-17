@@ -87,6 +87,9 @@
     </script>
     <script>
         $(document).ready(function () {
+            setTimeout(() => {
+                $("#comment_type_1").focus();
+            }, 500);
             let access = "{{ doc.access }}";
             let role = "{{ role }}";
             if (role === "Student") {

@@ -109,7 +109,7 @@
                     <div class="card-header">
                         <h2 class="d-inline">{{ doc.title }}</h2>
                         {% if app.user==doc.user %}
-                            <a aria-label="Edit Journal entry {{ doc.title }}"
+                            <a id="main" aria-label="Edit Journal entry {{ doc.title }}"
                                class="btn btn-primary btn-sm float-end"
                                href="{{ course_path('journal_edit', {'id': doc.id}) }}">Edit</a>
                         {% endif %}
@@ -217,7 +217,9 @@
         {{ parent() }}
         <script>
             $(document).ready(function () {
-
+                setTimeout(() => {
+                    $("#main").focus();
+                }, 500);
                 $(".ltiresult").each(function () {
                     var request = $(this).attr('data-request')
                     var target = '#' + $(this).attr('data-id')

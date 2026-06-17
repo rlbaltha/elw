@@ -79,7 +79,7 @@
                         {% if app.user == doc.user %}
                             <li class="nav-item">
                                 <a aria-label="Edit Document {{ doc.title }}" class="nav-link"
-                                   href="{{ course_path('doc_edit', {'id': doc.id}) }}">Edit</a>
+                                   href="{{ course_path('doc_edit', {'id': doc.id, 'type':type}) }}">Edit</a>
                             </li>
                         {% elseif doc.access!='Review' %}
                             <li class="nav-item">
@@ -271,7 +271,7 @@
                                     {% if app.user == review.user %}
                                         <li class="nav-item">
                                             <a aria-label="Edit Document {{ doc.title }}" class="nav-link"
-                                               href="{{ course_path('doc_edit', {'id': review.id}) }}">Edit</a>
+                                               href="{{ course_path('doc_edit', {'id': review.id, 'type': 'review'}) }}">Edit</a>
                                         </li>
                                     {% endif %}
                                     <li class="nav-item">
@@ -559,6 +559,7 @@
                     $('#toggle').text(($('#toggle').text() === 'Change to Popover View' ? 'Change to Inline View' : 'Change to Popover View'));
                     $('.popover-alert').text(($('#toggle').text() === 'Change to Inline View' ? 'This popover view is not designed for accessibility; hover over highlighted text for additional information.' : 'This inline view is designed for accessibility. Inserted notes are displayed inline and markup information is displayed at the bottom of the document as footnotes.'));
                     $('.note').toggle();
+                    $('.super').toggle();
                     $('.popover').hide();
                     $('.markup_div').toggle();
                 };
@@ -582,13 +583,6 @@
                     $(this).prev().append(note);
                 });
 
-                $('.highlight').each(function (index) {
-                    let span_number = index + 1;
-                    $(this).attr('id', 'h' + span_number);
-                    let span_append = '<span class="super">' + span_number + '</span>';
-                    $(this).append(span_append);
-                    $('.super').hide();
-                });
 
                 $('.markup_div').hide()
                 $('.document-editor').each(function (index) {
@@ -599,7 +593,7 @@
                         let markup_inline = $(id).children(".popover-title").text();
                         let markup_number = '<span class="super" style="color:black" >' + markup_index + '</span>';
                         let span_append = '<span class="note markupbody">' + markup_inline + markup_number + '</span>';
-                        $(this).after(span_append);
+                        $(this).next('span').after(markup_number);
                         let style = $(id).children(".popover-title").css("background-color");
                         let markuptitle = "<span style='padding:.2em; color:#fff; background-color:" + style + "'>" + $(id).children(".popover-title").text() + "</span>";
                         let markupbody = $(id).children(".popover-content").html();

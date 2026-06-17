@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Document Edit - {{ doc.title }}{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -44,7 +44,7 @@
 
 {% block body %}
     <div class="row">
-        <div id="success-message" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div id="success-message" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
 
         <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
@@ -240,69 +240,7 @@
                 });
                 }
                 });
-
-        {#$('#doc_body').tinymce({#}
-        {#    license_key: 'gpl',#}
-        {#    selector: 'textarea#custom-shortcut',#}
-        {#    height: 850,#}
-        {#    onboarding: false,#}
-        {#    content_css: '{{ asset('css/editor_document_v2.css')}}',#}
-        {#    // content_style: 'span.note { color:blue; background-color:white; border: #bababa solid 1px; border-radius: 10%;padding:4px; } span.highlight {background-color: hsl(60, 97%, 73%);}',#}
-        {#    plugins: [#}
-        {#        // Core editing features#}
-        {#        'anchor', 'autolink', 'charmap', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', 'image', 'help',#}
-        {#    ],#}
-        {#    menubar: 'file edit view insert format table help',#}
-        {#    removed_menuitems: 'newdocument pastetext codesample anchor codeformat ',#}
-        {#    toolbar: 'undo redo | fontfamily fontsize styles | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat | help',#}
-        {#    paste_data_images: true,#}
-        {#    setup: function(editor) {#}
-        {#        editor.on('init', function (e) {#}
-        {#            var wordCount = editor.plugins.wordcount.getCount();#}
-        {#            const wordCountWrapper = document.getElementById('word-count');#}
-        {#            wordCountWrapper.innerText = wordCount;#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+y', 'Add yellow highlight to selected text.', () => {#}
-        {#            editor.execCommand('hilitecolor', false , '#FFFF00');#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+i', 'Toggle to Insert Note', () => {#}
-        {#             document.getElementById("insert_value").focus();#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+m', 'Toggle to Markup', () => {#}
-        {#             document.getElementById("m_button1").focus();#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+r', 'Toggle to Rubrics', () => {#}
-        {#             document.getElementById("rubricheader1").focus();#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+s', 'Save the Document', () => {#}
-        {#            var editor = tinymce.activeEditor;#}
-        {#            var wordCount = editor.plugins.wordcount.getCount();#}
-        {#            $('#doc_wordcount').val(wordCount);#}
-        {#            $("#doc-form").submit(); // Submit the form#}
-        {#        });#}
-        {#        editor.addShortcut('alt+shift+t', 'Toggle Title Editing', () => {#}
-        {#             $("fieldset").toggle();#}
-        {#             $("#doc_project").toggle();#}
-        {#             $("#doc_stage").toggle();#}
-        {#             $("#doc_access").toggle();#}
-        {#             $("#doc_wordcount").toggle();#}
-        {#             $('#settings_arrows').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');#}
-        {#             $(this).attr('aria-expanded', function (i, attr) {#}
-        {#             return attr == 'true' ? 'false' : 'true'#}
-        {#             });#}
-        {#        });#}
-        {#        editor.on('WordCountUpdate', function (e) {#}
-        {#            var wordCount = editor.plugins.wordcount.getCount();#}
-        {#            const wordCountWrapper = document.getElementById('word-count');#}
-        {#            wordCountWrapper.innerText = wordCount;#}
-        {#            if (editor.isDirty()) {#}
-        {#                const editorStatus = document.getElementById('editor-status');#}
-        {#                editorStatus.innerText = 'changed';#}
-        {#            }#}
-        {#        });#}
-        {#    }#}
-        {#});#}
-    </script>
+   </script>
 
     <script>
         {# Markup insert and tracking #}
@@ -317,8 +255,12 @@
         function insert_markup(id, name, color) {
             const selected_text = tinyMCE.activeEditor.selection.getContent();
             const markup_color = 'markup_'+color;
-            const content = '<span data-id="' + id + '" title="' + name + '" class="markup '+ markup_color +'">'+ selected_text + '</span>';
+            const content = '<span data-id="' + id + '" title="' + name + '" class="markup '+ markup_color +'">'+ selected_text + '</span>' + '<span class="note markupbody">'+ name + '</span>';
             tinymce.activeEditor.insertContent(content);
+            setTimeout(() => {
+                $('#success-message').text("Markup successfully inserted.");
+            }, 50);
+
 
         }
 

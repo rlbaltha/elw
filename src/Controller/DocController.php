@@ -227,7 +227,7 @@ class DocController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($doc);
         $entityManager->flush();
-        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
+        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid, 'type' => 'doc']);
 
     }
 
@@ -268,7 +268,7 @@ class DocController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
+        return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid, 'type' => 'review']);
     }
 
     /**
@@ -283,7 +283,7 @@ class DocController extends AbstractController
         if ($doc->getAgsResultId() != null) {
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
-
+        $type =  ($doc->getOrigin()) ? 'review' : 'doc';
         $role = $permissions->getCourseRole($courseid);
         if ($doc->getProject()) {
             $markupsets = $doc->getProject()->getMarkupsets();
@@ -297,6 +297,7 @@ class DocController extends AbstractController
 
         return $this->render('doc/show.html.twig', [
             'doc' => $doc,
+            'type' => $type,
             'course' => $course,
             'scores' => $scores,
             'markupsets' => $markupsets,
@@ -411,9 +412,9 @@ class DocController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/{courseid}/edit", name="doc_edit", methods={"GET","POST"})
+     * @Route("/{id}/{courseid}/{type}/edit", name="doc_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid, string $type): Response
     {
         $allowed = ['Instructor', 'Student'];
         $username = $this->getUser()->getUsername();
@@ -436,6 +437,13 @@ class DocController extends AbstractController
         $form->handleRequest($request);
         $markupsets = $doc->getProject()->getMarkupsets();
         $now = new \DateTime('now');
+        if ($type == 'review') {
+            $page_title = "Edit Review: " . $doc->getTitle();
+        }
+        else {
+            $page_title = "Document Edit: " . $doc->getTitle();
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             if ($role == 'Instructor' and $doc->getAccess()=='Private' and $doc->getOrigin()) {
                 $doc->setReleasedate($now);
@@ -456,6 +464,7 @@ class DocController extends AbstractController
         }
         return $this->render('doc/edit.html.twig', [
             'doc' => $doc,
+            'page_title' => $page_title,
             'markupsets' => $markupsets,
             'form' => $form->createView(),
         ]);
