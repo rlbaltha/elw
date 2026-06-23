@@ -193,6 +193,31 @@
             menubar: 'file edit view insert format table help',
             removed_menuitems: 'newdocument pastetext codesample anchor codeformat ',
             toolbar: 'undo redo | fontfamily fontsize styles | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat | help',
+            content_style: 'p { text-indent: 40px; line-height: 1.6; }',
+            style_formats: [
+                { title: 'Styles', items: [
+                    { title: 'Paragraph', format: 'p' },
+                    { title: 'Blockquote', format: 'blockquote' },
+                    { title: 'Heading 1', format: 'h1' },
+                    { title: 'Heading 2', format: 'h2' },
+                    { title: 'Heading 3', format: 'h3' },
+                    { title: 'Heading 4', format: 'h4' },
+                    ]},
+                { title: 'Format', items: [
+                    { title: 'Bold', format: 'bold' },
+                    { title: 'Italic', format: 'italic' },
+                    { title: 'Underline', format: 'underline' },
+                    { title: 'Strikethrough', format: 'strikethrough' },
+                    { title: 'Superscript', format: 'superscript' },
+                    { title: 'Subscript', format: 'subscript' },
+                    ]},
+                { title: 'Align', items: [
+                    { title: 'Left', format: 'alignleft' },
+                    { title: 'Center', format: 'aligncenter' },
+                    { title: 'Right', format: 'alignright' },
+                    { title: 'Justify', format: 'alignjustify' }
+                     ]},
+            ],
             paste_data_images: true,
             setup: function(editor) {
                 editor.on('init', function (e) {
