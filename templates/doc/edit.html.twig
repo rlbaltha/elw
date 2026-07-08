@@ -39,6 +39,9 @@
     <li class="nav-item">
         <a data-bs-toggle="modal" data-bs-target="#helpModal" href="javascript:void(0);" class="nav-link">Document Help</a>
     </li>
+    <li class="nav-item">
+        <a data-bs-toggle="modal" data-bs-target="#accessibilityModal" href="javascript:void(0);" class="nav-link">Accessibility Help</a>
+    </li>
 {% endblock %}
 
 
@@ -170,6 +173,33 @@
             </div>
         </div>
     </div>
+
+        <!-- Accessibility Modal -->
+    <div class="modal fade" id="accessibilityModal" tabindex="-1" role="dialog" aria-labelledby="accessibilityModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="accessibiltyModalLabel">Accessibility Help</h3>
+                    <button type="button" data-toggle="tooltip" data-placement="top" title="close help" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                </div>
+                <div class="modal-body">
+                    <p>To open the Help dialog with the list of all accessibility options, press alt + 0 (Windows/Linux) or Option + 0 (Mac)</p>
+                    <p>eLW includes the following additional shortcuts:</p>
+                    <ul>
+                    <li>Alt + shift + s --> <strong>save</strong></li>
+                    <li>Alt + shift + i --> <strong>insert note</strong></li>
+                    <li>Alt + shift + m --> <strong>markup</strong></li>
+                    <li>Alt + shift + t --> <strong>toggle the document settings</strong></li>
+                    <li>Alt + shift + y --> <strong>highlight the text yellow</strong></li>
+                    <li>Alt + shift + r --> <strong>open the rubric</strong></li>
+                    <li>Shift + f10 --> <strong>pop-up menu for tables</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block head %}
