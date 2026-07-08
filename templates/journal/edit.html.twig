@@ -66,6 +66,7 @@
             license_key: 'gpl',
             height: 800,
             onboarding: false,
+            content_css: '{{ asset('css/editor_document_v2.css')}}',
             plugins: [
                 // Core editing features
                 'anchor', 'autolink', 'charmap', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', 'image', 'help'
@@ -73,10 +74,10 @@
             menubar: 'file edit view insert format table help',
             removed_menuitems: 'newdocument pastetext codesample anchor codeformat ',
             toolbar: 'undo redo | fontfamily fontsize styles | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat | help',
-            content_style: 'p { text-indent: 40px; line-height: 1.6; }',
             style_formats: [
                 { title: 'Styles', items: [
                         { title: 'Paragraph', format: 'p' },
+                        { title: 'Hanging Indent', block: 'p', classes: 'doc_hanging_indent' },
                         { title: 'Blockquote', format: 'blockquote' },
                         { title: 'Heading 1', format: 'h1' },
                         { title: 'Heading 2', format: 'h2' },

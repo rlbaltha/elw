@@ -193,10 +193,10 @@
             menubar: 'file edit view insert format table help',
             removed_menuitems: 'newdocument pastetext codesample anchor codeformat ',
             toolbar: 'undo redo | fontfamily fontsize styles | bold italic forecolor backcolor underline strikethrough | link image media table  |  align lineheight | checklist numlist bullist indent outdent |  removeformat | help',
-            content_style: 'p { text-indent: 40px; line-height: 1.6; }',
             style_formats: [
                 { title: 'Styles', items: [
                     { title: 'Paragraph', format: 'p' },
+                    { title: 'Hanging Indent', block: 'p', classes: 'doc_hanging_indent' },
                     { title: 'Blockquote', format: 'blockquote' },
                     { title: 'Heading 1', format: 'h1' },
                     { title: 'Heading 2', format: 'h2' },

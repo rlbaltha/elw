@@ -4,7 +4,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <!--
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    -->
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/editor_document_v2.css') }}">
 {% endblock %}
 
 {% block subnav %}
