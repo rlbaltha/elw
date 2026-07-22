@@ -148,24 +148,9 @@ a {
     overflow: auto;
 }
 
-p.doc_hanging_indent {
-    text-indent:-0.5in;
-    margin-left:0.5in;
-}
-
 .doc_header {text-align:left;}
 
 .doc_wc {text-align:center;}
-
-/*
-.doc_block_quote {margin-left:0.5in;}
- */
-
-/*
-p.doc_paragraph_indent {
-    text-indent:0.5in;
-}
-*/
 
 
 p {
@@ -173,15 +158,14 @@ p {
     line-height: 1.6;
 }
 
-/*
-.doc_single_space {
-    line-height: 120%;
+blockquote {
+    margin-left:0.5in;
 }
 
-.doc_double_space {
-    line-height: 200%;
+p.doc_hanging_indent {
+    text-indent:-0.5in;
+    margin-left:0.5in;
 }
-*/
 
 /* diff display */
 del.diffdel {color:maroon}
