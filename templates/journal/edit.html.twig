@@ -31,6 +31,9 @@
             <p class="navbar-text">Journal entries that have end comments or grades cannot be deleted.</p>
         {% endif %}
     </li>
+    <li class="nav-item">
+        <a data-bs-toggle="modal" data-bs-target="#accessibilityModal" href="javascript:void(0);" class="nav-link">Accessibility Help</a>
+    </li>
 {% endblock %}
 
 
@@ -52,6 +55,27 @@
                 closing and return to eLC to login again.
             </div>
             {{ include('doc/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+    </div>
+
+    <!-- Accessibility Modal -->
+    <div class="modal fade" id="accessibilityModal" tabindex="-1" role="dialog" aria-labelledby="accessibilityModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="accessibiltyModalLabel">Accessibility Help</h3>
+                    <button type="button" data-toggle="tooltip" data-placement="top" title="close help" class="btn-close" data-bs-dismiss="modal" aria-label="Close Help"></button>
+                </div>
+                <div class="modal-body">
+                    <p>To open the Help dialog with the list of all accessibility options, press alt + 0 (Windows/Linux) or Option + 0 (Mac)</p>
+                    <p>eLW includes the following additional shortcuts:</p>
+                    <ul>
+                        <li>Alt + shift + s --> <strong>save</strong></li>
+                        <li>Alt + shift + y --> <strong>highlight the text yellow</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
