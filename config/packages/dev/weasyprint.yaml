@@ -1,0 +1,5 @@
+weasyprint:
+  pdf:
+    enabled:    true
+    binary:     /usr/bin/weasyprint
+    options:    []
