@@ -21,6 +21,8 @@ use Doctrine\Persistence\ManagerRegistry;
 //use Knp\Snappy\Pdf;
 use Pontedilana\PhpWeasyPrint\Pdf;
 use Pontedilana\WeasyprintBundle\WeasyPrint\Response\PdfResponse;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 
@@ -383,7 +385,16 @@ class DocController extends AbstractController
      * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
     public function pdf(Permissions $permissions, Request $request, Pdf $pdf)
-    {   $doc_html = "<head><meta name='description' content='This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.'></head><h1></h1><p class='small'>Note:  This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.</p>";
+    {
+        // Configure Dompdf Options
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->set('isRemoteEnabled', true); // Allow loading external images/CSS
+
+        // Instantiate Dompdf
+        $dompdf = new Dompdf($pdfOptions);
+
+        $doc_html = "<head><meta name='description' content='This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.'></head><h1></h1><p class='small'>Note:  This file does not fully conform with all applicable guidelines for accessible digital documents. For the most accessible experience, read the contents in the web browser.</p>";
         $doc_body = $request->get('html2pdf');
         $doc_html .= $doc_body;
         $title = $request->get('title');
@@ -405,10 +416,24 @@ class DocController extends AbstractController
             'doc_html' => $doc_html,
         ]);
         $filename = 'PDF_of_' . $title_esc . '(limited-accessibility).pdf';
-        return new PdfResponse(
-            $pdf->getOutputFromHtml($html),
-            $filename
-        );
+
+        // 4. Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup Paper Size and Orientation
+        $dompdf->setPaper('letter', 'portrait');
+
+        // 5. Render the HTML as PDF
+        $dompdf->render();
+
+        // 6. Return as a Symfony Response (Stream to browser or force download)
+        $output = $dompdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"', // Use 'attachment' to force download
+        ]);
+
     }
 
     /**

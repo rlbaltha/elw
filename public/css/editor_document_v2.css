@@ -4,6 +4,11 @@ html  {
     background-color: white;
 }
 
+@page { margin-left: 0px; margin-right: 0px; margin-top: 1in; margin-bottom: 1in;}
+@page :first {margin: 0px;}
+
+body { margin-left: 0px; margin-right: 0px; margin-top: 0px; margin-top: 0px;}
+
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
     div.document-editor {
