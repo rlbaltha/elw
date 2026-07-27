@@ -18,8 +18,6 @@ use Caxy\HtmlDiff\HtmlDiff;
 //use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Persistence\ManagerRegistry;
-//use Knp\Snappy\Pdf;
-use Pontedilana\PhpWeasyPrint\Pdf;
 use Pontedilana\WeasyprintBundle\WeasyPrint\Response\PdfResponse;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -384,7 +382,7 @@ class DocController extends AbstractController
     /**
      * @Route("/pdf", name="doc_pdf", methods={"POST"})
      */
-    public function pdf(Permissions $permissions, Request $request, Pdf $pdf)
+    public function pdf(Permissions $permissions, Request $request)
     {
         // Configure Dompdf Options
         $pdfOptions = new Options();
