@@ -25,9 +25,7 @@ use Dompdf\Options;
 
 
 
-/**
- * @Route("/doc")
- */
+#[Route(path: '/doc')]
 class DocController extends AbstractController
 {
     /** @var RequestStack */
@@ -43,9 +41,7 @@ class DocController extends AbstractController
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @Route("/{courseid}/{findtype}/index", name="doc_index", methods={"GET"}, defaults={"findtype":"MyDocs"})
-     */
+    #[Route(path: '/{courseid}/{findtype}/index', name: 'doc_index', methods: ['GET'], defaults: ['findtype' => 'MyDocs'])]
     public function index(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
     {
         $allowed = ['Student', 'Instructor'];
@@ -95,10 +91,10 @@ class DocController extends AbstractController
 
     /**
      *  Release All Hidden
-     * @Route("/release_all_hidden/{courseid}/{findtype}" , name="release_all_hidden")
      *
      */
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype)
+    #[Route(path: '/release_all_hidden/{courseid}/{findtype}', name: 'release_all_hidden')]
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -131,9 +127,7 @@ class DocController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{courseid}/{findtype}/{userid}/byuser", name="doc_byuser", methods={"GET"}, defaults={"findtype":"MyDocs"})
-     */
+    #[Route(path: '/{courseid}/{findtype}/{userid}/byuser', name: 'doc_byuser', methods: ['GET'], defaults: ['findtype' => 'MyDocs'])]
     public function byuser(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
     {
         $findtype = 'byuser';
@@ -168,9 +162,7 @@ class DocController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/{findtype}/{projectid}/byproject", name="doc_byproject", methods={"GET"}, defaults={"findtype":"byproject"})
-     */
+    #[Route(path: '/{courseid}/{findtype}/{projectid}/byproject', name: 'doc_byproject', methods: ['GET'], defaults: ['findtype' => 'byproject'])]
     public function byProject(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, string $courseid, string $projectid): Response
     {
         $findtype = 'byproject';
@@ -205,10 +197,8 @@ class DocController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{courseid}/{projectid}/new", name="doc_new", methods={"GET","POST"})
-     */
-    public function new(Request $request, Permissions $permissions, string $courseid, string $projectid): Response
+    #[Route(path: '/{courseid}/{projectid}/new', name: 'doc_new', methods: ['GET', 'POST'])]
+    public function new(Permissions $permissions, string $courseid, string $projectid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -231,10 +221,8 @@ class DocController extends AbstractController
 
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/review", name="doc_review", methods={"GET","POST"})
-     */
-    public function review(Request $request, Permissions $permissions, $courseid, $docid): Response
+    #[Route(path: '/{courseid}/{docid}/review', name: 'doc_review', methods: ['GET', 'POST'])]
+    public function review(Permissions $permissions, $courseid, $docid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -271,10 +259,8 @@ class DocController extends AbstractController
         return $this->redirectToRoute('doc_edit', ['id' => $doc->getId(), 'courseid' => $courseid, 'type' => 'review']);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/{target}/show", name="doc_show", methods={"GET"}, defaults={"target" = "0" })
-     */
-    public function show(Doc $doc, string $courseid, Permissions $permissions, Request $request, Lti $lti, string $target): Response
+    #[Route(path: '/{id}/{courseid}/{target}/show', name: 'doc_show', methods: ['GET'], defaults: ['target' => '0'])]
+    public function show(Doc $doc, string $courseid, Permissions $permissions, Lti $lti, string $target): Response
     {
         $permissions->isAllowedToView($courseid, $doc);
 
@@ -306,9 +292,7 @@ class DocController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id1}/{id2}/{courseid}/{order}/diff", name="doc_diff", methods={"GET"}, defaults={"order" = "0" })
-     */
+    #[Route(path: '/{id1}/{id2}/{courseid}/{order}/diff', name: 'doc_diff', methods: ['GET'], defaults: ['order' => '0'])]
     public function diff(string $id1, string $id2, string $courseid, string $order, Permissions $permissions): Response
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -337,10 +321,8 @@ class DocController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{courseid}/{docid}/{source}/ags_score_view", name="ags_score_view", methods={"GET"})
-     */
-    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Request $request, Lti $lti, string $source): Response
+    #[Route(path: '/{courseid}/{docid}/{source}/ags_score_view', name: 'ags_score_view', methods: ['GET'])]
+    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Lti $lti, string $source): Response
     {
         $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
         $role = $permissions->getCourseRole($courseid);
@@ -361,28 +343,25 @@ class DocController extends AbstractController
     }
 
 //    /**
-//     * @Route("/{id}/{courseid}/doc_display", name="doc_display", methods={"GET"})
-//     */
-//    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
-//    {
-//        $permissions->isAllowedToView($courseid, $doc);
-//        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-//        if ($doc->getProject()->getMarkupsets()) {
-//            $markupsets = $doc->getProject()->getMarkupsets();
-//        } else {
-//            $markupsets = $course->getMarkupsets();
-//        }
-//        return $this->render('doc/pdf.html.twig', [
-//            'doc' => $doc,
-//            'markupsets' => $markupsets,
-//        ]);
-//
-//    }
-
-    /**
-     * @Route("/pdf", name="doc_pdf", methods={"POST"})
-     */
-    public function pdf(Permissions $permissions, Request $request)
+    //     * @Route("/{id}/{courseid}/doc_display", name="doc_display", methods={"GET"})
+    //     */
+    //    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
+    //    {
+    //        $permissions->isAllowedToView($courseid, $doc);
+    //        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+    //        if ($doc->getProject()->getMarkupsets()) {
+    //            $markupsets = $doc->getProject()->getMarkupsets();
+    //        } else {
+    //            $markupsets = $course->getMarkupsets();
+    //        }
+    //        return $this->render('doc/pdf.html.twig', [
+    //            'doc' => $doc,
+    //            'markupsets' => $markupsets,
+    //        ]);
+    //
+    //    }
+    #[Route(path: '/pdf', name: 'doc_pdf', methods: ['POST'])]
+    public function pdf(Permissions $permissions, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         // Configure Dompdf Options
         $pdfOptions = new Options();
@@ -427,16 +406,14 @@ class DocController extends AbstractController
         // 6. Return as a Symfony Response (Stream to browser or force download)
         $output = $dompdf->output();
 
-        return new Response($output, 200, [
+        return new Response($output, \Symfony\Component\HttpFoundation\Response::HTTP_OK, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"', // Use 'attachment' to force download
         ]);
 
     }
 
-    /**
-     * @Route("/{id}/{courseid}/{type}/edit", name="doc_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/{courseid}/{type}/edit', name: 'doc_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid, string $type): Response
     {
         $allowed = ['Instructor', 'Student'];
@@ -496,9 +473,9 @@ class DocController extends AbstractController
 
     /**
      * Saves via AJAX
-     * @Route("/{courseid}/{id}/autosave", name="doc_autosave", methods={"POST"})
      */
-    public function autosave(Request $request, Permissions $permissions, Doc $doc, string $courseid)
+    #[Route(path: '/{courseid}/{id}/autosave', name: 'doc_autosave', methods: ['POST'])]
+    public function autosave(Request $request, Permissions $permissions, Doc $doc, string $courseid): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -520,10 +497,8 @@ class DocController extends AbstractController
         return new JsonResponse($return);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/access", name="doc_access", methods={"GET","POST"})
-     */
-    public function access(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
+    #[Route(path: '/{id}/{courseid}/access', name: 'doc_access', methods: ['GET', 'POST'])]
+    public function access(Permissions $permissions, Doc $doc, string $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -537,9 +512,7 @@ class DocController extends AbstractController
         return $this->redirectToRoute('doc_show', ['id' => $doc->getId(), 'courseid' => $courseid, 'target' => $doc->getId()]);
     }
 
-    /**
-     * @Route("/{courseid}/{id}/delete", name="doc_delete", methods={"POST"})
-     */
+    #[Route(path: '/{courseid}/{id}/delete', name: 'doc_delete', methods: ['POST'])]
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];

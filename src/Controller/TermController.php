@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/term")
- */
+#[Route(path: '/term')]
 class TermController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -24,9 +22,7 @@ class TermController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/", name="term_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'term_index', methods: ['GET'])]
     public function index(TermRepository $termRepository): Response
     {
         return $this->render('term/index.html.twig', [
@@ -34,9 +30,7 @@ class TermController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="term_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'term_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $term = new Term();
@@ -58,9 +52,7 @@ class TermController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/edit", name="term_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'term_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Term $term): Response
     {
         $form = $this->createForm(TermType::class, $term);
@@ -79,10 +71,8 @@ class TermController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/default", name="term_default", methods={"GET"})
-     */
-    public function default(string $id)
+    #[Route(path: '/{id}/default', name: 'term_default', methods: ['GET'])]
+    public function default(string $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $terms = $this->doctrine->getManager()->getRepository('App:Term')->findAll();
         foreach ($terms as &$archiveterm) {
@@ -98,9 +88,7 @@ class TermController extends AbstractController
         return $this->redirectToRoute('term_index');
     }
 
-    /**
-     * @Route("/{id}", name="term_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'term_delete', methods: ['POST'])]
     public function delete(Request $request, Term $term): Response
     {
         if ($this->isCsrfTokenValid('delete'.$term->getId(), $request->request->get('_token'))) {

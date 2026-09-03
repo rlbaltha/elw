@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @Route("/markup")
- */
+#[Route(path: '/markup')]
 class MarkupController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -25,9 +23,7 @@ class MarkupController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/{markupsetid}/new", name="markup_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/{markupsetid}/new', name: 'markup_new', methods: ['GET', 'POST'])]
     public function new(Request $request, $markupsetid): Response
     {
         $username = $this->getUser()->getUsername();
@@ -55,9 +51,7 @@ class MarkupController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/edit", name="markup_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'markup_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Markup $markup): Response
     {
         if (!($this->getUser() == $markup->getUser() or $this->isGranted('ROLE_ADMIN'))) {
@@ -80,9 +74,7 @@ class MarkupController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}", name="markup_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'markup_delete', methods: ['POST'])]
     public function delete(Request $request, Markup $markup): Response
     {
         $markupset = $markup->getMarkupset();

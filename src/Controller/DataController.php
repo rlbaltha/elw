@@ -17,9 +17,7 @@ class DataController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/data", name="data")
-     */
+    #[Route(path: '/data', name: 'data')]
     public function index(): Response
     {
         $course_count = $this->doctrine->getManager()->getRepository('App:Course')->countByTerm();
@@ -43,9 +41,7 @@ class DataController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{termid}/{rubricid}/data", name="rubric_data")
-     */
+    #[Route(path: '/{termid}/{rubricid}/data', name: 'rubric_data')]
     public function rubricdata($termid, $rubricid): Response
     {
         $rubric = null;

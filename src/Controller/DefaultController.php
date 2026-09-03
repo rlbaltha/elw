@@ -21,10 +21,8 @@ class DefaultController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @Route("/home", name="home")
-     */
-    public function home()
+    #[Route(path: '/home', name: 'home')]
+    public function home(): \Symfony\Component\HttpFoundation\Response
     {
         $login_access = $_ENV['LOGIN_ACCESS'];
         $login_note = $_ENV['LOGIN_NOTE'];
@@ -36,9 +34,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/keep-alive", name="keep_alive", methods={"POST"})
-     */
+    #[Route(path: '/keep-alive', name: 'keep_alive', methods: ['POST'])]
     public function keepalive(SerializerInterface $serializer): Response
     {
         $return = "success";

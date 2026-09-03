@@ -14,9 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @Route("/markupset")
- */
+#[Route(path: '/markupset')]
 class MarkupsetController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -27,9 +25,7 @@ class MarkupsetController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/", name="markupset_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'markupset_index', methods: ['GET'])]
     public function index(MarkupsetRepository $markupsetRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -40,9 +36,7 @@ class MarkupsetController extends AbstractController
     }
 
 
-    /**
-     * @Route("/byuser", name="markupset_byuser", methods={"GET"})
-     */
+    #[Route(path: '/byuser', name: 'markupset_byuser', methods: ['GET'])]
     public function byuser(MarkupsetRepository $markupsetRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -54,9 +48,7 @@ class MarkupsetController extends AbstractController
             'markupsets' => $markupsetRepository->findByUser($user),
         ]);
     }
-    /**
-     * @Route("/new", name="markupset_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'markupset_new', methods: ['GET', 'POST'])]
     public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $username = $this->getUser()->getUsername();
@@ -85,9 +77,7 @@ class MarkupsetController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="markupset_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'markupset_show', methods: ['GET'])]
     public function show(Markupset $markupset): Response
     {
         return $this->render('markupset/show.html.twig', [
@@ -95,9 +85,7 @@ class MarkupsetController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="markupset_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'markupset_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Markupset $markupset, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if (!($this->getUser() == $markupset->getUser() or $this->isGranted('ROLE_ADMIN'))) {
@@ -122,9 +110,7 @@ class MarkupsetController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="markupset_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'markupset_delete', methods: ['POST'])]
     public function delete(Request $request, Markupset $markupset): Response
     {
         if ($this->isCsrfTokenValid('delete'.$markupset->getId(), $request->request->get('_token'))) {

@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @Route("/stage")
- */
+#[Route(path: '/stage')]
 class StageController extends AbstractController
 {
 
@@ -26,9 +24,7 @@ class StageController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/index", name="stage_index", methods={"GET"})
-     */
+    #[Route(path: '/index', name: 'stage_index', methods: ['GET'])]
     public function index(StageRepository $stageRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -39,9 +35,7 @@ class StageController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="stage_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'stage_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $username = $this->getUser()->getUsername();
@@ -67,9 +61,7 @@ class StageController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/edit", name="stage_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'stage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stage $stage): Response
     {
         if (!($this->getUser() == $stage->getUser() or $this->isGranted('ROLE_ADMIN'))) {
@@ -90,9 +82,7 @@ class StageController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="stage_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'stage_delete', methods: ['POST'])]
     public function delete(Request $request, Stage $stage): Response
     {
 

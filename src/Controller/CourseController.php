@@ -19,9 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * @Route("/course")
- */
+#[Route(path: '/course')]
 class CourseController extends AbstractController
 {
 
@@ -37,9 +35,7 @@ class CourseController extends AbstractController
         $this->requestStack = $requestStack;
     }
     
-    /**
-     * @Route("/admin", name="course_admin", methods={"GET"})
-     */
+    #[Route(path: '/admin', name: 'course_admin', methods: ['GET'])]
     public function admin(CourseRepository $courseRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -73,9 +69,7 @@ class CourseController extends AbstractController
     }
 
 
-    /**
-     * @Route("/adminFind", name="course_admin_find", methods={"GET","POST"})
-     */
+    #[Route(path: '/adminFind', name: 'course_admin_find', methods: ['GET', 'POST'])]
     public function adminFind(CourseRepository $courseRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -115,9 +109,7 @@ class CourseController extends AbstractController
 
     }
 
-    /**
-     * @Route("/find", name="course_find", methods={"GET","POST"})
-     */
+    #[Route(path: '/find', name: 'course_find', methods: ['GET', 'POST'])]
     public function find(CourseRepository $courseRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -140,9 +132,7 @@ class CourseController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{status}/", name="course_index", methods={"GET"}, defaults={"status" = "default"})
-     */
+    #[Route(path: '/{status}/', name: 'course_index', methods: ['GET'], defaults: ['status' => 'default'])]
     public function index(CourseRepository $courseRepository, string $status): Response
     {
         $username = $this->getUser()->getUsername();
@@ -163,9 +153,7 @@ class CourseController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="course_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'course_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -206,9 +194,7 @@ class CourseController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/show", name="course_show", methods={"GET"})
-     */
+    #[Route(path: '/{courseid}/show', name: 'course_show', methods: ['GET'])]
     public function show(Permissions $permissions, string $courseid, Request $request,): Response
     {
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
@@ -244,9 +230,7 @@ class CourseController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/edit", name="course_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/edit', name: 'course_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Permissions $permissions, $courseid): Response
     {
         $allowed = ['Instructor'];
@@ -275,9 +259,7 @@ class CourseController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/announcement", name="course_announcement", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/announcement', name: 'course_announcement', methods: ['GET', 'POST'])]
     public function announcement(Request $request, Permissions $permissions, $courseid): Response
     {
         $allowed = ['Instructor'];
@@ -301,10 +283,10 @@ class CourseController extends AbstractController
 
     /**
      *  Approves all pending student
-     * @Route("/approve_all_pending/{courseid}" , name="approve_all_pending")
      *
      */
-    public function approveAllAction(Permissions $permissions, $courseid)
+    #[Route(path: '/approve_all_pending/{courseid}', name: 'approve_all_pending')]
+    public function approveAllAction(Permissions $permissions, $courseid): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -323,9 +305,7 @@ class CourseController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}", name="course_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'course_delete', methods: ['POST'])]
     public function delete(Request $request, Permissions $permissions, Course $course): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

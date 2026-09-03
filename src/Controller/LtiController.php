@@ -55,13 +55,11 @@ class LtiController extends AbstractController
     }
 
 
-    /**
-     * @Route("/lti_launch", name="lti_launch")
-     */
+    #[Route(path: '/lti_launch', name: 'lti_launch')]
     public function lti_launch(CourseRepository $courseRepository, ServerRequestInterface $serverRequest,
                                RegistrationRepositoryInterface $repository, NonceRepositoryInterface $nonceRepository,
                                UserAuthenticatorInterface $userAuthenticator, LtiAuthenticator $ltiAuthenticator,
-                               Session $session, Request $request)
+                               Session $session, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         // Create the lti token validator
         $validator = new ToolLaunchValidator($repository, $nonceRepository);
@@ -191,10 +189,8 @@ class LtiController extends AbstractController
     }
 
 
-    /**
-     * @Route("/lti/{courseid}/nrps", name="lti_nrps", methods={"GET","POST"})
-     */
-    public function nrps(Permissions $permissions, string $courseid, Lti $lti, Session $session)
+    #[Route(path: '/lti/{courseid}/nrps', name: 'lti_nrps', methods: ['GET', 'POST'])]
+    public function nrps(Permissions $permissions, string $courseid, Lti $lti, Session $session): \Symfony\Component\HttpFoundation\Response
     {
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
 
@@ -220,10 +216,8 @@ class LtiController extends AbstractController
     }
 
 
-    /**
-     * @Route("/lti/{courseid}/ags_new", name="ags_new", methods={"GET","POST"})
-     */
-    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti, Session $session)
+    #[Route(path: '/lti/{courseid}/ags_new', name: 'ags_new', methods: ['GET', 'POST'])]
+    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti, Session $session): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(LtiAgsLineitemType::class);
         $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
@@ -274,10 +268,8 @@ class LtiController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/lti/{courseid}/{docid}/{source}/ags_score", name="ags_score_new", methods={"GET","POST"})
-     */
-    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, Session $session, string $courseid, string $docid, string $source)
+    #[Route(path: '/lti/{courseid}/{docid}/{source}/ags_score', name: 'ags_score_new', methods: ['GET', 'POST'])]
+    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, Session $session, string $courseid, string $docid, string $source): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);

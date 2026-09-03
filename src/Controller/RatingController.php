@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/rating")
- */
+#[Route(path: '/rating')]
 class RatingController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -29,9 +27,7 @@ class RatingController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/", name="rating_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'rating_index', methods: ['GET'])]
     public function index(RatingRepository $ratingRepository): Response
     {
         return $this->render('rating/index.html.twig', [
@@ -64,9 +60,7 @@ class RatingController extends AbstractController
         return $choices;
     }
 
-    /**
-     * @Route("/{docid}/{rubricid}/{courseid}/new", name="rating_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/{docid}/{rubricid}/{courseid}/new', name: 'rating_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
     {
         $header = 'Rubric Rating';
@@ -103,9 +97,7 @@ class RatingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="rating_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'rating_show', methods: ['GET'])]
     public function show(Rating $rating): Response
     {
         return $this->render('rating/show.html.twig', [
@@ -113,9 +105,7 @@ class RatingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{docid}/{rubricid}/{courseid}/rating_view", name="rating_view", methods={"GET"})
-     */
+    #[Route(path: '/{docid}/{rubricid}/{courseid}/rating_view', name: 'rating_view', methods: ['GET'])]
     public function ajax_view(Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
     {
         $role = $permissions->getCourseRole($courseid);
@@ -129,9 +119,7 @@ class RatingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/edit", name="rating_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/{courseid}/edit', name: 'rating_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Permissions $permissions, Rating $rating): Response
     {
         $header = 'Rubric Rating';
@@ -161,9 +149,7 @@ class RatingController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}", name="rating_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'rating_delete', methods: ['POST'])]
     public function delete(Request $request, Rating $rating): Response
     {
         $doc = $rating->getDoc();

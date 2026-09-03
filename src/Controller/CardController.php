@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/card")
- */
+#[Route(path: '/card')]
 class CardController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -23,9 +21,7 @@ class CardController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
-    /**
-     * @Route("/", name="card_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'card_index', methods: ['GET'])]
     public function index(CardRepository $cardRepository): Response
     {
         return $this->render('card/index.html.twig', [
@@ -33,9 +29,7 @@ class CardController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="card_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'card_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $card = new Card();
@@ -56,9 +50,7 @@ class CardController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="card_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'card_show', methods: ['GET'])]
     public function show(Card $card): Response
     {
         return $this->render('card/show.html.twig', [
@@ -66,9 +58,7 @@ class CardController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="card_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'card_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Card $card): Response
     {
         $form = $this->createForm(CardType::class, $card);
@@ -86,9 +76,7 @@ class CardController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="card_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'card_delete', methods: ['POST'])]
     public function delete(Request $request, Card $card): Response
     {
         if ($this->isCsrfTokenValid('delete'.$card->getId(), $request->request->get('_token'))) {

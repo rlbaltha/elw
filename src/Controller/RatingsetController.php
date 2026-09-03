@@ -59,7 +59,7 @@ class RatingsetController extends AbstractController
     }
 
     #[Route('/{docid}/{courseid}/new', name: 'app_ratingset_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, RatingsetRepository $ratingsetRepository, Permissions $permissions, int $docid, int $courseid): Response
+    public function new(RatingsetRepository $ratingsetRepository, Permissions $permissions, int $docid, int $courseid): Response
     {
         $ratingset = new Ratingset();
         $header = 'Rubric Collection Ratings';

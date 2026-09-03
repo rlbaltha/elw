@@ -18,9 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/comment")
- */
+#[Route(path: '/comment')]
 class CommentController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -31,9 +29,7 @@ class CommentController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/{source}/ajax_new", name="comment_ajax_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/{docid}/{source}/ajax_new', name: 'comment_ajax_new', methods: ['GET', 'POST'])]
     public function ajax_new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
     {
         $username = $this->getUser()->getUsername();
@@ -86,9 +82,7 @@ class CommentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{docid}/{source}/{id}/ajax_edit", name="comment_ajax_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{docid}/{source}/{id}/ajax_edit', name: 'comment_ajax_edit', methods: ['GET', 'POST'])]
     public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $source, string $id): Response
     {
         $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
@@ -103,7 +97,7 @@ class CommentController extends AbstractController
             $this->doctrine->getManager()->flush();
             if ($source!='doc') {
                 $return = "success";
-                return new Response($return, 200, array('Content-Type' => 'application/json'));
+                return new Response($return, \Symfony\Component\HttpFoundation\Response::HTTP_OK, array('Content-Type' => 'application/json'));
             }
             return $this->redirectToRoute('doc_show', ['id' => $doc->getId(),  'target' => $doc->getId()]);
         }
@@ -117,9 +111,7 @@ class CommentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/ajax_show", name="comment_ajax_show", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/{docid}/ajax_show', name: 'comment_ajax_show', methods: ['GET', 'POST'])]
     public function ajax_show(Permissions $permissions, string $docid, string $courseid): Response
     {
         $role = $permissions->getCourseRole($courseid);
@@ -133,10 +125,10 @@ class CommentController extends AbstractController
 
     /**
      *  Release All Hidden
-     * @Route("/release_all_comments/{courseid}/{findtype}" , name="release_all_comments")
      *
      */
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype)
+    #[Route(path: '/release_all_comments/{courseid}/{findtype}', name: 'release_all_comments')]
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -185,9 +177,7 @@ class CommentController extends AbstractController
 
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/{target}/{source}/{id}/delete", name="comment_delete", methods={"POST"})
-     */
+    #[Route(path: '/{courseid}/{docid}/{target}/{source}/{id}/delete', name: 'comment_delete', methods: ['POST'])]
     public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
@@ -221,9 +211,7 @@ class CommentController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/{target}/{source}/new", name="comment_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/{docid}/{target}/{source}/new', name: 'comment_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Permissions $permissions, $docid, $courseid, $source, $target): Response
     {
 
@@ -288,9 +276,7 @@ class CommentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/{target}/{source}/{id}/edit", name="comment_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/{docid}/{target}/{source}/{id}/edit', name: 'comment_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target): Response
     {
         $header = 'End Comment Edit';

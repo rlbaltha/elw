@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/classlist")
- */
+#[Route(path: '/classlist')]
 class ClasslistController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -26,9 +24,7 @@ class ClasslistController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/edit", name="classlist_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'classlist_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Classlist $classlist): Response
     {
         $form = $this->createForm(ClasslistType::class, $classlist);
@@ -46,9 +42,7 @@ class ClasslistController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="classlist_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'classlist_delete', methods: ['POST'])]
     public function delete(Request $request, Classlist $classlist): Response
     {
         $courseid = $classlist->getCourse()->getId();

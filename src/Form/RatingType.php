@@ -15,7 +15,7 @@ class RatingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function ($event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function ($event): void {
             $rating = $event->getData();
             $level = $rating->getRubric()->getLevel();
             $form = $event->getForm();

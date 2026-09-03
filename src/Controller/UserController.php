@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-/**
- * @Route("/user")
- */
+#[Route(path: '/user')]
 class UserController extends AbstractController
 {
     /** @var UserPasswordHasherInterface */
@@ -34,10 +32,8 @@ class UserController extends AbstractController
         $this->passwordHasher = $passwordHasher;
     }
     
-    /**
-     * @Route("/admin/", name="user_index", methods={"GET"})
-     */
-    public function index(PaginatorInterface $paginator, UserRepository $userRepository, Request $request): Response
+    #[Route(path: '/admin/', name: 'user_index', methods: ['GET'])]
+    public function index(PaginatorInterface $paginator, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
@@ -51,9 +47,7 @@ class UserController extends AbstractController
     }
 
 
-    /**
-     * @Route("/admin/find", name="user_find", methods={"GET","POST"})
-     */
+    #[Route(path: '/admin/find', name: 'user_find', methods: ['GET', 'POST'])]
     public function find(UserRepository $userRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -71,9 +65,7 @@ class UserController extends AbstractController
     }
 
 
-    /**
-     * @Route("/admin/{id}", name="user_show", methods={"GET"})
-     */
+    #[Route(path: '/admin/{id}', name: 'user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -101,9 +93,7 @@ class UserController extends AbstractController
 
     }
 
-    /**
-     * @Route("/admin/{id}/edit", name="user_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/admin/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -122,9 +112,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/username_edit", name="username_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/{courseid}/username_edit', name: 'username_edit', methods: ['GET', 'POST'])]
     public function username_edit(Request $request, User $user, $courseid): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -147,20 +135,17 @@ class UserController extends AbstractController
     }
 
 //    /**
-//     * @Route("/admin/{id}/promote", name="user_promote", methods={"GET"})
-//     */
-//    public function promote(User $user): Response
-//    {
-//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-//        $this->addFlash('notice', 'This profile has been promoted.');
-//        return $this->render('user/show.html.twig', [
-//            'user' => $user,
-//        ]);
-//    }
-
-    /**
-     * @Route("/{courseid}/theme", name="user_theme", methods={"GET"})
-     */
+    //     * @Route("/admin/{id}/promote", name="user_promote", methods={"GET"})
+    //     */
+    //    public function promote(User $user): Response
+    //    {
+    //        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    //        $this->addFlash('notice', 'This profile has been promoted.');
+    //        return $this->render('user/show.html.twig', [
+    //            'user' => $user,
+    //        ]);
+    //    }
+    #[Route(path: '/{courseid}/theme', name: 'user_theme', methods: ['GET'])]
     public function theme(string $courseid): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -178,9 +163,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('course_show', ['courseid' => $courseid]);
     }
 
-    /**
-     * @Route("/{courseid}/irb", name="user_irb", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/irb', name: 'user_irb', methods: ['GET', 'POST'])]
     public function irb(Request $request, string $courseid): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -212,9 +195,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/{id}", name="user_delete", methods={"POST"})
-     */
+    #[Route(path: '/admin/{id}', name: 'user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

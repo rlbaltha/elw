@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/rubric")
- */
+#[Route(path: '/rubric')]
 class RubricController extends AbstractController
 {
     /** @var ManagerRegistry */
@@ -26,9 +24,7 @@ class RubricController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/", name="rubric_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'rubric_index', methods: ['GET'])]
     public function index(RubricRepository $rubricRepository): Response
     {
         return $this->render('rubric/index.html.twig', [
@@ -36,9 +32,7 @@ class RubricController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="rubric_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'rubric_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $username = $this->getUser()->getUsername();
@@ -63,9 +57,7 @@ class RubricController extends AbstractController
     }
 
 
-    /**
-     * @Route("/{id}/edit", name="rubric_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'rubric_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Rubric $rubric): Response
     {
         $form = $this->createForm(RubricType::class, $rubric);
@@ -83,9 +75,7 @@ class RubricController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{project}/collection_edit", name="rubric_collection_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{project}/collection_edit', name: 'rubric_collection_edit', methods: ['GET', 'POST'])]
     public function collection_edit(Request $request, Project $project): Response
     {
         $form = $this->createForm(RubricCollectionType::class, $project);
@@ -103,9 +93,7 @@ class RubricController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="rubric_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'rubric_delete', methods: ['POST'])]
     public function delete(Request $request, Rubric $rubric): Response
     {
         if ($this->isCsrfTokenValid('delete'.$rubric->getId(), $request->request->get('_token'))) {

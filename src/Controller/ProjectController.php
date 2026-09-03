@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @Route("/project")
- */
+#[Route(path: '/project')]
 class ProjectController extends AbstractController
 {
 
@@ -28,9 +26,7 @@ class ProjectController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    /**
-     * @Route("/{courseid}/index", name="project_index", methods={"GET"})
-     */
+    #[Route(path: '/{courseid}/index', name: 'project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository, Permissions $permissions, string $courseid): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -42,9 +38,7 @@ class ProjectController extends AbstractController
             'role' => $role
         ]);
     }
-    /**
-     * @Route("/{courseid}/new", name="project_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/{courseid}/new', name: 'project_new', methods: ['GET', 'POST'])]
     public function new(Request $request, $courseid): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
@@ -83,9 +77,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="project_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, Permissions $permissions, DocRepository $docRepository): Response
     {
 
@@ -121,9 +113,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="project_delete", methods={"POST"})
-     */
+    #[Route(path: '/{id}', name: 'project_delete', methods: ['POST'])]
     public function delete(Request $request, Project $project): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');

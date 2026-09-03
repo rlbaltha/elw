@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @Route("/journal")
- */
+#[Route(path: '/journal')]
 class JournalController extends AbstractController
 {
     
@@ -28,10 +26,8 @@ class JournalController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @Route("/{courseid}/{docid}/{userid}/{index}/index", name="journal_index", methods={"GET"}, defaults={"docid":"0", "userid":"0", "index":"1"})
-     */
-    public function index(Request $request, Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
+    #[Route(path: '/{courseid}/{docid}/{userid}/{index}/index', name: 'journal_index', methods: ['GET'], defaults: ['docid' => '0', 'userid' => '0', 'index' => '1'])]
+    public function index(Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -70,10 +66,8 @@ class JournalController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/new", name="journal_new", methods={"GET","POST"})
-     */
-    public function new(Request $request, Permissions $permissions, $courseid): Response
+    #[Route(path: '/{courseid}/new', name: 'journal_new', methods: ['GET', 'POST'])]
+    public function new(Permissions $permissions, $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -92,9 +86,7 @@ class JournalController extends AbstractController
         return $this->redirectToRoute('journal_edit', ['id' => $doc->getId(), 'courseid' => $courseid]);
     }
 
-    /**
-     * @Route("/{id}/{courseid}/edit", name="journal_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/{courseid}/edit', name: 'journal_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];
@@ -116,9 +108,7 @@ class JournalController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{courseid}/{id}/delete", name="journal_delete", methods={"POST"})
-     */
+    #[Route(path: '/{courseid}/{id}/delete', name: 'journal_delete', methods: ['POST'])]
     public function delete(Request $request, Permissions $permissions, Doc $doc, string $courseid): Response
     {
         $allowed = ['Instructor', 'Student'];
