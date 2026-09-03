@@ -14,26 +14,8 @@
     "defuse/php-encryption": {
         "version": "v2.2.1"
     },
-    "doctrine/annotations": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "a2759dd6123694c8d901d0ec80006e044c2e6457"
-        },
-        "files": [
-            "config/routes/annotations.yaml"
-        ]
-    },
-    "doctrine/cache": {
-        "version": "1.10.2"
-    },
     "doctrine/collections": {
         "version": "1.6.7"
-    },
-    "doctrine/common": {
-        "version": "2.13.3"
     },
     "doctrine/dbal": {
         "version": "2.10.2"
@@ -326,30 +308,6 @@
     "sebastian/version": {
         "version": "2.0.1"
     },
-    "sensio/framework-extra-bundle": {
-        "version": "5.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
-    },
-    "stof/doctrine-extensions-bundle": {
-        "version": "1.10",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.2",
-            "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
-        },
-        "files": [
-            "config/packages/stof_doctrine_extensions.yaml"
-        ]
-    },
     "symfony/asset": {
         "version": "v4.4.11"
     },
@@ -549,14 +507,8 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.18.1"
     },
-    "symfony/polyfill-php73": {
-        "version": "v1.18.1"
-    },
     "symfony/polyfill-php80": {
         "version": "v1.18.1"
-    },
-    "symfony/polyfill-php81": {
-        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.4.11"
@@ -605,9 +557,6 @@
         "version": "v4.4.11"
     },
     "symfony/security-csrf": {
-        "version": "v4.4.11"
-    },
-    "symfony/security-guard": {
         "version": "v4.4.11"
     },
     "symfony/security-http": {

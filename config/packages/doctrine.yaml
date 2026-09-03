@@ -17,10 +17,6 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
 
-        dql:
-            string_functions:
-                replace: DoctrineExtensions\Query\Mysql\Replace
-
 when@test:
     doctrine:
         dbal:
