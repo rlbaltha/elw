@@ -9,10 +9,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -433,7 +433,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         return $this->updated;
     }
 
-    public function isEqualTo(UserInterface $user): ?bool
+    public function isEqualTo(UserInterface $user): bool
     {
         return true;
     }
