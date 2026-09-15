@@ -24,10 +24,10 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/lti1p3, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/lti_launch, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login$, roles: PUBLIC_ACCESS }
+    - { path: ^/home, roles: PUBLIC_ACCESS }
+    - { path: ^/lti1p3, roles: PUBLIC_ACCESS }
+    - { path: ^/lti_launch, roles: PUBLIC_ACCESS }
     - { path: ^/course, roles: ROLE_USER}
     - { path: ^/journal, roles: ROLE_USER}
     - { path: ^/classlist, roles: ROLE_USER }
