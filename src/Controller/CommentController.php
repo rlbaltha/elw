@@ -8,6 +8,7 @@ use App\Form\CommentJournalType;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\DocRepository;
+use App\Repository\UserRepository;
 use App\Service\Permissions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Repository\CourseRepository;
 
 #[Route(path: '/comment')]
 class CommentController extends AbstractController
@@ -30,12 +32,12 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/{source}/ajax_new', name: 'comment_ajax_new', methods: ['GET', 'POST'])]
-    public function ajax_new(Request $request, Permissions $permissions, $docid, $courseid, $source): Response
+    public function ajax_new(Request $request, Permissions $permissions, $docid, $courseid, $source, UserRepository $userRepository, DocRepository $docRepository): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $docRepository->findOneById($docid);
         $request_url = $this->generateUrl('comment_ajax_new', ['courseid'=> $courseid, 'docid'=> $docid, 'source'=> $source]);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
@@ -83,9 +85,9 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{docid}/{source}/{id}/ajax_edit', name: 'comment_ajax_edit', methods: ['GET', 'POST'])]
-    public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $source, string $id): Response
+    public function ajax_edit(SerializerInterface $serializer, Request $request, Comment $comment, string $docid, string $source, string $id, DocRepository $docRepository): Response
     {
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $docRepository->findOneById($docid);
         $form = $this->createForm(CommentJournalType::class, $comment, [
             'action' => '#',
             'method' => 'POST',
@@ -112,10 +114,10 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/ajax_show', name: 'comment_ajax_show', methods: ['GET', 'POST'])]
-    public function ajax_show(Permissions $permissions, string $docid, string $courseid): Response
+    public function ajax_show(Permissions $permissions, string $docid, string $courseid, DocRepository $docRepository): Response
     {
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $doc = $docRepository->find($docid);
         return $this->render('comment/ajax_show.html.twig', [
             'doc' => $doc,
             'courseid' => $doc->getCourse()->getId(),
@@ -128,14 +130,14 @@ class CommentController extends AbstractController
      *
      */
     #[Route(path: '/release_all_comments/{courseid}/{findtype}', name: 'release_all_comments')]
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype, UserRepository $userRepository, CourseRepository $courseRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $entityManager = $this->doctrine->getManager();
         $docs = $docRepository->findDocComments($course, $user);
         foreach($docs as $doc){
@@ -178,9 +180,9 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/{target}/{source}/{id}/delete', name: 'comment_delete', methods: ['POST'])]
-    public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target): Response
+    public function delete(Request $request, Comment $comment, $docid, $courseid, $source, $target, DocRepository $docRepository): Response
     {
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $doc = $docRepository->findOneById($docid);
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->doctrine->getManager();
             $entityManager->remove($comment);
@@ -212,15 +214,15 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/{target}/{source}/new', name: 'comment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source, $target): Response
+    public function new(Request $request, Permissions $permissions, $docid, $courseid, $source, $target, UserRepository $userRepository, CourseRepository $courseRepository, DocRepository $docRepository): Response
     {
 
         $header = 'End Comment New';
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $role = $permissions->getCourseRole($courseid);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($target);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $doc = $docRepository->findOneById($target);
         $comment = new Comment();
         if ($role=='Instructor' and $source=='doc') {
             $comment->setAccess('Hidden');
@@ -277,13 +279,13 @@ class CommentController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/{target}/{source}/{id}/edit', name: 'comment_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target): Response
+    public function edit(Request $request, Permissions $permissions, Comment $comment, $docid, $courseid, $source, $target, UserRepository $userRepository, CourseRepository $courseRepository, DocRepository $docRepository): Response
     {
         $header = 'End Comment Edit';
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $user = $userRepository->findOneByUsername($username);
+        $doc = $docRepository->findOneById($docid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);

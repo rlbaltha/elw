@@ -19,6 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\UserRepository;
+use App\Repository\MarkupsetRepository;
+use App\Repository\ClasslistRepository;
+use App\Repository\CardRepository;
+use App\Repository\NotificationRepository;
 
 #[Route(path: '/course')]
 class CourseController extends AbstractController
@@ -111,11 +115,11 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/find', name: 'course_find', methods: ['GET', 'POST'])]
-    public function find(CourseRepository $courseRepository, Request $request): Response
+    public function find(CourseRepository $courseRepository, Request $request, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $course = new Course();
         $form = $this->createFindForm($course);
         $header = 'My Courses';
@@ -155,15 +159,15 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'course_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, UserRepository $userRepository, MarkupsetRepository $markupsetRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
 
         $labelsets = $this->doctrine->getManager()->getRepository('App:Labelset')->findDefault();
-        $markupsets = $this->doctrine->getManager()->getRepository('App:Markupset')->findDefault();
+        $markupsets = $markupsetRepository->findDefault();
         $course = new Course();
         foreach ($labelsets as $labelset) {
             $course->addLabelset($labelset);
@@ -196,23 +200,23 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/show', name: 'course_show', methods: ['GET'])]
-    public function show(Permissions $permissions, CourseRepository $courseRepository, string $courseid, Request $request,): Response
+    public function show(Permissions $permissions, CourseRepository $courseRepository, string $courseid, Request $request, UserRepository $userRepository, ClasslistRepository $classlistRepository, CardRepository $cardRepository, NotificationRepository $notificationRepository): Response
     {
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         //discover needed info on request
         $course = $courseRepository->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $classuser = $this->doctrine->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
+        $user = $userRepository->findOneByUsername($username);
+        $classuser = $classlistRepository->findCourseUser($course, $user);
 
         $role = $permissions->getCourseRole($courseid);
         //check status and show course page
         $status = $classuser->getStatus();
         $course = $courseRepository->find($courseid);
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
         $previouslogin = $user->getPreviouslogin();
-        $notifications = $this->doctrine->getManager()->getRepository('App:Notification')->findByUser($user->getId(), $courseid, $previouslogin);
-        $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
+        $notifications = $notificationRepository->findByUser($user->getId(), $courseid, $previouslogin);
+        $irb = $cardRepository->findOneByType('irb');
 
         $form = $this->createForm(IrbType::class, $user, [
             'action' => $this->generateUrl('user_irb', ['courseid' => $courseid]),
@@ -232,13 +236,13 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/edit', name: 'course_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Permissions $permissions, CourseRepository $courseRepository, $courseid): Response
+    public function edit(Request $request, Permissions $permissions, CourseRepository $courseRepository, $courseid, UserRepository $userRepository): Response
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $course = $courseRepository->findOneByCourseid($courseid);
         $options = ['user' => $user];
         $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
@@ -287,13 +291,13 @@ class CourseController extends AbstractController
      *
      */
     #[Route(path: '/approve_all_pending/{courseid}', name: 'approve_all_pending')]
-    public function approveAllAction(Permissions $permissions, $courseid): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function approveAllAction(Permissions $permissions, $courseid, ClasslistRepository $classlistRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $entityManager = $this->doctrine->getManager();
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
         foreach ($classlists as $classlist) {
             if ($classlist->getStatus() == 'Pending') {
                 $classlist->setStatus('Approved');

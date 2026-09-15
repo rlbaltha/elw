@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Stage;
 use App\Form\StageType;
 use App\Repository\StageRepository;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,21 +26,21 @@ class StageController extends AbstractController
     }
     
     #[Route(path: '/index', name: 'stage_index', methods: ['GET'])]
-    public function index(StageRepository $stageRepository): Response
+    public function index(StageRepository $stageRepository, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         return $this->render('stage/index.html.twig', [
             'stages' => $stageRepository->findByUser($user),
         ]);
     }
 
     #[Route(path: '/new', name: 'stage_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, UserRepository $userRepository): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $stage = new Stage();
         $form = $this->createForm(StageType::class, $stage);
         $form->handleRequest($request);

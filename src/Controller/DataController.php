@@ -6,6 +6,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CourseRepository;
+use App\Repository\ClasslistRepository;
+use App\Repository\DocRepository;
+use App\Repository\RatingRepository;
+use App\Repository\RubricRepository;
+use App\Repository\TermRepository;
 
 class DataController extends AbstractController
 {
@@ -18,16 +24,16 @@ class DataController extends AbstractController
     }
     
     #[Route(path: '/data', name: 'data')]
-    public function index(): Response
+    public function index(CourseRepository $courseRepository, ClasslistRepository $classlistRepository, DocRepository $docRepository, RubricRepository $rubricRepository, TermRepository $termRepository): Response
     {
-        $course_count = $this->doctrine->getManager()->getRepository('App:Course')->countByTerm();
-        $classlist_count = $this->doctrine->getManager()->getRepository('App:Classlist')->countByTerm();
-        $doc_count = $this->doctrine->getManager()->getRepository('App:Doc')->countDocsByTerm();
-        $journal_count = $this->doctrine->getManager()->getRepository('App:Doc')->countJournalByTerm();
-        $term = $this->doctrine->getManager()->getRepository('App:Term')->findOneBy(['status'=>'Default']);
-        $terms = $this->doctrine->getManager()->getRepository('App:Term')->findAll();
-        $coursetype_count = $this->doctrine->getManager()->getRepository('App:Course')->countByCoursetype($term->getId());
-        $rubric_count = $this->doctrine->getManager()->getRepository('App:Rubric')->countRubricsByTerm($term->getId());
+        $course_count = $courseRepository->countByTerm();
+        $classlist_count = $classlistRepository->countByTerm();
+        $doc_count = $docRepository->countDocsByTerm();
+        $journal_count = $docRepository->countJournalByTerm();
+        $term = $termRepository->findOneBy(['status'=>'Default']);
+        $terms = $termRepository->findAll();
+        $coursetype_count = $courseRepository->countByCoursetype($term->getId());
+        $rubric_count = $rubricRepository->countRubricsByTerm($term->getId());
         return $this->render('data/index.html.twig', [
             'course_count' => $course_count,
             'coursetype_count' => $coursetype_count,
@@ -42,19 +48,19 @@ class DataController extends AbstractController
 
 
     #[Route(path: '/{termid}/{rubricid}/data', name: 'rubric_data')]
-    public function rubricdata($termid, $rubricid): Response
+    public function rubricdata($termid, $rubricid, RatingRepository $ratingRepository, RubricRepository $rubricRepository, TermRepository $termRepository): Response
     {
         $rubric = null;
         $ratings_count = null;
         if ($rubricid !== 0)
         {
-            $rubric = $this->doctrine->getManager()->getRepository('App:Rubric')->find($rubricid);
-            $ratings_count = $this->doctrine->getManager()->getRepository('App:Rating')->countRatingsByRubricByTerm($termid, $rubricid);
+            $rubric = $rubricRepository->find($rubricid);
+            $ratings_count = $ratingRepository->countRatingsByRubricByTerm($termid, $rubricid);
         }
-        $term = $this->doctrine->getManager()->getRepository('App:Term')->find($termid);
-        $terms = $this->doctrine->getManager()->getRepository('App:Term')->findAll();
+        $term = $termRepository->find($termid);
+        $terms = $termRepository->findAll();
 
-        $rubric_count = $this->doctrine->getManager()->getRepository('App:Rubric')->countRubricsByTerm($term->getId());
+        $rubric_count = $rubricRepository->countRubricsByTerm($term->getId());
 
         return $this->render('data/rubric.html.twig', [
             'rubric_count' => $rubric_count,

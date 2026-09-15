@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\CardRepository;
 
 #[Route(path: '/user')]
 class UserController extends AbstractController
@@ -146,11 +147,11 @@ class UserController extends AbstractController
     //        ]);
     //    }
     #[Route(path: '/{courseid}/theme', name: 'user_theme', methods: ['GET'])]
-    public function theme(string $courseid): Response
+    public function theme(string $courseid, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         if ($user->getTheme() != 'dark') {
             $user->setTheme('dark');
         }
@@ -164,12 +165,12 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/irb', name: 'user_irb', methods: ['GET', 'POST'])]
-    public function irb(Request $request, string $courseid): Response
+    public function irb(Request $request, string $courseid, UserRepository $userRepository, CardRepository $cardRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $irb = $this->doctrine->getManager()->getRepository('App:Card')->findOneByType('irb');
+        $user = $userRepository->findOneByUsername($username);
+        $irb = $cardRepository->findOneByType('irb');
         if ($user->getIrb() == null) {
             $user->setIrb(1);
         }

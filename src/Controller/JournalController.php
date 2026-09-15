@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Doc;
 use App\Form\JournalType;
 use App\Repository\DocRepository;
+use App\Repository\UserRepository;
 use App\Service\Lti;
 use App\Service\Permissions;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use App\Repository\CourseRepository;
+use App\Repository\ClasslistRepository;
 
 #[Route(path: '/journal')]
 class JournalController extends AbstractController
@@ -27,17 +30,17 @@ class JournalController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/{userid}/{index}/index', name: 'journal_index', methods: ['GET'], defaults: ['docid' => '0', 'userid' => '0', 'index' => '1'])]
-    public function index(Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index): Response
+    public function index(Permissions $permissions, DocRepository $docRepository, Lti $lti, string $courseid, string $docid, string $userid, string $index, UserRepository $userRepository, CourseRepository $courseRepository, ClasslistRepository $classlistRepository): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $role = $permissions->getCourseRole($courseid);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         if ($userid!=0) {
-            $requested_user = $this->doctrine->getManager()->getRepository('App:User')->findOneById($userid);
+            $requested_user = $userRepository->findOneById($userid);
             if ($user == $requested_user or $role=='Instructor') {
                 $user = $requested_user;
             }
@@ -67,15 +70,15 @@ class JournalController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/new', name: 'journal_new', methods: ['GET', 'POST'])]
-    public function new(Permissions $permissions, $courseid): Response
+    public function new(Permissions $permissions, $courseid, UserRepository $userRepository, CourseRepository $courseRepository): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $user = $userRepository->findOneByUsername($username);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $doc->setTitle('New Journal Entry');
         $doc->setUser($user);
         $doc->setCourse($course);

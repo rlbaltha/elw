@@ -6,6 +6,7 @@ use App\Entity\Doc;
 use App\Entity\Notification;
 use App\Form\DocType;
 use App\Repository\DocRepository;
+use App\Repository\UserRepository;
 use App\Service\Lti;
 use App\Service\Permissions;
 use Knp\Component\Pager\PaginatorInterface;
@@ -21,6 +22,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Pontedilana\WeasyprintBundle\WeasyPrint\Response\PdfResponse;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Repository\CourseRepository;
+use App\Repository\ClasslistRepository;
+use App\Repository\LtiAgsRepository;
+use App\Repository\ProjectRepository;
 
 
 
@@ -42,7 +47,7 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{findtype}/index', name: 'doc_index', methods: ['GET'], defaults: ['findtype' => 'MyDocs'])]
-    public function index(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): Response
+    public function index(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $findtype, UserRepository $userRepository, CourseRepository $courseRepository, ClasslistRepository $classlistRepository): Response
     {
         $allowed = ['Student', 'Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -51,12 +56,12 @@ class DocController extends AbstractController
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
 
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
 
         if ($findtype == 'SharedDocs') {
             $querybuilder = $docRepository->findSharedDocs($course, $role);
@@ -94,14 +99,14 @@ class DocController extends AbstractController
      *
      */
     #[Route(path: '/release_all_hidden/{courseid}/{findtype}', name: 'release_all_hidden')]
-    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function releaseAllAction(Permissions $permissions, DocRepository $docRepository, $courseid, $findtype, UserRepository $userRepository, CourseRepository $courseRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $entityManager = $this->doctrine->getManager();
         $docs = $docRepository->findHiddenDocs($course, $user);
         $now = new \DateTime('now');
@@ -128,7 +133,7 @@ class DocController extends AbstractController
 
 
     #[Route(path: '/{courseid}/{findtype}/{userid}/byuser', name: 'doc_byuser', methods: ['GET'], defaults: ['findtype' => 'MyDocs'])]
-    public function byuser(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid): Response
+    public function byuser(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, $courseid, $userid, UserRepository $userRepository, CourseRepository $courseRepository, ClasslistRepository $classlistRepository): Response
     {
         $findtype = 'byuser';
         $allowed = ['Student', 'Instructor'];
@@ -136,12 +141,12 @@ class DocController extends AbstractController
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneById($userid);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
+        $user = $userRepository->findOneById($userid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $querybuilder = $docRepository->findByUser($course, $role, $user);
         $docs = $paginator->paginate(
             $querybuilder, /* query NOT result */
@@ -163,7 +168,7 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{findtype}/{projectid}/byproject', name: 'doc_byproject', methods: ['GET'], defaults: ['findtype' => 'byproject'])]
-    public function byProject(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, string $courseid, string $projectid): Response
+    public function byProject(PaginatorInterface $paginator, Request $request, Permissions $permissions, DocRepository $docRepository, string $courseid, string $projectid, CourseRepository $courseRepository, ClasslistRepository $classlistRepository, ProjectRepository $projectRepository): Response
     {
         $findtype = 'byproject';
         $allowed = ['Student', 'Instructor'];
@@ -171,11 +176,11 @@ class DocController extends AbstractController
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         $role = $permissions->getCourseRole($courseid);
         $page_limit = 50;
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
+        $course = $courseRepository->find($courseid);
         $hidden_reviews = $docRepository->countHiddenReviews($course);
         $hidden_comments = $docRepository->countHiddenComments($course);
-        $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
-        $project = $this->doctrine->getManager()->getRepository('App:Project')->find($projectid);
+        $classlists = $classlistRepository->findByCourseid($courseid);
+        $project = $projectRepository->find($projectid);
         $querybuilder = $docRepository->findByProject($course, $role, $project);
         $docs = $paginator->paginate(
             $querybuilder, /* query NOT result */
@@ -198,16 +203,16 @@ class DocController extends AbstractController
 
 
     #[Route(path: '/{courseid}/{projectid}/new', name: 'doc_new', methods: ['GET', 'POST'])]
-    public function new(Permissions $permissions, string $courseid, string $projectid): Response
+    public function new(Permissions $permissions, string $courseid, string $projectid, UserRepository $userRepository, CourseRepository $courseRepository, ProjectRepository $projectRepository): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $project = $this->doctrine->getManager()->getRepository('App:Project')->find($projectid);
+        $user = $userRepository->findOneByUsername($username);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $project = $projectRepository->find($projectid);
         $stages = $project->getStages();
         $doc->setUser($user);
         $doc->setCourse($course);
@@ -222,16 +227,16 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/{docid}/review', name: 'doc_review', methods: ['GET', 'POST'])]
-    public function review(Permissions $permissions, $courseid, $docid): Response
+    public function review(Permissions $permissions, $courseid, $docid, UserRepository $userRepository, CourseRepository $courseRepository, DocRepository $docRepository): Response
     {
         $allowed = ['Instructor', 'Student'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $now = new \DateTime('now');
         $doc = new Doc();
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $origin = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $user = $userRepository->findOneByUsername($username);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $origin = $docRepository->findOneById($docid);
         $doc_title = 'for ' . $origin->getUser()->getFirstname() . ' ' . $origin->getUser()->getLastname();
         $doc->setUser($user);
         $doc->setCourse($course);
@@ -260,11 +265,11 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{id}/{courseid}/{target}/show', name: 'doc_show', methods: ['GET'], defaults: ['target' => '0'])]
-    public function show(Doc $doc, string $courseid, Permissions $permissions, Lti $lti, string $target): Response
+    public function show(Doc $doc, string $courseid, Permissions $permissions, Lti $lti, string $target, CourseRepository $courseRepository): Response
     {
         $permissions->isAllowedToView($courseid, $doc);
 
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $scores = [];
         if ($doc->getAgsResultId() != null) {
             $scores = $lti->getLtiResult($doc->getAgsResultId());
@@ -293,11 +298,11 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{id1}/{id2}/{courseid}/{order}/diff', name: 'doc_diff', methods: ['GET'], defaults: ['order' => '0'])]
-    public function diff(string $id1, string $id2, string $courseid, string $order, Permissions $permissions): Response
+    public function diff(string $id1, string $id2, string $courseid, string $order, Permissions $permissions, CourseRepository $courseRepository, DocRepository $docRepository): Response
     {
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc1 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id1);
-        $doc2 = $this->doctrine->getManager()->getRepository('App:Doc')->find($id2);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $doc1 = $docRepository->find($id1);
+        $doc2 = $docRepository->find($id2);
         $permissions->isAllowedToView($courseid, $doc1);
         $permissions->isAllowedToView($courseid, $doc2);
         if ($order==="0" and $doc1->getCreated() > $doc2->getCreated()) {
@@ -322,15 +327,15 @@ class DocController extends AbstractController
 
 
     #[Route(path: '/{courseid}/{docid}/{source}/ags_score_view', name: 'ags_score_view', methods: ['GET'])]
-    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Lti $lti, string $source): Response
+    public function ags_score_view(string $docid, string $courseid, Permissions $permissions, Lti $lti, string $source, DocRepository $docRepository, LtiAgsRepository $ltiAgsRepository): Response
     {
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $doc = $docRepository->find($docid);
         $role = $permissions->getCourseRole($courseid);
         $scores = [];
         $column = '';
         if ($doc->getAgsResultId() != null) {
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
-            $column = $this->doctrine->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid)->getLabel();
+            $column = $ltiAgsRepository->findOneByLtiid($ltiid)->getLabel();
             $scores = $lti->getLtiResult($doc->getAgsResultId());
         }
         return $this->render('lti/lti_ags_ajax.html.twig', [
@@ -348,7 +353,7 @@ class DocController extends AbstractController
     //    public function docDisplay(Doc $doc, string $courseid, Permissions $permissions)
     //    {
     //        $permissions->isAllowedToView($courseid, $doc);
-    //        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+    //        $course = $courseRepository->findOneByCourseid($courseid);
     //        if ($doc->getProject()->getMarkupsets()) {
     //            $markupsets = $doc->getProject()->getMarkupsets();
     //        } else {
@@ -361,7 +366,7 @@ class DocController extends AbstractController
     //
     //    }
     #[Route(path: '/pdf', name: 'doc_pdf', methods: ['POST'])]
-    public function pdf(Permissions $permissions, Request $request): \Symfony\Component\HttpFoundation\Response
+    public function pdf(Permissions $permissions, Request $request, DocRepository $docRepository): \Symfony\Component\HttpFoundation\Response
     {
         // Configure Dompdf Options
         $pdfOptions = new Options();
@@ -378,7 +383,7 @@ class DocController extends AbstractController
         $title_esc = str_replace('/', '-', $title);
         $docid = $request->get('docid');
         $courseid = $request->get('courseid');
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $doc = $docRepository->find($docid);
         //check to see if request is a diff plus general permissions
         if ($docid!=0) {
             if($doc->getOrigin() != null) {
@@ -414,11 +419,11 @@ class DocController extends AbstractController
     }
 
     #[Route(path: '/{id}/{courseid}/{type}/edit', name: 'doc_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid, string $type): Response
+    public function edit(Request $request, Permissions $permissions, Doc $doc, string $courseid, string $type, UserRepository $userRepository, CourseRepository $courseRepository): Response
     {
         $allowed = ['Instructor', 'Student'];
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $entityManager = $this->doctrine->getManager();
         $permissions->restrictAccessTo($courseid, $allowed);
         $permissions->isOwner($doc);
@@ -431,7 +436,7 @@ class DocController extends AbstractController
             $choices = ['Shared' => 'Shared', 'Private' => 'Private'];
         }
         $stages = $doc->getProject()->getStages();
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $options = ['courseid' => $courseid, 'choices' => $choices, 'stages' => $stages];
         $form = $this->createForm(DocType::class, $doc, ['attr' => ['id' => 'doc-form'], 'options' => $options]);
         $form->handleRequest($request);

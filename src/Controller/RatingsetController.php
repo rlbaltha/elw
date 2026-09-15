@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ratingset;
 use App\Form\RatingsetType;
 use App\Repository\RatingsetRepository;
+use App\Repository\UserRepository;
 use App\Service\Permissions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Rating;
+use App\Repository\CourseRepository;
+use App\Repository\DocRepository;
 
 
 #[Route('/ratingset')]
@@ -59,15 +62,15 @@ class RatingsetController extends AbstractController
     }
 
     #[Route('/{docid}/{courseid}/new', name: 'app_ratingset_new', methods: ['GET', 'POST'])]
-    public function new(RatingsetRepository $ratingsetRepository, Permissions $permissions, int $docid, int $courseid): Response
+    public function new(RatingsetRepository $ratingsetRepository, Permissions $permissions, int $docid, int $courseid, UserRepository $userRepository, CourseRepository $courseRepository, DocRepository $docRepository): Response
     {
         $ratingset = new Ratingset();
         $header = 'Rubric Collection Ratings';
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
+        $user = $userRepository->findOneByUsername($username);
+        $doc = $docRepository->find($docid);
         $project = $doc->getProject();
         $rubrics = $project->getRubrics();
         $cnt = count($rubrics);
@@ -96,10 +99,10 @@ class RatingsetController extends AbstractController
     }
 
     #[Route('/{id}/{courseid}/edit', name: 'app_ratingset_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Ratingset $ratingset, RatingsetRepository $ratingsetRepository, Permissions $permissions): Response
+    public function edit(Request $request, Ratingset $ratingset, RatingsetRepository $ratingsetRepository, Permissions $permissions, CourseRepository $courseRepository): Response
     {
         $doc = $ratingset->getRating()[0]->getDoc();
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($doc->getCourse());
+        $course = $courseRepository->findOneByCourseid($doc->getCourse());
         $header = 'Rubric Collection Ratings';
         $role = $permissions->getCourseRole($course->getId());
 

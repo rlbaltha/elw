@@ -72,15 +72,15 @@ class TermController extends AbstractController
 
 
     #[Route(path: '/{id}/default', name: 'term_default', methods: ['GET'])]
-    public function default(string $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function default(string $id, TermRepository $termRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $terms = $this->doctrine->getManager()->getRepository('App:Term')->findAll();
+        $terms = $termRepository->findAll();
         foreach ($terms as &$archiveterm) {
             $archiveterm->setStatus('Archive');
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($archiveterm);
         }
-        $term = $this->doctrine->getManager()->getRepository('App:Term')->find($id);
+        $term = $termRepository->find($id);
         $term->setStatus('Default');
         $entityManager->persist($term);
         $entityManager->flush();

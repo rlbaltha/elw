@@ -28,6 +28,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use OAT\Library\Lti1p3Core\Message\Launch\Validator\Tool\ToolLaunchValidator;
 //use OAT\Library\Lti1p3Core\Message\Launch\Validator\ToolLaunchValidator;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Repository\ClasslistRepository;
+use App\Repository\DocRepository;
+use App\Repository\LtiAgsRepository;
+use App\Repository\TermRepository;
 
 class LtiController extends AbstractController
 {
@@ -59,7 +63,7 @@ class LtiController extends AbstractController
     public function lti_launch(CourseRepository $courseRepository, ServerRequestInterface $serverRequest,
                                RegistrationRepositoryInterface $repository, NonceRepositoryInterface $nonceRepository,
                                UserAuthenticatorInterface $userAuthenticator, LtiAuthenticator $ltiAuthenticator,
-                               Session $session, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+                               Session $session, Request $request, ClasslistRepository $classlistRepository, TermRepository $termRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         // Create the lti token validator
         $validator = new ToolLaunchValidator($repository, $nonceRepository);
@@ -151,7 +155,7 @@ class LtiController extends AbstractController
             if (in_array("http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor", $roles)) {
                 $course = new Course();
                 //Untested Default Term
-                $default_term = $this->doctrine->getManager()->getRepository('App:Term')->findOneBy(['status'=>'Default']);
+                $default_term = $termRepository->findOneBy(['status'=>'Default']);
                 $course->setTerm($default_term);
                 //Untested Default Term
                 $course->setName($course_name);
@@ -171,7 +175,7 @@ class LtiController extends AbstractController
 
         } else {
             //Check if on Roll (Classlist)
-            $classuser = $this->doctrine->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
+            $classuser = $classlistRepository->findCourseUser($course, $user);
             if (!$classuser) {
                 $classlist = new Classlist();
                 $classlist->setUser($user);
@@ -190,9 +194,9 @@ class LtiController extends AbstractController
 
 
     #[Route(path: '/lti/{courseid}/nrps', name: 'lti_nrps', methods: ['GET', 'POST'])]
-    public function nrps(Permissions $permissions, string $courseid, Lti $lti, Session $session): \Symfony\Component\HttpFoundation\Response
+    public function nrps(Permissions $permissions, string $courseid, Lti $lti, Session $session, CourseRepository $courseRepository): \Symfony\Component\HttpFoundation\Response
     {
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
 
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
@@ -217,10 +221,10 @@ class LtiController extends AbstractController
 
 
     #[Route(path: '/lti/{courseid}/ags_new', name: 'ags_new', methods: ['GET', 'POST'])]
-    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti, Session $session): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+    public function ags_new(Request $request, Permissions $permissions, string $courseid, Lti $lti, Session $session, CourseRepository $courseRepository): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(LtiAgsLineitemType::class);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
 
         $form->handleRequest($request);
@@ -269,13 +273,13 @@ class LtiController extends AbstractController
     }
 
     #[Route(path: '/lti/{courseid}/{docid}/{source}/ags_score', name: 'ags_score_new', methods: ['GET', 'POST'])]
-    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, Session $session, string $courseid, string $docid, string $source): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+    public function ags_score_new(Request $request, Permissions $permissions, Lti $lti, Session $session, string $courseid, string $docid, string $source, CourseRepository $courseRepository, DocRepository $docRepository, LtiAgsRepository $ltiAgsRepository): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
         $header = 'Grade Submit';
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->findOneById($docid);
+        $course = $courseRepository->findOneByCourseid($courseid);
+        $doc = $docRepository->findOneById($docid);
 
         if ($doc->getProject() != null) {
             $uris = $doc->getProject()->getLtiGrades();
@@ -289,7 +293,7 @@ class LtiController extends AbstractController
 
         if ($doc->getAgsResultId() != null) {
             $ltiid = strstr($doc->getAgsResultId(), "/results", true);
-            $column = $this->doctrine->getManager()->getRepository('App:LtiAgs')->findOneByLtiid($ltiid);
+            $column = $ltiAgsRepository->findOneByLtiid($ltiid);
             $uri = $doc->getAgsResultId();
             $results = $lti->getLtiResult($uri);
             if (is_array($results) ) {
@@ -313,7 +317,7 @@ class LtiController extends AbstractController
             $accept_header = 'application/vnd.ims.lis.v1.score+json';
             $data = $form->getData();
             $agsid = $data['uri'];
-            $local_ags = $this->doctrine->getManager()->getRepository('App:LtiAgs')->findOneByAgsid($agsid);
+            $local_ags = $ltiAgsRepository->findOneByAgsid($agsid);
             $uri = $local_ags->getLtiId() . '/scores';
             $scoreMaximum = $local_ags->getMax();
             $timestamp = date(\DateTime::ISO8601);

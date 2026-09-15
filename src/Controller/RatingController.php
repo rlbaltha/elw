@@ -9,12 +9,16 @@ use App\Entity\Ratingset;
 use App\Form\RatingCollectionType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
+use App\Repository\UserRepository;
 use App\Service\Permissions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CourseRepository;
+use App\Repository\DocRepository;
+use App\Repository\RubricRepository;
 
 #[Route(path: '/rating')]
 class RatingController extends AbstractController
@@ -61,15 +65,15 @@ class RatingController extends AbstractController
     }
 
     #[Route(path: '/{docid}/{rubricid}/{courseid}/new', name: 'rating_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
+    public function new(Request $request, Permissions $permissions, int $docid, int $rubricid, int $courseid, UserRepository $userRepository, CourseRepository $courseRepository, DocRepository $docRepository, RubricRepository $rubricRepository): Response
     {
         $header = 'Rubric Rating';
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $role = $permissions->getCourseRole($courseid);
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
-        $rubric = $this->doctrine->getManager()->getRepository('App:Rubric')->find($rubricid);
+        $user = $userRepository->findOneByUsername($username);
+        $doc = $docRepository->find($docid);
+        $rubric = $rubricRepository->find($rubricid);
         $rating = new Rating();
         $rating->setUser($user);
         $rating->setDoc($doc);
@@ -106,11 +110,11 @@ class RatingController extends AbstractController
     }
 
     #[Route(path: '/{docid}/{rubricid}/{courseid}/rating_view', name: 'rating_view', methods: ['GET'])]
-    public function ajax_view(Permissions $permissions, int $docid, int $rubricid, int $courseid): Response
+    public function ajax_view(Permissions $permissions, int $docid, int $rubricid, int $courseid, DocRepository $docRepository, RatingRepository $ratingRepository): Response
     {
         $role = $permissions->getCourseRole($courseid);
-        $doc = $this->doctrine->getManager()->getRepository('App:Doc')->find($docid);
-        $ratings = $this->doctrine->getManager()->getRepository('App:Rating')->findAjax($docid, $rubricid);
+        $doc = $docRepository->find($docid);
+        $ratings = $ratingRepository->findAjax($docid, $rubricid);
         return $this->render('rating/rating_ajax.html.twig', [
             'rubricid' => $rubricid,
             'ratings' => $ratings,

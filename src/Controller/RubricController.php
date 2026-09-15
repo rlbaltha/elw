@@ -7,6 +7,7 @@ use App\Entity\Rubric;
 use App\Form\RubricCollectionType;
 use App\Form\RubricType;
 use App\Repository\RubricRepository;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,10 +34,10 @@ class RubricController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'rubric_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, UserRepository $userRepository): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
         $rubric = new Rubric();
         $form = $this->createForm(RubricType::class, $rubric);
         $form->handleRequest($request);

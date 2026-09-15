@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Markupset;
 use App\Form\MarkupsetType;
 use App\Repository\MarkupsetRepository;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,22 +38,22 @@ class MarkupsetController extends AbstractController
 
 
     #[Route(path: '/byuser', name: 'markupset_byuser', methods: ['GET'])]
-    public function byuser(MarkupsetRepository $markupsetRepository): Response
+    public function byuser(MarkupsetRepository $markupsetRepository, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_INSTRUCTOR');
 
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
 
         return $this->render('markupset/index.html.twig', [
             'markupsets' => $markupsetRepository->findByUser($user),
         ]);
     }
     #[Route(path: '/new', name: 'markupset_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker): Response
+    public function new(Request $request, AuthorizationCheckerInterface $authorizationChecker, UserRepository $userRepository): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
+        $user = $userRepository->findOneByUsername($username);
 
         $markupset = new Markupset();
         $markupset->setUser($user);
