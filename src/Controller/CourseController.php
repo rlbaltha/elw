@@ -200,7 +200,7 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/show', name: 'course_show', methods: ['GET'])]
-    public function show(Permissions $permissions, CourseRepository $courseRepository, string $courseid, Request $request, UserRepository $userRepository, ClasslistRepository $classlistRepository, CardRepository $cardRepository, NotificationRepository $notificationRepository): Response
+    public function show(Permissions $permissions, CourseRepository $courseRepository, Request $request, UserRepository $userRepository, ClasslistRepository $classlistRepository, CardRepository $cardRepository, NotificationRepository $notificationRepository, $courseid): Response
     {
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         //discover needed info on request

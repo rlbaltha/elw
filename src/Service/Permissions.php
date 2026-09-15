@@ -7,14 +7,20 @@ namespace App\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\CourseRepository;
+use App\Repository\UserRepository;
+use App\Repository\ClasslistRepository;
 
 class Permissions
 {
 
-    public function __construct(EntityManagerInterface $em, Security $security) {
+    public function __construct(EntityManagerInterface $em, Security $security, CourseRepository $courseRepository, UserRepository $userRepository, ClasslistRepository $classlistRepository) {
         $this->em = $em;
         $this->security = $security;
+        $this->courseRepository = $courseRepository;
+        $this->userRepository = $userRepository;
+        $this->classlistRepository = $classlistRepository;
     }
 
 
@@ -22,10 +28,10 @@ class Permissions
      *@return the role of the current user in the course
      */
     public function getCourseRole($courseid) {
-        $course = $this->em->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $this->courseRepository->findOneByCourseid($courseid);
         $username = $this->security->getUser()->getUsername();
-        $user = $this->em->getRepository('App:User')->findOneByUsername($username);
-        $classlist =  $this->em->getRepository('App:Classlist')->findCourseUser($course, $user);
+        $user = $this->userRepository->findOneByUsername($username);
+        $classlist =  $this->classlistRepository->findCourseUser($course, $user);
         if(!$classlist or $classlist->getStatus() == 'Pending'){
             return null;
         }
@@ -59,7 +65,7 @@ class Permissions
     public function isOwner($doc)
     {
         $username = $this->security->getUser()->getUsername();
-        $user = $this->em->getRepository('App:User')->findOneByUsername($username);
+        $user = $this->userRepository->findOneByUsername($username);
         if ($user == $doc->getUser()) {
             return true;
         } else {
