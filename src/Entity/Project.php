@@ -6,57 +6,37 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\ProjectRepository::class)]
 class Project
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $color;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Stage::class, inversedBy="projects")
-     */
+    #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'projects')]
     private $stages;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Markupset::class, inversedBy="projects")
-     */
+    #[ORM\ManyToMany(targetEntity: Markupset::class, inversedBy: 'projects')]
     private $markupsets;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Rubric::class, inversedBy="projects")
-     */
+    #[ORM\ManyToMany(targetEntity: Rubric::class, inversedBy: 'projects')]
     private $rubrics;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Course::class, inversedBy="projects")
-     */
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'projects')]
     private $course;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=LtiAgs::class, inversedBy="projects")
-     */
+    #[ORM\ManyToMany(targetEntity: LtiAgs::class, inversedBy: 'projects')]
     private $ltigrades;
 
     public function __construct()

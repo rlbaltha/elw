@@ -15,125 +15,87 @@ use App\Repository\UserRepository;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $username;
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $password;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private $roles = [];
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $firstname;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $lastname;
 
     /**
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $created;
 
     /**
      * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $updated;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Doc", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Doc::class, mappedBy: 'user', orphanRemoval: true)]
     private $docs;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Classlist", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Classlist::class, mappedBy: 'user', orphanRemoval: true)]
     private $classlists;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Markup", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Markup::class, mappedBy: 'user', orphanRemoval: true)]
     private $markups;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Markupset", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Markupset::class, mappedBy: 'user', orphanRemoval: true)]
     private $markupsets;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Project::class, mappedBy: 'user', orphanRemoval: true)]
     private $projects;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $lti_id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $d2l_id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $theme = 'light';
 
 
-    /**
-     * @ORM\OneToMany(targetEntity=Rubric::class, mappedBy="user")
-     */
+    #[ORM\OneToMany(targetEntity: Rubric::class, mappedBy: 'user')]
     private $rubrics;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $irb;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'user', orphanRemoval: true)]
     private $ratings;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $lastlogin;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="from_user")
-     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'from_user')]
     private $notifications;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $previouslogin;
 
 
@@ -267,7 +229,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection|Doc[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Doc>
      */
     public function getDocs(): Collection
     {
@@ -299,7 +261,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
 
     /**
-     * @return Collection|Classlist[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Classlist>
      */
     public function getClasslists(): Collection
     {
@@ -331,7 +293,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
 
     /**
-     * @return Collection|Markup[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Markup>
      */
     public function getMarkups(): Collection
     {
@@ -362,7 +324,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection|Markupset[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Markupset>
      */
     public function getMarkupsets(): Collection
     {
@@ -393,7 +355,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection|Project[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Project>
      */
     public function getProjects(): Collection
     {
@@ -477,7 +439,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
 
     /**
-     * @return Collection|Rubric[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Rubric>
      */
     public function getRubrics(): Collection
     {
@@ -519,7 +481,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection|Rating[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Rating>
      */
     public function getRatings(): Collection
     {

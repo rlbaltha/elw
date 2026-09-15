@@ -11,62 +11,40 @@ use App\Repository\CourseRepository;
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 class Course
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Classlist", mappedBy="course", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Classlist::class, mappedBy: 'course', orphanRemoval: true)]
     private $classlists;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Doc", mappedBy="course", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Doc::class, mappedBy: 'course', orphanRemoval: true)]
     private $docs;
 
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Markupset", inversedBy="courses")
-     */
+    #[ORM\ManyToMany(targetEntity: \App\Entity\Markupset::class, inversedBy: 'courses')]
     private $markupsets;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $announcement = "Welcome to our class.";
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $time;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Term")
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Term::class)]
     private $term;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $lti_id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=LtiAgs::class, mappedBy="course", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: LtiAgs::class, mappedBy: 'course', orphanRemoval: true)]
     private $ltiAgs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="course")
-     */
+    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'course')]
     private $projects;
 
 
@@ -98,7 +76,7 @@ class Course
     }
 
     /**
-     * @return Collection|Classlist[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Classlist>
      */
     public function getClasslists(): Collection
     {
@@ -129,7 +107,7 @@ class Course
     }
 
     /**
-     * @return Collection|Doc[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Doc>
      */
     public function getDocs(): Collection
     {
@@ -161,7 +139,7 @@ class Course
 
 
     /**
-     * @return Collection|Markupset[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Markupset>
      */
     public function getMarkupsets(): Collection
     {
@@ -235,7 +213,7 @@ class Course
     }
 
     /**
-     * @return Collection|LtiAgs[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\LtiAgs>
      */
     public function getLtiAgs(): Collection
     {
@@ -265,7 +243,7 @@ class Course
     }
 
     /**
-     * @return Collection|Project[]
+     * @return \Doctrine\Common\Collections\Collection<int, \App\Entity\Project>
      */
     public function getProjects(): Collection
     {

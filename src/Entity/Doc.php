@@ -7,109 +7,77 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\DocRepository")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\DocRepository::class)]
 class Doc
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title="New Document";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $body;
 
     /**
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private $created;
 
     /**
      * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private $updated;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="docs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: 'docs')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="docs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Course::class, inversedBy: 'docs')]
+    #[ORM\JoinColumn(nullable: false)]
     private $course;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Doc", inversedBy="reviews")
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Doc::class, inversedBy: 'reviews')]
     private $origin;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Doc", mappedBy="origin")
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Doc::class, mappedBy: 'origin')]
     private $reviews;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project")
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Project::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private $project;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Stage")
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Stage::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private $stage;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $access = 'Shared';
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="doc", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Comment::class, mappedBy: 'doc', orphanRemoval: true)]
     private $comments;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $ags_result_id;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $wordcount;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="doc", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'doc', orphanRemoval: true)]
     private $ratings;
 
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $releasedate;
 
 

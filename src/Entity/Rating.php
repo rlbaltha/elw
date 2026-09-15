@@ -5,49 +5,33 @@ namespace App\Entity;
 use App\Repository\RatingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RatingRepository::class)
- */
+#[ORM\Entity(repositoryClass: RatingRepository::class)]
 class Rating
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $scale;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $comment;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ratings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ratings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Doc::class, inversedBy="ratings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Doc::class, inversedBy: 'ratings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $doc;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Rubric::class, inversedBy="ratings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Rubric::class, inversedBy: 'ratings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $rubric;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Ratingset::class, inversedBy="rating")
-     */
+    #[ORM\ManyToOne(targetEntity: Ratingset::class, inversedBy: 'rating')]
     private $ratingset;
 
     public function getId(): ?int

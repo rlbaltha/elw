@@ -7,21 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RatingsetRepository::class)
- */
+#[ORM\Entity(repositoryClass: RatingsetRepository::class)]
 class Ratingset
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="ratingset", cascade={"remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'ratingset', cascade: ['remove'])]
     private $rating;
 
     public function __construct()

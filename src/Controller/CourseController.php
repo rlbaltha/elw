@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Repository\UserRepository;
 
 #[Route(path: '/course')]
 class CourseController extends AbstractController
@@ -132,12 +133,12 @@ class CourseController extends AbstractController
     }
 
 
-    #[Route(path: '/{status}/', name: 'course_index', methods: ['GET'], defaults: ['status' => 'default'])]
-    public function index(CourseRepository $courseRepository, string $status): Response
+    #[Route(path: '/{status}/', name: 'course_index', defaults: ['status' => 'default'], methods: ['GET'])]
+    public function index(CourseRepository $courseRepository, string $status, UserRepository $userRepository): Response
     {
         $username = $this->getUser()->getUsername();
-        $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $courses = $this->doctrine->getManager()->getRepository('App:Course')->findByUserAndTerm($user, $status);
+        $user = $userRepository->findOneBy(['username' => $username]);
+        $courses = $courseRepository->findByUserAndTerm($user, $status);
         $course = new Course();
         $form = $this->createFindForm($course, $user);
         if($status == 'default') {
@@ -195,11 +196,11 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/show', name: 'course_show', methods: ['GET'])]
-    public function show(Permissions $permissions, string $courseid, Request $request,): Response
+    public function show(Permissions $permissions, CourseRepository $courseRepository, string $courseid, Request $request,): Response
     {
         $this->requestStack->getSession()->set('referrer', $request->getRequestUri());
         //discover needed info on request
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $username = $this->getUser()->getUsername();
         $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
         $classuser = $this->doctrine->getManager()->getRepository('App:Classlist')->findCourseUser($course, $user);
@@ -207,7 +208,7 @@ class CourseController extends AbstractController
         $role = $permissions->getCourseRole($courseid);
         //check status and show course page
         $status = $classuser->getStatus();
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->find($courseid);
+        $course = $courseRepository->find($courseid);
         $classlists = $this->doctrine->getManager()->getRepository('App:Classlist')->findByCourseid($courseid);
         $previouslogin = $user->getPreviouslogin();
         $notifications = $this->doctrine->getManager()->getRepository('App:Notification')->findByUser($user->getId(), $courseid, $previouslogin);
@@ -231,14 +232,14 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/edit', name: 'course_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Permissions $permissions, $courseid): Response
+    public function edit(Request $request, Permissions $permissions, CourseRepository $courseRepository, $courseid): Response
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
         $username = $this->getUser()->getUsername();
         $user = $this->doctrine->getManager()->getRepository('App:User')->findOneByUsername($username);
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $options = ['user' => $user];
         $form = $this->createForm(CourseType::class, $course, ['options' => $options]);
         $form->handleRequest($request);
@@ -260,12 +261,12 @@ class CourseController extends AbstractController
     }
 
     #[Route(path: '/{courseid}/announcement', name: 'course_announcement', methods: ['GET', 'POST'])]
-    public function announcement(Request $request, Permissions $permissions, $courseid): Response
+    public function announcement(Request $request, Permissions $permissions, $courseid, CourseRepository $courseRepository,): Response
     {
         $allowed = ['Instructor'];
         $permissions->restrictAccessTo($courseid, $allowed);
 
-        $course = $this->doctrine->getManager()->getRepository('App:Course')->findOneByCourseid($courseid);
+        $course = $courseRepository->findOneByCourseid($courseid);
         $form = $this->createForm(AnnouncementType::class, $course);
         $form->handleRequest($request);
 

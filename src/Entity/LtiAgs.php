@@ -7,42 +7,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=LtiAgsRepository::class)
- */
+#[ORM\Entity(repositoryClass: LtiAgsRepository::class)]
 class LtiAgs
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $label;
 
-    /**
-     * @ORM\Column(type="string", length=1020)
-     */
+    #[ORM\Column(type: 'string', length: 1020)]
     private $lti_id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Course::class, inversedBy="ltiAgs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'ltiAgs')]
+    #[ORM\JoinColumn(nullable: false)]
     private $course;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $max;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="ltigrades")
-     */
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'ltigrades')]
     private $projects;
 
     public function __construct()
