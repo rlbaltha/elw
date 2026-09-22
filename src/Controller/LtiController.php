@@ -301,8 +301,7 @@ class LtiController extends AbstractController
             $uri = $doc->getAgsResultId();
             $results = $lti->getLtiResult($uri);
             if (is_array($results) ) {
-                $comment_org = html_entity_decode($results[0]['comment'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
-                $comment = str_replace('&#13;', '', $comment_org);
+                $comment = $results[0]['comment'];
                 $score = $results[0]['resultScore'];
             }
         }
@@ -337,7 +336,7 @@ class LtiController extends AbstractController
                     "userId" => $d2l_user,
                     "scoreGiven" => $data['scoreGiven'],
                     "scoreMaximum" => $scoreMaximum,
-                    "comment" => strip_tags(html_entity_decode($datacomment, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8')),
+                    "comment" => $datacomment,
                     "timestamp" => $timestamp,
                     "activityProgress" => 'Completed',
                     "gradingProgress" => 'FullyGraded'
