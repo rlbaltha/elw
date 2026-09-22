@@ -54,7 +54,7 @@
         "symfony/yaml": "5.4.*",
         "tinymce/tinymce": "^8.6",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "~3.28.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
