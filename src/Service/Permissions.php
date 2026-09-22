@@ -15,6 +15,23 @@ use App\Repository\ClasslistRepository;
 class Permissions
 {
 
+    /** @var EntityManagerInterface */
+    private $em;
+
+    /** @var Security */
+    private $security;
+
+    /** @var CourseRepository */
+    private $courseRepository;
+
+    /** @var UserRepository */
+    private $userRepository;
+
+    /** @var ClasslistRepository */
+    private $classlistRepository;
+
+
+
     public function __construct(EntityManagerInterface $em, Security $security, CourseRepository $courseRepository, UserRepository $userRepository, ClasslistRepository $classlistRepository) {
         $this->em = $em;
         $this->security = $security;

@@ -14,6 +14,9 @@ class CourseExtension extends AbstractExtension
 
     private $router;
 
+    /** @var RequestStack */
+    private $requestStack;
+
     public function __construct(RequestStack $requestStack, UrlGeneratorInterface $router) {
         $this->requestStack = $requestStack;
         $this->router = $router;
