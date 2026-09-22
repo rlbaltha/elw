@@ -1,5 +1,4 @@
 
-
 index:
   path: /
   controller: App\Controller\DefaultController::home
@@ -7,3 +6,10 @@ index:
 app_logout:
   path: /logout
   methods: GET
+
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
