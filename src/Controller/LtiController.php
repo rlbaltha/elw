@@ -301,7 +301,7 @@ class LtiController extends AbstractController
             $uri = $doc->getAgsResultId();
             $results = $lti->getLtiResult($uri);
             if (is_array($results) ) {
-                $comment = $results[0]['comment'];
+                $comment = html_entity_decode(html_entity_decode($results[0]['comment'], ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8');
                 $score = $results[0]['resultScore'];
             }
         }

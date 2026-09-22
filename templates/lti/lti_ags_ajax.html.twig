@@ -10,7 +10,7 @@
             {% endif %}
         </div>
         <div class="card-body" style="white-space: pre-line;">
-            {{ score.comment | raw }}
+            {{ score.comment|replace({"&amp;#39;": "'", "&amp;amp;": "&", "&amp;quot;": '"'}) }}
         </div>
         <div class="card-footer">
             Grade: {{ score.resultScore }}
