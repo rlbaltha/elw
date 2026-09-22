@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormEvents;
 class RatingType extends AbstractType
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function ($event): void {
@@ -47,7 +47,7 @@ class RatingType extends AbstractType
     }
 
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Rating::class,

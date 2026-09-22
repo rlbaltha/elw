@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class LtiAgsScoreType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $comment = $options['comment'];
         $score = $options['score'];
@@ -41,7 +41,7 @@ class LtiAgsScoreType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'comment',

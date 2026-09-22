@@ -31,7 +31,7 @@ class ProjectType extends AbstractType
         $this->markupsetRepository = $markupsetRepository;
         $this->ltiAgsRepository = $ltiAgsRepository;
     }
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->options = $options['options'];
         $user = $this->options['user'] ;
@@ -78,7 +78,7 @@ class ProjectType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Project::class,

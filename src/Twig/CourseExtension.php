@@ -23,7 +23,7 @@ class CourseExtension extends AbstractExtension
         return 'course';
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array(
             new TwigFunction('course_path', array($this, 'course_path'))

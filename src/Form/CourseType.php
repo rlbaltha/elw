@@ -27,7 +27,7 @@ class CourseType extends AbstractType
         $this->markupsetRepository = $markupsetRepository;
         $this->termRepository = $termRepository;
     }
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->options = $options['options'];
         $user = $this->options['user'] ;
@@ -48,7 +48,7 @@ class CourseType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Course::class,
