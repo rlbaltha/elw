@@ -1,8 +1,9 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
-    #csrf_protection: true
+    annotations: false
     http_method_override: false
+    handle_all_throwables: true
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
@@ -18,11 +19,12 @@ framework:
         #        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         #        cookie_lifetime: 7200
         # improves the security of the cookies used for sessions
-        cookie_secure: 'auto'
-        cookie_samesite: 'lax'
+        cookie_secure: auto
+        cookie_samesite: lax
         # session scrubbed after 60 minutes
         cookie_lifetime: 0
         gc_maxlifetime: 5400
+
 
     #esi: true
     #fragments: true
