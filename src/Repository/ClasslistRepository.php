@@ -6,6 +6,7 @@ use App\Entity\Classlist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use SortDirection;
 
 /**
  * @method Classlist|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,8 +30,8 @@ class ClasslistRepository extends ServiceEntityRepository
             ->join('c.user', 'u')
             ->andWhere('c.course = :val')
             ->setParameter('val', $courseid)
-            ->orderBy('u.firstname', 'ASC')
-            ->orderBy('u.lastname', 'ASC')
+            ->orderBy('u.lastname', SortDirection::Ascending)
+            ->orderBy('u.firstname', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
         ;

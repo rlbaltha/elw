@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Rubric;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @method Rubric|null find($id, $lockMode = null, $lockVersion = null)
@@ -61,7 +62,7 @@ class RubricRepository extends ServiceEntityRepository
             ->select('r.id, r.name,  count(r.id) as rubriccount')
             ->groupBy('r.id')
             ->setParameter('termid', $termid)
-            ->orderBy('r.name', 'DESC')
+            ->orderBy('r.name', SortDirection::Descending)
             ->getQuery()
             ->getResult()
             ;

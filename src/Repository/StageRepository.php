@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Stage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @method Stage|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,7 +30,7 @@ class StageRepository extends ServiceEntityRepository
             ->join('l.courses','c')
             ->andWhere('c.id = :val  ')
             ->setParameter('val', $courseid)
-            ->orderBy('s.name', 'ASC')
+            ->orderBy('s.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
             ;

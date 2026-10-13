@@ -6,6 +6,8 @@ use App\Entity\Course;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use FontLib\Table\Type\name;
+use Doctrine\Common\Collections\Order;
+use SortDirection;
 
 /**
  * @method Course|null find($id, $lockMode = null, $lockVersion = null)
@@ -50,7 +52,7 @@ class CourseRepository extends ServiceEntityRepository
             ->setParameter('val1', $user)
             ->andWhere('c.name LIKE :val2 or ct.semester LIKE :val2 or ct.year LIKE :val2')
             ->setParameter('val2', $namesearch)
-            ->addOrderBy('c.id', 'DESC')
+            ->orderBy('c.id', SortDirection::Descending)
             ->getQuery()
             ->getResult()
             ;
@@ -70,7 +72,7 @@ class CourseRepository extends ServiceEntityRepository
             ->andWhere('c.name LIKE :val or ct.semester LIKE :val or ct.year LIKE :val or (cl.role = :val2 and cu.lastname LIKE :val)')
             ->setParameter('val', $namesearch)
             ->setParameter('val2', $role)
-            ->addOrderBy('c.id', 'DESC')
+            ->addorderBy('c.id', SortDirection::Descending)
             ->getQuery()
             ->getResult()
             ;
@@ -148,7 +150,7 @@ class CourseRepository extends ServiceEntityRepository
             ->join('c.term', 't')
             ->select('t.id, t.year, t.semester, count(t.id) as termcount')
             ->groupBy('t.id')
-            ->orderBy('t.id', 'DESC')
+            ->orderBy('t.id', SortDirection::Descending)
             ->getQuery()
             ->getResult();
 
@@ -181,7 +183,7 @@ class CourseRepository extends ServiceEntityRepository
             ->select('r.id, r.name,  count(r.id) as rubriccount')
             ->groupBy('r.id')
             ->setParameter('termid', $termid)
-            ->orderBy('r.name', 'DESC')
+            ->orderBy('r.name', SortDirection::Descending)
             ->getQuery()
             ->getResult()
             ;

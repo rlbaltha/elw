@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @method Project|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,6 +32,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->andWhere('c.id = :val  ')
             ->setParameter('val', $courseid)
             ->orderBy('p.name', 'ASC')
+            ->orderBy('p.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
         ;
@@ -46,7 +48,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->join('p.course','c')
             ->andWhere('c.id = :val  ')
             ->setParameter('val', $courseid)
-            ->orderBy('p.name', 'ASC')
+            ->orderBy('p.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
             ;

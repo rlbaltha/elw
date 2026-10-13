@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\Order;
+use SortDirection;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -26,8 +28,8 @@ class UserRepository extends ServiceEntityRepository
     public function findUsers()
     {
         return $this->createQueryBuilder('u')
-            ->addOrderBy('u.lastname', 'ASC')
-            ->addOrderBy('u.firstname', 'ASC')
+            ->addorderBy('u.lastname', SortDirection::Ascending)
+            ->addorderBy('u.firstname', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
             ;
@@ -43,8 +45,8 @@ class UserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->andWhere('u.lastname LIKE :val')
             ->setParameter('val', $namesearch)
-            ->addOrderBy('u.lastname', 'ASC')
-            ->addOrderBy('u.firstname', 'ASC')
+            ->addorderBy('u.lastname', SortDirection::Ascending)
+            ->addorderBy('u.firstname', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
         ;

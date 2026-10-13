@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use http\QueryString;
 use PhpParser\Node\Scalar;
+use SortDirection;
 
 /**
  * @method Doc|null find($id, $lockMode = null, $lockVersion = null)
@@ -34,7 +35,7 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
             ->setParameter('val3', 'Journal')
-            ->orderBy('d.updated', 'DESC');
+            ->orderBy('d.updated', SortDirection::Descending);
     }
 
     /**
@@ -49,7 +50,7 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
             ->setParameter('val3', 'Hidden')
-            ->orderBy('d.updated', 'DESC')
+            ->orderBy('d.updated', SortDirection::Descending)
             ->getQuery()
             ->getResult();
     }
@@ -65,14 +66,14 @@ class DocRepository extends ServiceEntityRepository
                 ->andWhere('d.access != :val3')
                 ->setParameter('val1', $course)
                 ->setParameter('val3', 'Journal')
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         } else {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.course = :val1')
                 ->andWhere('d.access = :val2')
                 ->setParameter('val1', $course)
                 ->setParameter('val2', 'Shared')
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         }
     }
 
@@ -89,7 +90,7 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val1', $course)
                 ->setParameter('val4', $project)
                 ->setParameter('val3', 'Journal')
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         } else {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.course = :val1')
@@ -98,7 +99,7 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val1', $course)
                 ->setParameter('val4', $project)
                 ->setParameter('val2', 'Shared')
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         }
     }
 
@@ -115,7 +116,7 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val1', $course)
                 ->setParameter('val2', 'Journal')
                 ->setParameter('val3', $user)
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         } else {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.course = :val1')
@@ -124,7 +125,7 @@ class DocRepository extends ServiceEntityRepository
                 ->setParameter('val1', $course)
                 ->setParameter('val2', 'Shared')
                 ->setParameter('val3', $user)
-                ->orderBy('d.updated', 'DESC');
+                ->orderBy('d.updated', SortDirection::Descending);
         }
     }
 
@@ -157,7 +158,7 @@ class DocRepository extends ServiceEntityRepository
             ->setParameter('val1', $course)
             ->setParameter('val2', $user)
             ->setParameter('val3', 'Journal')
-            ->orderBy('d.updated', 'DESC')
+            ->orderBy('d.updated', SortDirection::Descending)
             ->getQuery()
             ->getResult();
     }
@@ -207,7 +208,7 @@ class DocRepository extends ServiceEntityRepository
             ->andWhere('d.access = :val')
             ->select('t.id, t.year, t.semester, count(t.id) as termcount')
             ->groupBy('t.id')
-            ->orderBy('t.id', 'DESC')
+            ->orderBy('t.id', SortDirection::Descending)
             ->setParameter('val', 'Journal')
             ->getQuery()
             ->getResult()
@@ -222,7 +223,7 @@ class DocRepository extends ServiceEntityRepository
             ->andWhere('d.access != :val')
             ->select('t.id, t.year, t.semester, count(t.id) as termcount')
             ->groupBy('t.id')
-            ->orderBy('t.id', 'DESC')
+            ->orderBy('t.id', SortDirection::Descending)
             ->setParameter('val', 'Journal')
             ->getQuery()
             ->getResult()

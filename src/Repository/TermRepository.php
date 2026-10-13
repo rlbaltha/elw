@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Term;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @method Term|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,7 +26,7 @@ class TermRepository extends ServiceEntityRepository
     public function orderLasttoFirst()
     {
         return $this->createQueryBuilder('t')
-            ->orderBy('t.id', 'DESC')
+            ->orderBy('t.id', SortDirection::Descending)
             ->getQuery()
             ->getResult()
         ;

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Notification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @extends ServiceEntityRepository<Notification>
@@ -51,7 +52,7 @@ class NotificationRepository extends ServiceEntityRepository
             ->setParameter('userid', $userid)
             ->setParameter('courseid', $courseid)
             ->setParameter('previouslogin', $previouslogin)
-            ->orderBy('n.created', 'ASC')
+            ->orderBy('n.created', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
         ;

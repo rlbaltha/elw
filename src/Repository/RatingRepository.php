@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Rating;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @method Rating|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,7 +32,7 @@ class RatingRepository extends ServiceEntityRepository
             ->andWhere('ru.id = :val2')
             ->setParameter('val1', $docid)
             ->setParameter('val2', $rubricid)
-            ->orderBy('r.id', 'ASC')
+            ->orderBy('r.id', SortDirection::Ascending)
             ->getQuery()
             ->getResult()
         ;
@@ -51,7 +52,7 @@ class RatingRepository extends ServiceEntityRepository
             ->groupBy('r.scale')
             ->setParameter('termid', $termid)
             ->setParameter('rubricid', $rubricid)
-            ->orderBy('r.scale', 'DESC')
+            ->orderBy('r.scale', SortDirection::Descending)
             ->getQuery()
             ->getResult()
             ;
