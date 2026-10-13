@@ -81,7 +81,7 @@ class CourseController extends AbstractController
         $course = new Course();
         $form = $this->createAdminFindForm($course);
         $header = 'My Courses';
-        $postData = $request->request->get('form');
+        $postData = $request->request->all('form');
         $name = $postData['name'];
 
 
@@ -123,7 +123,7 @@ class CourseController extends AbstractController
         $course = new Course();
         $form = $this->createFindForm($course);
         $header = 'My Courses';
-        $postData = $request->request->get('form');
+        $postData = $request->request->all('form');
         $name = $postData['name'];
 
 

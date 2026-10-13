@@ -235,7 +235,6 @@ class CommentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine->getManager();
-//            $request_data = $request->request->get('comment');
             $request_data = $request->request->all('comment');
             $access = $request_data['access'];
                 // if get comment on my doc from someone else

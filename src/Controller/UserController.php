@@ -54,7 +54,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
         $form = $this->createFindForm($user);
-        $postData = $request->request->get('form');
+        $postData = $request->request->all('form');
         $name = $postData['lastname'];
 
         $users = $userRepository->findByLastname($name);
